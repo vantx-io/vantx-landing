@@ -7,13 +7,13 @@
 
 ### Foundation
 
-- [ ] **FOUND-01**: Sistema de idioma bilingüe — auto-detect vía `navigator.languages`, toggle en navbar, traducciones en JSON (`en.json`, `es.json`), persistencia via `localStorage`
-- [ ] **FOUND-02**: Nav y footer compartidos reutilizables en todas las páginas via fetch-inject (sin build step)
-- [ ] **FOUND-03**: Arquitectura de URL documentada y decidida: single-URL con toggle JS (seleccionado — tradeoff SEO aceptado explícitamente)
+- [x] **FOUND-01**: Sistema de idioma bilingüe — auto-detect vía `navigator.languages`, toggle en navbar, traducciones en JSON (`en.json`, `es.json`), persistencia via `localStorage`
+- [x] **FOUND-02**: Nav y footer compartidos reutilizables en todas las páginas via fetch-inject (sin build step)
+- [x] **FOUND-03**: Arquitectura de URL documentada y decidida: single-URL con toggle JS (seleccionado — tradeoff SEO aceptado explícitamente)
 
 ### Design
 
-- [ ] **DSNG-01**: Dark & techy visual (estética Vercel/Linear) con CSS Custom Properties para tokens de color, tipografía y espaciado — WCAG-compliant (ratio ≥4.5:1 en todos los textos)
+- [x] **DSNG-01**: Dark & techy visual (estética Vercel/Linear) con CSS Custom Properties para tokens de color, tipografía y espaciado — WCAG-compliant (ratio ≥4.5:1 en todos los textos)
 - [ ] **DSNG-02**: Auditoría con impeccable.style/cheatsheet superada antes de ship
 
 ### Main Landing (/)
@@ -63,10 +63,10 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOUND-01 | Phase 1 | Pending |
-| FOUND-02 | Phase 1 | Pending |
-| FOUND-03 | Phase 1 | Pending |
-| DSNG-01 | Phase 1 | Pending |
+| FOUND-01 | Phase 1 | ✓ Done |
+| FOUND-02 | Phase 1 | ✓ Done |
+| FOUND-03 | Phase 1 | ✓ Done |
+| DSNG-01 | Phase 1 | ✓ Done |
 | DSNG-02 | Phase 4 | Pending |
 | LAND-01 | Phase 2 | Pending |
 | LAND-02 | Phase 2 | Pending |
@@ -85,4 +85,4 @@
 
 ---
 *Requirements defined: 2026-03-20*
-*Last updated: 2026-03-20 after roadmap creation*
+*Last updated: 2026-03-20 — Phase 1 Foundation requirements marked done*

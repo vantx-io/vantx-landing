@@ -1,0 +1,151 @@
+{
+  "lang": {
+    "code": "en",
+    "toggle_label": "ES",
+    "toggle_aria": "Switch to Spanish"
+  },
+  "nav": {
+    "services": "Services",
+    "pricing": "Pricing",
+    "about": "About",
+    "cta": "Book a Demo",
+    "logo_aria": "Vantix — Home"
+  },
+  "footer": {
+    "tagline": "Managed performance engineering, at startup speed.",
+    "services_heading": "Services",
+    "observability": "Observability as a Service",
+    "performance": "Performance as a Service",
+    "sre": "Fractional SRE",
+    "company_heading": "Company",
+    "mission": "Mission & Values",
+    "copyright": "© 2026 Vantix Consulting"
+  },
+  "hero": {
+    "pill": "Managed Performance Engineering",
+    "headline": "Your systems are slow.\nYour team doesn't know why.",
+    "headline_accent": "We do.",
+    "subheadline": "Vantix is your external performance and SRE team. Monitoring, load testing, and observability as a continuously improving managed capability.",
+    "cta_primary": "Book a Free Demo",
+    "cta_secondary": "View Services"
+  },
+  "pain": {
+    "heading": "Does this sound familiar?",
+    "subheading": "If you're a CTO or engineering manager at a scaling SaaS, you've probably faced at least one of these.",
+    "cards": [
+      {
+        "title": "Alerts firing at 3 AM",
+        "body": "Your on-call rotation is exhausted and alerts are noise — no one knows which ones actually matter."
+      },
+      {
+        "title": "Monitoring tools, zero insights",
+        "body": "You have Datadog or Grafana, but no one has time to build the dashboards that tell you something useful."
+      },
+      {
+        "title": "Load tests that don't exist",
+        "body": "You find out about performance bottlenecks in production, from customers, at the worst possible moment."
+      },
+      {
+        "title": "No SRE, no budget for one",
+        "body": "A senior SRE costs $150K+/yr. You need the expertise without the full-time hire."
+      },
+      {
+        "title": "Every release is a guess",
+        "body": "Deploys go out without any baseline — you don't know if today's release made things better or worse."
+      },
+      {
+        "title": "Incident retrospectives go nowhere",
+        "body": "You write up the post-mortem. Nothing changes. The same incident happens again three months later."
+      }
+    ]
+  },
+  "services": {
+    "heading": "What we deliver",
+    "subheading": "Three managed capabilities, designed to be combined.",
+    "observability": {
+      "tag": "Observability as a Service",
+      "headline": "See everything that matters.",
+      "description": "We instrument your systems, build the dashboards that actually answer your questions, and tune your alerts so they fire when something is wrong — not just when a threshold is crossed.",
+      "features": [
+        "Full-stack instrumentation (metrics, logs, traces)",
+        "Curated dashboards by service and team",
+        "Alert tuning — noise reduction, actionable runbooks",
+        "Monthly observability review"
+      ],
+      "price": "$3,000",
+      "price_period": "/month"
+    },
+    "performance": {
+      "tag": "Performance as a Service",
+      "headline": "Know your limits before your users do.",
+      "description": "Continuous k6 load testing built into your CI/CD pipeline. We write the scripts, baseline your services, define the SLOs, and track them over time.",
+      "features": [
+        "k6 load test suite (peak, soak, spike)",
+        "CI/CD pipeline integration",
+        "SLI/SLO definition and tracking",
+        "Monthly performance trend reports"
+      ],
+      "price": "$2,500",
+      "price_period": "/month"
+    },
+    "sre": {
+      "tag": "Fractional SRE",
+      "headline": "Senior SRE expertise, startup budget.",
+      "description": "A dedicated SRE (fractional) embedded in your engineering team. Architecture review, reliability roadmap, incident command, and the hands-on work to make it real.",
+      "features": [
+        "Dedicated fractional SRE (10–20 hrs/week)",
+        "Incident command & post-mortem facilitation",
+        "Reliability roadmap and architecture review",
+        "Escalation path during incidents"
+      ],
+      "price": "$5,500",
+      "price_period": "/month"
+    }
+  },
+  "pricing": {
+    "heading": "Transparent pricing",
+    "subheading": "No surprise invoices. No \"contact us for pricing.\" Three tiers — pick what fits.",
+    "monthly_label": "per month",
+    "included_label": "Included",
+    "cta": "Book a Demo",
+    "starter": {
+      "name": "Starter",
+      "price": "$2,500",
+      "description": "One managed capability to get started.",
+      "features": [
+        "One service (Observability or Performance)",
+        "Monthly reporting",
+        "Email support"
+      ]
+    },
+    "growth": {
+      "name": "Growth",
+      "price": "$5,000",
+      "badge": "Most Popular",
+      "description": "Two capabilities, fully integrated.",
+      "features": [
+        "Two services combined",
+        "Integrated dashboards + load tests",
+        "Bi-weekly syncs",
+        "Slack support channel"
+      ]
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "price": "$8,500",
+      "description": "All three services plus fractional SRE.",
+      "features": [
+        "All three services",
+        "Dedicated fractional SRE",
+        "Weekly syncs + incident support",
+        "Custom SLO program"
+      ]
+    }
+  },
+  "cta_section": {
+    "heading": "Ready to stop guessing?",
+    "subheading": "Book a 30-minute demo. We'll review your current setup and show you exactly what we'd change first.",
+    "cta_primary": "Book a Free Demo",
+    "cta_secondary": "Have questions? Let's talk."
+  }
+}

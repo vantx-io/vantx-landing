@@ -1,0 +1,75 @@
+<!-- Shared navigation partial — injected by js/partials.js into [data-partial="nav"] -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="container nav__inner">
+
+    <!-- Logo -->
+    <a href="/" class="nav__logo" data-i18n-aria="nav.logo_aria">
+      <span class="nav__logo-mark" aria-hidden="true">▲</span>
+      <span class="nav__logo-text">Vantix</span>
+    </a>
+
+    <!-- Desktop links -->
+    <ul class="nav__links" role="list">
+      <li>
+        <a href="/#services" class="nav__link" data-i18n="nav.services">Services</a>
+      </li>
+      <li>
+        <a href="/#pricing" class="nav__link" data-i18n="nav.pricing">Pricing</a>
+      </li>
+      <li>
+        <a href="/about/mission.html" class="nav__link" data-i18n="nav.about">About</a>
+      </li>
+    </ul>
+
+    <!-- Desktop actions -->
+    <div class="nav__actions">
+      <button
+        class="nav__lang"
+        data-lang-toggle
+        type="button"
+        aria-label="Switch language"
+      >ES</button>
+      <a
+        href="#calendly"
+        class="btn btn--primary btn--sm"
+        data-i18n="nav.cta"
+      >Book a Demo</a>
+    </div>
+
+    <!-- Mobile hamburger -->
+    <button
+      class="nav__mobile-toggle"
+      type="button"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="nav-drawer"
+    >
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </button>
+
+  </div><!-- /.nav__inner -->
+
+  <!-- Mobile drawer -->
+  <div id="nav-drawer" class="nav__drawer" role="menu" aria-label="Mobile navigation">
+    <a href="/#services" class="nav__link" role="menuitem" data-i18n="nav.services">Services</a>
+    <a href="/#pricing"  class="nav__link" role="menuitem" data-i18n="nav.pricing">Pricing</a>
+    <a href="/about/mission.html" class="nav__link" role="menuitem" data-i18n="nav.about">About</a>
+
+    <div class="nav__drawer-actions">
+      <button
+        class="nav__lang"
+        data-lang-toggle
+        type="button"
+        aria-label="Switch language"
+      >ES</button>
+      <a
+        href="#calendly"
+        class="btn btn--primary btn--sm"
+        data-i18n="nav.cta"
+      >Book a Demo</a>
+    </div>
+  </div><!-- /#nav-drawer -->
+
+</nav>

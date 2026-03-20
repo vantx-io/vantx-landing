@@ -9,29 +9,28 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 
 ## Current Position
 
-Phase: 1 of 4 (Foundation)
+Phase: 2 of 4 (Main Landing)
 Plan: 0 of TBD in current phase
-Status: Ready to plan
-Last activity: 2026-03-20 — Roadmap created, phases derived from requirements
+Status: Phase 1 complete — ready to plan Phase 2
+Last activity: 2026-03-20 — Phase 1 Foundation executed and shipped
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [██░░░░░░░░] 25%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 0
+- Total plans completed: 1
 - Average duration: -
 - Total execution time: -
 
 **By Phase:**
 
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| - | - | - | - |
-
-**Recent Trend:**
-- Last 5 plans: -
-- Trend: -
+| Phase | Plans | Status |
+|-------|-------|--------|
+| 1. Foundation | 1/1 | ✓ Complete |
+| 2. Main Landing | 0/TBD | Not started |
+| 3. Detail Pages | 0/TBD | Not started |
+| 4. Polish & Launch Gate | 0/TBD | Not started |
 
 *Updated after each plan completion*
 
@@ -51,14 +50,19 @@ Recent decisions affecting current work:
 
 None yet.
 
+### Phase 1 decisions made
+
+- **Font strategy**: Google Fonts CDN (DM Sans + JetBrains Mono) — v1 simplicity wins; revisit self-hosting in Phase 4
+- **Base path pattern**: `window.VANTIX_BASE = '.'` (root) / `'..'` (nested) — set inline before scripts load
+- **Token palette**: zinc-950/900/800 dark scale + blue-500 accent — matches Vercel/Linear aesthetic
+
 ### Blockers/Concerns
 
 - **Calendly account**: Live Calendly scheduling link URL must be confirmed before Phase 2 execution
-- **Font strategy**: Self-host woff2 vs. Google Fonts CDN decision should be made in Phase 1 (affects `tokens.css` and performance baseline for a performance consultancy)
-- **ES copy completeness**: Bilingual system requires complete Spanish translations — new sections (how-it-works, pricing format) need strings authored in both languages simultaneously
+- **ES copy completeness**: All Phase 1 translations authored in both EN + ES in i18n/en.json + es.json ✓
 
 ## Session Continuity
 
 Last session: 2026-03-20
-Stopped at: Roadmap created — ROADMAP.md and STATE.md written, REQUIREMENTS.md traceability updated
-Resume file: None
+Stopped at: Phase 1 Foundation complete — all deliverables shipped, ready for Phase 2 planning
+Resume file: .planning/phases/01-foundation/PLAN.md
