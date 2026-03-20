@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  platform:
+    name: Platform — lint, type-check, build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 07-plataforma/vantix-platform
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: 07-plataforma/vantix-platform/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type check
+        run: npm run type-check
+
+      - name: Build
+        run: npm run build
+        env:
+          # Stub env vars for build — real values injected via GitHub secrets in prod
+          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder-anon-key
+          SUPABASE_SERVICE_ROLE_KEY: placeholder-service-role-key
+          STRIPE_SECRET_KEY: sk_test_placeholder
+          STRIPE_WEBHOOK_SECRET: whsec_placeholder
+          NEXT_PUBLIC_GRAFANA_URL: http://localhost:3001
+
+  k6-validate:
+    name: k6 framework — validate scripts
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: 08-k6-framework/vantix-k6/package.json
+
+      - name: Check for syntax errors (Node.js parse)
+        working-directory: 08-k6-framework/vantix-k6
+        run: |
+          npm install
+          node --check lib/config.js
+          node --check lib/metrics.js
+          node --check lib/checks.js
+          node --check scripts/push-to-supabase.js

@@ -1,0 +1,7 @@
+node_modules/
+.next/
+*.lock
+*.sql
+08-k6-framework/vantix-k6/results/
+08-k6-framework/vantix-k6/logs/
+07-plataforma/vantix-platform.zip

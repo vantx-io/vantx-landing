@@ -1,0 +1,25 @@
+{
+  "name": "vantix-kit",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Vantix monorepo — managed monitoring, load testing, and observability platform",
+  "workspaces": [
+    "07-plataforma/vantix-platform",
+    "08-k6-framework/vantix-k6",
+    "09-generator"
+  ],
+  "scripts": {
+    "lint": "npm run lint --workspace=07-plataforma/vantix-platform",
+    "type-check": "npm run type-check --workspace=07-plataforma/vantix-platform",
+    "build": "npm run build --workspace=07-plataforma/vantix-platform",
+    "dev": "npm run dev --workspace=07-plataforma/vantix-platform",
+    "stack:up": "docker compose up -d",
+    "stack:down": "docker compose down",
+    "stack:logs": "docker compose logs -f",
+    "stack:up:otel": "docker compose --profile otel up -d"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}
