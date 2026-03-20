@@ -1,3 +1,19 @@
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: completed
+stopped_at: Phase 1 context gathered
+last_updated: "2026-03-20T19:01:24.388Z"
+last_activity: 2026-03-20 — Phase 2 Main Landing executed and shipped
+progress:
+  total_phases: 4
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 50
+---
+
 # Project State
 
 ## Project Reference
@@ -9,16 +25,17 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 
 ## Current Position
 
-Phase: 2 of 4 (Main Landing)
+Phase: 3 of 4 (Detail Pages)
 Plan: 0 of TBD in current phase
-Status: Phase 1 complete — ready to plan Phase 2
-Last activity: 2026-03-20 — Phase 1 Foundation executed and shipped
+Status: Phase 2 complete — index.html conversion page shipped with Calendly + GA4
+Last activity: 2026-03-20 — Phase 2 Main Landing executed and shipped
 
-Progress: [██░░░░░░░░] 25%
+Progress: [████░░░░░░] 50%
 
 ## Performance Metrics
 
 **Velocity:**
+
 - Total plans completed: 1
 - Average duration: -
 - Total execution time: -
@@ -28,7 +45,7 @@ Progress: [██░░░░░░░░] 25%
 | Phase | Plans | Status |
 |-------|-------|--------|
 | 1. Foundation | 1/1 | ✓ Complete |
-| 2. Main Landing | 0/TBD | Not started |
+| 2. Main Landing | 1/1 | ✓ Complete |
 | 3. Detail Pages | 0/TBD | Not started |
 | 4. Polish & Launch Gate | 0/TBD | Not started |
 
@@ -45,6 +62,9 @@ Recent decisions affecting current work:
 - [Project init]: Fetch-inject partial architecture for nav/footer — no build step required
 - [Project init]: Calendly popup pattern on main page (not inline) — avoid blocking Core Web Vitals
 - [Project init]: ANLT-01 + ANLT-02 assigned to Phase 2 — Calendly tracking must be wired when Calendly is introduced, not post-launch
+- [Phase 2]: Calendly URL placeholder `https://calendly.com/vantix/30min` — must be replaced with real link before launch
+- [Phase 2]: GA4 Measurement ID placeholder `G-XXXXXXXXXX` — must be replaced before launch
+- [Phase 2]: `services/performance.html` linked from index.html but not yet built (PAGE-V2-01, deferred)
 
 ### Pending Todos
 
@@ -58,11 +78,11 @@ None yet.
 
 ### Blockers/Concerns
 
-- **Calendly account**: Live Calendly scheduling link URL must be confirmed before Phase 2 execution
-- **ES copy completeness**: All Phase 1 translations authored in both EN + ES in i18n/en.json + es.json ✓
+- **Calendly URL**: Replace `https://calendly.com/vantix/30min` in `index.html` with real link before launch
+- **GA4 ID**: Replace `G-XXXXXXXXXX` in `index.html` with real Measurement ID before launch
 
 ## Session Continuity
 
-Last session: 2026-03-20
-Stopped at: Phase 1 Foundation complete — all deliverables shipped, ready for Phase 2 planning
-Resume file: .planning/phases/01-foundation/PLAN.md
+Last session: 2026-03-20T19:01:24.379Z
+Stopped at: Phase 1 context gathered
+Resume file: .planning/phases/01-foundation/01-CONTEXT.md
