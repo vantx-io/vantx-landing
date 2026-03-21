@@ -8,7 +8,7 @@
     "services": "Servicios",
     "pricing": "Precios",
     "about": "Acerca de",
-    "cta": "Agendar Demo",
+    "cta": "Agendar Llamada Estratégica",
     "logo_aria": "Vantix — Inicio"
   },
   "footer": {
@@ -26,7 +26,7 @@
     "headline": "Tus sistemas son lentos.\nTu equipo no sabe por qué.",
     "headline_accent": "Nosotros sí.",
     "subheadline": "Vantix es tu equipo externo de performance y SRE. Monitoreo, load testing y observabilidad como una capacidad gestionada en mejora continua.",
-    "cta_primary": "Agendar Demo Gratis",
+    "cta_primary": "Agendar Llamada Estratégica",
     "cta_secondary": "Ver Servicios"
   },
   "pain": {
@@ -108,7 +108,7 @@
     "subheading": "Sin facturas sorpresa. Sin \"contáctanos para precios\". Tres tiers — elige el que te quede.",
     "monthly_label": "por mes",
     "included_label": "Incluido",
-    "cta": "Agendar Demo",
+    "cta": "Agendar Llamada Estratégica",
     "starter": {
       "name": "Starter",
       "price": "$2,500",
@@ -145,8 +145,8 @@
   },
   "cta_section": {
     "heading": "¿Listo para dejar de adivinar?",
-    "subheading": "Agenda una demo de 30 minutos. Revisamos tu setup actual y te mostramos exactamente qué cambiaríamos primero.",
-    "cta_primary": "Agendar Demo Gratis",
+    "subheading": "Agenda una llamada estratégica de 30 minutos. Revisamos tu setup actual y te mostramos exactamente qué cambiaríamos primero.",
+    "cta_primary": "Agendar Llamada Estratégica",
     "cta_secondary": "¿Tienes preguntas? Hablemos."
   },
   "obs_page": {

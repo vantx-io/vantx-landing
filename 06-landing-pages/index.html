@@ -18,98 +18,20 @@
   <!-- Design system -->
   <link rel="stylesheet" href="./css/tokens.css">
   <link rel="stylesheet" href="./css/base.css">
+  <link rel="stylesheet" href="./css/landing.css">
 
-  <!-- Page-level styles (Phase 2 will expand this) -->
-  <style>
-    /* Foundation validation styles — removed in Phase 2 */
-    .foundation-check {
-      padding: var(--space-20) 0;
-      text-align: center;
-    }
+  <!-- Calendly widget CSS — small, non-blocking -->
+  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
 
-    .foundation-check__title {
-      font-size: var(--text-5xl);
-      font-weight: var(--font-bold);
-      letter-spacing: var(--tracking-tight);
-      line-height: var(--leading-tight);
-      color: var(--color-text);
-      margin-bottom: var(--space-6);
-    }
-
-    .foundation-check__title span {
-      color: var(--color-accent);
-    }
-
-    .foundation-check__sub {
-      font-size: var(--text-xl);
-      color: var(--color-text-muted);
-      max-width: 560px;
-      margin: 0 auto var(--space-10);
-      line-height: var(--leading-normal);
-    }
-
-    .foundation-check__actions {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: var(--space-4);
-      flex-wrap: wrap;
-    }
-
-    /* Token grid — Phase 1 visual check */
-    .token-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: var(--space-4);
-      margin-top: var(--space-16);
-    }
-
-    .token-swatch {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-lg);
-      padding: var(--space-4);
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      color: var(--color-text-muted);
-    }
-
-    .token-swatch__color {
-      width: 100%;
-      height: 40px;
-      border-radius: var(--radius);
-      margin-bottom: var(--space-3);
-    }
-
-    .token-swatch__name {
-      font-weight: var(--font-semibold);
-      color: var(--color-text);
-      margin-bottom: var(--space-1);
-    }
-
-    /* Lang status badge */
-    .lang-status {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-2);
-      padding: var(--space-2) var(--space-4);
-      background: var(--color-accent-subtle);
-      border: 1px solid var(--color-accent-border);
-      border-radius: var(--radius-full);
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      font-weight: var(--font-semibold);
-      color: var(--color-accent);
-      margin-bottom: var(--space-6);
-    }
-
-    .lang-status__dot {
-      width: 6px;
-      height: 6px;
-      background: var(--color-success);
-      border-radius: var(--radius-full);
-    }
-  </style>
+  <!-- Google Analytics 4
+       REPLACE G-XXXXXXXXXX with your real Measurement ID before launch -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
 </head>
 
 <body>
@@ -117,92 +39,299 @@
   <!-- Nav partial injected here -->
   <div data-partial="nav"></div>
 
-  <!-- ============================================================
-       Main content — Phase 1 scaffold
-       Phase 2 will replace this with the full conversion page
-       ============================================================ -->
   <main id="main-content" tabindex="-1">
 
-    <section class="foundation-check section">
+    <!-- ================================================================
+         Hero
+         LAND-01: headline, subheadline, primary CTA opens Calendly popup
+         ================================================================ -->
+    <section class="hero section" id="hero" aria-label="Hero">
+      <div class="container">
+        <div class="hero__inner">
+
+          <!-- Pill badge -->
+          <div class="pill hero__pill" data-i18n="hero.pill">Managed Performance Engineering</div>
+
+          <!-- Main headline — \n in translation renders via white-space: pre-line -->
+          <h1 class="hero__headline">
+            <span class="hero__headline-main" data-i18n="hero.headline">Your systems are slow.
+Your team doesn't know why.</span>
+            <span class="hero__headline-accent" data-i18n="hero.headline_accent">We do.</span>
+          </h1>
+
+          <p class="hero__sub" data-i18n="hero.subheadline">
+            Vantix is your external performance and SRE team. Monitoring, load testing, and observability as a continuously improving managed capability.
+          </p>
+
+          <div class="hero__actions">
+            <button
+              class="btn btn--primary btn--lg js-calendly-trigger"
+              type="button"
+              data-i18n="hero.cta_primary"
+            >Book a Strategy Call</button>
+            <a href="#services" class="btn btn--outline btn--lg" data-i18n="hero.cta_secondary">View Services</a>
+          </div>
+
+        </div><!-- /.hero__inner -->
+      </div><!-- /.container -->
+    </section>
+
+    <!-- ================================================================
+         Pain
+         LAND-02: 6 ICP problem cards ("Does this sound familiar?")
+         ================================================================ -->
+    <section class="pain section" id="pain" aria-labelledby="pain-heading">
       <div class="container">
 
-        <!-- Language detection status — proves i18n is working -->
-        <div class="lang-status" id="lang-status" role="status" aria-live="polite">
-          <span class="lang-status__dot" aria-hidden="true"></span>
-          <span id="lang-status-text">Detecting language…</span>
+        <div class="section-header">
+          <h2 id="pain-heading" class="section-title" data-i18n="pain.heading">Does this sound familiar?</h2>
+          <p class="section-sub" data-i18n="pain.subheading">
+            If you're a CTO or engineering manager at a scaling SaaS, you've probably faced at least one of these.
+          </p>
         </div>
 
-        <!-- Hero placeholder — real content in Phase 2 -->
-        <h1 class="foundation-check__title">
-          Phase 1 Foundation
-          <br>
-          <span>System Check</span>
-        </h1>
+        <div class="pain__grid">
 
-        <p class="foundation-check__sub">
-          Nav and footer are injected from shared partials. Language auto-detected
-          from browser. Toggle switches content without reload.
-        </p>
-
-        <div class="foundation-check__actions">
-          <a href="#" class="btn btn--primary btn--lg" data-i18n="nav.cta">Book a Demo</a>
-          <a href="#tokens" class="btn btn--outline btn--lg">View Token Grid</a>
-        </div>
-
-        <!-- Token color grid — visual proof of design system -->
-        <div id="tokens" class="token-grid" aria-label="Design token swatches">
-
-          <div class="token-swatch">
-            <div class="token-swatch__color" style="background: var(--color-bg);" aria-hidden="true"></div>
-            <div class="token-swatch__name">bg</div>
-            <div>#09090b</div>
+          <div class="pain__card">
+            <h3 class="pain__card-title" data-i18n="pain.cards.0.title">Alerts firing at 3 AM</h3>
+            <p class="pain__card-body" data-i18n="pain.cards.0.body">
+              Your on-call rotation is exhausted and alerts are noise — no one knows which ones actually matter.
+            </p>
           </div>
 
-          <div class="token-swatch">
-            <div class="token-swatch__color" style="background: var(--color-surface);" aria-hidden="true"></div>
-            <div class="token-swatch__name">surface</div>
-            <div>#18181b</div>
+          <div class="pain__card">
+            <h3 class="pain__card-title" data-i18n="pain.cards.1.title">Monitoring tools, zero insights</h3>
+            <p class="pain__card-body" data-i18n="pain.cards.1.body">
+              You have Datadog or Grafana, but no one has time to build the dashboards that tell you something useful.
+            </p>
           </div>
 
-          <div class="token-swatch">
-            <div class="token-swatch__color" style="background: var(--color-surface-elevated);" aria-hidden="true"></div>
-            <div class="token-swatch__name">surface-elevated</div>
-            <div>#27272a</div>
+          <div class="pain__card">
+            <h3 class="pain__card-title" data-i18n="pain.cards.2.title">Load tests that don't exist</h3>
+            <p class="pain__card-body" data-i18n="pain.cards.2.body">
+              You find out about performance bottlenecks in production, from customers, at the worst possible moment.
+            </p>
           </div>
 
-          <div class="token-swatch">
-            <div class="token-swatch__color" style="background: var(--color-accent);" aria-hidden="true"></div>
-            <div class="token-swatch__name">accent</div>
-            <div>#3b82f6</div>
+          <div class="pain__card">
+            <h3 class="pain__card-title" data-i18n="pain.cards.3.title">No SRE, no budget for one</h3>
+            <p class="pain__card-body" data-i18n="pain.cards.3.body">
+              A senior SRE costs $150K+/yr. You need the expertise without the full-time hire.
+            </p>
           </div>
 
-          <div class="token-swatch">
-            <div class="token-swatch__color" style="background: var(--color-text);" aria-hidden="true"></div>
-            <div class="token-swatch__name">text</div>
-            <div>#fafafa</div>
+          <div class="pain__card">
+            <h3 class="pain__card-title" data-i18n="pain.cards.4.title">Every release is a guess</h3>
+            <p class="pain__card-body" data-i18n="pain.cards.4.body">
+              Deploys go out without any baseline — you don't know if today's release made things better or worse.
+            </p>
           </div>
 
-          <div class="token-swatch">
-            <div class="token-swatch__color" style="background: var(--color-text-muted);" aria-hidden="true"></div>
-            <div class="token-swatch__name">text-muted</div>
-            <div>#a1a1aa</div>
+          <div class="pain__card">
+            <h3 class="pain__card-title" data-i18n="pain.cards.5.title">Incident retrospectives go nowhere</h3>
+            <p class="pain__card-body" data-i18n="pain.cards.5.body">
+              You write up the post-mortem. Nothing changes. The same incident happens again three months later.
+            </p>
           </div>
 
-          <div class="token-swatch">
-            <div class="token-swatch__color" style="background: var(--color-success);" aria-hidden="true"></div>
-            <div class="token-swatch__name">success</div>
-            <div>#22c55e</div>
-          </div>
-
-          <div class="token-swatch">
-            <div class="token-swatch__color" style="background: var(--color-danger);" aria-hidden="true"></div>
-            <div class="token-swatch__name">danger</div>
-            <div>#ef4444</div>
-          </div>
-
-        </div><!-- /.token-grid -->
-
+        </div><!-- /.pain__grid -->
       </div><!-- /.container -->
+    </section>
+
+    <!-- ================================================================
+         Services
+         LAND-03: 3 service cards with links to detail pages
+         ================================================================ -->
+    <section class="section" id="services" aria-labelledby="services-heading">
+      <div class="container">
+
+        <div class="section-header">
+          <h2 id="services-heading" class="section-title" data-i18n="services.heading">What we deliver</h2>
+          <p class="section-sub" data-i18n="services.subheading">Three managed capabilities, designed to be combined.</p>
+        </div>
+
+        <div class="services__grid">
+
+          <!-- Observability as a Service -->
+          <article class="svc-card svc-card--observability">
+            <span class="svc-card__tag" data-i18n="services.observability.tag">Observability as a Service</span>
+            <h3 class="svc-card__headline" data-i18n="services.observability.headline">See everything that matters.</h3>
+            <p class="svc-card__desc" data-i18n="services.observability.description">
+              We instrument your systems, build the dashboards that actually answer your questions, and tune your alerts so they fire when something is wrong.
+            </p>
+            <ul class="svc-card__features" aria-label="Features">
+              <li data-i18n="services.observability.features.0">Full-stack instrumentation (metrics, logs, traces)</li>
+              <li data-i18n="services.observability.features.1">Curated dashboards by service and team</li>
+              <li data-i18n="services.observability.features.2">Alert tuning — noise reduction, actionable runbooks</li>
+              <li data-i18n="services.observability.features.3">Monthly observability review</li>
+            </ul>
+            <div class="svc-card__footer">
+              <div class="svc-card__price">
+                <span class="svc-card__price-amount" data-i18n="services.observability.price">$3,000</span>
+                <span class="svc-card__price-period" data-i18n="services.observability.price_period">/month</span>
+              </div>
+              <a href="./services/observability.html" class="btn btn--outline btn--sm" data-i18n="services.learn_more">Learn More</a>
+            </div>
+          </article>
+
+          <!-- Performance as a Service -->
+          <article class="svc-card svc-card--performance">
+            <span class="svc-card__tag" data-i18n="services.performance.tag">Performance as a Service</span>
+            <h3 class="svc-card__headline" data-i18n="services.performance.headline">Know your limits before your users do.</h3>
+            <p class="svc-card__desc" data-i18n="services.performance.description">
+              Continuous k6 load testing built into your CI/CD pipeline. We write the scripts, baseline your services, define the SLOs, and track them over time.
+            </p>
+            <ul class="svc-card__features" aria-label="Features">
+              <li data-i18n="services.performance.features.0">k6 load test suite (peak, soak, spike)</li>
+              <li data-i18n="services.performance.features.1">CI/CD pipeline integration</li>
+              <li data-i18n="services.performance.features.2">SLI/SLO definition and tracking</li>
+              <li data-i18n="services.performance.features.3">Monthly performance trend reports</li>
+            </ul>
+            <div class="svc-card__footer">
+              <div class="svc-card__price">
+                <span class="svc-card__price-amount" data-i18n="services.performance.price">$2,500</span>
+                <span class="svc-card__price-period" data-i18n="services.performance.price_period">/month</span>
+              </div>
+              <a href="./services/performance.html" class="btn btn--outline btn--sm" data-i18n="services.learn_more">Learn More</a>
+            </div>
+          </article>
+
+          <!-- Fractional SRE -->
+          <article class="svc-card svc-card--sre">
+            <span class="svc-card__tag" data-i18n="services.sre.tag">Fractional SRE</span>
+            <h3 class="svc-card__headline" data-i18n="services.sre.headline">Senior SRE expertise, startup budget.</h3>
+            <p class="svc-card__desc" data-i18n="services.sre.description">
+              A dedicated SRE (fractional) embedded in your engineering team. Architecture review, reliability roadmap, incident command, and the hands-on work to make it real.
+            </p>
+            <ul class="svc-card__features" aria-label="Features">
+              <li data-i18n="services.sre.features.0">Dedicated fractional SRE (10–20 hrs/week)</li>
+              <li data-i18n="services.sre.features.1">Incident command & post-mortem facilitation</li>
+              <li data-i18n="services.sre.features.2">Reliability roadmap and architecture review</li>
+              <li data-i18n="services.sre.features.3">Escalation path during incidents</li>
+            </ul>
+            <div class="svc-card__footer">
+              <div class="svc-card__price">
+                <span class="svc-card__price-amount" data-i18n="services.sre.price">$5,500</span>
+                <span class="svc-card__price-period" data-i18n="services.sre.price_period">/month</span>
+              </div>
+              <a href="./services/fractional-sre.html" class="btn btn--outline btn--sm" data-i18n="services.learn_more">Learn More</a>
+            </div>
+          </article>
+
+        </div><!-- /.services__grid -->
+      </div><!-- /.container -->
+    </section>
+
+    <!-- ================================================================
+         Pricing
+         LAND-04: tier names + real prices — no "contact us"
+         ================================================================ -->
+    <section class="pricing section" id="pricing" aria-labelledby="pricing-heading">
+      <div class="container">
+
+        <div class="section-header">
+          <h2 id="pricing-heading" class="section-title" data-i18n="pricing.heading">Transparent pricing</h2>
+          <p class="section-sub" data-i18n="pricing.subheading">
+            No surprise invoices. No "contact us for pricing." Three tiers — pick what fits.
+          </p>
+        </div>
+
+        <div class="pricing__grid">
+
+          <!-- Starter -->
+          <div class="pricing__card">
+            <div class="pricing__name" data-i18n="pricing.starter.name">Starter</div>
+            <div class="pricing__price">
+              <span class="pricing__amount" data-i18n="pricing.starter.price">$2,500</span>
+              <span class="pricing__period" data-i18n="pricing.monthly_label">per month</span>
+            </div>
+            <p class="pricing__desc" data-i18n="pricing.starter.description">One managed capability to get started.</p>
+            <div class="pricing__divider" role="separator"></div>
+            <ul class="pricing__features" aria-label="Included features">
+              <li data-i18n="pricing.starter.features.0">One service (Observability or Performance)</li>
+              <li data-i18n="pricing.starter.features.1">Monthly reporting</li>
+              <li data-i18n="pricing.starter.features.2">Email support</li>
+            </ul>
+            <button
+              class="btn btn--outline btn--lg pricing__cta js-calendly-trigger"
+              type="button"
+              data-i18n="pricing.cta"
+            >Book a Strategy Call</button>
+          </div>
+
+          <!-- Growth — featured -->
+          <div class="pricing__card pricing__card--featured">
+            <div class="pricing__badge" data-i18n="pricing.growth.badge">Most Popular</div>
+            <div class="pricing__name" data-i18n="pricing.growth.name">Growth</div>
+            <div class="pricing__price">
+              <span class="pricing__amount" data-i18n="pricing.growth.price">$5,000</span>
+              <span class="pricing__period" data-i18n="pricing.monthly_label">per month</span>
+            </div>
+            <p class="pricing__desc" data-i18n="pricing.growth.description">Two capabilities, fully integrated.</p>
+            <div class="pricing__divider" role="separator"></div>
+            <ul class="pricing__features" aria-label="Included features">
+              <li data-i18n="pricing.growth.features.0">Two services combined</li>
+              <li data-i18n="pricing.growth.features.1">Integrated dashboards + load tests</li>
+              <li data-i18n="pricing.growth.features.2">Bi-weekly syncs</li>
+              <li data-i18n="pricing.growth.features.3">Slack support channel</li>
+            </ul>
+            <button
+              class="btn btn--primary btn--lg pricing__cta js-calendly-trigger"
+              type="button"
+              data-i18n="pricing.cta"
+            >Book a Strategy Call</button>
+          </div>
+
+          <!-- Enterprise -->
+          <div class="pricing__card">
+            <div class="pricing__name" data-i18n="pricing.enterprise.name">Enterprise</div>
+            <div class="pricing__price">
+              <span class="pricing__amount" data-i18n="pricing.enterprise.price">$8,500</span>
+              <span class="pricing__period" data-i18n="pricing.monthly_label">per month</span>
+            </div>
+            <p class="pricing__desc" data-i18n="pricing.enterprise.description">All three services plus fractional SRE.</p>
+            <div class="pricing__divider" role="separator"></div>
+            <ul class="pricing__features" aria-label="Included features">
+              <li data-i18n="pricing.enterprise.features.0">All three services</li>
+              <li data-i18n="pricing.enterprise.features.1">Dedicated fractional SRE</li>
+              <li data-i18n="pricing.enterprise.features.2">Weekly syncs + incident support</li>
+              <li data-i18n="pricing.enterprise.features.3">Custom SLO program</li>
+            </ul>
+            <button
+              class="btn btn--outline btn--lg pricing__cta js-calendly-trigger"
+              type="button"
+              data-i18n="pricing.cta"
+            >Book a Strategy Call</button>
+          </div>
+
+        </div><!-- /.pricing__grid -->
+      </div><!-- /.container -->
+    </section>
+
+    <!-- ================================================================
+         CTA section — closing push
+         ================================================================ -->
+    <section class="cta-section section" aria-labelledby="cta-heading">
+      <div class="container">
+        <div class="cta-section__inner">
+          <h2 id="cta-heading" class="cta-section__heading" data-i18n="cta_section.heading">Ready to stop guessing?</h2>
+          <p class="cta-section__sub" data-i18n="cta_section.subheading">
+            Book a 30-minute strategy call. We'll review your current setup and show you exactly what we'd change first.
+          </p>
+          <div class="cta-section__actions">
+            <button
+              class="btn btn--primary btn--lg js-calendly-trigger"
+              type="button"
+              data-i18n="cta_section.cta_primary"
+            >Book a Strategy Call</button>
+            <button
+              class="btn btn--ghost btn--lg js-calendly-trigger"
+              type="button"
+              data-i18n="cta_section.cta_secondary"
+            >Have questions? Let's talk.</button>
+          </div>
+        </div>
+      </div>
     </section>
 
   </main>
@@ -210,24 +339,47 @@
   <!-- Footer partial injected here -->
   <div data-partial="footer"></div>
 
-  <!-- ============================================================
+  <!-- ================================================================
        Scripts — load order matters:
        1. Set VANTIX_BASE (root page = '.')
        2. i18n.js — exposes window.i18n (no auto-init)
        3. partials.js — boots the whole system
-       ============================================================ -->
+       ================================================================ -->
   <script>window.VANTIX_BASE = '.';</script>
   <script src="./js/i18n.js"></script>
   <script src="./js/partials.js"></script>
 
-  <!-- Page-specific: update lang status badge after system boots -->
+  <!-- Calendly widget JS — async, does not block initial render
+       REPLACE the URL below with your real Calendly scheduling link before launch -->
+  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+
+  <!-- Page JS: Calendly popup trigger + GA4 booking event -->
   <script>
-    document.addEventListener('vantix:ready', function () {
-      var lang = window.i18n.getCurrentLang();
-      var statusEl = document.getElementById('lang-status-text');
-      if (statusEl) {
-        statusEl.textContent = 'Language detected: ' + lang.toUpperCase()
-          + ' (toggle in nav to switch)';
+    // REPLACE with your real Calendly scheduling link before launch
+    var CALENDLY_URL = 'https://calendly.com/vantix/30min';
+
+    // Intercept all CTA clicks — both .js-calendly-trigger and [href="#calendly"] (nav)
+    document.addEventListener('click', function (e) {
+      var trigger = e.target.closest('.js-calendly-trigger, [href="#calendly"]');
+      if (!trigger) return;
+      e.preventDefault();
+      if (window.Calendly) {
+        Calendly.initPopupWidget({ url: CALENDLY_URL });
+      } else {
+        // Calendly widget not yet loaded — open in new tab as fallback
+        window.open(CALENDLY_URL, '_blank', 'noopener,noreferrer');
+      }
+    });
+
+    // GA4: track Calendly booking completions (ANLT-02)
+    window.addEventListener('message', function (e) {
+      if (e.data && e.data.event === 'calendly.event_scheduled') {
+        if (typeof gtag === 'function') {
+          gtag('event', 'calendly_booking', {
+            event_category: 'engagement',
+            event_label: 'demo_scheduled'
+          });
+        }
       }
     });
   </script>

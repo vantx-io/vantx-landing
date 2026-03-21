@@ -8,7 +8,7 @@
     "services": "Services",
     "pricing": "Pricing",
     "about": "About",
-    "cta": "Book a Demo",
+    "cta": "Book a Strategy Call",
     "logo_aria": "Vantix — Home"
   },
   "footer": {
@@ -26,7 +26,7 @@
     "headline": "Your systems are slow.\nYour team doesn't know why.",
     "headline_accent": "We do.",
     "subheadline": "Vantix is your external performance and SRE team. Monitoring, load testing, and observability as a continuously improving managed capability.",
-    "cta_primary": "Book a Free Demo",
+    "cta_primary": "Book a Strategy Call",
     "cta_secondary": "View Services"
   },
   "pain": {
@@ -108,7 +108,7 @@
     "subheading": "No surprise invoices. No \"contact us for pricing.\" Three tiers — pick what fits.",
     "monthly_label": "per month",
     "included_label": "Included",
-    "cta": "Book a Demo",
+    "cta": "Book a Strategy Call",
     "starter": {
       "name": "Starter",
       "price": "$2,500",
@@ -145,8 +145,8 @@
   },
   "cta_section": {
     "heading": "Ready to stop guessing?",
-    "subheading": "Book a 30-minute demo. We'll review your current setup and show you exactly what we'd change first.",
-    "cta_primary": "Book a Free Demo",
+    "subheading": "Book a 30-minute strategy call. We'll review your current setup and show you exactly what we'd change first.",
+    "cta_primary": "Book a Strategy Call",
     "cta_secondary": "Have questions? Let's talk."
   },
   "obs_page": {
