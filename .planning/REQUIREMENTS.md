@@ -18,21 +18,21 @@
 
 ### Main Landing (/)
 
-- [ ] **LAND-01**: Hero con headline principal, subheadline orientado al ICP, y CTA primario que abre Calendly popup
-- [ ] **LAND-02**: Pain section con 6 cards de problemas del ICP ("¿Te suena familiar?")
-- [ ] **LAND-03**: 3 service cards (Performance as a Service / Observability as a Service / Fractional Perf & SRE) con links a páginas de detalle
-- [ ] **LAND-04**: Pricing teaser con tier names y precios visibles (no "contáctanos para pricing")
+- [x] **LAND-01**: Hero con headline principal, subheadline orientado al ICP, y CTA primario que abre Calendly popup
+- [x] **LAND-02**: Pain section con 6 cards de problemas del ICP ("¿Te suena familiar?")
+- [x] **LAND-03**: 3 service cards (Performance as a Service / Observability as a Service / Fractional Perf & SRE) con links a páginas de detalle
+- [x] **LAND-04**: Pricing teaser con tier names y precios visibles (no "contáctanos para pricing")
 
 ### Detail Pages
 
-- [ ] **PAGE-01**: Página Observability as a Service — refactorizar `vantix-observability-as-a-service.html` al nuevo sistema (dark theme + i18n + partials)
-- [ ] **PAGE-02**: Página Fractional Perf & SRE — nueva página (el servicio existe en la landing v3 pero sin página propia)
-- [ ] **PAGE-03**: Página Misión / Visión / Valores — refactorizar `vantix-mision-vision-valores.html` al nuevo dark theme + i18n
+- [x] **PAGE-01**: Página Observability as a Service — refactorizar `vantix-observability-as-a-service.html` al nuevo sistema (dark theme + i18n + partials)
+- [x] **PAGE-02**: Página Fractional Perf & SRE — nueva página (el servicio existe en la landing v3 pero sin página propia)
+- [x] **PAGE-03**: Página Misión / Visión / Valores — refactorizar `vantix-mision-vision-valores.html` al nuevo dark theme + i18n
 
 ### Analytics
 
-- [ ] **ANLT-01**: Google Analytics 4 — tracking base (pageviews, eventos)
-- [ ] **ANLT-02**: Calendly booking tracking — listener `window.addEventListener('message', ...)` para evento `calendly.event_scheduled` → GA4 event
+- [x] **ANLT-01**: Google Analytics 4 — tracking base (pageviews, eventos)
+- [x] **ANLT-02**: Calendly booking tracking — listener `window.addEventListener('message', ...)` para evento `calendly.event_scheduled` → GA4 event
 
 ## v2 Requirements
 
@@ -72,9 +72,9 @@
 | LAND-02 | Phase 2 | Pending |
 | LAND-03 | Phase 2 | Pending |
 | LAND-04 | Phase 2 | Pending |
-| PAGE-01 | Phase 3 | Pending |
-| PAGE-02 | Phase 3 | Pending |
-| PAGE-03 | Phase 3 | Pending |
+| PAGE-01 | Phase 3 | Complete |
+| PAGE-02 | Phase 3 | Complete |
+| PAGE-03 | Phase 3 | Complete |
 | ANLT-01 | Phase 2 | Pending |
 | ANLT-02 | Phase 2 | Pending |
 
@@ -85,4 +85,4 @@
 
 ---
 *Requirements defined: 2026-03-20*
-*Last updated: 2026-03-20 — Phase 1 Foundation requirements marked done*
+*Last updated: 2026-03-20 — Phase 2 Main Landing requirements marked done*

@@ -49,9 +49,9 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. All three detail pages (`services/observability.html`, `services/fractional-sre.html`, `about/mission.html` or equivalent) load with the correct dark theme, shared nav, and shared footer — no visual drift from `index.html`
   2. Every detail page is fully bilingual: switching language on the main landing and navigating to a detail page shows the correct language
   3. Each service detail page contains a Calendly booking entry point (inline embed or popup CTA)
-**Plans:** 3 plans
+**Plans:** 1/3 plans executed
 Plans:
-- [ ] 03-01-PLAN.md — Foundation: detail.css shared styles + all i18n keys for 3 pages
+- [x] 03-01-PLAN.md — Foundation: detail.css shared styles + all i18n keys for 3 pages
 - [ ] 03-02-PLAN.md — Service pages: observability.html + fractional-sre.html
 - [ ] 03-03-PLAN.md — Mission page: mission.html + visual verification checkpoint
 
@@ -75,5 +75,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 1/1 | ✓ Done | 2026-03-20 |
 | 2. Main Landing | 1/1 | ✓ Done | 2026-03-20 |
-| 3. Detail Pages | 0/3 | Planned | - |
+| 3. Detail Pages | 1/3 | In Progress|  |
 | 4. Polish & Launch Gate | 0/TBD | Not started | - |
