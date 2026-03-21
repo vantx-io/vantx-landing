@@ -227,6 +227,12 @@ ul, ol {
   line-height: 1;
 }
 
+.nav__logo-img {
+  display: block;
+  height: 32px;
+  width: auto;
+}
+
 /* Desktop links */
 .nav__links {
   display: flex;
