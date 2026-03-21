@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - CSS tokens, i18n system, shared partials — everything else depends on this
 - [x] **Phase 2: Main Landing** - index.html with hero, services, pricing, Calendly popup, and GA4 tracking
-- [ ] **Phase 3: Detail Pages** - Three service pages (Observability, Fractional SRE, Mission/Vision)
+- [x] **Phase 3: Detail Pages** - Three service pages (Observability, Fractional SRE, Mission/Vision) (completed 2026-03-21)
 - [ ] **Phase 4: Polish & Launch Gate** - impeccable.style audit, cross-device verification, ship
 
 ## Phase Details
@@ -49,10 +49,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. All three detail pages (`services/observability.html`, `services/fractional-sre.html`, `about/mission.html` or equivalent) load with the correct dark theme, shared nav, and shared footer — no visual drift from `index.html`
   2. Every detail page is fully bilingual: switching language on the main landing and navigating to a detail page shows the correct language
   3. Each service detail page contains a Calendly booking entry point (inline embed or popup CTA)
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans complete
 Plans:
 - [x] 03-01-PLAN.md — Foundation: detail.css shared styles + all i18n keys for 3 pages
-- [ ] 03-02-PLAN.md — Service pages: observability.html + fractional-sre.html
+- [x] 03-02-PLAN.md — Service pages: observability.html + fractional-sre.html
 - [x] 03-03-PLAN.md — Mission page: mission.html + visual verification checkpoint
 
 ### Phase 4: Polish & Launch Gate
@@ -75,5 +75,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 1/1 | ✓ Done | 2026-03-20 |
 | 2. Main Landing | 1/1 | ✓ Done | 2026-03-20 |
-| 3. Detail Pages | 2/3 | In Progress|  |
+| 3. Detail Pages | 3/3 | Complete   | 2026-03-21 |
 | 4. Polish & Launch Gate | 0/TBD | Not started | - |
