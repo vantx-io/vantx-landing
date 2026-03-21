@@ -11,7 +11,7 @@
     "about": "Acerca de",
     "login": "Login",
     "cta": "Agendar Call",
-    "logo_aria": "Vantix — Inicio"
+    "logo_aria": "Vantx — Inicio"
   },
   "credibility": {
     "exp_number": "10+",
@@ -32,13 +32,13 @@
     "qa": "QA Tech Lead Fraccional",
     "company_heading": "Empresa",
     "mission": "Misión & Valores",
-    "copyright": "© 2026 Vantix Engineering"
+    "copyright": "© 2026 Vantx Engineering"
   },
   "hero": {
     "pill": "Ingeniería de Performance Gestionada",
     "headline": "Tus sistemas son lentos.\nTu equipo no sabe por qué.",
     "headline_accent": "Nosotros sí.",
-    "subheadline": "Vantix es tu ingeniero externo de performance y SRE. Monitoreo, load testing y observabilidad como una capacidad gestionada en mejora continua.",
+    "subheadline": "Vantx es tu ingeniero externo de performance y SRE. Monitoreo, load testing y observabilidad como una capacidad gestionada en mejora continua.",
     "cta_primary": "Agendar Strategy Call",
     "cta_secondary": "Ver Precios"
   },
@@ -141,10 +141,10 @@
     "cta": "Agendar Strategy Call"
   },
   "compare": {
-    "heading": "Vantix vs. contratar full-time",
+    "heading": "Vantx vs. contratar full-time",
     "subheading": "La experiencia sin el overhead.",
     "col_hiring": "Contratar in-house",
-    "col_vantix": "Vantix",
+    "col_vantix": "Vantx",
     "row_cost": "Costo",
     "hiring_cost": "$150K–$200K/año + equity + beneficios",
     "vantix_cost": "Tarifa mensual fija, cancela cuando quieras",
@@ -162,9 +162,9 @@
     "vantix_tools": "Stack open-source, sin vendor lock-in"
   },
   "team": {
-    "heading": "Quién está detrás de Vantix",
+    "heading": "Quién está detrás de Vantx",
     "subheading": "Un ingeniero senior. 10+ años en performance, observabilidad y SRE.",
-    "body": "Vantix no es una agencia de staffing. Detrás de cada engagement hay un único ingeniero senior con 10+ años de experiencia práctica en performance engineering, observabilidad, site reliability y QA automation — la misma persona que define la estrategia es quien la implementa. No tercerizado. No rotado. No un consultor junior supervisado por un manager. Un practicante que conoce tus sistemas, construye los dashboards, escribe los load tests, lidera el incident response y entrega los reportes. Esa continuidad es lo que marca la diferencia.",
+    "body": "Vantx no es una agencia de staffing. Detrás de cada engagement hay un único ingeniero senior con 10+ años de experiencia práctica en performance engineering, observabilidad, site reliability y QA automation — la misma persona que define la estrategia es quien la implementa. No tercerizado. No rotado. No un consultor junior supervisado por un manager. Un practicante que conoce tus sistemas, construye los dashboards, escribe los load tests, lidera el incident response y entrega los reportes. Esa continuidad es lo que marca la diferencia.",
     "perf": "Performance Engineering",
     "sre": "Site Reliability",
     "devops": "DevOps",
@@ -218,10 +218,10 @@
     "subheading": "Cuéntanos sobre tu sistema. Lo revisamos y te mostramos exactamente qué cambiaríamos primero.",
     "cta_primary": "Empezar",
     "cta_secondary": "¿Tienes preguntas? Hablemos.",
-    "slots": "Vantix está recibiendo alta demanda — los slots son limitados. Para respuesta más rápida, escribe a <a href=\"mailto:hello@van-tix.io\">hello@van-tix.io</a>"
+    "slots": "Vantx está recibiendo alta demanda — los slots son limitados. Para respuesta más rápida, escribe a <a href=\"mailto:hello@vantx.io\">hello@vantx.io</a>"
   },
   "obs_page": {
-    "meta_title": "Observabilidad como Servicio — Vantix",
+    "meta_title": "Observabilidad como Servicio — Vantx",
     "meta_description": "Observabilidad gestionada: instrumentación, dashboards, SLOs y ajuste de alertas como capacidad en mejora continua. De caótico a confiable.",
     "hero": {
       "pill": "Observabilidad como Servicio",
@@ -348,7 +348,7 @@
     }
   },
   "sre_page": {
-    "meta_title": "SRE Fraccional — Vantix",
+    "meta_title": "SRE Fraccional — Vantx",
     "meta_description": "Un SRE fraccional dedicado embebido en tu equipo. Revisión de arquitectura, command de incidentes, roadmap de confiabilidad — experiencia SRE senior a presupuesto startup.",
     "hero": {
       "pill": "SRE Fraccional",
@@ -469,8 +469,8 @@
     }
   },
   "mission_page": {
-    "meta_title": "Misión & Valores — Vantix",
-    "meta_description": "La misión de Vantix: que cada equipo de tecnología sepa exactamente cómo se comporta su sistema bajo carga — y tenga un plan concreto para mejorarlo.",
+    "meta_title": "Misión & Valores — Vantx",
+    "meta_description": "La misión de Vantx: que cada equipo de tecnología sepa exactamente cómo se comporta su sistema bajo carga — y tenga un plan concreto para mejorarlo.",
     "header": {
       "sub": "Performance Engineering · Observability · Fractional SRE"
     },
@@ -482,7 +482,7 @@
     "vision": {
       "label": "Visión",
       "heading": "Ser el equipo externo de Performance y SRE al que las empresas tech de Americas recurren cuando necesitan que su sistema sea confiable — sin construir un equipo interno de 10 personas para lograrlo.",
-      "body": "En 3 años, cada empresa tech en LATAM y US que necesite performance engineering, observabilidad, o prácticas SRE debería pensar en Vantix como la primera opción: más rápido que contratar, más profundo que un tool, y más confiable que hacerlo solos."
+      "body": "En 3 años, cada empresa tech en LATAM y US que necesite performance engineering, observabilidad, o prácticas SRE debería pensar en Vantx como la primera opción: más rápido que contratar, más profundo que un tool, y más confiable que hacerlo solos."
     },
     "purpose": {
       "label": "Propósito",
@@ -514,7 +514,7 @@
         {
           "num": "05",
           "title": "Transferencia de conocimiento",
-          "body": "Nuestro objetivo es que tu equipo aprenda. Workshops, pair programming, code reviews, mentoring. Un buen engagement con Vantix termina cuando tu equipo ya no nos necesita — y ese es nuestro mejor caso de éxito."
+          "body": "Nuestro objetivo es que tu equipo aprenda. Workshops, pair programming, code reviews, mentoring. Un buen engagement con Vantx termina cuando tu equipo ya no nos necesita — y ese es nuestro mejor caso de éxito."
         },
         {
           "num": "06",
@@ -538,7 +538,7 @@
     }
   },
   "qa_page": {
-    "meta_title": "QA Tech Lead Fraccional — Vantix",
+    "meta_title": "QA Tech Lead Fraccional — Vantx",
     "meta_description": "Un Senior QA/Automation Expert embebido en tu equipo. Estrategia de testing, frameworks de automation, integración CI/CD, y mentoring — a tarifa mensual fija.",
     "hero": {
       "pill": "QA Tech Lead Fraccional",
@@ -659,7 +659,7 @@
     }
   },
   "perf_page": {
-    "meta_title": "Performance as a Service — Vantix",
+    "meta_title": "Performance as a Service — Vantx",
     "meta_description": "Performance engineering gestionado: load testing continuo, monitoreo sintético, web performance tracking y capacity planning. Sabe tus límites antes que tus usuarios.",
     "hero": {
       "pill": "Performance as a Service",

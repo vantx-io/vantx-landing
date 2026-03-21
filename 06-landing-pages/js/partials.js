@@ -1,15 +1,15 @@
 /**
- * Vantix Partials — Fetch-inject system for shared nav and footer
+ * Vantx Partials — Fetch-inject system for shared nav and footer
  *
  * Boot sequence (deterministic):
  *  1. Fetch nav.html and footer.html in parallel
  *  2. Fetch translations via window.i18n.init() — also in parallel
  *  3. After ALL three resolve: apply translations + wire interactivity
- *  4. Dispatch 'vantix:ready' event for page-level code to hook into
+ *  4. Dispatch 'vantx:ready' event for page-level code to hook into
  *
  * Page setup (add before <script src="js/partials.js">):
- *   <script>window.VANTIX_BASE = '.';</script>   ← root pages
- *   <script>window.VANTIX_BASE = '..';</script>  ← pages one level deep
+ *   <script>window.VANTX_BASE = '.';</script>   ← root pages
+ *   <script>window.VANTX_BASE = '..';</script>  ← pages one level deep
  *
  * HTML markers (place these empty elements where nav/footer should appear):
  *   <div data-partial="nav"></div>
@@ -20,7 +20,7 @@
   'use strict'
 
   function base() {
-    return typeof window.VANTIX_BASE !== 'undefined' ? window.VANTIX_BASE : ''
+    return typeof window.VANTX_BASE !== 'undefined' ? window.VANTX_BASE : ''
   }
 
   /* ------------------------------------------------------------------
@@ -123,7 +123,7 @@
     markActiveLink()
 
     // Phase D — signal readiness to page-level scripts
-    document.dispatchEvent(new CustomEvent('vantix:ready'))
+    document.dispatchEvent(new CustomEvent('vantx:ready'))
   }
 
   /* ------------------------------------------------------------------

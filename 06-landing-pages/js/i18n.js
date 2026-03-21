@@ -1,5 +1,5 @@
 /**
- * Vantix i18n — Bilingual language system
+ * Vantx i18n — Bilingual language system
  *
  * Features:
  *  - Auto-detect language from navigator.languages
@@ -20,24 +20,22 @@
  */
 
 window.i18n = (function () {
-  'use strict';
+  'use strict'
 
-  const STORAGE_KEY = 'vantix-lang';
-  const SUPPORTED    = ['en', 'es'];
-  const DEFAULT_LANG = 'en';
+  const STORAGE_KEY = 'vantx-lang'
+  const SUPPORTED = ['en', 'es']
+  const DEFAULT_LANG = 'en'
 
   /* Base path set by each page before loading scripts:
-     window.VANTIX_BASE = '.'    (root-level pages)
-     window.VANTIX_BASE = '..'  (one level deep)
+     window.VANTX_BASE = '.'    (root-level pages)
+     window.VANTX_BASE = '..'  (one level deep)
      Falls back to '' (root-relative, works on servers). */
   function basePath() {
-    return (typeof window.VANTIX_BASE !== 'undefined')
-      ? window.VANTIX_BASE
-      : '';
+    return typeof window.VANTX_BASE !== 'undefined' ? window.VANTX_BASE : ''
   }
 
-  let _translations = {};
-  let _lang = DEFAULT_LANG;
+  let _translations = {}
+  let _lang = DEFAULT_LANG
 
   /* ------------------------------------------------------------------
      Language detection
@@ -45,20 +43,21 @@ window.i18n = (function () {
 
   function detectLang() {
     // 1. Honour stored preference
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored && SUPPORTED.includes(stored)) return stored;
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (stored && SUPPORTED.includes(stored)) return stored
 
     // 2. Auto-detect from browser language list
-    const prefs = Array.isArray(navigator.languages) && navigator.languages.length
-      ? navigator.languages
-      : [navigator.language || DEFAULT_LANG];
+    const prefs =
+      Array.isArray(navigator.languages) && navigator.languages.length
+        ? navigator.languages
+        : [navigator.language || DEFAULT_LANG]
 
     for (const pref of prefs) {
-      const code = pref.split('-')[0].toLowerCase();
-      if (SUPPORTED.includes(code)) return code;
+      const code = pref.split('-')[0].toLowerCase()
+      if (SUPPORTED.includes(code)) return code
     }
 
-    return DEFAULT_LANG;
+    return DEFAULT_LANG
   }
 
   /* ------------------------------------------------------------------
@@ -70,13 +69,13 @@ window.i18n = (function () {
    * Returns the key itself when not found (graceful degradation).
    */
   function t(key) {
-    const parts = key.split('.');
-    let node = _translations;
+    const parts = key.split('.')
+    let node = _translations
     for (const part of parts) {
-      if (node == null || typeof node !== 'object') return key;
-      node = node[part];
+      if (node == null || typeof node !== 'object') return key
+      node = node[part]
     }
-    return (node != null && node !== '') ? String(node) : key;
+    return node != null && node !== '' ? String(node) : key
   }
 
   /* ------------------------------------------------------------------
@@ -86,38 +85,38 @@ window.i18n = (function () {
   /** Apply all translations to the current DOM. */
   function apply() {
     // data-i18n → textContent
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      el.textContent = t(el.getAttribute('data-i18n'));
-    });
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
+      el.textContent = t(el.getAttribute('data-i18n'))
+    })
 
     // data-i18n-html → innerHTML (for bold/em markup in copy)
-    document.querySelectorAll('[data-i18n-html]').forEach(el => {
-      el.innerHTML = t(el.getAttribute('data-i18n-html'));
-    });
+    document.querySelectorAll('[data-i18n-html]').forEach((el) => {
+      el.innerHTML = t(el.getAttribute('data-i18n-html'))
+    })
 
     // data-i18n-aria → aria-label
-    document.querySelectorAll('[data-i18n-aria]').forEach(el => {
-      el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
-    });
+    document.querySelectorAll('[data-i18n-aria]').forEach((el) => {
+      el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')))
+    })
 
     // data-i18n-placeholder → placeholder
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-      el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
-    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
+      el.placeholder = t(el.getAttribute('data-i18n-placeholder'))
+    })
 
     // data-i18n-title → title attribute
-    document.querySelectorAll('[data-i18n-title]').forEach(el => {
-      el.title = t(el.getAttribute('data-i18n-title'));
-    });
+    document.querySelectorAll('[data-i18n-title]').forEach((el) => {
+      el.title = t(el.getAttribute('data-i18n-title'))
+    })
 
     // Language toggle buttons — show the *other* language code
-    document.querySelectorAll('[data-lang-toggle]').forEach(btn => {
-      btn.textContent   = t('lang.toggle_label');
-      btn.setAttribute('aria-label', t('lang.toggle_aria'));
-    });
+    document.querySelectorAll('[data-lang-toggle]').forEach((btn) => {
+      btn.textContent = t('lang.toggle_label')
+      btn.setAttribute('aria-label', t('lang.toggle_aria'))
+    })
 
     // Sync <html lang> attribute for assistive tech
-    document.documentElement.lang = _lang;
+    document.documentElement.lang = _lang
   }
 
   /* ------------------------------------------------------------------
@@ -126,10 +125,10 @@ window.i18n = (function () {
 
   /** Fetch the JSON bundle for a given language code. */
   async function loadTranslations(lang) {
-    const url = `${basePath()}/i18n/${lang}.json`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`i18n: failed to load ${url} (${res.status})`);
-    _translations = await res.json();
+    const url = `${basePath()}/i18n/${lang}.json`
+    const res = await fetch(url)
+    if (!res.ok) throw new Error(`i18n: failed to load ${url} (${res.status})`)
+    _translations = await res.json()
   }
 
   /* ------------------------------------------------------------------
@@ -142,9 +141,9 @@ window.i18n = (function () {
    * Returns the resolved language code.
    */
   async function init() {
-    _lang = detectLang();
-    await loadTranslations(_lang);
-    return _lang;
+    _lang = detectLang()
+    await loadTranslations(_lang)
+    return _lang
   }
 
   /**
@@ -152,20 +151,20 @@ window.i18n = (function () {
    */
   async function setLang(lang) {
     if (!SUPPORTED.includes(lang)) {
-      console.warn(`i18n: unsupported language "${lang}"`);
-      return;
+      console.warn(`i18n: unsupported language "${lang}"`)
+      return
     }
-    _lang = lang;
-    localStorage.setItem(STORAGE_KEY, lang);
-    await loadTranslations(lang);
-    apply();
-    document.dispatchEvent(new CustomEvent('i18n:changed', { detail: { lang } }));
+    _lang = lang
+    localStorage.setItem(STORAGE_KEY, lang)
+    await loadTranslations(lang)
+    apply()
+    document.dispatchEvent(new CustomEvent('i18n:changed', { detail: { lang } }))
   }
 
   /** Return the currently active language code. */
   function getCurrentLang() {
-    return _lang;
+    return _lang
   }
 
-  return { init, setLang, apply, t, getCurrentLang };
-}());
+  return { init, setLang, apply, t, getCurrentLang }
+})()
