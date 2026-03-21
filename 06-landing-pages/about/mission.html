@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" data-i18n-attr="content:mission_page.meta_description" content="Vantix mission, vision, and values — data-driven performance engineering with async-first communication and no vendor lock-in.">
+  <title data-i18n="mission_page.meta_title">Mission &amp; Values — Vantix</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- Design system — paths use ../ because this page is one level deep -->
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/detail.css">
+
+  <!-- Calendly widget CSS -->
+  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+
+  <!-- Google Analytics 4
+       REPLACE G-XXXXXXXXXX with your real Measurement ID before launch -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+</head>
+
+<body>
+
+  <!-- Nav partial injected here -->
+  <div data-partial="nav"></div>
+
+  <main id="main-content" tabindex="-1">
+
+    <!-- ================================================================
+         Page Hero
+         Centered, pill badge only — no CTA in hero per UI-SPEC
+         ================================================================ -->
+    <section class="page-hero section" id="hero" aria-label="Mission page header">
+      <div class="container">
+        <div class="page-hero__inner" style="text-align: center; margin: 0 auto;">
+
+          <!-- Pill badge -->
+          <div class="pill" data-i18n="mission_page.header.sub">Performance Engineering · Observability · Fractional SRE</div>
+
+          <!-- Page headline — uses mission heading as h1 for SEO -->
+          <h1 class="page-hero__headline" data-i18n="mission_page.mission.heading">
+            That every technology team knows exactly how their system behaves under load — and has a concrete plan to improve it.
+          </h1>
+
+        </div><!-- /.page-hero__inner -->
+      </div><!-- /.container -->
+    </section>
+
+    <!-- ================================================================
+         Mission / Vision / Purpose blocks
+         Three distinct styled blocks — no hero CTA on mission page
+         ================================================================ -->
+    <section class="section" id="mission" aria-labelledby="mission-heading">
+      <div class="container">
+
+        <!-- Mission block — dark filled card -->
+        <div class="mission-block">
+          <div class="mission-block__label" data-i18n="mission_page.mission.label">Mission</div>
+          <h2 id="mission-heading" class="mission-block__heading" data-i18n="mission_page.mission.heading">
+            That every technology team knows exactly how their system behaves under load — and has a concrete plan to improve it.
+          </h2>
+          <p class="mission-block__body" data-i18n="mission_page.mission.body">
+            We close the gap between 'having tools' and 'using them well'. We make monitoring, testing, and observability work continuously and reliably — as a managed capability that improves every month, not as a project that ends and gets forgotten.
+          </p>
+        </div>
+
+        <!-- Vision block — outlined card -->
+        <div class="vision-block">
+          <div class="vision-block__label" data-i18n="mission_page.vision.label">Vision</div>
+          <h2 class="vision-block__heading" data-i18n="mission_page.vision.heading">
+            To be the external Performance and SRE team that tech companies across the Americas turn to when they need their system to be reliable — without building an internal team of 10 people to achieve it.
+          </h2>
+          <p class="vision-block__body" data-i18n="mission_page.vision.body">
+            In 3 years, every tech company in LATAM and the US that needs performance engineering, observability, or SRE practices should think of Vantix as the first option: faster than hiring, deeper than a tool, and more reliable than doing it alone.
+          </p>
+        </div>
+
+        <!-- Purpose block — subtle filled, centered -->
+        <div class="purpose-block">
+          <div class="purpose-block__label" data-i18n="mission_page.purpose.label">Purpose</div>
+          <h2 class="purpose-block__heading" data-i18n="mission_page.purpose.heading">
+            That no team has to cross their fingers before a Black Friday, a launch, or a marketing campaign. That infrastructure decisions are made with data, not hope.
+          </h2>
+        </div>
+
+      </div><!-- /.container -->
+    </section>
+
+    <!-- ================================================================
+         Values Grid
+         6 value cards in a 2-column grid
+         ================================================================ -->
+    <section class="section" id="values" aria-labelledby="values-heading">
+      <div class="container">
+
+        <div class="mission-block__label" id="values-heading" data-i18n="mission_page.values.section_label" style="margin-bottom: var(--space-5);">Values</div>
+
+        <div class="values-grid">
+
+          <div class="value-card">
+            <div class="value-card__num" data-i18n="mission_page.values.items.0.num">01</div>
+            <h3 class="value-card__title" data-i18n="mission_page.values.items.0.title">Data, not opinions</h3>
+            <p class="value-card__body" data-i18n="mission_page.values.items.0.body">
+              Every number in every report comes from real tests and monitoring running 24/7. We don't say 'I think'. We say 'the data shows'. If we don't have the data, we measure before we opine.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div class="value-card__num" data-i18n="mission_page.values.items.1.num">02</div>
+            <h3 class="value-card__title" data-i18n="mission_page.values.items.1.title">Actions, not lists</h3>
+            <p class="value-card__body" data-i18n="mission_page.values.items.1.body">
+              We don't deliver generic best-practice lists. We deliver the exact SQL, the exact config, the exact change — with the expected improvement estimate. 'CREATE INDEX idx_x ON table(col1, col2)' not 'consider optimizing the database'.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div class="value-card__num" data-i18n="mission_page.values.items.2.num">03</div>
+            <h3 class="value-card__title" data-i18n="mission_page.values.items.2.title">Async by default</h3>
+            <p class="value-card__body" data-i18n="mission_page.values.items.2.body">
+              We respect our clients' time and our own. Slack for communication, Loom for explanations, PDF for reports. Meetings exist when they truly matter — not as ritual.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div class="value-card__num" data-i18n="mission_page.values.items.3.num">04</div>
+            <h3 class="value-card__title" data-i18n="mission_page.values.items.3.title">No lock-in</h3>
+            <p class="value-card__body" data-i18n="mission_page.values.items.3.body">
+              Everything we build uses open-source tools: k6, Grafana, OpenTelemetry, Prometheus. If you decide to end the service tomorrow, everything is yours. We don't create dependency — we create capability.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div class="value-card__num" data-i18n="mission_page.values.items.4.num">05</div>
+            <h3 class="value-card__title" data-i18n="mission_page.values.items.4.title">Knowledge transfer</h3>
+            <p class="value-card__body" data-i18n="mission_page.values.items.4.body">
+              Our goal is for your team to learn. Workshops, pair programming, code reviews, mentoring. A successful Vantix engagement ends when your team no longer needs us — and that is our best success story.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div class="value-card__num" data-i18n="mission_page.values.items.5.num">06</div>
+            <h3 class="value-card__title" data-i18n="mission_page.values.items.5.title">Continuous improvement, not projects</h3>
+            <p class="value-card__body" data-i18n="mission_page.values.items.5.body">
+              We don't deliver a report that gets filed away. We deliver a cycle: measure → find → prioritize → implement → validate. Every month the baseline rises. Every month the system is more reliable. That's what we sell.
+            </p>
+          </div>
+
+        </div><!-- /.values-grid -->
+
+      </div><!-- /.container -->
+    </section>
+
+    <!-- ================================================================
+         Manifesto
+         8 belief statements with dash markers
+         ================================================================ -->
+    <section class="section" id="manifesto" aria-labelledby="manifesto-heading">
+      <div class="container">
+
+        <div class="manifesto">
+          <div class="manifesto__label" id="manifesto-heading" data-i18n="mission_page.manifesto.label">What we believe</div>
+          <ul class="manifesto__list">
+            <li class="manifesto__item" data-i18n="mission_page.manifesto.items.0">
+              Most teams don't lack tools. They lack someone who operates them correctly.
+            </li>
+            <li class="manifesto__item" data-i18n="mission_page.manifesto.items.1">
+              A load test run once is not performance engineering. It's a checkbox.
+            </li>
+            <li class="manifesto__item" data-i18n="mission_page.manifesto.items.2">
+              Alerts that get ignored are worse than no alerts — they create a false sense of security.
+            </li>
+            <li class="manifesto__item" data-i18n="mission_page.manifesto.items.3">
+              The cost of an incident is always greater than the cost of preventing it.
+            </li>
+            <li class="manifesto__item" data-i18n="mission_page.manifesto.items.4">
+              A dashboard that doesn't answer the question you have during an incident is decoration, not observability.
+            </li>
+            <li class="manifesto__item" data-i18n="mission_page.manifesto.items.5">
+              The difference between a tester and a performance engineer is the difference between running a script and understanding the architecture.
+            </li>
+            <li class="manifesto__item" data-i18n="mission_page.manifesto.items.6">
+              100% async doesn't mean 0% communication. It means efficient communication, when it matters, without wasting anyone's time.
+            </li>
+            <li class="manifesto__item" data-i18n="mission_page.manifesto.items.7">
+              The best deliverable is the one that arrives without you asking for it, with the data you need, in the format you can use.
+            </li>
+          </ul>
+        </div>
+
+      </div><!-- /.container -->
+    </section>
+
+    <!-- ================================================================
+         CTA section — closing push
+         1 CTA only on mission page (no hero CTA per UI-SPEC)
+         ================================================================ -->
+    <section class="cta-section section" aria-labelledby="page-cta-heading">
+      <div class="container">
+        <div class="cta-section__inner">
+          <h2 id="page-cta-heading" class="cta-section__heading" data-i18n="cta_section.heading">Ready to stop guessing?</h2>
+          <p class="cta-section__sub" data-i18n="cta_section.subheading">
+            Book a 30-minute demo. We'll review your current setup and show you exactly what we'd change first.
+          </p>
+          <div class="cta-section__actions">
+            <button
+              class="btn btn--primary btn--lg js-calendly-trigger"
+              type="button"
+              data-i18n="cta_section.cta_primary"
+            >Book a Free Demo</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer partial injected here -->
+  <div data-partial="footer"></div>
+
+  <!-- ================================================================
+       Scripts — load order matters:
+       1. Set VANTIX_BASE ('..' because page is one level deep)
+       2. i18n.js — exposes window.i18n
+       3. partials.js — boots the whole system
+       ================================================================ -->
+  <script>window.VANTIX_BASE = '..';</script>
+  <script src="../js/i18n.js"></script>
+  <script src="../js/partials.js"></script>
+
+  <!-- Calendly widget JS — async, does not block initial render -->
+  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+
+  <!-- Page JS: Calendly popup trigger + GA4 booking event -->
+  <script>
+    // REPLACE with your real Calendly scheduling link before launch
+    var CALENDLY_URL = 'https://calendly.com/vantix/30min';
+
+    // Intercept all CTA clicks — both .js-calendly-trigger and [href="#calendly"] (nav)
+    document.addEventListener('click', function (e) {
+      var trigger = e.target.closest('.js-calendly-trigger, [href="#calendly"]');
+      if (!trigger) return;
+      e.preventDefault();
+      if (window.Calendly) {
+        Calendly.initPopupWidget({ url: CALENDLY_URL });
+      } else {
+        // Calendly widget not yet loaded — open in new tab as fallback
+        window.open(CALENDLY_URL, '_blank', 'noopener,noreferrer');
+      }
+    });
+
+    // GA4: track Calendly booking completions (ANLT-02)
+    window.addEventListener('message', function (e) {
+      if (e.data && e.data.event === 'calendly.event_scheduled') {
+        if (typeof gtag === 'function') {
+          gtag('event', 'calendly_booking', {
+            event_category: 'engagement',
+            event_label: 'demo_scheduled'
+          });
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
