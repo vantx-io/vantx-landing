@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" data-i18n-attr="content:sre_page.meta_description" content="A dedicated fractional SRE embedded in your team. Architecture review, incident command, reliability roadmap — senior SRE expertise at startup budget.">
+  <title data-i18n="sre_page.meta_title">Fractional SRE — Vantix</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- Design system — paths use ../ because this page is one level deep -->
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/detail.css">
+
+  <!-- Calendly widget CSS -->
+  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+
+  <!-- Google Analytics 4
+       REPLACE G-XXXXXXXXXX with your real Measurement ID before launch -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+</head>
+
+<body>
+
+  <!-- Nav partial injected here -->
+  <div data-partial="nav"></div>
+
+  <main id="main-content" tabindex="-1">
+
+    <!-- ================================================================
+         Page Hero
+         ================================================================ -->
+    <section class="page-hero page-hero--sre section" aria-label="Hero">
+      <div class="container">
+        <div class="page-hero__inner">
+
+          <!-- Pill badge — amber accent via .page-hero--sre .pill -->
+          <div class="pill" data-i18n="sre_page.hero.pill">Fractional SRE</div>
+
+          <!-- Price display -->
+          <div class="page-hero__price">
+            <span class="page-hero__price-amount" data-i18n="services.sre.price">$5,500</span>
+            <span class="page-hero__price-period" data-i18n="services.sre.price_period">/month</span>
+          </div>
+
+          <!-- Main headline -->
+          <h1 class="page-hero__headline">
+            <span data-i18n="sre_page.hero.headline">Senior SRE expertise.</span>
+            <span class="page-hero__headline-accent" data-i18n="sre_page.hero.headline_accent"> Startup budget.</span>
+          </h1>
+
+          <!-- Subheadline -->
+          <p class="page-hero__sub" data-i18n="sre_page.hero.subheadline">
+            A dedicated SRE embedded in your engineering team — handling architecture review, incident command, post-mortems, and the hands-on reliability work that never gets prioritized. All the expertise of a full-time senior SRE at a fraction of the cost.
+          </p>
+
+          <!-- Hero CTAs -->
+          <div class="page-hero__actions">
+            <button
+              class="btn btn--primary btn--lg js-calendly-trigger"
+              type="button"
+              data-i18n="cta_section.cta_primary"
+            >Book a Free Demo</button>
+            <a href="../#services" class="btn btn--outline btn--lg" data-i18n="hero.cta_secondary">View Services</a>
+          </div>
+
+        </div><!-- /.page-hero__inner -->
+      </div><!-- /.container -->
+    </section>
+
+    <!-- ================================================================
+         Problem
+         ================================================================ -->
+    <section class="section" id="problem" style="background: var(--color-surface);">
+      <div class="container">
+        <p class="deliverables__intro" data-i18n="sre_page.problem.body_1">
+          A senior SRE costs $150K+/year in salary alone. Your engineering team is shipping features, not building reliability practices. Incidents take hours to resolve because no one owns the process. Post-mortems get written and filed — then the same incident happens again three months later. You know reliability matters, but you can't justify a full-time hire at this stage.
+        </p>
+        <p class="deliverables__intro" data-i18n="sre_page.problem.body_2" style="margin-bottom: 0;">
+          That's the exact gap a fractional SRE fills. Not a consultant who delivers a report and disappears — a dedicated practitioner embedded in your team, owning reliability the same way your engineers own their services.
+        </p>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         Deliverables
+         ================================================================ -->
+    <section class="section" id="deliverables" aria-labelledby="deliverables-heading">
+      <div class="container">
+
+        <div class="section-header">
+          <h2 id="deliverables-heading" class="section-title" data-i18n="sre_page.deliverables.heading">What our clients receive</h2>
+        </div>
+
+        <p class="deliverables__intro" data-i18n="sre_page.deliverables.intro">
+          Six concrete deliverables that bring senior SRE capability to your team without the full-time headcount.
+        </p>
+
+        <!-- Deliverable 1 -->
+        <div class="deliverable">
+          <div class="deliverable__num deliverable__num--amber">1</div>
+          <div>
+            <h3 class="deliverable__title" data-i18n="sre_page.deliverables.items.0.title">Dedicated fractional SRE embedded in your team (10-20 hrs/week)</h3>
+            <p class="deliverable__body" data-i18n="sre_page.deliverables.items.0.body">
+              Your fractional SRE attends standups, reviews PRs for reliability impact, participates in architecture discussions, and is reachable on Slack during business hours. Not a consultant who shows up for quarterly reviews — a practitioner who knows your systems.
+            </p>
+            <div class="deliverable__badges">
+              <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.0.badges.0">10-20 hrs/week</span>
+              <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.0.badges.1">Slack access</span>
+              <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.0.badges.2">PR reliability reviews</span>
+              <span class="deliverable__badge deliverable__badge--freq-amber" data-i18n="sre_page.deliverables.items.0.freq">Ongoing</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deliverable 2 -->
+        <div class="deliverable">
+          <div class="deliverable__num deliverable__num--amber">2</div>
+          <div>
+            <h3 class="deliverable__title" data-i18n="sre_page.deliverables.items.1.title">Architecture review + reliability roadmap</h3>
+            <p class="deliverable__body" data-i18n="sre_page.deliverables.items.1.body">
+              In the first two weeks, we map your architecture, identify the top reliability risks, and produce a prioritized roadmap. Not a generic checklist — a concrete plan specific to your stack: which services are single points of failure, which have no SLOs, which incidents are preventable.
+            </p>
+            <div class="deliverable__badges">
+              <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.1.badges.0">Architecture risk map</span>
+              <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.1.badges.1">Prioritized reliability roadmap</span>
+              <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.1.badges.2">Quick wins identified</span>
+              <span class="deliverable__badge deliverable__badge--freq-amber" data-i18n="sre_page.deliverables.items.1.freq">Weeks 1-2</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deliverable 3 -->
+        <div class="deliverable">
+          <div class="deliverable__num deliverable__num--amber">3</div>
+          <div>
+            <h3 class="deliverable__title" data-i18n="sre_page.deliverables.items.2.title">Incident command and post-mortem facilitation</h3>
+            <p class="deliverable__body" data-i18n="sre_page.deliverables.items.2.body">
+              During live incidents, your fractional SRE leads the response: coordinates communication, drives the diagnosis process, and keeps the team focused. After the incident, facilitates a structured post-mortem that produces actionable follow-ups — not a document that gets filed and forgotten.
+            </p>
+            <div class="deliverable__badges">
+              <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.2.badges.0">Incident command</span>
+              <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.2.badges.1">Structured post-mortems</span>
+              <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.2.badges.2">Action item tracking</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deliverable 4 -->
+        <div class="deliverable">
+          <div class="deliverable__num deliverable__num--amber">4</div>
+          <div>
+            <h3 class="deliverable__title" data-i18n="sre_page.deliverables.items.3.title">Escalation path during live incidents</h3>
+            <p class="deliverable__body" data-i18n="sre_page.deliverables.items.3.body">
+              When something breaks at 2 AM, your team has a direct escalation path. We respond within 15 minutes for P1 incidents during business hours, and maintain an async escalation channel for off-hours emergencies. Your on-call rotation gets backed by someone who has seen the failure mode before.
+            </p>
+            <div class="deliverable__badges">
+              <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.3.badges.0">P1 escalation: 15 min response</span>
+              <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.3.badges.1">Off-hours async channel</span>
+              <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.3.badges.2">Incident runbooks</span>
+              <span class="deliverable__badge deliverable__badge--freq-amber" data-i18n="sre_page.deliverables.items.3.freq">Always-on</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deliverable 5 -->
+        <div class="deliverable">
+          <div class="deliverable__num deliverable__num--amber">5</div>
+          <div>
+            <h3 class="deliverable__title" data-i18n="sre_page.deliverables.items.4.title">SLO program definition and tracking</h3>
+            <p class="deliverable__body" data-i18n="sre_page.deliverables.items.4.body">
+              We define SLOs your business understands, instrument them correctly, and establish the error budget process. Monthly SLO reviews with the engineering team — is reliability improving? Are we spending error budget on the right things? This becomes the language between engineering and product.
+            </p>
+            <div class="deliverable__badges">
+              <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.4.badges.0">SLO definition workshop</span>
+              <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.4.badges.1">Error budget tracking</span>
+              <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.4.badges.2">Monthly SLO review</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deliverable 6 -->
+        <div class="deliverable">
+          <div class="deliverable__num deliverable__num--amber">6</div>
+          <div>
+            <h3 class="deliverable__title" data-i18n="sre_page.deliverables.items.5.title">Async communication (Slack) + optional weekly sync</h3>
+            <p class="deliverable__body" data-i18n="sre_page.deliverables.items.5.body">
+              All communication defaults to async: Slack for questions, Loom for explaining architectural decisions, written reports for status updates. An optional 30-minute weekly sync to align on priorities. We respect your team's time — meetings happen when they add value that async doesn't.
+            </p>
+            <div class="deliverable__badges">
+              <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.5.badges.0">Slack async always</span>
+              <span class="deliverable__badge deliverable__badge--freq-amber" data-i18n="sre_page.deliverables.items.5.badges.1">Optional weekly sync: 30 min</span>
+              <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.5.badges.2">Written status reports</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.container -->
+    </section>
+
+    <!-- ================================================================
+         Outcomes
+         ================================================================ -->
+    <section class="section" id="outcomes" style="background: var(--color-surface);" aria-labelledby="outcomes-heading">
+      <div class="container">
+
+        <div class="section-header">
+          <h2 id="outcomes-heading" class="section-title" data-i18n="sre_page.outcomes.heading">The result</h2>
+        </div>
+
+        <div class="outcomes-grid">
+          <div class="outcome-card">
+            <h4 class="outcome-card__title" data-i18n="sre_page.outcomes.items.0.title">Reliability without headcount</h4>
+            <p class="outcome-card__body" data-i18n="sre_page.outcomes.items.0.body">
+              Senior SRE capability embedded in your team at a fraction of the cost. No recruiting, no onboarding overhead, no $150K salary commitment.
+            </p>
+          </div>
+          <div class="outcome-card">
+            <h4 class="outcome-card__title" data-i18n="sre_page.outcomes.items.1.title">Faster incident resolution</h4>
+            <p class="outcome-card__body" data-i18n="sre_page.outcomes.items.1.body">
+              Clear incident command process. Runbooks that exist. A practitioner who knows your systems and leads the response. Incidents that used to take 4 hours get resolved in 45 minutes.
+            </p>
+          </div>
+          <div class="outcome-card">
+            <h4 class="outcome-card__title" data-i18n="sre_page.outcomes.items.2.title">A reliability culture that sticks</h4>
+            <p class="outcome-card__body" data-i18n="sre_page.outcomes.items.2.body">
+              SLOs your team actually tracks. Post-mortems that produce changes. Architecture decisions made with reliability data. The practices don't disappear when the engagement ends — they're built into how your team works.
+            </p>
+          </div>
+        </div>
+
+      </div><!-- /.container -->
+    </section>
+
+    <!-- ================================================================
+         How It Works
+         ================================================================ -->
+    <section class="section timeline-section" id="how-it-works" aria-labelledby="how-heading">
+      <div class="container">
+
+        <div class="section-header">
+          <h2 id="how-heading" class="section-title" data-i18n="sre_page.how.heading">How it works</h2>
+        </div>
+
+        <div class="timeline">
+
+          <!-- Step 1 -->
+          <div class="timeline__step">
+            <h4 class="timeline__step-title">
+              <span data-i18n="sre_page.how.steps.0.title">Kick-off</span>
+              <span class="timeline__badge" data-i18n="sre_page.how.steps.0.badge">15 min video call</span>
+            </h4>
+            <p class="timeline__step-body" data-i18n="sre_page.how.steps.0.body">
+              We understand your current architecture, recent incidents, and what reliability means for your business. Access to your stack is set up — Slack, incident tooling, monitoring.
+            </p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="timeline__step">
+            <h4 class="timeline__step-title">
+              <span data-i18n="sre_page.how.steps.1.title">Week 1: Architecture review</span>
+            </h4>
+            <p class="timeline__step-body" data-i18n="sre_page.how.steps.1.body">
+              We map your services, identify single points of failure, review recent incidents, and audit your current on-call setup. You get a written risk assessment by end of week 1.
+            </p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="timeline__step">
+            <h4 class="timeline__step-title">
+              <span data-i18n="sre_page.how.steps.2.title">Weeks 2-3: Reliability roadmap</span>
+            </h4>
+            <p class="timeline__step-body" data-i18n="sre_page.how.steps.2.body">
+              We build the prioritized roadmap: what to fix first, what SLOs to define, what runbooks to write. The first quick wins get implemented — things that improve reliability immediately.
+            </p>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="timeline__step">
+            <h4 class="timeline__step-title">
+              <span data-i18n="sre_page.how.steps.3.title">Month 2+: Embedded SRE</span>
+            </h4>
+            <p class="timeline__step-body" data-i18n="sre_page.how.steps.3.body">
+              Ongoing embedded work: incident response, PR reviews, SLO tracking, architecture guidance. Your team has a dedicated reliability practitioner in their corner.
+            </p>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="timeline__step">
+            <h4 class="timeline__step-title">
+              <span data-i18n="sre_page.how.steps.4.title">Quarterly: Reliability review</span>
+              <span class="timeline__badge" data-i18n="sre_page.how.steps.4.badge">1h recorded</span>
+            </h4>
+            <p class="timeline__step-body" data-i18n="sre_page.how.steps.4.body">
+              A structured review of reliability progress: SLO trends, incident frequency, error budget consumption, and roadmap for the next quarter.
+            </p>
+          </div>
+
+        </div><!-- /.timeline -->
+
+      </div><!-- /.container -->
+    </section>
+
+    <!-- ================================================================
+         CTA section — closing push
+         ================================================================ -->
+    <section class="cta-section section" aria-labelledby="page-cta-heading">
+      <div class="container">
+        <div class="cta-section__inner">
+          <h2 id="page-cta-heading" class="cta-section__heading" data-i18n="cta_section.heading">Ready to stop guessing?</h2>
+          <p class="cta-section__sub" data-i18n="cta_section.subheading">
+            Book a 30-minute demo. We'll review your current setup and show you exactly what we'd change first.
+          </p>
+          <div class="cta-section__actions">
+            <button
+              class="btn btn--primary btn--lg js-calendly-trigger"
+              type="button"
+              data-i18n="cta_section.cta_primary"
+            >Book a Free Demo</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer partial injected here -->
+  <div data-partial="footer"></div>
+
+  <!-- ================================================================
+       Scripts — load order matters:
+       1. Set VANTIX_BASE ('..' for pages one level deep)
+       2. i18n.js — exposes window.i18n (no auto-init)
+       3. partials.js — boots the whole system
+       ================================================================ -->
+  <script>window.VANTIX_BASE = '..';</script>
+  <script src="../js/i18n.js"></script>
+  <script src="../js/partials.js"></script>
+
+  <!-- Calendly widget JS — async, does not block initial render
+       REPLACE the URL below with your real Calendly scheduling link before launch -->
+  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+
+  <!-- Page JS: Calendly popup trigger + GA4 booking event -->
+  <script>
+    // REPLACE with your real Calendly scheduling link before launch
+    var CALENDLY_URL = 'https://calendly.com/vantix/30min';
+
+    // Intercept all CTA clicks — both .js-calendly-trigger and [href="#calendly"] (nav)
+    document.addEventListener('click', function (e) {
+      var trigger = e.target.closest('.js-calendly-trigger, [href="#calendly"]');
+      if (!trigger) return;
+      e.preventDefault();
+      if (window.Calendly) {
+        Calendly.initPopupWidget({ url: CALENDLY_URL });
+      } else {
+        // Calendly widget not yet loaded — open in new tab as fallback
+        window.open(CALENDLY_URL, '_blank', 'noopener,noreferrer');
+      }
+    });
+
+    // GA4: track Calendly booking completions (ANLT-02)
+    window.addEventListener('message', function (e) {
+      if (e.data && e.data.event === 'calendly.event_scheduled') {
+        if (typeof gtag === 'function') {
+          gtag('event', 'calendly_booking', {
+            event_category: 'engagement',
+            event_label: 'demo_scheduled'
+          });
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
