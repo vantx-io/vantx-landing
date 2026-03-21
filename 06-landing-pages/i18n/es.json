@@ -6,10 +6,22 @@
   },
   "nav": {
     "services": "Servicios",
+    "see_pricing": "Ver Precios",
     "pricing": "Precios",
     "about": "Acerca de",
-    "cta": "Agendar Llamada Estratégica",
+    "login": "Login",
+    "cta": "Agendar Call",
     "logo_aria": "Vantix — Inicio"
+  },
+  "credibility": {
+    "exp_number": "10+",
+    "exp_label": "años de experiencia",
+    "team_number": "1",
+    "team_label": "ingeniero senior — no tercerizado, no rotado",
+    "stack_number": "4",
+    "stack_label": "disciplinas: Performance, SRE, DevOps, QA",
+    "tools_number": "0",
+    "tools_label": "vendor lock-in — 100% open-source"
   },
   "footer": {
     "tagline": "Ingeniería de performance gestionada, a velocidad startup.",
@@ -17,21 +29,23 @@
     "observability": "Observabilidad como Servicio",
     "performance": "Performance como Servicio",
     "sre": "SRE Fraccional",
+    "qa": "QA Tech Lead Fraccional",
     "company_heading": "Empresa",
     "mission": "Misión & Valores",
-    "copyright": "© 2026 Vantix Consulting"
+    "copyright": "© 2026 Vantix Engineering"
   },
   "hero": {
     "pill": "Ingeniería de Performance Gestionada",
     "headline": "Tus sistemas son lentos.\nTu equipo no sabe por qué.",
     "headline_accent": "Nosotros sí.",
-    "subheadline": "Vantix es tu equipo externo de performance y SRE. Monitoreo, load testing y observabilidad como una capacidad gestionada en mejora continua.",
-    "cta_primary": "Agendar Llamada Estratégica",
-    "cta_secondary": "Ver Servicios"
+    "subheadline": "Vantix es tu ingeniero externo de performance y SRE. Monitoreo, load testing y observabilidad como una capacidad gestionada en mejora continua.",
+    "cta_primary": "Agendar Strategy Call",
+    "cta_secondary": "Ver Precios"
   },
   "pain": {
     "heading": "¿Te suena familiar?",
     "subheading": "Si eres CTO o Engineering Manager en un SaaS que escala, probablemente has vivido al menos uno de estos.",
+    "cta": "Vamos a resolverlo",
     "cards": [
       {
         "title": "Alertas a las 3 AM",
@@ -61,143 +75,225 @@
   },
   "services": {
     "heading": "Qué entregamos",
-    "subheading": "Tres capacidades gestionadas, diseñadas para combinarse.",
+    "subheading": "Cuatro capacidades gestionadas, diseñadas para combinarse.",
     "learn_more": "Ver más",
+    "sold_out": "Agotado",
     "observability": {
       "tag": "Observabilidad como Servicio",
-      "headline": "Ve todo lo que importa.",
-      "description": "Instrumentamos tus sistemas, construimos los dashboards que realmente responden tus preguntas y ajustamos tus alertas para que disparen cuando algo está mal — no solo cuando se cruza un umbral.",
+      "headline": "Tu próximo incidente, diagnosticado en 30 segundos.",
+      "description": "Instrumentamos tus sistemas, construimos dashboards que responden las preguntas del incidente, y afinamos alertas para que tu equipo confíe en ellas. IRM incluido: on-call routing, incident timeline, status pages.",
       "features": [
-        "Instrumentación full-stack (métricas, logs, trazas)",
-        "Dashboards curados por servicio y equipo",
-        "Ajuste de alertas — reducción de ruido, runbooks accionables",
-        "Revisión mensual de observabilidad"
+        "Instrumentación + estrategia de telemetría",
+        "Dashboards que responden las preguntas del incidente en 30 segundos",
+        "Alertas que tu equipo confía + SLOs que el negocio entiende",
+        "IRM: on-call routing, incidentes, status pages",
+        "Optimización de costos de telemetría (reducción 30–50%)"
       ],
-      "price": "$3,000",
+      "price": "$3,500",
       "price_period": "/mes"
     },
     "performance": {
       "tag": "Performance como Servicio",
-      "headline": "Conoce tus límites antes que tus usuarios.",
-      "description": "Load testing continuo con k6 integrado en tu pipeline de CI/CD. Escribimos los scripts, hacemos el baseline de tus servicios, definimos los SLOs y los rastreamos en el tiempo.",
+      "headline": "Sabe tus límites antes que tus usuarios.",
+      "description": "Load testing continuo, monitoreo sintético 24/7, RUM desde browsers reales, y evaluaciones de performance mensuales. Datos reales cada semana — no un test aislado antes de un release.",
       "features": [
-        "Suite de load tests k6 (peak, soak, spike)",
-        "Integración con pipeline de CI/CD",
-        "Definición y seguimiento de SLIs/SLOs",
-        "Reportes mensuales de tendencia de performance"
+        "Baseline de capacidad medido (Max TPS, breakpoint, p95)",
+        "Uptime + monitoreo sintético 24/7",
+        "RUM + JS error tracking (50K sessions incluidas)",
+        "Lighthouse + Core Web Vitals semanal",
+        "Load test mensual + informe de capacity planning"
       ],
-      "price": "$2,500",
+      "price": "$2,800",
       "price_period": "/mes"
     },
     "sre": {
       "tag": "SRE Fraccional",
-      "headline": "Experiencia SRE senior, presupuesto startup.",
-      "description": "Un SRE dedicado (fraccional) embebido en tu equipo de ingeniería. Revisión de arquitectura, roadmap de confiabilidad, command de incidentes y el trabajo real para hacerlo realidad.",
+      "headline": "Incidentes resueltos en 45 minutos, no 4 horas.",
+      "description": "Un SRE senior embebido en tu equipo — manejando revisión de arquitectura, incident command, post-mortems, y el trabajo de reliability que nunca se prioriza.",
       "features": [
-        "SRE fraccional dedicado (10–20 hrs/semana)",
+        "SRE fraccional dedicado embebido en tu equipo",
         "Command de incidentes y facilitación de post-mortems",
         "Roadmap de confiabilidad y revisión de arquitectura",
         "Canal de escalación durante incidentes"
       ],
-      "price": "$5,500",
+      "price_prefix": "Desde",
+      "price": "$4,000",
+      "price_period": "/mes"
+    },
+    "qa": {
+      "tag": "QA Tech Lead Fraccional",
+      "headline": "Estrategia de testing que escala con tu equipo.",
+      "description": "Un Senior QA/Automation Expert embebido en tu equipo — definiendo estrategia de testing, construyendo frameworks de automation, integrando tests en CI/CD, y entrenando a tu equipo para mantener calidad autónomamente.",
+      "features": [
+        "Estrategia de testing + framework de automation",
+        "Integración CI/CD (GitHub Actions, GitLab CI)",
+        "Playwright/Cypress E2E + contract testing",
+        "Mentoring y pair programming para tu equipo"
+      ],
+      "price_prefix": "Desde",
+      "price": "$3,500",
       "price_period": "/mes"
     }
   },
   "pricing": {
     "heading": "Precios transparentes",
-    "subheading": "Sin facturas sorpresa. Sin \"contáctanos para precios\". Tres tiers — elige el que te quede.",
-    "monthly_label": "por mes",
-    "included_label": "Incluido",
-    "cta": "Agendar Llamada Estratégica",
-    "starter": {
-      "name": "Starter",
-      "price": "$2,500",
-      "description": "Una capacidad gestionada para comenzar.",
-      "features": [
-        "Un servicio (Observabilidad o Performance)",
-        "Reporte mensual",
-        "Soporte por email"
-      ]
-    },
-    "growth": {
-      "name": "Growth",
-      "price": "$5,000",
-      "badge": "Más Popular",
-      "description": "Dos capacidades, completamente integradas.",
-      "features": [
-        "Dos servicios combinados",
-        "Dashboards integrados + load tests",
-        "Syncs quincenales",
-        "Canal de Slack dedicado"
-      ]
-    },
-    "enterprise": {
-      "name": "Enterprise",
-      "price": "$8,500",
-      "description": "Los tres servicios más SRE fraccional.",
-      "features": [
-        "Los tres servicios",
-        "SRE fraccional dedicado",
-        "Syncs semanales + soporte en incidentes",
-        "Programa de SLOs personalizado"
-      ]
-    }
+    "subheading": "Cada servicio tiene un precio claro. Sin 'contáctanos para cotizar'. Mira cada página de servicio para detalles.",
+    "cta": "Agendar Strategy Call"
+  },
+  "compare": {
+    "heading": "Vantix vs. contratar full-time",
+    "subheading": "La experiencia sin el overhead.",
+    "col_hiring": "Contratar in-house",
+    "col_vantix": "Vantix",
+    "row_cost": "Costo",
+    "hiring_cost": "$150K–$200K/año + equity + beneficios",
+    "vantix_cost": "Tarifa mensual fija, cancela cuando quieras",
+    "row_time": "Tiempo para empezar",
+    "hiring_time": "3–6 meses reclutando",
+    "vantix_time": "Activo en 1 semana",
+    "row_expertise": "Expertise",
+    "hiring_expertise": "1 persona, 1 skill set",
+    "vantix_expertise": "Un ingeniero senior: Performance, SRE, DevOps, QA",
+    "row_risk": "Riesgo",
+    "hiring_risk": "Se va y empiezas de cero",
+    "vantix_risk": "Continuo, documentado, transferible",
+    "row_tools": "Herramientas",
+    "hiring_tools": "Lo que esa persona conozca",
+    "vantix_tools": "Stack open-source, sin vendor lock-in"
+  },
+  "team": {
+    "heading": "Quién está detrás de Vantix",
+    "subheading": "Un ingeniero senior. 10+ años en performance, observabilidad y SRE.",
+    "body": "Vantix no es una agencia de staffing. Detrás de cada engagement hay un único ingeniero senior con 10+ años de experiencia práctica en performance engineering, observabilidad, site reliability y QA automation — la misma persona que define la estrategia es quien la implementa. No tercerizado. No rotado. No un consultor junior supervisado por un manager. Un practicante que conoce tus sistemas, construye los dashboards, escribe los load tests, lidera el incident response y entrega los reportes. Esa continuidad es lo que marca la diferencia.",
+    "perf": "Performance Engineering",
+    "sre": "Site Reliability",
+    "devops": "DevOps",
+    "qa": "QA Automation"
+  },
+  "faq": {
+    "heading": "Preguntas frecuentes",
+    "cta_text": "¿Aún tienes preguntas?",
+    "cta_link": "Escríbenos — respondemos el mismo día",
+    "items": [
+      {
+        "q": "¿Cómo funciona la suscripción?",
+        "a": "Elige un servicio, suscríbete, empezamos. Tarifa mensual fija. Sin tracking de horas, sin facturas sorpresa. Pausa o cancela cuando quieras."
+      },
+      {
+        "q": "¿Hay un contrato a largo plazo?",
+        "a": "No. Mes a mes. Cancela cuando quieras. Sin lock-in, sin penalidades."
+      },
+      {
+        "q": "¿Qué tan rápido empiezan a entregar?",
+        "a": "La mayoría de servicios se activan en la primera semana. Los entregables continuos siguen una cadencia semanal y mensual clara."
+      },
+      {
+        "q": "¿Quién trabaja en mis sistemas?",
+        "a": "Un ingeniero senior con 10+ años de experiencia en performance, observabilidad y SRE. No tercerizado, no rotado."
+      },
+      {
+        "q": "¿Qué pasa si necesito pausar?",
+        "a": "Pausa tu suscripción cuando quieras. Cuando retomes, continuamos exactamente donde quedamos."
+      },
+      {
+        "q": "¿Cómo nos comunicamos?",
+        "a": "100% async por defecto. Slack para preguntas, Loom para walkthroughs, PDF para reportes. Video calls solo cuando realmente agregan valor."
+      },
+      {
+        "q": "¿Puedo combinar servicios?",
+        "a": "Sí. Los cuatro servicios están diseñados para funcionar juntos. La mayoría de clientes empiezan con uno y agregan más al ver el valor."
+      },
+      {
+        "q": "¿Qué herramientas usan?",
+        "a": "Solo open-source: k6, Grafana, OpenTelemetry, Prometheus. Todo lo que construimos es tuyo. Sin vendor lock-in."
+      },
+      {
+        "q": "¿No estás seguro de cuál necesitas?",
+        "a": "Empieza con un Performance Checkup ($3,500). En 5 días sabrás exactamente qué problemas tienes y cuál de nuestros servicios los resuelve. Sin compromiso."
+      }
+    ]
   },
   "cta_section": {
     "heading": "¿Listo para dejar de adivinar?",
-    "subheading": "Agenda una llamada estratégica de 30 minutos. Revisamos tu setup actual y te mostramos exactamente qué cambiaríamos primero.",
-    "cta_primary": "Agendar Llamada Estratégica",
-    "cta_secondary": "¿Tienes preguntas? Hablemos."
+    "subheading": "Cuéntanos sobre tu sistema. Lo revisamos y te mostramos exactamente qué cambiaríamos primero.",
+    "cta_primary": "Empezar",
+    "cta_secondary": "¿Tienes preguntas? Hablemos.",
+    "slots": "Vantix está recibiendo alta demanda — los slots son limitados. Para respuesta más rápida, escribe a <a href=\"mailto:hello@vantix.engineering\">hello@vantix.engineering</a>"
   },
   "obs_page": {
     "meta_title": "Observabilidad como Servicio — Vantix",
     "meta_description": "Observabilidad gestionada: instrumentación, dashboards, SLOs y ajuste de alertas como capacidad en mejora continua. De caótico a confiable.",
     "hero": {
       "pill": "Observabilidad como Servicio",
-      "headline": "Tu equipo no carece de observabilidad.",
-      "headline_accent": "Carece de una forma de ejecutarla bien.",
-      "subheadline": "Alertas que se ignoran. Dashboards que no responden las preguntas que tienes en un incidente. Factura de telemetría creciendo sin control. Eso no se resuelve con más herramientas. Se resuelve con alguien que las opere correctamente."
+      "headline": "Tu próximo incidente, diagnosticado en 30 segundos.",
+      "headline_accent": " No detectado por un usuario.",
+      "subheadline": "Alertas que tu equipo ignora. Dashboards que no responden las preguntas de un incidente. Factura de telemetría creciendo sin control. No te vendemos un tool. Gestionamos tu observabilidad — y nos aseguramos de que realmente funcione."
     },
     "problem": {
-      "body_1": "Si tu stack de monitoreo se siente 'implementado' pero caótico, probablemente es la misma historia: alertas que nadie confía, así que se ignoran. Dashboards que no responden las preguntas que tienes durante un incidente. Volúmenes de telemetría creciendo — y con ellos, la factura. Instrumentación inconsistente entre equipos. Y todos asumiendo que 'el equipo de plataforma lo va a arreglar'... entre emergencias.",
-      "body_2": "Eso es exactamente lo que resolvemos. Esto no es un tool. No es un proyecto one-off. Es una capacidad gestionada — diseñada para mantener tus señales útiles, tus costos controlados, y tu equipo confiado cuando algo se rompe."
+      "body_1": "La mayoría de los stacks de monitoreo están ‘implementados’ — y son completamente inútiles durante un incidente real. Alertas que nadie confía, así que se ignoran. Dashboards que no responden las preguntas que necesitas bajo presión. Factura de telemetría que crece cada mes sin que nadie sepa por qué. Y todos asumen que alguien más lo va a arreglar — hasta que los usuarios empiezan a quejarse.",
+      "body_2": "Eso es exactamente lo que resolvemos. No con más herramientas. No con un proyecto one-off. Con una capacidad gestionada que mantiene tus señales útiles, tus costos controlados, y tu equipo confiado cuando algo se rompe — cada mes, continuamente."
     },
     "deliverables": {
       "heading": "Qué reciben nuestros clientes",
-      "intro": "Seis deliverables concretos que transforman tu monitoreo de 'implementado pero caótico' a 'confiable y útil'.",
+      "intro": "Seis deliverables concretos. Un resultado: tu equipo se entera de los incidentes antes que los usuarios.",
       "items": [
         {
-          "title": "Un baseline de observabilidad — qué recolectar, qué descartar, y por qué",
-          "body": "Auditamos tu stack actual y definimos una estrategia de telemetría opinionada: qué métricas importan, qué logs son ruido, qué traces necesitas, y qué datos estás pagando por recolectar sin que nadie mire jamás. Instrumentamos con OpenTelemetry hasta 5 servicios.",
-          "badges": ["Auditoría de stack actual", "OpenTelemetry instrumentation", "Telemetry strategy document"],
+          "title": "Deja de pagar por datos que nadie mira — y recolecta exactamente lo que importa",
+          "body": "Auditamos tu stack actual y definimos una estrategia de telemetría clara: qué métricas impulsan decisiones, qué logs son ruido puro, qué traces realmente necesitas. Luego instrumentamos hasta 5 servicios con OpenTelemetry. Al final de la semana 3, tu equipo sabe qué vale monitorear — y dejó de pagar por lo que no.",
+          "badges": [
+            "Auditoría de stack actual",
+            "OpenTelemetry instrumentation",
+            "Telemetry strategy document"
+          ],
           "freq": "Semana 1-3"
         },
         {
-          "title": "SLOs y alertas prácticas — alineadas a cómo el negocio experimenta downtime",
-          "body": "No definimos SLOs genéricos de '99.9% uptime'. Definimos SLOs que el negocio entiende: 'si p95 del checkout pasa de 2 segundos, estamos perdiendo ventas'. Error budget tracking con burn rate alerting para que el equipo sepa cuándo priorizar reliability sobre features.",
-          "badges": ["SLOs alineados al negocio", "Error budget + burn rate", "Alert rules tiered + runbooks"],
+          "title": "Alertas que tu equipo confía — y respuesta inmediata cuando el negocio pregunta ‘¿estamos funcionando bien?’",
+          "body": "Definimos SLOs que el negocio entiende: ‘si el p95 del checkout pasa de 2 segundos, estamos perdiendo ventas.’ Luego construimos burn rate alerting para que tu equipo reciba alertas cuando importa — no constantemente. Y cuando un stakeholder pregunta sobre reliability, tu equipo tiene un número, no una suposición.",
+          "badges": [
+            "SLOs alineados al negocio",
+            "Error budget + burn rate",
+            "Alert rules tiered + runbooks"
+          ],
           "freq": "Semana 3-4"
         },
         {
-          "title": "Dashboards lean, consistentes, opinionados — construidos alrededor de las preguntas que tu equipo realmente hace",
-          "body": "No 40 dashboards donde nadie encuentra nada. 10-15 dashboards Grafana diseñados para responder las preguntas específicas de un incidente: ¿qué servicio está fallando? ¿desde cuándo? ¿qué cambió? ¿cuál es el impacto? RED metrics, USE metrics, PostgreSQL, y SLO compliance — cada uno con un propósito claro.",
-          "badges": ["10-15 dashboards Grafana", "RED + USE methodology", "Provisioning as code"]
+          "title": "Cualquier incidente diagnosticado en 30 segundos — no 30 minutos buscando en dashboards",
+          "body": "No 40 dashboards donde nadie encuentra nada. 10–15 dashboards construidos para responder una pregunta cada uno: ¿qué servicio está fallando? ¿Desde cuándo? ¿Qué cambió? ¿Cuál es el impacto? Cada pantalla tiene un propósito. Tu on-call las usa sin pensarlo.",
+          "badges": [
+            "10-15 dashboards Grafana",
+            "RED + USE methodology",
+            "Provisioning as code"
+          ]
         },
         {
-          "title": "Mejora continua de instrumentación — no fire drills trimestrales",
-          "body": "Cada mes revisamos las alertas (false positives, gaps, thresholds), onboardeamos nuevos servicios, ajustamos dashboards al feedback del equipo, y actualizamos los SLOs si el negocio cambió. Es una mejora iterativa, no un proyecto que se termina y se olvida.",
-          "badges": ["Review mensual de alertas", "Onboarding de nuevos servicios", "Workshop trimestral para el equipo (2h)"]
+          "title": "Un stack de monitoreo que se afina cada mes — no uno que se deteriora silenciosamente",
+          "body": "Cada mes: revisión de alertas (false positives, gaps, ajuste de thresholds), onboarding de nuevos servicios, ajuste de dashboards según feedback del equipo, actualización de SLOs si el negocio cambió. Esa es la diferencia entre un proyecto que termina y una capacidad que mejora.",
+          "badges": [
+            "Review mensual de alertas",
+            "Onboarding de nuevos servicios",
+            "Workshop trimestral para el equipo (2h)"
+          ]
         },
         {
-          "title": "Telemetría optimizada y costos controlados — reducción de cardinalidad y volumen",
-          "body": "Si tu factura de Datadog o New Relic crece cada mes sin que nadie sepa por qué, esto es para ti. Identificamos métricas de alta cardinalidad, logs verbosos que nadie lee, y traces redundantes. Reducimos volumen sin perder visibilidad. Algunos clientes reducen 30-50% su factura de telemetría solo con esta optimización.",
-          "badges": ["Cardinality analysis", "Log sampling strategy", "Cost reduction roadmap"],
+          "title": "Tu factura de telemetría, reducida 30–50% — sin perder la visibilidad que importa",
+          "body": "Identificamos métricas de alta cardinalidad, logs verbosos que nadie lee, y traces redundantes. Reducimos volumen sin cortar señal. Algunos clientes reducen a la mitad su factura de Datadog o New Relic solo con esta optimización — en el primer mes.",
+          "badges": [
+            "Cardinality analysis",
+            "Log sampling strategy",
+            "Cost reduction roadmap"
+          ],
           "freq": "Mensual"
         },
         {
           "title": "Comunicación async-first — con calls cuando realmente importa",
           "body": "Slack para preguntas del día a día. Loom para explicaciones de hallazgos. PDF para reportes formales. Incluimos call de kick-off de 15 min para alinear, calls opcionales ante incidentes o hallazgos, y video meet opcional del informe mensual si quieres presentar los resultados a tu equipo o management.",
-          "badges": ["Kick-off: 15 min video call", "Incidentes: call 15 min opcional", "Informe mensual: video meet opcional", "Slack async siempre"]
+          "badges": [
+            "Kick-off: 15 min video call",
+            "Incidentes: call 15 min opcional",
+            "Informe mensual: video meet opcional",
+            "Slack async siempre"
+          ]
         }
       ]
     },
@@ -205,16 +301,16 @@
       "heading": "El resultado",
       "items": [
         {
-          "title": "Menos sorpresas",
-          "body": "Alertas que la gente confía. Incidentes detectados antes de que los usuarios se quejen. Error budget como herramienta de priorización."
+          "title": "Incidentes antes de que los usuarios noten",
+          "body": "Tu equipo se entera primero. Siempre. La degradación se detecta antes de convertirse en downtime. On-call sabe qué hacer en el momento que llega la alerta."
         },
         {
-          "title": "Diagnóstico más rápido",
-          "body": "Dashboards que responden las preguntas del incidente en 30 segundos, no 30 minutos. Correlación e2e con traces."
+          "title": "30 segundos hasta la causa raíz",
+          "body": "Dashboards construidos alrededor de las preguntas del incidente. Una pantalla. Respuesta clara. Sin buscar en dashboards, sin adivinar, sin war room."
         },
         {
-          "title": "Una plataforma que mejora cada mes",
-          "body": "No es un proyecto que se entrega y se olvida. Es una capacidad que se afina continuamente. Cada mes más precisa, más útil, más eficiente."
+          "title": "Un sistema de monitoreo que justifica su costo",
+          "body": "No es un proyecto que se entrega y se olvida. Es una capacidad que se afina cada mes — alertas más precisas, factura más baja, mayor confianza."
         }
       ]
     },
@@ -258,10 +354,10 @@
       "pill": "SRE Fraccional",
       "headline": "Experiencia SRE senior.",
       "headline_accent": "Presupuesto startup.",
-      "subheadline": "Un SRE dedicado embebido en tu equipo de ingeniería — manejando revisión de arquitectura, command de incidentes, post-mortems, y el trabajo real de confiabilidad que nunca se prioriza. Toda la experiencia de un SRE senior full-time a una fracción del costo."
+      "subheadline": "Un SRE dedicado embebido en tu equipo de ingeniería — manejando revisión de arquitectura, incident command, post-mortems, y el trabajo de reliability que nunca se prioriza. Toda la experiencia de un SRE senior full-time a una tarifa mensual fija."
     },
     "problem": {
-      "body_1": "Un SRE senior cuesta $150K+/año solo en salario. Tu equipo de ingeniería está shipiando features, no construyendo prácticas de confiabilidad. Los incidentes toman horas en resolverse porque nadie es dueño del proceso. Los post-mortems se escriben y se archivan — y el mismo incidente ocurre tres meses después. Sabes que la confiabilidad importa, pero no puedes justificar una contratación full-time en este momento.",
+      "body_1": "Un SRE senior cuesta $150K+/año solo en salario. Tu equipo de ingeniería está shipiando features, no construyendo prácticas de confiabilidad. Los incidentes se alargan porque nadie es dueño del proceso. Los post-mortems se escriben y se archivan — y el mismo incidente ocurre tres meses después. Sabes que la confiabilidad importa, pero no puedes justificar una contratación full-time en este momento.",
       "body_2": "Ese es exactamente el gap que llena un SRE fraccional. No un consultor que entrega un reporte y desaparece — un practicante dedicado embebido en tu equipo, dueño de la confiabilidad de la misma forma en que tus ingenieros son dueños de sus servicios."
     },
     "deliverables": {
@@ -269,37 +365,61 @@
       "intro": "Seis deliverables concretos que llevan capacidad SRE senior a tu equipo sin el headcount full-time.",
       "items": [
         {
-          "title": "SRE fraccional dedicado embebido en tu equipo (10-20 hrs/semana)",
-          "body": "Tu SRE fraccional asiste a standups, revisa PRs por impacto en confiabilidad, participa en discusiones de arquitectura, y es accesible por Slack durante horario hábil. No un consultor que aparece para reviews trimestrales — un practicante que conoce tus sistemas.",
-          "badges": ["10-20 hrs/semana", "Acceso Slack", "PR reliability reviews"],
+          "title": "Un SRE dedicado embebido en tu equipo — tarifa mensual fija",
+          "body": "Tu SRE fraccional participa en standups, revisa PRs por impacto en reliability, participa en discusiones de arquitectura, y está disponible por Slack. No es un consultor que aparece para revisiones trimestrales — es un practicante que conoce tus sistemas.",
+          "badges": [
+            "Embebido en tu flujo de trabajo",
+            "Acceso por Slack",
+            "Revisión de PRs por reliability"
+          ],
           "freq": "Continuo"
         },
         {
           "title": "Revisión de arquitectura + roadmap de confiabilidad",
           "body": "En las primeras dos semanas, mapeamos tu arquitectura, identificamos los principales riesgos de confiabilidad, y producimos un roadmap priorizado. No un checklist genérico — un plan concreto específico a tu stack: qué servicios son single points of failure, cuáles no tienen SLOs, qué incidentes son prevenibles.",
-          "badges": ["Mapa de riesgos de arquitectura", "Roadmap de confiabilidad priorizado", "Quick wins identificados"],
+          "badges": [
+            "Mapa de riesgos de arquitectura",
+            "Roadmap de confiabilidad priorizado",
+            "Quick wins identificados"
+          ],
           "freq": "Semanas 1-2"
         },
         {
           "title": "Command de incidentes y facilitación de post-mortems",
           "body": "Durante incidentes activos, tu SRE fraccional lidera la respuesta: coordina comunicación, conduce el proceso de diagnóstico, y mantiene al equipo enfocado. Después del incidente, facilita un post-mortem estructurado que produce follow-ups accionables — no un documento que se archiva y se olvida.",
-          "badges": ["Command de incidentes", "Post-mortems estructurados", "Seguimiento de action items"]
+          "badges": [
+            "Command de incidentes",
+            "Post-mortems estructurados",
+            "Seguimiento de action items"
+          ]
         },
         {
           "title": "Canal de escalación durante incidentes activos",
-          "body": "Cuando algo se rompe a las 2 AM, tu equipo tiene un canal de escalación directo. Respondemos en 15 minutos para incidentes P1 durante horario hábil, y mantenemos un canal async de escalación para emergencias fuera de horario. Tu rotación de on-call queda respaldada por alguien que ya ha visto el failure mode antes.",
-          "badges": ["Escalación P1: respuesta en 15 min", "Canal async fuera de horario", "Runbooks de incidentes"],
+          "body": "Cuando algo se rompe, tu equipo tiene un camino de escalación directo. Respondemos en 15 minutos para incidentes P1 y mantenemos un canal de escalación async para emergencias. Tu rotación de on-call tiene respaldo de alguien que ya vio ese modo de falla.",
+          "badges": [
+            "Escalación P1: respuesta 15 min",
+            "Canal de escalación async",
+            "Runbooks de incidentes"
+          ],
           "freq": "Siempre disponible"
         },
         {
           "title": "Definición y seguimiento del programa de SLOs",
           "body": "Definimos SLOs que tu negocio entiende, los instrumentamos correctamente, y establecemos el proceso de error budget. Reviews mensuales de SLOs con el equipo de ingeniería — ¿está mejorando la confiabilidad? ¿estamos gastando error budget en las cosas correctas? Esto se convierte en el lenguaje entre ingeniería y producto.",
-          "badges": ["Workshop de definición de SLOs", "Error budget tracking", "Review mensual de SLOs"]
+          "badges": [
+            "Workshop de definición de SLOs",
+            "Error budget tracking",
+            "Review mensual de SLOs"
+          ]
         },
         {
           "title": "Comunicación async (Slack) + sync semanal opcional",
           "body": "Toda la comunicación es async por defecto: Slack para preguntas, Loom para explicar decisiones de arquitectura, reportes escritos para actualizaciones de estado. Un sync semanal opcional de 30 minutos para alinear prioridades. Respetamos el tiempo de tu equipo — las reuniones ocurren cuando agregan valor que el async no puede dar.",
-          "badges": ["Slack async siempre", "Sync semanal opcional: 30 min", "Reportes de estado escritos"]
+          "badges": [
+            "Slack async siempre",
+            "Sync semanal opcional: 30 min",
+            "Reportes de estado escritos"
+          ]
         }
       ]
     },
@@ -308,11 +428,11 @@
       "items": [
         {
           "title": "Confiabilidad sin headcount",
-          "body": "Capacidad SRE senior embebida en tu equipo a una fracción del costo. Sin reclutamiento, sin overhead de onboarding, sin compromiso de salario de $150K."
+          "body": "Capacidad SRE senior embebida en tu equipo a una tarifa mensual fija. Sin recruiting, sin overhead de onboarding, sin compromiso salarial de $150K."
         },
         {
           "title": "Resolución de incidentes más rápida",
-          "body": "Proceso claro de command de incidentes. Runbooks que existen. Un practicante que conoce tus sistemas y lidera la respuesta. Incidentes que antes tomaban 4 horas se resuelven en 45 minutos."
+          "body": "Proceso claro de incident command. Runbooks que existen. Un practicante que conoce tus sistemas y lidera la respuesta. Incidentes resueltos en minutos, no arrastrados por toda la tarde."
         },
         {
           "title": "Una cultura de confiabilidad que perdura",
@@ -414,6 +534,259 @@
         "La diferencia entre un tester y un performance engineer es la diferencia entre ejecutar un script y entender la arquitectura.",
         "100% async no significa 0% comunicación. Significa comunicación eficiente, cuando importa, sin desperdiciar el tiempo de nadie.",
         "El mejor entregable es el que llega sin que lo pidas, con los datos que necesitas, en el formato que puedes usar."
+      ]
+    }
+  },
+  "qa_page": {
+    "meta_title": "QA Tech Lead Fraccional — Vantix",
+    "meta_description": "Un Senior QA/Automation Expert embebido en tu equipo. Estrategia de testing, frameworks de automation, integración CI/CD, y mentoring — a tarifa mensual fija.",
+    "hero": {
+      "pill": "QA Tech Lead Fraccional",
+      "headline": "Tu equipo shipea rápido.",
+      "headline_accent": " Ahora hazlo seguro.",
+      "subheadline": "Un Senior QA/Automation Expert embebido en tu equipo — definiendo estrategia de testing, construyendo el framework de automation, integrando tests en CI/CD, y entrenando a tus ingenieros para mantener calidad autónomamente. Toda la experiencia de un QA lead full-time a una tarifa mensual fija."
+    },
+    "problem": {
+      "body_1": "Tus devs testean 'cuando hay tiempo' — y nunca hay tiempo. Tienes un equipo de QA pero sin dirección técnica. Los tests corren localmente pero no en el pipeline. Quieres automatizar pero nadie es dueño de la estrategia. Y cada release se siente como tirar los dados.",
+      "body_2": "Ese es el gap que llena un QA Tech Lead fraccional. No un consultor que escribe un test plan y desaparece — un practicante dedicado embebido en tu equipo, dueño de la estrategia de testing de la misma forma en que tus ingenieros son dueños de sus servicios."
+    },
+    "deliverables": {
+      "heading": "Qué reciben nuestros clientes",
+      "intro": "Seis deliverables concretos que llevan liderazgo QA senior a tu equipo sin el headcount full-time.",
+      "items": [
+        {
+          "title": "Una foto clara de dónde está tu testing — y qué arreglar primero",
+          "body": "En la primera semana, mapeamos tu cobertura de tests actual, auditamos tu pipeline, identificamos los gaps, y producimos un documento de estrategia de testing con quick wins. No un checklist genérico — un plan concreto específico a tu stack: qué flujos tienen cero cobertura, qué tests son flaky, qué ambientes están rotos.",
+          "badges": [
+            "Auditoría de cobertura",
+            "Evaluación del pipeline",
+            "Documento de estrategia de testing"
+          ],
+          "freq": "Semana 1"
+        },
+        {
+          "title": "Un framework de automation que tu equipo puede mantener",
+          "body": "Construimos (o mejoramos) tu framework de automation: Playwright, Cypress, o Selenium — lo que mejor se adapte a tu stack. Page Object Model, test data management, fixtures, factories. No un proyecto demo — un framework production-ready que tus ingenieros pueden extender sin pedir ayuda.",
+          "badges": [
+            "Playwright / Cypress / Selenium",
+            "Page Object Model",
+            "Test data management"
+          ],
+          "freq": "Semanas 2-4"
+        },
+        {
+          "title": "Tests en el pipeline — no en la laptop de alguien",
+          "body": "Integramos tus tests en GitHub Actions, GitLab CI, Jenkins, o CircleCI. Cada PR corre la suite de tests. Cada merge a main corre la regresión completa. Los tests flaky se ponen en cuarentena. Sabes si un deploy es seguro antes de que salga — automáticamente.",
+          "badges": [
+            "Integración CI/CD",
+            "Test gates por PR",
+            "Cuarentena de tests flaky"
+          ]
+        },
+        {
+          "title": "Contract testing + visual regression — atrapa lo que los unit tests no ven",
+          "body": "Contract tests de APIs con Pact para que frontend y backend no puedan romperse mutuamente en silencio. Visual regression con Playwright screenshots o Chromatic para que los cambios de UI sean intencionales, no accidentales. Dos capas que la mayoría de equipos se saltan — y pagan en bugs de producción.",
+          "badges": [
+            "Pact contract testing",
+            "Visual regression",
+            "Schema validation"
+          ]
+        },
+        {
+          "title": "Tu equipo aprende — pair programming, code reviews, workshops",
+          "body": "El objetivo es que tu equipo mantenga calidad autónomamente. Pair programming en código de tests, code reviews con foco en testing, workshops hands-on. Un buen engagement termina cuando tu equipo ya no nos necesita — y ese es nuestro mejor caso de éxito.",
+          "badges": [
+            "Pair programming",
+            "Code reviews",
+            "Workshops hands-on"
+          ],
+          "freq": "Continuo"
+        },
+        {
+          "title": "Comunicación async-first — con calls cuando realmente importa",
+          "body": "Slack para preguntas del día a día. Loom para explicar decisiones de arquitectura de tests. Reportes escritos para status de calidad. Un sync semanal opcional de 30 minutos para alinear prioridades. Respetamos el tiempo de tu equipo — las reuniones ocurren cuando agregan valor.",
+          "badges": [
+            "Slack async siempre",
+            "Sync semanal opcional: 30 min",
+            "Reportes de calidad escritos"
+          ]
+        }
+      ]
+    },
+    "outcomes": {
+      "heading": "El resultado",
+      "items": [
+        {
+          "title": "Confianza antes de cada release",
+          "body": "Tests corren en el pipeline. Cobertura en flujos críticos. Visual regression atrapa regresiones de UI. Tu equipo sabe que un deploy es seguro antes de shipearlo."
+        },
+        {
+          "title": "Un equipo que es dueño de la calidad",
+          "body": "No una dependencia en QA externo. Tus ingenieros escriben tests, revisan código de tests, y mantienen el framework. La calidad es parte de cómo trabajan, no una fase separada."
+        },
+        {
+          "title": "Dirección técnica sin headcount",
+          "body": "Liderazgo QA senior a tarifa mensual fija. Sin recruiting, sin overhead de onboarding, sin compromiso salarial de $120K. Pausa o cancela cuando quieras."
+        }
+      ]
+    },
+    "how": {
+      "heading": "Cómo funciona",
+      "steps": [
+        {
+          "title": "Kick-off",
+          "badge": "15 min video call",
+          "body": "Entendemos tu proceso de testing actual, tus herramientas, y los gaps. Se configura el acceso: Slack, repo, CI/CD."
+        },
+        {
+          "title": "Semana 1: Assessment",
+          "body": "Mapeamos tu cobertura de tests, auditamos tu pipeline, y producimos un documento de estrategia con quick wins identificados."
+        },
+        {
+          "title": "Semanas 2-4: Setup del framework",
+          "body": "Construimos el framework de automation, integramos en CI/CD, y escribimos los primeros tests críticos. Para la semana 4, los tests corren en cada PR."
+        },
+        {
+          "title": "Mes 2+: QA lead embebido",
+          "body": "Trabajo embebido continuo: pair programming, code reviews, mentoring, workshops. Tu equipo aprende y mantiene calidad autónomamente."
+        },
+        {
+          "title": "Trimestral: Quality review",
+          "badge": "1h grabado",
+          "body": "Una review estructurada de cobertura de tests, ratio de tests flaky, tiempo de ejecución, y roadmap de mejora para el próximo trimestre."
+        }
+      ]
+    }
+  },
+  "perf_page": {
+    "meta_title": "Performance as a Service — Vantix",
+    "meta_description": "Performance engineering gestionado: load testing continuo, monitoreo sintético, web performance tracking y capacity planning. Sabe tus límites antes que tus usuarios.",
+    "hero": {
+      "pill": "Performance as a Service",
+      "headline": "Tu próximo Black Friday ya no es una apuesta.",
+      "headline_accent": " Es un dato.",
+      "subheadline": "Sabemos exactamente cuánto tráfico aguanta tu sistema. Cuál es tu punto de quiebre. Cómo se comporta bajo carga real. Y te avisamos si algo cambia — antes de que lo note un usuario."
+    },
+    "problem": {
+      "body_1": "Tu '99.9% uptime' es una estimación. No lo has medido. No sabes cuánto tráfico aguanta tu sistema antes de degradar. No sabes si el último deploy empeoró tu performance. Y cuando llega Black Friday o una campaña de marketing, cruzas los dedos.",
+      "body_2": "El problema no es que tu equipo no sepa hacer load testing. Es que nadie tiene tiempo de hacerlo de forma continua — y un test aislado antes del release no cuenta. Lo resolvemos con una capacidad gestionada que te da datos reales cada semana y mejora cada mes."
+    },
+    "deliverables": {
+      "heading": "Qué reciben nuestros clientes",
+      "intro": "Siete deliverables concretos. Un resultado: siempre sabes exactamente cómo está tu sistema — y qué hacer con eso.",
+      "items": [
+        {
+          "title": "Sabes exactamente cuánto aguanta tu sistema — medido, no estimado",
+          "body": "Establecemos un baseline medido: capacidad real (Max TPS), punto de quiebre, latencia de referencia (p50/p95/p99), error rate de referencia, y uptime real medido cada minuto. Este baseline es tu punto de partida. Todo lo que hagamos después se mide contra él.",
+          "badges": [
+            "Load test (baseline + stress + spike)",
+            "Synthetic monitoring",
+            "Uptime checks cada 1 min"
+          ],
+          "freq": "Semana 1 — y después cada mes"
+        },
+        {
+          "title": "Tu equipo se entera antes que tus usuarios — 24/7, cada minuto",
+          "body": "Desde el día 1, tu sistema está siendo monitoreado cada minuto. Health checks comprueban que está vivo. Cada 5 minutos, un test sintético ejecuta tu flujo crítico (ej: login → buscar → pagar) y mide la latencia real y los errores. Si algo se degrada, lo sabemos antes que tus usuarios — y te avisamos por Slack.",
+          "badges": [
+            "Uptime check cada 1 min",
+            "Synthetic flow cada 5 min",
+            "Alertas → Slack"
+          ],
+          "freq": "Real-time"
+        },
+        {
+          "title": "Si un deploy empeoró tu performance, lo sabemos esa semana — no 3 meses después",
+          "body": "Cada semana corremos Lighthouse contra las páginas críticas de tu aplicación. Trackeamos LCP, FID, CLS, TTI, bundle size, y Lighthouse score. Si un deploy empeoró tu web performance, lo detectamos al siguiente scan — no 3 meses después cuando SEO se queja.",
+          "badges": [
+            "Lighthouse CI headless",
+            "Core Web Vitals trending"
+          ],
+          "freq": "Semanal"
+        },
+        {
+          "title": "Cada mes sabes si soportas 2x, 5x, 10x tu tráfico — con números",
+          "body": "Cada mes ejecutamos una evaluación completa: prueba de carga (baseline + stress + spike), actualizamos el breakpoint, comparamos contra el mes anterior, y evaluamos si tu sistema soporta el crecimiento proyectado. Si implementaste los fixes que recomendamos, medimos el impacto real.",
+          "badges": [
+            "Full load test",
+            "Capacity planning extrapolation",
+            "Before/after delta analysis"
+          ],
+          "freq": "Mensual"
+        },
+        {
+          "title": "No recomendaciones genéricas — el fix exacto, con el impacto estimado",
+          "body": "Cada hallazgo viene con severidad (P0–P3), componente afectado, evidencia con datos, impacto cuantificado, y una acción concreta de remediación — incluyendo el SQL, la config, o el cambio exacto. No decimos 'considere optimizar la base de datos'. Decimos 'CREATE INDEX idx_x ON settlements(merchant_id, status, created_at DESC)' — con la estimación de mejora esperada.",
+          "badges": [
+            "Metodología FANG-grade",
+            "USE / RED / Four Golden Signals",
+            "Roadmap priorizado por ROI"
+          ]
+        },
+        {
+          "title": "Dashboards en tiempo real + reportes que llegan sin pedirlos",
+          "body": "Tu equipo tiene acceso a dashboards Grafana — uptime, latencia, error rate, y web performance actualizadas en tiempo real. Cada lunes recibes un reporte semanal por Slack. Cada mes un informe completo (PDF) con trending, hallazgos, y recomendaciones. Todo async — llega sin que tengas que pedirlo.",
+          "badges": [
+            "Grafana dashboards",
+            "Reporte semanal → Slack cada lunes",
+            "Informe mensual → PDF"
+          ],
+          "freq": "Continuo"
+        },
+        {
+          "title": "Comunicación async-first — con calls cuando realmente importa",
+          "body": "Operamos 100% async por defecto: Slack para preguntas, Loom para explicaciones, PDF para reportes formales. Incluimos call de kick-off de 15 min para alinear prioridades, calls opcionales de 15 min ante incidentes o hallazgos complejos, y video meet opcional del informe mensual.",
+          "badges": [
+            "Kick-off: 15 min video call",
+            "Incidentes: call 15 min opcional",
+            "Informe mensual: video meet opcional",
+            "Slack async siempre"
+          ]
+        }
+      ]
+    },
+    "outcomes": {
+      "heading": "El resultado",
+      "items": [
+        {
+          "title": "Menos sorpresas",
+          "body": "Sabes tu capacidad real, tu uptime medido, y tus bottlenecks antes de que sean incidentes. Black Friday ya no es una apuesta."
+        },
+        {
+          "title": "Diagnóstico más rápido",
+          "body": "Cuando algo se degrada, tienes dashboards con datos reales, trending histórico, y un equipo que ya conoce tu sistema."
+        },
+        {
+          "title": "Un sistema que mejora cada mes",
+          "body": "No es un reporte que se archiva. Es un ciclo: medir → encontrar → priorizar → implementar → validar. Cada mes el baseline sube."
+        }
+      ]
+    },
+    "how": {
+      "heading": "Cómo funciona",
+      "steps": [
+        {
+          "title": "Kick-off",
+          "badge": "15 min video call",
+          "body": "Alineamos prioridades, entendemos tu stack, definimos endpoints y flujos críticos a monitorear. Si prefieres async, mandas un doc y arrancamos."
+        },
+        {
+          "title": "Semana 1: Baseline + activación de monitoreo",
+          "body": "Corremos el primer load test completo y activamos uptime + synthetic monitoring 24/7. Desde este punto, tienes datos reales cada minuto."
+        },
+        {
+          "title": "Cada lunes: Reporte semanal → Slack",
+          "body": "Uptime, latencia, errores, anomalías de la semana, optimizaciones realizadas. Formato corto, actionable."
+        },
+        {
+          "title": "Cada mes: Evaluación completa + informe",
+          "body": "Load test mensual + Lighthouse + capacity planning. Informe PDF detallado con trending, hallazgos, y roadmap."
+        },
+        {
+          "title": "Ante incidentes: alerta + call si necesitas",
+          "badge": "respuesta mismo día",
+          "body": "Si el monitoreo detecta una degradación, te avisamos por Slack con los datos. Si necesitas hablar, agendamos un call de 15 min."
+        }
       ]
     }
   }

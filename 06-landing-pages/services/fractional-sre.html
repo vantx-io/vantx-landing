@@ -113,12 +113,12 @@
         <div class="deliverable">
           <div class="deliverable__num deliverable__num--amber">1</div>
           <div>
-            <h3 class="deliverable__title" data-i18n="sre_page.deliverables.items.0.title">Dedicated fractional SRE embedded in your team (10-20 hrs/week)</h3>
+            <h3 class="deliverable__title" data-i18n="sre_page.deliverables.items.0.title">A dedicated SRE embedded in your team — one flat monthly rate</h3>
             <p class="deliverable__body" data-i18n="sre_page.deliverables.items.0.body">
               Your fractional SRE attends standups, reviews PRs for reliability impact, participates in architecture discussions, and is reachable on Slack during business hours. Not a consultant who shows up for quarterly reviews — a practitioner who knows your systems.
             </p>
             <div class="deliverable__badges">
-              <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.0.badges.0">10-20 hrs/week</span>
+              <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.0.badges.0">Embedded in your workflow</span>
               <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.0.badges.1">Slack access</span>
               <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.0.badges.2">PR reliability reviews</span>
               <span class="deliverable__badge deliverable__badge--freq-amber" data-i18n="sre_page.deliverables.items.0.freq">Ongoing</span>
@@ -315,6 +315,52 @@
     </section>
 
     <!-- ================================================================
+         FAQ
+         ================================================================ -->
+    <section class="faq section" id="faq" aria-labelledby="faq-heading">
+      <div class="container">
+
+        <div class="section-header">
+          <h2 id="faq-heading" class="section-title" data-i18n="faq.heading">FAQs</h2>
+        </div>
+
+        <div class="faq__list">
+
+          <details class="faq__item">
+            <summary class="faq__question" data-i18n="faq.items.0.q">How does the subscription work?</summary>
+            <p class="faq__answer" data-i18n="faq.items.0.a">Pick a service, subscribe, we start. Flat monthly rate. No hourly tracking, no surprise invoices. Pause or cancel anytime.</p>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__question" data-i18n="faq.items.1.q">Is there a long-term contract?</summary>
+            <p class="faq__answer" data-i18n="faq.items.1.a">No. Month-to-month. Cancel anytime. No lock-in, no exit fees.</p>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__question" data-i18n="faq.items.2.q">How fast do you start delivering?</summary>
+            <p class="faq__answer" data-i18n="faq.items.2.a">Most services are activated within the first week. Ongoing deliverables follow a clear weekly and monthly cadence.</p>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__question" data-i18n="faq.items.3.q">Who works on my systems?</summary>
+            <p class="faq__answer" data-i18n="faq.items.3.a">A senior engineer with 10+ years of experience in performance, observability, and SRE. Not outsourced, not rotated.</p>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__question" data-i18n="faq.items.4.q">What if I need to pause?</summary>
+            <p class="faq__answer" data-i18n="faq.items.4.a">Pause your subscription anytime. When you resume, we pick up right where we left off.</p>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__question" data-i18n="faq.items.5.q">How do we communicate?</summary>
+            <p class="faq__answer" data-i18n="faq.items.5.a">100% async by default. Slack for questions, Loom for walkthroughs, PDF for reports. Video calls only when they add real value.</p>
+          </details>
+
+        </div><!-- /.faq__list -->
+      </div><!-- /.container -->
+    </section>
+
+    <!-- ================================================================
          CTA section — closing push
          ================================================================ -->
     <section class="cta-section section" aria-labelledby="page-cta-heading">
@@ -322,14 +368,15 @@
         <div class="cta-section__inner">
           <h2 id="page-cta-heading" class="cta-section__heading" data-i18n="cta_section.heading">Ready to stop guessing?</h2>
           <p class="cta-section__sub" data-i18n="cta_section.subheading">
-            Book a 30-minute strategy call. We'll review your current setup and show you exactly what we'd change first.
+            Tell us about your system. We'll review it and show you exactly what we'd change first.
           </p>
           <div class="cta-section__actions">
             <button
               class="btn btn--primary btn--lg js-calendly-trigger"
               type="button"
               data-i18n="cta_section.cta_primary"
-            >Book a Strategy Call</button>
+            >Get Started</button>
+            <a href="mailto:hello@vantix.engineering" class="btn btn--outline btn--lg" data-i18n="cta_section.cta_secondary">Have questions? Let's talk.</a>
           </div>
         </div>
       </div>

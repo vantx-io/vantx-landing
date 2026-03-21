@@ -280,6 +280,18 @@ ul, ol {
   flex-shrink: 0;
 }
 
+/* Login link */
+.nav__login {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-text-muted);
+  transition: color var(--transition-fast);
+}
+
+.nav__login:hover {
+  color: var(--color-text);
+}
+
 /* Language toggle button */
 .nav__lang {
   display: inline-flex;
