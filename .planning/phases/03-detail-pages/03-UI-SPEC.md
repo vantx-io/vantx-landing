@@ -1,7 +1,8 @@
 ---
 phase: 3
 slug: detail-pages
-status: draft
+status: approved
+reviewed_at: 2026-03-20
 shadcn_initialized: false
 preset: none
 created: 2026-03-20
@@ -65,15 +66,12 @@ Inherit all scales from `tokens.css`. Detail pages use exactly 4 roles with thes
 
 | Role | Token | Computed Size | Weight Token | Weight | Line Height Token | Line Height | Usage |
 |------|-------|--------------|--------------|--------|-------------------|-------------|-------|
-| Body | `--text-sm` | 14px | `--font-normal` | 400 | `--leading-normal` | 1.6 | Deliverable body, card descriptions, timeline step body, manifesto items |
-| Label | `--text-xs` | 12px | `--font-semibold` | 600 | `--leading-none` | 1 | Pill/tag badges, section labels (MISSION, VISION, VALUE 01), mono badges |
-| Heading | `--text-xl` | 20px | `--font-bold` | 700 | `--leading-snug` | 1.375 | Deliverable titles, outcome card titles, timeline step titles, value card titles |
+| Body | `--text-base` | 16px | `--font-normal` | 400 | `--leading-normal` | 1.6 | Deliverable body, card descriptions, timeline step body, manifesto items, section intro paragraphs |
+| Label | `--text-xs` | 12px | `--font-bold` | 700 | `--leading-none` | 1 | Pill/tag badges, section labels (MISSION, VISION, VALUE 01), mono badges |
+| Heading | `--text-xl` | 20px | `--font-bold` | 700 | `--leading-snug` | 1.375 | Deliverable titles, outcome card titles, timeline step titles, value card titles, mission/vision/purpose block headings |
 | Display | `--text-4xl` | 36px | `--font-bold` | 700 | `--leading-tight` | 1.15 | Page hero headline (`h1`) on detail pages |
 
-Supplementary sizes (inherited, not new):
-- Section headings (`h2`): `--text-3xl` (30px), weight 700, `--leading-tight` — same as `section-title` in base.css
-- Hero subheadline: `--text-lg` (18px), weight 400, `--leading-normal`
-- Price amounts in any pricing context: `--text-2xl` (24px), `--font-mono`, weight 700
+Section headings use the `.section-title` class (existing in base.css). Hero subheadline uses body role sizing (`--text-base`, 16px). Price amounts follow the existing pricing pattern in landing.css.
 
 Font family rules:
 - All body and heading text: `--font-sans` (DM Sans)
@@ -225,12 +223,12 @@ Used on all three detail pages. Replaces `.hero` from landing.css.
 | Max-width of inner | 780px (matches `.hero__inner`) | Consistent reading width |
 | Pill/tag | `--font-mono`, `--text-xs`, `--tracking-wider`, uppercase | Same as `.hero__pill` but color varies by service (see color section) |
 | Headline (`h1`) | `--text-4xl` (36px), weight 700, `--leading-tight` | Smaller than landing `--text-6xl` — detail pages are deep eval, not first impression |
-| Subheadline | `--text-lg` (18px), weight 400, `--leading-normal`, color `--color-text-muted` | Same pattern as `.hero__sub` |
+| Subheadline | `--text-base` (16px), weight 400, `--leading-normal`, color `--color-text-muted` | Body role sizing — same visual weight as `.hero__sub` |
 | Max-width subheadline | 600px | Maintains readable line length |
 
 Mobile breakpoints:
-- `max-width: 768px`: headline drops to `--text-3xl` (30px)
-- `max-width: 480px`: headline drops to `--text-2xl` (24px)
+- `max-width: 768px`: headline drops to `--text-xl` (20px, heading role)
+- `max-width: 480px`: hero actions: row → column, buttons full-width
 
 ---
 
@@ -247,10 +245,10 @@ Used on observability and fractional-sre pages. 6 numbered items for observabili
 | Item layout | CSS Grid — `grid-template-columns: 56px 1fr`, `gap: var(--space-5)`, `align-items: start` |
 | Item bottom margin | `var(--space-8)` (32px) between deliverable items |
 | Number badge | 48px × 48px, `--radius-lg` (12px), background `--color-success-subtle` (observability) or `--color-warning-subtle` (SRE), color matches service accent, `--font-mono`, 20px, weight 700 |
-| Item title (`h3`) | `--text-xl` (20px), weight 700, color `--color-text`, `margin-bottom: var(--space-1-5)` (6px — use `calc(var(--space-1) * 1.5)` or `0.375rem`) |
-| Item body | `--text-sm` (14px), color `--color-text-muted`, `--leading-normal` (1.6), `margin-bottom: var(--space-3)` |
+| Item title (`h3`) | `--text-xl` (20px), weight 700, color `--color-text`, `margin-bottom: var(--space-2)` (8px) |
+| Item body | `--text-base` (16px), color `--color-text-muted`, `--leading-normal` (1.6), `margin-bottom: var(--space-3)` |
 | Badge strip (tool/frequency) | `display: flex`, `gap: var(--space-3)`, `flex-wrap: wrap` |
-| Tool badge | Background `--color-surface-elevated`, color `--color-text-muted`, `--text-xs`, weight 500, `--radius-sm` (4px), `padding: var(--space-1) var(--space-3)` |
+| Tool badge | Background `--color-surface-elevated`, color `--color-text-muted`, `--text-xs`, weight 400, `--radius-sm` (4px), `padding: var(--space-1) var(--space-3)` |
 | Frequency badge | Background matches service `*-subtle` token, color matches service accent token, same padding/radius as tool badge |
 
 Mobile breakpoints:
@@ -271,7 +269,7 @@ Used on observability and fractional-sre pages. Always 3 outcome cards.
 | Card border-radius | `--radius-lg` (12px) |
 | Card padding | `var(--space-6)` (24px) |
 | Card title (`h4`) | `--text-base` (16px), weight 700, color `--color-text`, `margin-bottom: var(--space-2)` |
-| Card body | `--text-sm` (14px), color `--color-text-muted`, `--leading-normal` |
+| Card body | `--text-base` (16px), color `--color-text-muted`, `--leading-normal` |
 | Card hover | `transform: translateY(-2px)`, `box-shadow: var(--shadow)`, `transition: var(--transition)` |
 | Section heading | `.section-title` (existing) |
 
@@ -293,8 +291,8 @@ Used on observability and fractional-sre pages. 4–6 steps.
 | Step wrapper | `position: relative`, `margin-bottom: var(--space-8)` (32px) |
 | Step dot | Pseudo `::before`, `position: absolute`, `left: -32px`, `top: 4px`, `width: 24px`, `height: 24px`, `border-radius: var(--radius-full)`, `background: var(--color-accent)`, `border: 3px solid var(--color-bg)`, `box-shadow: 0 0 0 2px var(--color-border)` |
 | Step title (`h4`) | `--text-base` (16px), weight 700, color `--color-text`, `margin-bottom: var(--space-1)` |
-| Step body | `--text-sm` (14px), color `--color-text-muted`, `--leading-normal` |
-| Inline badge (optional, e.g. "15 min") | `display: inline-block`, `padding: 2px var(--space-2)`, `--radius-sm` (4px), `--text-xs`, weight 600, background `--color-success-subtle`, color `--color-success`, `margin-left: var(--space-2)` |
+| Step body | `--text-base` (16px), color `--color-text-muted`, `--leading-normal` |
+| Inline badge (optional, e.g. "15 min") | `display: inline-block`, `padding: var(--space-1) var(--space-2)`, `--radius-sm` (4px), `--text-xs`, weight 700, background `--color-success-subtle`, color `--color-success`, `margin-left: var(--space-2)` |
 
 ---
 
@@ -309,11 +307,11 @@ Used only on `about/mission.html`. 6 value cards in a 2-column grid.
 | Card background | `var(--color-surface)` |
 | Card border | `1px solid var(--color-border)` |
 | Card border-radius | `--radius-lg` (12px) |
-| Card padding | `var(--space-7)` — use `calc(var(--space-6) + var(--space-1))` = 28px |
+| Card padding | `calc(var(--space-6) + var(--space-1))` = 28px |
 | Card hover | `border-color: var(--color-accent-border)`, `box-shadow: var(--shadow)`, `transition: var(--transition)` |
-| Numeric index (01–06) | `--font-mono`, `--text-sm` (14px), color `--color-accent`, weight 700, `margin-bottom: var(--space-2)` |
-| Card title (`h3`) | `--text-base` (16px), weight 700, color `--color-text`, `margin-bottom: var(--space-1-5)` |
-| Card body | `--text-sm` (14px), color `--color-text-muted`, `--leading-relaxed` (1.75) — values need breathing room |
+| Numeric index (01–06) | `--font-mono`, `--text-xs` (12px), color `--color-accent`, weight 700, `margin-bottom: var(--space-2)` |
+| Card title (`h3`) | `--text-xl` (20px), weight 700, color `--color-text`, `margin-bottom: var(--space-2)` (8px) |
+| Card body | `--text-base` (16px), color `--color-text-muted`, `--leading-relaxed` (1.75) — values need breathing room |
 
 Mobile breakpoints:
 - `max-width: 600px`: collapse to `1fr` (single column)
@@ -332,9 +330,9 @@ Used only on `about/mission.html`. Three distinct styled blocks, not a grid.
 | Border-radius | `--radius-xl` (16px) |
 | Padding | `var(--space-10)` (40px) |
 | Margin-bottom | `var(--space-10)` |
-| Label | `--text-xs` (12px), `--tracking-wider`, uppercase, color `--color-accent`, weight 600, `margin-bottom: var(--space-3)` |
-| Heading (`h2`) | `--text-3xl` (30px), weight 700, `--leading-snug`, color `--color-text`, `margin-bottom: var(--space-4)` |
-| Body | `--text-sm` (14px), color `--color-text-muted`, `--leading-relaxed` |
+| Label | `--text-xs` (12px), `--tracking-wider`, uppercase, color `--color-accent`, weight 700, `margin-bottom: var(--space-3)` |
+| Heading (`h2`) | `--text-xl` (20px), weight 700, `--leading-snug`, color `--color-text`, `margin-bottom: var(--space-4)` |
+| Body | `--text-base` (16px), color `--color-text-muted`, `--leading-relaxed` |
 
 **Vision block** (outlined card):
 
@@ -345,9 +343,9 @@ Used only on `about/mission.html`. Three distinct styled blocks, not a grid.
 | Border-radius | `--radius-xl` (16px) |
 | Padding | `var(--space-10)` |
 | Margin-bottom | `var(--space-10)` |
-| Label | `--text-xs`, uppercase, color `--color-success`, weight 600 |
-| Heading | `--text-2xl` (24px), weight 700, `--leading-snug`, color `--color-text` |
-| Body | `--text-sm`, color `--color-text-muted`, `--leading-relaxed` |
+| Label | `--text-xs`, uppercase, color `--color-success`, weight 700 |
+| Heading | `--text-xl` (20px), weight 700, `--leading-snug`, color `--color-text` |
+| Body | `--text-base` (16px), color `--color-text-muted`, `--leading-relaxed` |
 
 **Purpose block** (subtle filled, centered):
 
@@ -359,7 +357,7 @@ Used only on `about/mission.html`. Three distinct styled blocks, not a grid.
 | Padding | `var(--space-10)` |
 | Margin-bottom | `var(--space-12)` (48px) |
 | Text-align | center |
-| Label | `--text-xs`, uppercase, color `--color-warning`, weight 600 |
+| Label | `--text-xs`, uppercase, color `--color-warning`, weight 700 |
 | Heading | `--text-xl` (20px), weight 700, color `--color-text`, `--leading-normal`, max-width 560px, margin auto |
 
 ---
@@ -373,9 +371,9 @@ Used only on `about/mission.html`. 8 belief statements.
 | Border-top | `1px solid var(--color-border)` |
 | Padding-top | `var(--space-10)` |
 | Margin-bottom | `var(--space-10)` |
-| Label | `--text-xs`, uppercase, color `--color-danger`, weight 600, `margin-bottom: var(--space-5)` |
+| Label | `--text-xs`, uppercase, color `--color-danger`, weight 700, `margin-bottom: var(--space-5)` |
 | List | `list-style: none`, `padding: 0` |
-| List item | `--text-base` (16px), color `--color-text-muted`, `--leading-relaxed`, `padding: var(--space-2) 0`, `padding-left: var(--space-7)` (28px), `position: relative`, `border-bottom: 1px solid var(--color-border)` |
+| List item | `--text-base` (16px), color `--color-text-muted`, `--leading-relaxed`, `padding: var(--space-2) 0`, `padding-left: calc(var(--space-6) + var(--space-1))`, `position: relative`, `border-bottom: 1px solid var(--color-border)` |
 | Last item | `border-bottom: none` |
 | `::before` marker | content `'—'`, `position: absolute`, `left: 0`, color `--color-accent`, weight 700 |
 
@@ -430,9 +428,9 @@ No new CSS needed. Use `.cta-section` and child classes exactly as defined in `l
 | Breakpoint | Layout Change |
 |------------|--------------|
 | `max-width: 900px` | `.outcomes-grid`: 3-col → 1-col; `.services__grid` (if reused): 3-col → 1-col |
-| `max-width: 768px` | `.page-hero h1`: `--text-4xl` → `--text-3xl`; `.deliverables` item grid: 2-col → 1-col |
+| `max-width: 768px` | `.page-hero h1`: `--text-4xl` → `--text-xl`; `.deliverables` item grid: 2-col → 1-col |
 | `max-width: 600px` | `.values-grid`: 2-col → 1-col |
-| `max-width: 480px` | `.page-hero h1`: `--text-3xl` → `--text-2xl`; hero actions: row → column, buttons full-width |
+| `max-width: 480px` | hero actions: row → column, buttons full-width |
 
 Touch target rule: all interactive elements (buttons, links) must be minimum 44px height. The existing `btn--lg` class satisfies this — use it for all primary CTAs.
 
