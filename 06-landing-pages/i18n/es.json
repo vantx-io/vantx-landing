@@ -62,6 +62,7 @@
   "services": {
     "heading": "Qué entregamos",
     "subheading": "Tres capacidades gestionadas, diseñadas para combinarse.",
+    "learn_more": "Ver más",
     "observability": {
       "tag": "Observabilidad como Servicio",
       "headline": "Ve todo lo que importa.",
@@ -147,5 +148,273 @@
     "subheading": "Agenda una demo de 30 minutos. Revisamos tu setup actual y te mostramos exactamente qué cambiaríamos primero.",
     "cta_primary": "Agendar Demo Gratis",
     "cta_secondary": "¿Tienes preguntas? Hablemos."
+  },
+  "obs_page": {
+    "meta_title": "Observabilidad como Servicio — Vantix",
+    "meta_description": "Observabilidad gestionada: instrumentación, dashboards, SLOs y ajuste de alertas como capacidad en mejora continua. De caótico a confiable.",
+    "hero": {
+      "pill": "Observabilidad como Servicio",
+      "headline": "Tu equipo no carece de observabilidad.",
+      "headline_accent": "Carece de una forma de ejecutarla bien.",
+      "subheadline": "Alertas que se ignoran. Dashboards que no responden las preguntas que tienes en un incidente. Factura de telemetría creciendo sin control. Eso no se resuelve con más herramientas. Se resuelve con alguien que las opere correctamente."
+    },
+    "problem": {
+      "body_1": "Si tu stack de monitoreo se siente 'implementado' pero caótico, probablemente es la misma historia: alertas que nadie confía, así que se ignoran. Dashboards que no responden las preguntas que tienes durante un incidente. Volúmenes de telemetría creciendo — y con ellos, la factura. Instrumentación inconsistente entre equipos. Y todos asumiendo que 'el equipo de plataforma lo va a arreglar'... entre emergencias.",
+      "body_2": "Eso es exactamente lo que resolvemos. Esto no es un tool. No es un proyecto one-off. Es una capacidad gestionada — diseñada para mantener tus señales útiles, tus costos controlados, y tu equipo confiado cuando algo se rompe."
+    },
+    "deliverables": {
+      "heading": "Qué reciben nuestros clientes",
+      "intro": "Seis deliverables concretos que transforman tu monitoreo de 'implementado pero caótico' a 'confiable y útil'.",
+      "items": [
+        {
+          "title": "Un baseline de observabilidad — qué recolectar, qué descartar, y por qué",
+          "body": "Auditamos tu stack actual y definimos una estrategia de telemetría opinionada: qué métricas importan, qué logs son ruido, qué traces necesitas, y qué datos estás pagando por recolectar sin que nadie mire jamás. Instrumentamos con OpenTelemetry hasta 5 servicios.",
+          "badges": ["Auditoría de stack actual", "OpenTelemetry instrumentation", "Telemetry strategy document"],
+          "freq": "Semana 1-3"
+        },
+        {
+          "title": "SLOs y alertas prácticas — alineadas a cómo el negocio experimenta downtime",
+          "body": "No definimos SLOs genéricos de '99.9% uptime'. Definimos SLOs que el negocio entiende: 'si p95 del checkout pasa de 2 segundos, estamos perdiendo ventas'. Error budget tracking con burn rate alerting para que el equipo sepa cuándo priorizar reliability sobre features.",
+          "badges": ["SLOs alineados al negocio", "Error budget + burn rate", "Alert rules tiered + runbooks"],
+          "freq": "Semana 3-4"
+        },
+        {
+          "title": "Dashboards lean, consistentes, opinionados — construidos alrededor de las preguntas que tu equipo realmente hace",
+          "body": "No 40 dashboards donde nadie encuentra nada. 10-15 dashboards Grafana diseñados para responder las preguntas específicas de un incidente: ¿qué servicio está fallando? ¿desde cuándo? ¿qué cambió? ¿cuál es el impacto? RED metrics, USE metrics, PostgreSQL, y SLO compliance — cada uno con un propósito claro.",
+          "badges": ["10-15 dashboards Grafana", "RED + USE methodology", "Provisioning as code"]
+        },
+        {
+          "title": "Mejora continua de instrumentación — no fire drills trimestrales",
+          "body": "Cada mes revisamos las alertas (false positives, gaps, thresholds), onboardeamos nuevos servicios, ajustamos dashboards al feedback del equipo, y actualizamos los SLOs si el negocio cambió. Es una mejora iterativa, no un proyecto que se termina y se olvida.",
+          "badges": ["Review mensual de alertas", "Onboarding de nuevos servicios", "Workshop trimestral para el equipo (2h)"]
+        },
+        {
+          "title": "Telemetría optimizada y costos controlados — reducción de cardinalidad y volumen",
+          "body": "Si tu factura de Datadog o New Relic crece cada mes sin que nadie sepa por qué, esto es para ti. Identificamos métricas de alta cardinalidad, logs verbosos que nadie lee, y traces redundantes. Reducimos volumen sin perder visibilidad. Algunos clientes reducen 30-50% su factura de telemetría solo con esta optimización.",
+          "badges": ["Cardinality analysis", "Log sampling strategy", "Cost reduction roadmap"],
+          "freq": "Mensual"
+        },
+        {
+          "title": "Comunicación async-first — con calls cuando realmente importa",
+          "body": "Slack para preguntas del día a día. Loom para explicaciones de hallazgos. PDF para reportes formales. Incluimos call de kick-off de 15 min para alinear, calls opcionales ante incidentes o hallazgos, y video meet opcional del informe mensual si quieres presentar los resultados a tu equipo o management.",
+          "badges": ["Kick-off: 15 min video call", "Incidentes: call 15 min opcional", "Informe mensual: video meet opcional", "Slack async siempre"]
+        }
+      ]
+    },
+    "outcomes": {
+      "heading": "El resultado",
+      "items": [
+        {
+          "title": "Menos sorpresas",
+          "body": "Alertas que la gente confía. Incidentes detectados antes de que los usuarios se quejen. Error budget como herramienta de priorización."
+        },
+        {
+          "title": "Diagnóstico más rápido",
+          "body": "Dashboards que responden las preguntas del incidente en 30 segundos, no 30 minutos. Correlación e2e con traces."
+        },
+        {
+          "title": "Una plataforma que mejora cada mes",
+          "body": "No es un proyecto que se entrega y se olvida. Es una capacidad que se afina continuamente. Cada mes más precisa, más útil, más eficiente."
+        }
+      ]
+    },
+    "how": {
+      "heading": "Cómo funciona",
+      "steps": [
+        {
+          "title": "Kick-off",
+          "badge": "15 min video call",
+          "body": "Entendemos tu stack actual, tus dolores, tus herramientas. Si prefieres async, mandas un doc y arrancamos."
+        },
+        {
+          "title": "Semana 1-3: Baseline",
+          "body": "Auditoría + instrumentación OTel + dashboards + alertas. Al final de la semana 3 tienes un stack de observabilidad funcional y opinionado."
+        },
+        {
+          "title": "Semana 3-4: SLOs + Governance",
+          "body": "SLOs formales, error budget tracking, burn rate alerting. Tu equipo sabe cuándo priorizar reliability."
+        },
+        {
+          "title": "Mes 2+: Gestión continua",
+          "body": "Review mensual de alertas, onboarding de servicios, optimización de costos, mejora de instrumentación."
+        },
+        {
+          "title": "Cada trimestre: Workshop",
+          "badge": "2h grabado",
+          "body": "Training para tu equipo sobre cómo usar los dashboards, interpretar SLOs, y diagnosticar incidentes."
+        },
+        {
+          "title": "Opcional: Video meet mensual",
+          "badge": "15-30 min",
+          "body": "Walkthrough del estado de la observabilidad, métricas de mejora, y próximos pasos."
+        }
+      ]
+    }
+  },
+  "sre_page": {
+    "meta_title": "SRE Fraccional — Vantix",
+    "meta_description": "Un SRE fraccional dedicado embebido en tu equipo. Revisión de arquitectura, command de incidentes, roadmap de confiabilidad — experiencia SRE senior a presupuesto startup.",
+    "hero": {
+      "pill": "SRE Fraccional",
+      "headline": "Experiencia SRE senior.",
+      "headline_accent": "Presupuesto startup.",
+      "subheadline": "Un SRE dedicado embebido en tu equipo de ingeniería — manejando revisión de arquitectura, command de incidentes, post-mortems, y el trabajo real de confiabilidad que nunca se prioriza. Toda la experiencia de un SRE senior full-time a una fracción del costo."
+    },
+    "problem": {
+      "body_1": "Un SRE senior cuesta $150K+/año solo en salario. Tu equipo de ingeniería está shipiando features, no construyendo prácticas de confiabilidad. Los incidentes toman horas en resolverse porque nadie es dueño del proceso. Los post-mortems se escriben y se archivan — y el mismo incidente ocurre tres meses después. Sabes que la confiabilidad importa, pero no puedes justificar una contratación full-time en este momento.",
+      "body_2": "Ese es exactamente el gap que llena un SRE fraccional. No un consultor que entrega un reporte y desaparece — un practicante dedicado embebido en tu equipo, dueño de la confiabilidad de la misma forma en que tus ingenieros son dueños de sus servicios."
+    },
+    "deliverables": {
+      "heading": "Qué reciben nuestros clientes",
+      "intro": "Seis deliverables concretos que llevan capacidad SRE senior a tu equipo sin el headcount full-time.",
+      "items": [
+        {
+          "title": "SRE fraccional dedicado embebido en tu equipo (10-20 hrs/semana)",
+          "body": "Tu SRE fraccional asiste a standups, revisa PRs por impacto en confiabilidad, participa en discusiones de arquitectura, y es accesible por Slack durante horario hábil. No un consultor que aparece para reviews trimestrales — un practicante que conoce tus sistemas.",
+          "badges": ["10-20 hrs/semana", "Acceso Slack", "PR reliability reviews"],
+          "freq": "Continuo"
+        },
+        {
+          "title": "Revisión de arquitectura + roadmap de confiabilidad",
+          "body": "En las primeras dos semanas, mapeamos tu arquitectura, identificamos los principales riesgos de confiabilidad, y producimos un roadmap priorizado. No un checklist genérico — un plan concreto específico a tu stack: qué servicios son single points of failure, cuáles no tienen SLOs, qué incidentes son prevenibles.",
+          "badges": ["Mapa de riesgos de arquitectura", "Roadmap de confiabilidad priorizado", "Quick wins identificados"],
+          "freq": "Semanas 1-2"
+        },
+        {
+          "title": "Command de incidentes y facilitación de post-mortems",
+          "body": "Durante incidentes activos, tu SRE fraccional lidera la respuesta: coordina comunicación, conduce el proceso de diagnóstico, y mantiene al equipo enfocado. Después del incidente, facilita un post-mortem estructurado que produce follow-ups accionables — no un documento que se archiva y se olvida.",
+          "badges": ["Command de incidentes", "Post-mortems estructurados", "Seguimiento de action items"]
+        },
+        {
+          "title": "Canal de escalación durante incidentes activos",
+          "body": "Cuando algo se rompe a las 2 AM, tu equipo tiene un canal de escalación directo. Respondemos en 15 minutos para incidentes P1 durante horario hábil, y mantenemos un canal async de escalación para emergencias fuera de horario. Tu rotación de on-call queda respaldada por alguien que ya ha visto el failure mode antes.",
+          "badges": ["Escalación P1: respuesta en 15 min", "Canal async fuera de horario", "Runbooks de incidentes"],
+          "freq": "Siempre disponible"
+        },
+        {
+          "title": "Definición y seguimiento del programa de SLOs",
+          "body": "Definimos SLOs que tu negocio entiende, los instrumentamos correctamente, y establecemos el proceso de error budget. Reviews mensuales de SLOs con el equipo de ingeniería — ¿está mejorando la confiabilidad? ¿estamos gastando error budget en las cosas correctas? Esto se convierte en el lenguaje entre ingeniería y producto.",
+          "badges": ["Workshop de definición de SLOs", "Error budget tracking", "Review mensual de SLOs"]
+        },
+        {
+          "title": "Comunicación async (Slack) + sync semanal opcional",
+          "body": "Toda la comunicación es async por defecto: Slack para preguntas, Loom para explicar decisiones de arquitectura, reportes escritos para actualizaciones de estado. Un sync semanal opcional de 30 minutos para alinear prioridades. Respetamos el tiempo de tu equipo — las reuniones ocurren cuando agregan valor que el async no puede dar.",
+          "badges": ["Slack async siempre", "Sync semanal opcional: 30 min", "Reportes de estado escritos"]
+        }
+      ]
+    },
+    "outcomes": {
+      "heading": "El resultado",
+      "items": [
+        {
+          "title": "Confiabilidad sin headcount",
+          "body": "Capacidad SRE senior embebida en tu equipo a una fracción del costo. Sin reclutamiento, sin overhead de onboarding, sin compromiso de salario de $150K."
+        },
+        {
+          "title": "Resolución de incidentes más rápida",
+          "body": "Proceso claro de command de incidentes. Runbooks que existen. Un practicante que conoce tus sistemas y lidera la respuesta. Incidentes que antes tomaban 4 horas se resuelven en 45 minutos."
+        },
+        {
+          "title": "Una cultura de confiabilidad que perdura",
+          "body": "SLOs que tu equipo realmente rastrea. Post-mortems que producen cambios. Decisiones de arquitectura tomadas con datos de confiabilidad. Las prácticas no desaparecen cuando termina el engagement — están construidas en cómo trabaja tu equipo."
+        }
+      ]
+    },
+    "how": {
+      "heading": "Cómo funciona",
+      "steps": [
+        {
+          "title": "Kick-off",
+          "badge": "15 min video call",
+          "body": "Entendemos tu arquitectura actual, incidentes recientes, y qué significa confiabilidad para tu negocio. Se configura el acceso a tu stack — Slack, tooling de incidentes, monitoreo."
+        },
+        {
+          "title": "Semana 1: Revisión de arquitectura",
+          "body": "Mapeamos tus servicios, identificamos single points of failure, revisamos incidentes recientes, y auditamos tu setup actual de on-call. Recibes una evaluación de riesgos escrita al final de la semana 1."
+        },
+        {
+          "title": "Semanas 2-3: Roadmap de confiabilidad",
+          "body": "Construimos el roadmap priorizado: qué arreglar primero, qué SLOs definir, qué runbooks escribir. Los primeros quick wins se implementan — cosas que mejoran la confiabilidad inmediatamente."
+        },
+        {
+          "title": "Mes 2+: SRE embebido",
+          "body": "Trabajo embebido continuo: respuesta a incidentes, reviews de PRs, seguimiento de SLOs, guía de arquitectura. Tu equipo tiene un practicante de confiabilidad dedicado de su lado."
+        },
+        {
+          "title": "Trimestral: Review de confiabilidad",
+          "badge": "1h grabado",
+          "body": "Una review estructurada del progreso en confiabilidad: tendencias de SLOs, frecuencia de incidentes, consumo de error budget, y roadmap para el próximo trimestre."
+        }
+      ]
+    }
+  },
+  "mission_page": {
+    "meta_title": "Misión & Valores — Vantix",
+    "meta_description": "La misión de Vantix: que cada equipo de tecnología sepa exactamente cómo se comporta su sistema bajo carga — y tenga un plan concreto para mejorarlo.",
+    "header": {
+      "sub": "Performance Engineering · Observability · Fractional SRE"
+    },
+    "mission": {
+      "label": "Misión",
+      "heading": "Que cada equipo de tecnología sepa exactamente cómo se comporta su sistema bajo carga — y tenga un plan concreto para mejorarlo.",
+      "body": "Cerramos el gap entre 'tener herramientas' y 'usarlas bien'. Hacemos que el monitoreo, el testing, y la observabilidad funcionen de forma continua y confiable — como una capacidad gestionada que mejora cada mes, no como un proyecto que se termina y se olvida."
+    },
+    "vision": {
+      "label": "Visión",
+      "heading": "Ser el equipo externo de Performance y SRE al que las empresas tech de Americas recurren cuando necesitan que su sistema sea confiable — sin construir un equipo interno de 10 personas para lograrlo.",
+      "body": "En 3 años, cada empresa tech en LATAM y US que necesite performance engineering, observabilidad, o prácticas SRE debería pensar en Vantix como la primera opción: más rápido que contratar, más profundo que un tool, y más confiable que hacerlo solos."
+    },
+    "purpose": {
+      "label": "Propósito",
+      "heading": "Que ningún equipo tenga que cruzar los dedos antes de un Black Friday, un lanzamiento, o una campaña de marketing. Que las decisiones de infraestructura se tomen con datos, no con esperanza."
+    },
+    "values": {
+      "section_label": "Valores",
+      "items": [
+        {
+          "num": "01",
+          "title": "Datos, no opiniones",
+          "body": "Cada número en cada reporte viene de tests y monitoreo real corriendo 24/7. No decimos 'yo creo que'. Decimos 'los datos muestran que'. Si no tenemos el dato, lo medimos antes de opinar."
+        },
+        {
+          "num": "02",
+          "title": "Acciones, no listas",
+          "body": "No entregamos listas genéricas de best practices. Entregamos el SQL exacto, la config exacta, el cambio exacto — con la estimación de mejora esperada. 'CREATE INDEX idx_x ON table(col1, col2)' no 'considere optimizar la base de datos'."
+        },
+        {
+          "num": "03",
+          "title": "Async por defecto",
+          "body": "Respetamos el tiempo de nuestros clientes y el nuestro. Slack para comunicación, Loom para explicaciones, PDF para reportes. Las reuniones existen cuando realmente importan — no como ritual."
+        },
+        {
+          "num": "04",
+          "title": "Sin lock-in",
+          "body": "Todo lo que construimos usa herramientas open-source: k6, Grafana, OpenTelemetry, Prometheus. Si mañana decides terminar el servicio, todo es tuyo. No creamos dependencia — creamos capacidad."
+        },
+        {
+          "num": "05",
+          "title": "Transferencia de conocimiento",
+          "body": "Nuestro objetivo es que tu equipo aprenda. Workshops, pair programming, code reviews, mentoring. Un buen engagement con Vantix termina cuando tu equipo ya no nos necesita — y ese es nuestro mejor caso de éxito."
+        },
+        {
+          "num": "06",
+          "title": "Mejora continua, no proyectos",
+          "body": "No entregamos un reporte que se archiva. Entregamos un ciclo: medir → encontrar → priorizar → implementar → validar. Cada mes el baseline sube. Cada mes el sistema es más confiable. Eso es lo que vendemos."
+        }
+      ]
+    },
+    "manifesto": {
+      "label": "Lo que creemos",
+      "items": [
+        "La mayoría de los equipos no carecen de herramientas. Carecen de alguien que las opere correctamente.",
+        "Un load test que se corre una vez no es performance engineering. Es un checkbox.",
+        "Las alertas que se ignoran son peores que no tener alertas — crean una falsa sensación de seguridad.",
+        "El costo de un incidente siempre es mayor que el costo de prevenirlo.",
+        "Un dashboard que no responde la pregunta que tienes durante un incidente es decoración, no observabilidad.",
+        "La diferencia entre un tester y un performance engineer es la diferencia entre ejecutar un script y entender la arquitectura.",
+        "100% async no significa 0% comunicación. Significa comunicación eficiente, cuando importa, sin desperdiciar el tiempo de nadie.",
+        "El mejor entregable es el que llega sin que lo pidas, con los datos que necesitas, en el formato que puedes usar."
+      ]
+    }
   }
 }
