@@ -43,14 +43,19 @@
 
     // 2. Fall back to network
     if (!raw) {
-      const res = await fetch(url);
-      if (!res.ok) {
-        console.error(
-          "partials: failed to load " + url + " (" + res.status + ")",
-        );
+      try {
+        const res = await fetch(url);
+        if (!res.ok) {
+          console.error(
+            "partials: failed to load " + url + " (" + res.status + ")",
+          );
+          return;
+        }
+        raw = await res.text();
+      } catch (err) {
+        console.error("partials: network error loading " + url, err);
         return;
       }
-      raw = await res.text();
       try {
         sessionStorage.setItem(cacheKey, raw);
       } catch (_) {}
@@ -69,15 +74,24 @@
     const drawer = document.querySelector(".nav__drawer");
     if (!nav || !toggle) return;
 
+    var _previousFocus = null; // restore focus on close
+
     function closeDrawer() {
       nav.classList.remove("is-open");
       toggle.setAttribute("aria-expanded", "false");
       if (drawer) drawer.classList.remove("is-open");
       document.body.classList.remove("nav-open");
-      toggle.focus();
+      // Restore focus to the element that was active before the drawer opened
+      if (_previousFocus && _previousFocus.focus) {
+        _previousFocus.focus();
+        _previousFocus = null;
+      } else {
+        toggle.focus();
+      }
     }
 
     function openDrawer() {
+      _previousFocus = document.activeElement;
       nav.classList.add("is-open");
       toggle.setAttribute("aria-expanded", "true");
       if (drawer) {
@@ -103,10 +117,27 @@
       });
     }
 
-    // Close on Escape key
+    // Keyboard handling — single listener for Escape + focus trap
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && nav.classList.contains("is-open")) {
+      if (!nav.classList.contains("is-open")) return;
+      if (e.key === "Escape") {
         closeDrawer();
+        return;
+      }
+      if (e.key === "Tab" && drawer) {
+        var focusable = drawer.querySelectorAll(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        );
+        if (!focusable.length) return;
+        var first = focusable[0];
+        var last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
       }
     });
 
@@ -123,6 +154,18 @@
      ------------------------------------------------------------------ */
 
   function wireLangToggle() {
+    // Create an aria-live region so screen readers announce language changes
+    var liveRegion = document.createElement("div");
+    liveRegion.setAttribute("aria-live", "polite");
+    liveRegion.setAttribute("aria-atomic", "true");
+    liveRegion.className = "sr-only";
+    document.body.appendChild(liveRegion);
+
+    document.addEventListener("i18n:changed", function (e) {
+      var langName = e.detail.lang === "es" ? "Espa\u00f1ol" : "English";
+      liveRegion.textContent = langName;
+    });
+
     document.querySelectorAll("[data-lang-toggle]").forEach((btn) => {
       btn.addEventListener("click", () => {
         const current = window.i18n.getCurrentLang();
@@ -137,16 +180,19 @@
      ------------------------------------------------------------------ */
 
   function markActiveLink() {
-    const path = window.location.pathname;
+    const path = window.location.pathname.replace(/\/$/, "") || "/";
     document.querySelectorAll(".nav__link").forEach((link) => {
       const href = link.getAttribute("href");
       if (!href) return;
-      // Strip fragment from href for comparison
-      const hrefPath = href.split("#")[0];
-      if (hrefPath && path.endsWith(hrefPath) && hrefPath !== "/") {
+      // Strip fragment and query from href for comparison
+      const hrefPath = href.split("#")[0].split("?")[0];
+      // Normalize: resolve relative paths and strip trailing slash
+      const normalizedHref = hrefPath.replace(/\/$/, "") || "/";
+      if (normalizedHref !== "/" && path.endsWith(normalizedHref)) {
         link.classList.add("is-active");
+        link.setAttribute("aria-current", "page");
       } else if (
-        hrefPath === "/" &&
+        normalizedHref === "/" &&
         (path === "/" || path.endsWith("/index.html"))
       ) {
         // Root page — don't mark nav links as active to avoid confusion

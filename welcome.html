@@ -45,15 +45,15 @@
 
   <main id="main-content" tabindex="-1">
 
-    <section class="page-hero section" aria-label="Welcome">
+    <section class="page-hero page-hero--welcome section" aria-label="Welcome">
       <div class="container">
-        <div class="page-hero__inner" style="text-align: center; max-width: 640px; margin: 0 auto;">
+        <div class="page-hero__inner">
 
           <div class="pill" data-i18n="welcome.pill">You're in</div>
 
-          <h1 class="page-hero__headline" style="margin-top: var(--space-6);" data-i18n="welcome.headline">Welcome to Vantx.</h1>
+          <h1 class="page-hero__headline" data-i18n="welcome.headline">Welcome to Vantx.</h1>
 
-          <p class="page-hero__sub" style="margin: var(--space-6) auto var(--space-10); max-width: 520px;" data-i18n="welcome.subheadline">
+          <p class="page-hero__sub" data-i18n="welcome.subheadline">
             Your payment is confirmed. Here's what happens next.
           </p>
 
@@ -62,34 +62,42 @@
             <div class="welcome-step">
               <span class="welcome-step__num">1</span>
               <div class="welcome-step__content">
-                <h3 class="welcome-step__title" data-i18n="welcome.step1_title">We reach out within 24 hours</h3>
-                <p class="welcome-step__body" data-i18n="welcome.step1_body">You'll get an email from our team to schedule onboarding and get access to your systems.</p>
+                <h3 class="welcome-step__title" data-i18n="welcome.step1_title">Mutual NDA</h3>
+                <p class="welcome-step__body" data-i18n="welcome.step1_body">We send a mutual NDA within 24 hours. Protects your systems and data before we access anything.</p>
               </div>
             </div>
 
             <div class="welcome-step">
               <span class="welcome-step__num">2</span>
               <div class="welcome-step__content">
-                <h3 class="welcome-step__title" data-i18n="welcome.step2_title">Kickoff call</h3>
-                <p class="welcome-step__body" data-i18n="welcome.step2_body">We review your stack, define priorities, and align on the first deliverables.</p>
+                <h3 class="welcome-step__title" data-i18n="welcome.step2_title">Onboarding questionnaire</h3>
+                <p class="welcome-step__body" data-i18n="welcome.step2_body">A brief form about your stack, monitoring tools, and priorities — so we arrive prepared.</p>
               </div>
             </div>
 
             <div class="welcome-step">
               <span class="welcome-step__num">3</span>
               <div class="welcome-step__content">
-                <h3 class="welcome-step__title" data-i18n="welcome.step3_title">First results in 5 days</h3>
-                <p class="welcome-step__body" data-i18n="welcome.step3_body">Expect your first capacity baseline, dashboards, or audit within the first week.</p>
+                <h3 class="welcome-step__title" data-i18n="welcome.step3_title">Kickoff call</h3>
+                <p class="welcome-step__body" data-i18n="welcome.step3_body">15-minute call to review your stack, define priorities, and align on first deliverables.</p>
+              </div>
+            </div>
+
+            <div class="welcome-step">
+              <span class="welcome-step__num">4</span>
+              <div class="welcome-step__content">
+                <h3 class="welcome-step__title" data-i18n="welcome.step4_title">First results in 5 days</h3>
+                <p class="welcome-step__body" data-i18n="welcome.step4_body">Expect your first capacity baseline, dashboards, or audit within the first week.</p>
               </div>
             </div>
 
           </div>
 
-          <p style="font-size: var(--text-sm); color: var(--color-text-muted); margin-top: var(--space-10); margin-bottom: var(--space-6);" data-i18n="welcome.cta_text">
+          <p class="welcome__cta-text" data-i18n="welcome.cta_text">
             Want to schedule the kickoff now?
           </p>
 
-          <div class="page-hero__actions" style="justify-content: center;">
+          <div class="page-hero__actions">
             <button class="btn btn--primary btn--lg js-calendly-trigger" type="button" data-i18n="welcome.cta">Schedule Kickoff Call</button>
             <a href="mailto:hello@vantx.io" class="btn btn--outline btn--lg" data-i18n="welcome.cta_email">Email us</a>
           </div>

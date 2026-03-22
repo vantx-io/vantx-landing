@@ -36,6 +36,7 @@
   line-height: var(--leading-tight);
   color: var(--color-text);
   margin-bottom: var(--space-6);
+  overflow-wrap: break-word; /* safety for long i18n headlines */
 }
 
 .page-hero__headline-accent {
@@ -106,6 +107,18 @@
   border-color: var(--color-qa-border);
 }
 
+/* Mission page — centered hero variant (no max-width constraint) */
+.page-hero--mission .page-hero__inner {
+  text-align: center;
+  margin: 0 auto;
+}
+
+.page-hero--mission .pill {
+  background: var(--color-accent-subtle);
+  color: var(--color-accent);
+  border-color: var(--color-accent-border);
+}
+
 /* Mobile: headline scale down */
 @media (max-width: 768px) {
   .page-hero {
@@ -140,6 +153,16 @@
   }
 }
 
+/* Alternating surface background for problem/outcome sections */
+.section--surface {
+  background: var(--color-surface);
+}
+
+/* Remove bottom margin on last paragraph in problem sections */
+.deliverables__intro:last-child {
+  margin-bottom: 0;
+}
+
 /* ==========================================================================
    2. Deliverables (.deliverables)
    Numbered deliverable items — used on observability and SRE pages.
@@ -158,6 +181,11 @@
   grid-template-columns: 56px 1fr;
   gap: var(--space-5);
   align-items: start;
+  min-width: 0; /* prevent grid children from overflowing */
+}
+
+.deliverable > div {
+  min-width: 0; /* allow text to wrap inside grid cell */
 }
 
 .deliverable__num {
@@ -196,6 +224,7 @@
   font-weight: var(--font-bold);
   color: var(--color-text);
   margin-bottom: var(--space-2);
+  overflow-wrap: break-word; /* safety for long i18n deliverable titles */
 }
 
 .deliverable__body {
@@ -275,6 +304,7 @@
   border-radius: var(--radius-lg);
   padding: var(--space-6);
   transition: transform var(--transition), box-shadow var(--transition);
+  min-width: 0; /* prevent grid children from overflowing */
 }
 
 .outcome-card:hover {
@@ -293,10 +323,18 @@
   font-size: var(--text-base);
   color: var(--color-text-muted);
   line-height: var(--leading-normal);
+  overflow-wrap: break-word;
 }
 
-/* Mobile: collapse to single column */
+/* Tablet: 2-column layout */
 @media (max-width: 900px) {
+  .outcomes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile: single column */
+@media (max-width: 600px) {
   .outcomes-grid {
     grid-template-columns: 1fr;
   }
@@ -309,6 +347,8 @@
 
 .timeline-section {
   border-top: 1px solid var(--color-border);
+  content-visibility: auto;
+  contain-intrinsic-size: auto 400px;
 }
 
 .timeline {
@@ -380,6 +420,8 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--space-5);
+  content-visibility: auto;
+  contain-intrinsic-size: auto 400px;
 }
 
 .value-card {
@@ -388,6 +430,8 @@
   border-radius: var(--radius-lg);
   padding: calc(var(--space-6) + var(--space-1));
   transition: border-color var(--transition), box-shadow var(--transition);
+  min-width: 0; /* prevent grid children from overflowing */
+  overflow-wrap: break-word;
 }
 
 .value-card:hover {
@@ -414,6 +458,11 @@
   font-size: var(--text-base);
   color: var(--color-text-muted);
   line-height: var(--leading-relaxed);
+}
+
+/* Values section heading — reuses .label from base.css with bottom spacing */
+.values-heading {
+  margin-bottom: var(--space-5);
 }
 
 /* Mobile: collapse to single column */
@@ -568,8 +617,35 @@
 }
 
 /* ==========================================================================
-   8. Welcome page steps
+   8. Welcome page
    ========================================================================== */
+
+/* Centered hero variant used on welcome page */
+.page-hero--welcome .page-hero__inner {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.page-hero--welcome .page-hero__headline {
+  margin-top: var(--space-6);
+}
+
+.page-hero--welcome .page-hero__sub {
+  margin: var(--space-6) auto var(--space-10);
+  max-width: 520px;
+}
+
+.page-hero--welcome .page-hero__actions {
+  justify-content: center;
+}
+
+.welcome__cta-text {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--space-10);
+  margin-bottom: var(--space-6);
+}
 
 .welcome-steps {
   display: flex;

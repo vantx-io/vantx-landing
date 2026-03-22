@@ -6,7 +6,8 @@
     <a href="/" class="nav__logo" data-i18n-aria="nav.logo_aria">
       <picture>
         <source srcset="{{BASE}}/img/vantx-logo-horizontal-white.webp" type="image/webp">
-        <img src="{{BASE}}/img/vantx-logo-horizontal-white-sm.png" alt="Vantx" class="nav__logo-img" width="140" height="32">
+        <img src="{{BASE}}/img/vantx-logo-horizontal-white-sm.png" alt="Vantx" class="nav__logo-img" width="140" height="32"
+             onerror="this.style.display='none';this.parentElement.insertAdjacentHTML('afterend','<span class=nav__logo-mark>Vantx</span>')">
       </picture>
     </a>
 
@@ -14,9 +15,6 @@
     <ul class="nav__links" role="list">
       <li>
         <a href="/#services" class="nav__link" data-i18n="nav.services">Services</a>
-      </li>
-      <li>
-        <a href="/#services" class="nav__link" data-i18n="nav.see_pricing">See Pricing</a>
       </li>
       <li>
         <a href="/about/mission.html" class="nav__link" data-i18n="nav.about">About</a>
@@ -31,11 +29,11 @@
         type="button"
         aria-label="Switch language"
       >ES</button>
-      <a
-        href="#calendly"
-        class="btn btn--primary btn--sm"
+      <button
+        type="button"
+        class="btn btn--primary btn--sm js-calendly-trigger"
         data-i18n="nav.cta"
-      >Book a Call</a>
+      >Book a Call</button>
     </div>
 
     <!-- Mobile hamburger -->
@@ -54,9 +52,8 @@
   </div><!-- /.nav__inner -->
 
   <!-- Mobile drawer -->
-  <div id="nav-drawer" class="nav__drawer" aria-label="Mobile navigation">
+  <div id="nav-drawer" class="nav__drawer" role="dialog" aria-label="Mobile navigation" aria-modal="true">
     <a href="/#services" class="nav__link" data-i18n="nav.services">Services</a>
-    <a href="/#services" class="nav__link" data-i18n="nav.see_pricing">See Pricing</a>
     <a href="/about/mission.html" class="nav__link" data-i18n="nav.about">About</a>
 
     <div class="nav__drawer-actions">
@@ -66,11 +63,11 @@
         type="button"
         aria-label="Switch language"
       >ES</button>
-      <a
-        href="#calendly"
-        class="btn btn--primary btn--sm"
+      <button
+        type="button"
+        class="btn btn--primary btn--sm js-calendly-trigger"
         data-i18n="nav.cta"
-      >Book a Call</a>
+      >Book a Call</button>
     </div>
   </div><!-- /#nav-drawer -->
 

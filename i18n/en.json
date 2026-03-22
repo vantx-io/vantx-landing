@@ -54,10 +54,6 @@
         "body": "Your on-call rotation is exhausted and alerts are noise — no one knows which ones actually matter."
       },
       {
-        "title": "Monitoring tools, zero insights",
-        "body": "You have Datadog or Grafana, but no one has time to build the dashboards that tell you something useful."
-      },
-      {
         "title": "Load tests that don't exist",
         "body": "You find out about performance bottlenecks in production, from customers, at the worst possible moment."
       },
@@ -68,10 +64,6 @@
       {
         "title": "Every release is a guess",
         "body": "Deploys go out without any baseline — you don't know if today's release made things better or worse."
-      },
-      {
-        "title": "Incident retrospectives go nowhere",
-        "body": "You write up the post-mortem. Nothing changes. The same incident happens again three months later."
       }
     ]
   },
@@ -155,11 +147,6 @@
       "price_period": "/month"
     }
   },
-  "pricing": {
-    "heading": "Transparent pricing",
-    "subheading": "Each service has a clear price. No 'contact us for pricing.' Check each service page for details.",
-    "cta": "Book a Strategy Call"
-  },
   "compare": {
     "heading": "Vantx vs. hiring full-time",
     "subheading": "The expertise without the overhead.",
@@ -178,19 +165,7 @@
     "row_risk": "Risk",
     "hiring_risk": "They leave, you start over",
     "vantix_risk": "Continuous, documented, fully transferable knowledge",
-    "row_tools": "Tools",
-    "hiring_tools": "Whatever they know",
-    "vantix_tools": "Open-source stack, no vendor lock-in",
     "caption": "Comparison of hiring in-house vs. Vantx"
-  },
-  "team": {
-    "heading": "Who's behind Vantx",
-    "subheading": "A dedicated team of senior specialists, augmented by AI agents.",
-    "body": "Behind every engagement is a tight, multidisciplinary team — not outsourced, not rotated. The same people who define your strategy implement it: they know your systems, build the dashboards, write the load tests, and deliver the reports.",
-    "perf": "Performance Engineering",
-    "sre": "Site Reliability",
-    "devops": "DevOps",
-    "qa": "QA Automation"
   },
   "faq": {
     "heading": "Common Questions",
@@ -214,24 +189,8 @@
         "a": "A dedicated team of senior specialists in performance, SRE, DevOps, and QA — augmented by AI agents. Not outsourced, not rotated."
       },
       {
-        "q": "What if I need to pause?",
-        "a": "Pause your subscription anytime. When you resume, we pick up right where we left off."
-      },
-      {
         "q": "How do we communicate?",
         "a": "100% async by default. Slack for questions, Loom for walkthroughs, PDF for reports. Video calls only when they add real value."
-      },
-      {
-        "q": "Can I combine services?",
-        "a": "Yes. All four services are designed to work together. Most clients start with one and add more as they see the value."
-      },
-      {
-        "q": "What tools do you use?",
-        "a": "Open-source only: k6, Grafana, OpenTelemetry, Prometheus. Everything we build is yours. No vendor lock-in."
-      },
-      {
-        "q": "Not sure which service you need?",
-        "a": "Start with a Performance Checkup ($2,995, one-time). In 5 days you'll have a capacity baseline, load test results, and a prioritized action plan. No subscription required."
       }
     ]
   },
@@ -241,25 +200,45 @@
     "cta_primary": "Get Started",
     "cta_join": "Start Today",
     "cta_secondary": "Book a Call",
-    "slots": "Vantx is experiencing high demand — slots are limited. For faster response, email <a href=\"mailto:hello@vantx.io\">hello@vantx.io</a>",
     "latam_headline": "Company or startup in Latin America or Spain?",
     "latam_desc": "We offer special pricing for companies and startups in LATAM and Spain. Book a call and ask about your discount.",
-    "latam_cta": "Ask About Your Discount",
-    "vibe_headline": "Building with AI?",
-    "vibe_desc": "Early-stage teams building with AI get special pricing. Book a call and ask about your discount.",
-    "vibe_cta": "Ask About Your Discount"
+    "latam_cta": "Ask About Your Discount"
+  },
+  "process": {
+    "heading": "How we start",
+    "subheading": "From first call to first results in under two weeks.",
+    "steps": [
+      {
+        "title": "Book a call",
+        "body": "15-minute intro. We understand your stack, your pain, and whether we're a fit."
+      },
+      {
+        "title": "Mutual NDA",
+        "body": "Before we access anything, we sign a mutual NDA to protect your systems and data."
+      },
+      {
+        "title": "Kickoff + access",
+        "body": "You grant access to monitoring, repos, and Slack. We define priorities and first deliverables."
+      },
+      {
+        "title": "First results in 5 days",
+        "body": "Capacity baseline, dashboards, or audit — real data from day one."
+      }
+    ]
   },
   "welcome": {
     "meta_title": "Welcome to Vantx",
     "pill": "You're in",
     "headline": "Welcome to Vantx.",
     "subheadline": "Your payment is confirmed. Here's what happens next.",
-    "step1_title": "We reach out within 24 hours",
-    "step1_body": "You'll get an email from our team to schedule onboarding and get access to your systems.",
-    "step2_title": "Kickoff call",
-    "step2_body": "We review your stack, define priorities, and align on the first deliverables.",
-    "step3_title": "First results in 5 days",
-    "step3_body": "Expect your first capacity baseline, dashboards, or audit within the first week.",
+    "step1_title": "Mutual NDA",
+    "step1_body": "We send a mutual NDA within 24 hours. Protects your systems and data before we access anything.",
+    "step2_title": "Onboarding questionnaire",
+    "step2_body": "A brief form about your stack, monitoring tools, and priorities — so we arrive prepared.",
+    "step3_title": "Kickoff call",
+    "step3_body": "15-minute call to review your stack, define priorities, and align on first deliverables.",
+    "step4_title": "First results in 5 days",
+    "step4_body": "Expect your first capacity baseline, dashboards, or audit within the first week.",
     "cta_text": "Want to schedule the kickoff now?",
     "cta": "Schedule Kickoff Call",
     "cta_email": "Email us"

@@ -54,10 +54,6 @@
         "body": "Tu rotación de guardia está agotada y las alertas son ruido — nadie sabe cuáles realmente importan."
       },
       {
-        "title": "Herramientas de monitoreo, cero insights",
-        "body": "Tienes Datadog o Grafana, pero nadie tiene tiempo de construir los dashboards que te digan algo útil."
-      },
-      {
         "title": "Load tests que no existen",
         "body": "Descubres los cuellos de botella de performance en producción, de tus clientes, en el peor momento posible."
       },
@@ -68,10 +64,6 @@
       {
         "title": "Cada release es una apuesta",
         "body": "Los deploys salen sin ningún baseline — no sabes si el release de hoy mejoró o empeoró las cosas."
-      },
-      {
-        "title": "Los post-mortems no cambian nada",
-        "body": "Escribes el reporte. No cambia nada. El mismo incidente ocurre tres meses después."
       }
     ]
   },
@@ -155,11 +147,6 @@
       "price_period": "/mes"
     }
   },
-  "pricing": {
-    "heading": "Precios transparentes",
-    "subheading": "Cada servicio tiene un precio claro. Sin 'contáctanos para cotizar'. Mira cada página de servicio para detalles.",
-    "cta": "Agendar Strategy Call"
-  },
   "compare": {
     "heading": "Vantx vs. contratar full-time",
     "subheading": "La experiencia sin el overhead.",
@@ -178,19 +165,7 @@
     "row_risk": "Riesgo",
     "hiring_risk": "Se va y empiezas de cero",
     "vantix_risk": "Continuo, documentado, conocimiento 100% transferible",
-    "row_tools": "Herramientas",
-    "hiring_tools": "Lo que esa persona conozca",
-    "vantix_tools": "Stack open-source, sin vendor lock-in",
     "caption": "Comparación entre contratar in-house y Vantx"
-  },
-  "team": {
-    "heading": "Quién está detrás de Vantx",
-    "subheading": "Un equipo dedicado de especialistas senior, potenciado por agentes de IA.",
-    "body": "Detrás de cada engagement hay un equipo compacto y multidisciplinario — no tercerizado, no rotado. Las mismas personas que definen tu estrategia la implementan: conocen tus sistemas, construyen los dashboards, escriben los load tests y entregan los reportes.",
-    "perf": "Performance Engineering",
-    "sre": "Site Reliability",
-    "devops": "DevOps",
-    "qa": "QA Automation"
   },
   "faq": {
     "heading": "Preguntas frecuentes",
@@ -214,24 +189,8 @@
         "a": "Un equipo dedicado de especialistas senior en performance, SRE, DevOps y QA — potenciado por agentes de IA. No tercerizado, no rotado."
       },
       {
-        "q": "¿Qué pasa si necesito pausar?",
-        "a": "Pausa tu suscripción cuando quieras. Cuando retomes, continuamos exactamente donde quedamos."
-      },
-      {
         "q": "¿Cómo nos comunicamos?",
         "a": "100% async por defecto. Slack para preguntas, Loom para walkthroughs, PDF para reportes. Video calls solo cuando realmente agregan valor."
-      },
-      {
-        "q": "¿Puedo combinar servicios?",
-        "a": "Sí. Los cuatro servicios están diseñados para funcionar juntos. La mayoría de clientes empiezan con uno y agregan más al ver el valor."
-      },
-      {
-        "q": "¿Qué herramientas usan?",
-        "a": "Solo open-source: k6, Grafana, OpenTelemetry, Prometheus. Todo lo que construimos es tuyo. Sin vendor lock-in."
-      },
-      {
-        "q": "¿No estás seguro de cuál necesitas?",
-        "a": "Empieza con un Performance Checkup ($2,995, one-time). En 5 días tendrás un baseline de capacidad, resultados de load test y un plan de acción priorizado. Sin suscripción requerida."
       }
     ]
   },
@@ -241,25 +200,45 @@
     "cta_primary": "Empezar",
     "cta_join": "Empezar hoy",
     "cta_secondary": "Agendar Call",
-    "slots": "Vantx está recibiendo alta demanda — los slots son limitados. Para respuesta más rápida, escribe a <a href=\"mailto:hello@vantx.io\">hello@vantx.io</a>",
     "latam_headline": "¿Empresa o startup en Latinoamérica o España?",
     "latam_desc": "Ofrecemos precios especiales para empresas y startups en LATAM y España. Agenda una llamada y consulta por tu descuento.",
-    "latam_cta": "Consultar Descuento",
-    "vibe_headline": "¿Construyendo con IA?",
-    "vibe_desc": "Equipos early-stage construyendo con IA tienen precios especiales. Agenda una llamada y consulta por tu descuento.",
-    "vibe_cta": "Consultar Descuento"
+    "latam_cta": "Consultar Descuento"
+  },
+  "process": {
+    "heading": "Cómo empezamos",
+    "subheading": "De la primera llamada a los primeros resultados en menos de dos semanas.",
+    "steps": [
+      {
+        "title": "Agenda una llamada",
+        "body": "15 minutos. Entendemos tu stack, tu problema, y si somos el fit correcto."
+      },
+      {
+        "title": "NDA mutuo",
+        "body": "Antes de acceder a nada, firmamos un NDA mutuo para proteger tus sistemas y datos."
+      },
+      {
+        "title": "Kickoff + accesos",
+        "body": "Nos das acceso a monitoreo, repos y Slack. Definimos prioridades y primeros entregables."
+      },
+      {
+        "title": "Primeros resultados en 5 días",
+        "body": "Baseline de capacidad, dashboards o auditoría — datos reales desde el día uno."
+      }
+    ]
   },
   "welcome": {
     "meta_title": "Bienvenido a Vantx",
     "pill": "Estás dentro",
     "headline": "Bienvenido a Vantx.",
     "subheadline": "Tu pago está confirmado. Esto es lo que sigue.",
-    "step1_title": "Te contactamos en 24 horas",
-    "step1_body": "Recibirás un email de nuestro equipo para agendar el onboarding y obtener acceso a tus sistemas.",
-    "step2_title": "Kickoff call",
-    "step2_body": "Revisamos tu stack, definimos prioridades y alineamos los primeros entregables.",
-    "step3_title": "Primeros resultados en 5 días",
-    "step3_body": "Espera tu primer baseline de capacidad, dashboards o auditoría en la primera semana.",
+    "step1_title": "NDA mutuo",
+    "step1_body": "Te enviamos un NDA mutuo en 24 horas. Protege tus sistemas y datos antes de acceder a nada.",
+    "step2_title": "Cuestionario de onboarding",
+    "step2_body": "Un formulario breve sobre tu stack, herramientas de monitoreo y prioridades — para llegar preparados.",
+    "step3_title": "Kickoff call",
+    "step3_body": "Llamada de 15 minutos para revisar tu stack, definir prioridades y alinear los primeros entregables.",
+    "step4_title": "Primeros resultados en 5 días",
+    "step4_body": "Espera tu primer baseline de capacidad, dashboards o auditoría en la primera semana.",
     "cta_text": "¿Quieres agendar el kickoff ahora?",
     "cta": "Agendar Kickoff Call",
     "cta_email": "Escríbenos"

@@ -7,7 +7,8 @@
       <a href="/" class="nav__logo" data-i18n-aria="nav.logo_aria">
         <picture>
           <source srcset="{{BASE}}/img/vantx-logo-horizontal-white.webp" type="image/webp">
-          <img src="{{BASE}}/img/vantx-logo-horizontal-white-sm.png" alt="Vantx" class="nav__logo-img" width="140" height="32" loading="lazy">
+          <img src="{{BASE}}/img/vantx-logo-horizontal-white-sm.png" alt="Vantx" class="nav__logo-img" width="140" height="32" loading="lazy"
+             onerror="this.style.display='none';this.parentElement.insertAdjacentHTML('afterend','<span class=nav__logo-mark>Vantx</span>')">
         </picture>
       </a>
       <p class="footer__tagline" data-i18n="footer.tagline">

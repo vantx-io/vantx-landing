@@ -126,9 +126,6 @@ Your team doesn't know why.</span>
 
         <div class="section-header">
           <h2 id="pain-heading" class="section-title" data-i18n="pain.heading">Does this sound familiar?</h2>
-          <p class="section-sub" data-i18n="pain.subheading">
-            If you're a CTO or engineering manager at a scaling company, you've probably faced at least one of these.
-          </p>
         </div>
 
         <div class="pain__grid">
@@ -141,37 +138,23 @@ Your team doesn't know why.</span>
           </div>
 
           <div class="pain__card">
-            <h3 class="pain__card-title" data-i18n="pain.cards.1.title">Monitoring tools, zero insights</h3>
+            <h3 class="pain__card-title" data-i18n="pain.cards.1.title">Load tests that don't exist</h3>
             <p class="pain__card-body" data-i18n="pain.cards.1.body">
-              You have Datadog or Grafana, but no one has time to build the dashboards that tell you something useful.
-            </p>
-          </div>
-
-          <div class="pain__card">
-            <h3 class="pain__card-title" data-i18n="pain.cards.2.title">Load tests that don't exist</h3>
-            <p class="pain__card-body" data-i18n="pain.cards.2.body">
               You find out about performance bottlenecks in production, from customers, at the worst possible moment.
             </p>
           </div>
 
           <div class="pain__card">
-            <h3 class="pain__card-title" data-i18n="pain.cards.3.title">No SRE, no budget for one</h3>
-            <p class="pain__card-body" data-i18n="pain.cards.3.body">
+            <h3 class="pain__card-title" data-i18n="pain.cards.2.title">No SRE, no budget for one</h3>
+            <p class="pain__card-body" data-i18n="pain.cards.2.body">
               A senior SRE costs $150K+/yr. You need the expertise without the full-time hire.
             </p>
           </div>
 
           <div class="pain__card">
-            <h3 class="pain__card-title" data-i18n="pain.cards.4.title">Every release is a guess</h3>
-            <p class="pain__card-body" data-i18n="pain.cards.4.body">
+            <h3 class="pain__card-title" data-i18n="pain.cards.3.title">Every release is a guess</h3>
+            <p class="pain__card-body" data-i18n="pain.cards.3.body">
               Deploys go out without any baseline — you don't know if today's release made things better or worse.
-            </p>
-          </div>
-
-          <div class="pain__card">
-            <h3 class="pain__card-title" data-i18n="pain.cards.5.title">Incident retrospectives go nowhere</h3>
-            <p class="pain__card-body" data-i18n="pain.cards.5.body">
-              You write up the post-mortem. Nothing changes. The same incident happens again three months later.
             </p>
           </div>
 
@@ -251,6 +234,40 @@ Your team doesn't know why.</span>
     </section>
 
     <!-- ================================================================
+         Process — How we start
+         ================================================================ -->
+    <section class="process section" id="process" aria-labelledby="process-heading">
+      <div class="container">
+        <div class="section-header">
+          <h2 id="process-heading" class="section-title" data-i18n="process.heading">How we start</h2>
+          <p class="section-sub" data-i18n="process.subheading">From first call to first results in under two weeks.</p>
+        </div>
+        <div class="process__steps">
+          <div class="process__step">
+            <span class="process__step-num">1</span>
+            <h3 class="process__step-title" data-i18n="process.steps.0.title">Book a call</h3>
+            <p class="process__step-body" data-i18n="process.steps.0.body">15-minute intro. We understand your stack, your pain, and whether we're a fit.</p>
+          </div>
+          <div class="process__step">
+            <span class="process__step-num">2</span>
+            <h3 class="process__step-title" data-i18n="process.steps.1.title">Mutual NDA</h3>
+            <p class="process__step-body" data-i18n="process.steps.1.body">Before we access anything, we sign a mutual NDA to protect your systems and data.</p>
+          </div>
+          <div class="process__step">
+            <span class="process__step-num">3</span>
+            <h3 class="process__step-title" data-i18n="process.steps.2.title">Kickoff + access</h3>
+            <p class="process__step-body" data-i18n="process.steps.2.body">You grant access to monitoring, repos, and Slack. We define priorities and first deliverables.</p>
+          </div>
+          <div class="process__step">
+            <span class="process__step-num">4</span>
+            <h3 class="process__step-title" data-i18n="process.steps.3.title">First results in 5 days</h3>
+            <p class="process__step-body" data-i18n="process.steps.3.body">Capacity baseline, dashboards, or audit — real data from day one.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
          Comparison — Vantx vs hiring
          ================================================================ -->
     <section class="compare section" id="compare" aria-labelledby="compare-heading">
@@ -290,46 +307,8 @@ Your team doesn't know why.</span>
                 <td data-label="In-house" data-i18n="compare.hiring_risk">They leave, you start over</td>
                 <td class="compare__highlight" data-label="Vantx" data-i18n="compare.vantix_risk">Continuous, documented, fully transferable knowledge</td>
               </tr>
-              <tr>
-                <th scope="row" data-i18n="compare.row_tools">Tools</th>
-                <td data-label="In-house" data-i18n="compare.hiring_tools">Whatever they know</td>
-                <td class="compare__highlight" data-label="Vantx" data-i18n="compare.vantix_tools">Open-source stack, no vendor lock-in</td>
-              </tr>
             </tbody>
           </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================================================================
-         Team — Who's behind Vantx
-         ================================================================ -->
-    <section class="team section" id="team" aria-labelledby="team-heading">
-      <div class="container">
-        <div class="section-header">
-          <h2 id="team-heading" class="section-title" data-i18n="team.heading">Who's behind Vantx</h2>
-          <p class="section-sub" data-i18n="team.subheading">A dedicated team of senior specialists, augmented by AI agents.</p>
-        </div>
-        <p class="team__body" data-i18n="team.body">
-          Behind every engagement is a tight, multidisciplinary team — not outsourced, not rotated. The same people who define your strategy implement it: they know your systems, build the dashboards, write the load tests, and deliver the reports.
-        </p>
-        <div class="team__disciplines">
-          <div class="team__discipline">
-            <span class="team__discipline-icon">k6</span>
-            <span class="team__discipline-name" data-i18n="team.perf">Performance Engineering</span>
-          </div>
-          <div class="team__discipline">
-            <span class="team__discipline-icon">SRE</span>
-            <span class="team__discipline-name" data-i18n="team.sre">Site Reliability</span>
-          </div>
-          <div class="team__discipline">
-            <span class="team__discipline-icon">OPS</span>
-            <span class="team__discipline-name" data-i18n="team.devops">DevOps</span>
-          </div>
-          <div class="team__discipline">
-            <span class="team__discipline-icon">QA</span>
-            <span class="team__discipline-name" data-i18n="team.qa">QA Automation</span>
-          </div>
         </div>
       </div>
     </section>
@@ -367,23 +346,8 @@ Your team doesn't know why.</span>
           </details>
 
           <details class="faq__item">
-            <summary class="faq__question" data-i18n="faq.items.4.q">What if I need to pause?</summary>
-            <p class="faq__answer" data-i18n="faq.items.4.a">Pause your subscription anytime. When you resume, we pick up right where we left off.</p>
-          </details>
-
-          <details class="faq__item">
-            <summary class="faq__question" data-i18n="faq.items.5.q">How do we communicate?</summary>
-            <p class="faq__answer" data-i18n="faq.items.5.a">100% async by default. Slack for questions, Loom for walkthroughs, PDF for reports. Video calls only when they add real value.</p>
-          </details>
-
-          <details class="faq__item">
-            <summary class="faq__question" data-i18n="faq.items.6.q">Can I combine services?</summary>
-            <p class="faq__answer" data-i18n="faq.items.6.a">Yes. All four services are designed to work together. Most clients start with one and add more as they see the value.</p>
-          </details>
-
-          <details class="faq__item">
-            <summary class="faq__question" data-i18n="faq.items.7.q">What tools do you use?</summary>
-            <p class="faq__answer" data-i18n="faq.items.7.a">Open-source only: k6, Grafana, OpenTelemetry, Prometheus. Everything we build is yours. No vendor lock-in.</p>
+            <summary class="faq__question" data-i18n="faq.items.4.q">How do we communicate?</summary>
+            <p class="faq__answer" data-i18n="faq.items.4.a">100% async by default. Slack for questions, Loom for walkthroughs, PDF for reports. Video calls only when they add real value.</p>
           </details>
 
         </div><!-- /.faq__list -->
@@ -411,18 +375,12 @@ Your team doesn't know why.</span>
             <button class="btn btn--outline btn--lg js-calendly-trigger" type="button" data-i18n="cta_section.cta_secondary">Book a Call</button>
           </div>
           <!-- LATAM + Spain startup discount — geo-targeted -->
-          <div class="latam-banner" id="latam-banner" hidden>
+          <div class="latam-banner" id="latam-banner" role="region" aria-label="LATAM discount" hidden>
             <p class="latam-banner__headline" data-i18n="cta_section.latam_headline">Company or startup in Latin America or Spain?</p>
             <p class="latam-banner__desc" data-i18n="cta_section.latam_desc">We offer special pricing for companies and startups in LATAM and Spain. Book a call and ask about your discount.</p>
             <button class="btn btn--outline btn--sm js-calendly-trigger" type="button" data-i18n="cta_section.latam_cta">Ask About Your Discount</button>
           </div>
 
-          <!-- Vibecoding startup discount — global -->
-          <div class="latam-banner" id="vibecoding-banner">
-            <p class="latam-banner__headline" data-i18n="cta_section.vibe_headline">Building with AI?</p>
-            <p class="latam-banner__desc" data-i18n="cta_section.vibe_desc">Early-stage teams building with AI get special pricing. Book a call and ask about your discount.</p>
-            <button class="btn btn--outline btn--sm js-calendly-trigger" type="button" data-i18n="cta_section.vibe_cta">Ask About Your Discount</button>
-          </div>
         </div>
       </div>
     </section>

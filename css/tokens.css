@@ -207,7 +207,7 @@
     /* Borders */
     --color-border:          rgba(255, 255, 255, 0.08);
     --color-border-strong:   rgba(255, 255, 255, 0.15);
-    --color-border-focus:    rgba(37, 155, 110, 0.5);
+    --color-border-focus:    rgba(37, 155, 110, 0.7);
 
     /* Text — warm off-white, not blue-white */
     --color-text:            #EDECE7;
