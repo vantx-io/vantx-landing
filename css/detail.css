@@ -12,27 +12,12 @@
   padding: var(--space-20) 0 var(--space-16);
 }
 
-/* Dot grid background — matches .hero::before in landing.css */
+/* Subtle bottom fade — matches .hero::before in landing.css */
 .page-hero::before {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(var(--color-surface-elevated) 1px, transparent 1px);
-  background-size: 24px 24px;
-  opacity: 0.6;
-  pointer-events: none;
-}
-
-/* Radial accent glow from top center — matches .hero::after in landing.css */
-.page-hero::after {
-  content: '';
-  position: absolute;
-  top: -200px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 900px;
-  height: 700px;
-  background: radial-gradient(ellipse, var(--color-accent-glow) 0%, transparent 65%);
+  background: linear-gradient(180deg, transparent 70%, var(--color-bg) 100%);
   pointer-events: none;
 }
 
@@ -95,9 +80,9 @@
 
 /* Service-specific pill colors */
 .page-hero--observability .pill {
-  background: var(--color-success-subtle);
-  color: var(--color-success);
-  border-color: var(--color-success-border);
+  background: var(--color-obs-subtle);
+  color: var(--color-obs);
+  border-color: rgba(13, 148, 136, 0.20);
 }
 
 .page-hero--sre .pill {
@@ -108,9 +93,9 @@
 
 /* Performance: blue pill */
 .page-hero--performance .pill {
-  background: var(--color-accent-subtle);
-  color: var(--color-accent);
-  border-color: var(--color-accent-border);
+  background: var(--color-perf-subtle);
+  color: var(--color-perf);
+  border-color: rgba(37, 99, 235, 0.20);
 }
 
 /* QA: purple pill */
@@ -187,10 +172,10 @@
   flex-shrink: 0;
 }
 
-/* Observability: green numbered badge */
+/* Observability: teal numbered badge */
 .deliverable__num--green {
-  background: var(--color-success-subtle);
-  color: var(--color-success);
+  background: var(--color-obs-subtle);
+  color: var(--color-obs);
 }
 
 /* Fractional SRE: amber numbered badge */
@@ -201,8 +186,8 @@
 
 /* Performance: blue numbered badge */
 .deliverable__num--blue {
-  background: var(--color-accent-subtle);
-  color: var(--color-accent);
+  background: var(--color-perf-subtle);
+  color: var(--color-perf);
 }
 
 .deliverable__title {
@@ -235,10 +220,10 @@
   color: var(--color-text-muted);
 }
 
-/* Frequency badge — observability (green) */
+/* Frequency badge — observability (teal) */
 .deliverable__badge--freq-green {
-  background: var(--color-success-subtle);
-  color: var(--color-success);
+  background: var(--color-obs-subtle);
+  color: var(--color-obs);
 }
 
 /* Frequency badge — SRE (amber) */
@@ -249,8 +234,8 @@
 
 /* Frequency badge — Performance (blue) */
 .deliverable__badge--freq-blue {
-  background: var(--color-accent-subtle);
-  color: var(--color-accent);
+  background: var(--color-perf-subtle);
+  color: var(--color-perf);
 }
 
 /* QA: purple numbered badge */

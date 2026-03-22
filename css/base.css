@@ -112,10 +112,10 @@ ul, ol {
 }
 
 .section-title {
-  font-size: var(--text-4xl);
+  font-size: clamp(1.75rem, 4vw, 3rem);
   font-weight: var(--font-bold);
-  letter-spacing: var(--tracking-tight);
-  line-height: var(--leading-tight);
+  letter-spacing: -0.035em;
+  line-height: 1.1;
   color: var(--color-text);
 }
 
@@ -263,6 +263,8 @@ ul, ol {
   display: block;
   height: 32px;
   width: auto;
+  /* Darken white logo for light theme — replace with dark logo asset when available */
+  filter: brightness(0);
 }
 
 /* Desktop links */

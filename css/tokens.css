@@ -1,6 +1,6 @@
 /* ==========================================================================
    Vantx Design Tokens
-   Dark & techy — Vercel/Linear aesthetic
+   Light, warm, premium — forest green accent
    All component CSS must reference these variables. No raw hex values.
    ========================================================================== */
 
@@ -8,59 +8,71 @@
   /* -------------------------------------------------------------------------
      Color Palette — Background
      ------------------------------------------------------------------------- */
-  --color-bg:              #09090b; /* zinc-950 — page background */
-  --color-surface:         #18181b; /* zinc-900 — card, footer, panels */
-  --color-surface-elevated:#27272a; /* zinc-800 — hover states, dropdowns */
-  --color-surface-overlay: rgba(9, 9, 11, 0.8); /* glassmorphism background */
+  --color-bg:              #F8F7F4; /* warm parchment — page background */
+  --color-surface:         #FFFFFF; /* white — cards, panels */
+  --color-surface-elevated:#F0EFE9; /* warm gray — hover states, dropdowns */
+  --color-surface-overlay: rgba(248, 247, 244, 0.85); /* frosted nav */
 
   /* -------------------------------------------------------------------------
      Color Palette — Borders
      ------------------------------------------------------------------------- */
-  --color-border:          rgba(255, 255, 255, 0.08); /* subtle dividers */
-  --color-border-strong:   rgba(255, 255, 255, 0.16); /* prominent borders */
-  --color-border-focus:    rgba(59, 130, 246, 0.6);   /* focus rings */
+  --color-border:          rgba(0, 0, 0, 0.08);   /* subtle dividers */
+  --color-border-strong:   rgba(0, 0, 0, 0.15);   /* prominent borders */
+  --color-border-focus:    rgba(27, 107, 74, 0.5); /* focus rings */
 
   /* -------------------------------------------------------------------------
      Color Palette — Text
      ------------------------------------------------------------------------- */
-  --color-text:            #fafafa; /* zinc-50 — primary text */
-  --color-text-muted:      #a1a1aa; /* zinc-400 — secondary text */
-  --color-text-subtle:     #71717a; /* zinc-500 — placeholder, meta */
-  --color-text-on-accent:  #ffffff; /* text on accent backgrounds */
+  --color-text:            #1A1A17; /* near-black — primary text */
+  --color-text-muted:      #5C5C56; /* warm gray — secondary text */
+  --color-text-subtle:     #8A8A82; /* lighter gray — placeholder, meta */
+  --color-text-on-accent:  #FFFFFF; /* text on accent backgrounds */
 
   /* -------------------------------------------------------------------------
-     Color Palette — Brand Accent
+     Color Palette — Brand Accent (deep forest green)
      ------------------------------------------------------------------------- */
-  --color-accent:          #3b82f6; /* blue-500 */
-  --color-accent-hover:    #2563eb; /* blue-600 */
-  --color-accent-active:   #1d4ed8; /* blue-700 */
-  --color-accent-subtle:   rgba(59, 130, 246, 0.10); /* tinted background */
-  --color-accent-border:   rgba(59, 130, 246, 0.30); /* accent border */
-  --color-accent-glow:     rgba(59, 130, 246, 0.20); /* glow shadow */
+  --color-accent:          #1B6B4A; /* forest green */
+  --color-accent-hover:    #155A3E; /* darker on hover */
+  --color-accent-active:   #0F4A32; /* darkest on press */
+  --color-accent-subtle:   rgba(27, 107, 74, 0.06); /* tinted background */
+  --color-accent-border:   rgba(27, 107, 74, 0.20); /* accent border */
+  --color-accent-glow:     rgba(27, 107, 74, 0.08); /* subtle brand tint */
 
   /* -------------------------------------------------------------------------
      Color Palette — Semantic
      ------------------------------------------------------------------------- */
-  --color-success:         #22c55e; /* green-500 */
-  --color-success-subtle:  rgba(34, 197, 94, 0.10);
-  --color-warning:         #f59e0b; /* amber-500 */
-  --color-warning-subtle:  rgba(245, 158, 11, 0.10);
-  --color-danger:          #ef4444; /* red-500 */
-  --color-danger-subtle:   rgba(239, 68, 68, 0.10);
-  --color-danger-border:   rgba(239, 68, 68, 0.25);
+  --color-success:         #16A34A; /* green-600 */
+  --color-success-subtle:  rgba(22, 163, 74, 0.08);
+  --color-warning:         #D97706; /* amber-600 */
+  --color-warning-subtle:  rgba(217, 119, 6, 0.08);
+  --color-danger:          #DC2626; /* red-600 */
+  --color-danger-subtle:   rgba(220, 38, 38, 0.06);
+  --color-danger-border:   rgba(220, 38, 38, 0.20);
+
+  /* -------------------------------------------------------------------------
+     Color Palette — Service: Observability (teal)
+     ------------------------------------------------------------------------- */
+  --color-obs:             #0D9488; /* teal-600 */
+  --color-obs-subtle:      rgba(13, 148, 136, 0.08);
+
+  /* -------------------------------------------------------------------------
+     Color Palette — Service: Performance (blue)
+     ------------------------------------------------------------------------- */
+  --color-perf:            #2563EB; /* blue-600 */
+  --color-perf-subtle:     rgba(37, 99, 235, 0.08);
 
   /* -------------------------------------------------------------------------
      Color Palette — Service: QA (purple)
      ------------------------------------------------------------------------- */
-  --color-qa:              #a78bfa; /* purple-400 */
-  --color-qa-subtle:       rgba(167, 139, 250, 0.10);
-  --color-qa-border:       rgba(167, 139, 250, 0.30);
+  --color-qa:              #7C3AED; /* purple-600 */
+  --color-qa-subtle:       rgba(124, 58, 237, 0.08);
+  --color-qa-border:       rgba(124, 58, 237, 0.20);
 
   /* -------------------------------------------------------------------------
      Color Palette — Semantic Borders
      ------------------------------------------------------------------------- */
-  --color-success-border:  rgba(34, 197, 94, 0.30);
-  --color-warning-border:  rgba(245, 158, 11, 0.30);
+  --color-success-border:  rgba(22, 163, 74, 0.20);
+  --color-warning-border:  rgba(217, 119, 6, 0.20);
 
   /* -------------------------------------------------------------------------
      Typography — Font Families
@@ -140,14 +152,14 @@
   --radius-full: 9999px;
 
   /* -------------------------------------------------------------------------
-     Shadows
+     Shadows — soft for light theme
      ------------------------------------------------------------------------- */
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.4);
-  --shadow:    0 4px 16px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.6);
-  --shadow-xl: 0 24px 60px rgba(0, 0, 0, 0.7);
-  --shadow-glow: 0 0 20px var(--color-accent-glow);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.05);
+  --shadow:    0 4px 16px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 24px 60px rgba(0, 0, 0, 0.10);
+  --shadow-glow: 0 4px 12px rgba(27, 107, 74, 0.12);
 
   /* -------------------------------------------------------------------------
      Motion
@@ -171,5 +183,5 @@
   --container-max:     1100px;
   --container-padding: 1.5rem; /* 24px */
   --nav-height:        64px;
-  --section-padding-y: 5rem;   /* 80px */
+  --section-padding-y: 6rem;   /* 96px — generous breathing room */
 }
