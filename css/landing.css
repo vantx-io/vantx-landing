@@ -135,6 +135,12 @@
   animation: hero-enter 600ms var(--ease-out) 700ms both; /* lands after hero CTAs */
 }
 
+.credibility__summary {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  line-height: var(--leading-normal);
+}
+
 .credibility__grid {
   display: flex;
   flex-wrap: wrap;

@@ -22,7 +22,8 @@
     "stack_number": "4",
     "stack_label": "disciplinas: Performance, SRE, DevOps, QA",
     "tools_number": "100%",
-    "tools_label": "open-source — cero vendor lock-in"
+    "tools_label": "open-source — cero vendor lock-in",
+    "summary": "6+ especialistas en Performance, SRE, DevOps y QA. 10+ años de experiencia. 100% open-source — cero vendor lock-in."
   },
   "footer": {
     "tagline": "Ingeniería de performance gestionada, a velocidad startup.",
