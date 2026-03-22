@@ -563,6 +563,39 @@
   opacity: 1;
 }
 
+.btn--disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* LATAM startup discount banner */
+.latam-banner {
+  background: var(--color-accent-subtle);
+  border: 1px solid var(--color-accent-border, var(--color-border));
+  border-radius: var(--radius-lg);
+  padding: var(--space-6) var(--space-8);
+  text-align: center;
+  margin-top: var(--space-10);
+}
+
+.latam-banner__headline {
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-2);
+}
+
+.latam-banner__desc {
+  font-size: var(--text-sm);
+  color: var(--color-text-subtle);
+  margin-bottom: var(--space-5);
+}
+
+.latam-banner .btn {
+  margin: 0 var(--space-2);
+}
+
 /* One-time entry products — available even on sold-out cards */
 .svc-card__onetime {
   margin-top: var(--space-6);

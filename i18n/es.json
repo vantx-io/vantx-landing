@@ -237,7 +237,13 @@
     "cta_primary": "Empezar",
     "cta_join": "Suscribirse hoy",
     "cta_secondary": "Agendar Call",
-    "slots": "Vantx está recibiendo alta demanda — los slots son limitados. Para respuesta más rápida, escribe a <a href=\"mailto:hello@vantx.io\">hello@vantx.io</a>"
+    "slots": "Vantx está recibiendo alta demanda — los slots son limitados. Para respuesta más rápida, escribe a <a href=\"mailto:hello@vantx.io\">hello@vantx.io</a>",
+    "latam_headline": "¿Startup en Latinoamérica o España?",
+    "latam_desc": "Ofrecemos precios especiales para startups en LATAM y España. Agenda una llamada y consulta por tu descuento.",
+    "latam_cta": "Consultar Descuento",
+    "vibe_headline": "¿Construyendo con IA / Vibecoding?",
+    "vibe_desc": "Equipos early-stage construyendo con IA tienen precios especiales. Agenda una llamada y consulta por tu descuento.",
+    "vibe_cta": "Consultar Descuento"
   },
   "welcome": {
     "meta_title": "Bienvenido a Vantx",

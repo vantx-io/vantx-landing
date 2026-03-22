@@ -221,8 +221,8 @@ Your team doesn't know why.</span>
               <a href="./services/observability.html" class="btn btn--outline btn--sm" data-i18n="services.learn_more">Learn More</a>
             </div>
 
-            <!-- One-time entry product — available even when subscription is sold out -->
-            <div class="svc-card__onetime svc-card__onetime--available">
+            <!-- One-time entry product — SOLD OUT (subscription sold out) -->
+            <div class="svc-card__onetime">
               <span class="svc-card__onetime-badge" data-i18n="services.onetime_tag">One-time</span>
               <div class="svc-card__onetime-body">
                 <div class="svc-card__onetime-info">
@@ -234,8 +234,8 @@ Your team doesn't know why.</span>
                     <span data-i18n="services.obs_setup.price">$19,995</span>
                     <span class="svc-card__onetime-suffix" data-i18n="services.obs_setup.price_suffix">one-time</span>
                   </span>
-                  <!-- TODO: Replace href with your real Stripe payment link for obs setup -->
-                  <a href="https://buy.stripe.com/TODO_OBS_SETUP" class="btn btn--primary btn--sm" data-i18n="services.obs_setup.cta">Get Setup</a>
+                  <!-- Link ready — re-enable when slot opens -->
+                  <a href="https://buy.stripe.com/test_3cI4gA3va9NBgrvdutgEg02" class="btn btn--primary btn--sm btn--disabled" aria-disabled="true" data-i18n="services.sold_out">Sold out</a>
                 </div>
               </div>
             </div>
@@ -261,8 +261,7 @@ Your team doesn't know why.</span>
                 <span class="svc-card__price-period" data-i18n="services.performance.price_period">/month</span>
               </div>
               <div class="svc-card__footer-actions">
-                <!-- TODO: Replace href with your real Stripe payment link -->
-                <a href="https://buy.stripe.com/TODO" class="btn btn--primary btn--sm" data-i18n="cta_section.cta_join">Join today</a>
+                <a href="https://buy.stripe.com/test_00wfZi8Pu4th2AFcqpgEg00" class="btn btn--primary btn--sm" data-i18n="cta_section.cta_join">Join today</a>
                 <a href="./services/performance.html" class="btn btn--outline btn--sm" data-i18n="services.learn_more">Learn More</a>
               </div>
             </div>
@@ -281,7 +280,7 @@ Your team doesn't know why.</span>
                     <span class="svc-card__onetime-suffix" data-i18n="services.perf_checkup.price_suffix">one-time</span>
                   </span>
                   <!-- TODO: Replace href with your real Stripe payment link for checkup -->
-                  <a href="https://buy.stripe.com/TODO_CHECKUP" class="btn btn--outline btn--sm" data-i18n="services.perf_checkup.cta">Get Checkup</a>
+                  <a href="https://buy.stripe.com/test_7sY14o3va5xl6QV765gEg01" class="btn btn--outline btn--sm" data-i18n="services.perf_checkup.cta">Get Checkup</a>
                 </div>
               </div>
             </div>
@@ -502,13 +501,26 @@ Your team doesn't know why.</span>
             Tell us about your system. We'll review it and show you exactly what we'd change first.
           </p>
           <div class="cta-section__actions">
-            <!-- TODO: Replace href with your real Stripe payment link -->
-            <a href="https://buy.stripe.com/TODO" class="btn btn--primary btn--lg" data-i18n="cta_section.cta_join">Join today</a>
+            <a href="https://buy.stripe.com/test_00wfZi8Pu4th2AFcqpgEg00" class="btn btn--primary btn--lg" data-i18n="cta_section.cta_join">Join today</a>
             <button class="btn btn--outline btn--lg js-calendly-trigger" type="button" data-i18n="cta_section.cta_secondary">Book a Call</button>
           </div>
           <p class="cta-section__slots" data-i18n-html="cta_section.slots">
             Vantx is experiencing high demand — slots are limited. For faster response, email <a href="mailto:hello@vantx.io">hello@vantx.io</a>
           </p>
+
+          <!-- LATAM + Spain startup discount — geo-targeted -->
+          <div class="latam-banner" id="latam-banner" hidden>
+            <p class="latam-banner__headline" data-i18n="cta_section.latam_headline">Startup in Latin America or Spain?</p>
+            <p class="latam-banner__desc" data-i18n="cta_section.latam_desc">We offer special pricing for startups in LATAM and Spain. Book a call and ask about your discount.</p>
+            <button class="btn btn--outline btn--sm js-calendly-trigger" type="button" data-i18n="cta_section.latam_cta">Ask About Your Discount</button>
+          </div>
+
+          <!-- Vibecoding startup discount — global -->
+          <div class="latam-banner" id="vibecoding-banner">
+            <p class="latam-banner__headline" data-i18n="cta_section.vibe_headline">Building with AI / Vibecoding?</p>
+            <p class="latam-banner__desc" data-i18n="cta_section.vibe_desc">Early-stage teams building with AI get special pricing. Book a call and ask about your discount.</p>
+            <button class="btn btn--outline btn--sm js-calendly-trigger" type="button" data-i18n="cta_section.vibe_cta">Ask About Your Discount</button>
+          </div>
         </div>
       </div>
     </section>
@@ -518,6 +530,19 @@ Your team doesn't know why.</span>
   <!-- Footer partial injected here -->
   <div data-partial="footer"></div>
 
+  <!-- Geo-detect LATAM visitors via Cloudflare trace (free, no external API) -->
+  <script>
+  (function(){
+    var LATAM = ['AR','BO','BR','CL','CO','CR','CU','DO','EC','ES','SV','GT','HN','MX','NI','PA','PY','PE','PR','UY','VE'];
+    fetch('/cdn-cgi/trace').then(function(r){return r.text()}).then(function(t){
+      var m = t.match(/loc=(\w+)/);
+      if(m && LATAM.indexOf(m[1]) !== -1){
+        var b = document.getElementById('latam-banner');
+        if(b) b.removeAttribute('hidden');
+      }
+    }).catch(function(){});
+  })();
+  </script>
 
 </body>
 </html>
