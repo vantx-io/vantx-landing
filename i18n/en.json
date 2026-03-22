@@ -11,7 +11,8 @@
     "about": "About",
     "login": "Login",
     "cta": "Book a Call",
-    "logo_aria": "Vantx — Home"
+    "logo_aria": "Vantx — Home",
+    "skip_link": "Skip to content"
   },
   "credibility": {
     "exp_number": "10+",
@@ -143,6 +144,7 @@
   "compare": {
     "heading": "Vantx vs. hiring full-time",
     "subheading": "The expertise without the overhead.",
+    "col_aspect": "Aspect",
     "col_hiring": "Hiring in-house",
     "col_vantix": "Vantx",
     "row_cost": "Cost",

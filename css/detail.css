@@ -97,33 +97,47 @@
 .page-hero--observability .pill {
   background: var(--color-success-subtle);
   color: var(--color-success);
-  border-color: rgba(34, 197, 94, 0.30);
+  border-color: var(--color-success-border);
 }
 
 .page-hero--sre .pill {
   background: var(--color-warning-subtle);
   color: var(--color-warning);
-  border-color: rgba(245, 158, 11, 0.30);
+  border-color: var(--color-warning-border);
 }
 
 /* Performance: blue pill */
 .page-hero--performance .pill {
-  background: rgba(46, 117, 182, 0.10);
+  background: var(--color-accent-subtle);
   color: var(--color-accent);
-  border-color: rgba(46, 117, 182, 0.30);
+  border-color: var(--color-accent-border);
 }
 
 /* QA: purple pill */
 .page-hero--qa .pill {
-  background: rgba(167, 139, 250, 0.10);
-  color: #a78bfa;
-  border-color: rgba(167, 139, 250, 0.30);
+  background: var(--color-qa-subtle);
+  color: var(--color-qa);
+  border-color: var(--color-qa-border);
 }
 
 /* Mobile: headline scale down */
 @media (max-width: 768px) {
+  .page-hero {
+    padding: var(--space-12) 0 var(--space-10);
+  }
+  .page-hero__headline {
+    font-size: var(--text-2xl);
+  }
+}
+
+@media (max-width: 480px) {
   .page-hero__headline {
     font-size: var(--text-xl);
+  }
+  .mission-block,
+  .vision-block,
+  .purpose-block {
+    padding: var(--space-6);
   }
 }
 
@@ -166,7 +180,7 @@
   border-radius: var(--radius-lg);
   font-family: var(--font-mono);
   font-weight: var(--font-bold);
-  font-size: 20px;
+  font-size: var(--text-xl);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -187,7 +201,7 @@
 
 /* Performance: blue numbered badge */
 .deliverable__num--blue {
-  background: rgba(46, 117, 182, 0.10);
+  background: var(--color-accent-subtle);
   color: var(--color-accent);
 }
 
@@ -235,20 +249,20 @@
 
 /* Frequency badge — Performance (blue) */
 .deliverable__badge--freq-blue {
-  background: rgba(46, 117, 182, 0.10);
+  background: var(--color-accent-subtle);
   color: var(--color-accent);
 }
 
 /* QA: purple numbered badge */
 .deliverable__num--purple {
-  background: rgba(167, 139, 250, 0.10);
-  color: #a78bfa;
+  background: var(--color-qa-subtle);
+  color: var(--color-qa);
 }
 
 /* Frequency badge — QA (purple) */
 .deliverable__badge--freq-purple {
-  background: rgba(167, 139, 250, 0.10);
-  color: #a78bfa;
+  background: var(--color-qa-subtle);
+  color: var(--color-qa);
 }
 
 /* Mobile: grid collapses — number badge stacks above content */
@@ -567,75 +581,4 @@
   font-weight: var(--font-bold);
 }
 
-/* ==========================================================================
-   8. FAQ section (detail pages)
-   ========================================================================== */
-
-.faq {
-  background: var(--color-surface);
-}
-
-.faq__list {
-  max-width: 720px;
-}
-
-.faq__item {
-  border-bottom: 1px solid var(--color-border);
-}
-
-.faq__item:first-child {
-  border-top: 1px solid var(--color-border);
-}
-
-.faq__question {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
-  padding: var(--space-6) 0;
-  font-size: var(--text-lg);
-  font-weight: var(--font-semibold);
-  color: var(--color-text);
-  cursor: pointer;
-  list-style: none;
-  user-select: none;
-  transition: color var(--transition);
-}
-
-.faq__question::-webkit-details-marker { display: none; }
-
-.faq__question::after {
-  content: '+';
-  font-family: var(--font-mono);
-  font-size: var(--text-xl);
-  font-weight: var(--font-normal);
-  color: var(--color-text-muted);
-  flex-shrink: 0;
-  transition: transform var(--transition);
-}
-
-.faq__item[open] .faq__question::after {
-  content: '\2212';
-}
-
-.faq__question:hover {
-  color: var(--color-accent);
-}
-
-.faq__answer {
-  font-size: var(--text-base);
-  color: var(--color-text-muted);
-  line-height: var(--leading-normal);
-  padding-bottom: var(--space-6);
-  max-width: 640px;
-}
-
-@media (max-width: 480px) {
-  .faq__question {
-    font-size: var(--text-base);
-    padding: var(--space-5) 0;
-  }
-  .faq__answer {
-    font-size: var(--text-sm);
-  }
-}
+/* FAQ styles moved to base.css (shared across landing + detail pages) */

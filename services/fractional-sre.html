@@ -22,14 +22,11 @@
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/detail.css">
 
-  <!-- Calendly: preconnect + deferred CSS (only needed when popup opens) -->
-  <link rel="preconnect" href="https://assets.calendly.com">
-  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" media="print" onload="this.media='all'">
-
   <!-- App scripts — defer: download now, execute after DOM parse -->
   <script>window.VANTX_BASE = '..';</script>
   <script defer src="../js/i18n.js"></script>
   <script defer src="../js/partials.js"></script>
+  <script defer src="../js/calendly.js"></script>
 
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-VMTZXQG4HX"></script>
@@ -42,6 +39,8 @@
 </head>
 
 <body>
+
+  <a href="#main-content" class="skip-link" data-i18n="nav.skip_link">Skip to content</a>
 
   <!-- Nav partial injected here -->
   <div data-partial="nav"></div>
@@ -392,39 +391,6 @@
   <!-- Footer partial injected here -->
   <div data-partial="footer"></div>
 
-  <!-- Calendly widget JS — async, does not block initial render -->
-  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
-
-  <!-- Page JS: Calendly popup trigger + GA4 booking event -->
-  <script>
-    // REPLACE with your real Calendly scheduling link before launch
-    var CALENDLY_URL = 'https://calendly.com/vantix/30min';
-
-    // Intercept all CTA clicks — both .js-calendly-trigger and [href="#calendly"] (nav)
-    document.addEventListener('click', function (e) {
-      var trigger = e.target.closest('.js-calendly-trigger, [href="#calendly"]');
-      if (!trigger) return;
-      e.preventDefault();
-      if (window.Calendly) {
-        Calendly.initPopupWidget({ url: CALENDLY_URL });
-      } else {
-        // Calendly widget not yet loaded — open in new tab as fallback
-        window.open(CALENDLY_URL, '_blank', 'noopener,noreferrer');
-      }
-    });
-
-    // GA4: track Calendly booking completions (ANLT-02)
-    window.addEventListener('message', function (e) {
-      if (e.data && e.data.event === 'calendly.event_scheduled') {
-        if (typeof gtag === 'function') {
-          gtag('event', 'calendly_booking', {
-            event_category: 'engagement',
-            event_label: 'demo_scheduled'
-          });
-        }
-      }
-    });
-  </script>
 
 </body>
 </html>

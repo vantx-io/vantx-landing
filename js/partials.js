@@ -16,28 +16,47 @@
  *   <div data-partial="footer"></div>
  */
 
-;(function () {
-  'use strict'
+(function () {
+  "use strict";
 
   function base() {
-    return typeof window.VANTX_BASE !== 'undefined' ? window.VANTX_BASE : ''
+    return typeof window.VANTX_BASE !== "undefined" ? window.VANTX_BASE : "";
   }
 
   /* ------------------------------------------------------------------
      Partial injection
      ------------------------------------------------------------------ */
 
-  async function injectPartial(selector, url) {
-    const container = document.querySelector(selector)
-    if (!container) return // not every page uses every partial
+  var CACHE_PREFIX = "vantx-partial-";
 
-    const res = await fetch(url)
-    if (!res.ok) {
-      console.error(`partials: failed to load ${url} (${res.status})`)
-      return
+  async function injectPartial(selector, url) {
+    const container = document.querySelector(selector);
+    if (!container) return; // not every page uses every partial
+
+    var cacheKey = CACHE_PREFIX + url.split("/").pop();
+    var raw = null;
+
+    // 1. Try sessionStorage (zero network, instant)
+    try {
+      raw = sessionStorage.getItem(cacheKey);
+    } catch (_) {}
+
+    // 2. Fall back to network
+    if (!raw) {
+      const res = await fetch(url);
+      if (!res.ok) {
+        console.error(
+          "partials: failed to load " + url + " (" + res.status + ")",
+        );
+        return;
+      }
+      raw = await res.text();
+      try {
+        sessionStorage.setItem(cacheKey, raw);
+      } catch (_) {}
     }
-    const html = (await res.text()).replaceAll('{{BASE}}', base())
-    container.innerHTML = html
+
+    container.innerHTML = raw.replaceAll("{{BASE}}", base());
   }
 
   /* ------------------------------------------------------------------
@@ -45,26 +64,26 @@
      ------------------------------------------------------------------ */
 
   function wireMobileNav() {
-    const nav = document.querySelector('.nav')
-    const toggle = document.querySelector('.nav__mobile-toggle')
-    const drawer = document.querySelector('.nav__drawer')
-    if (!nav || !toggle) return
+    const nav = document.querySelector(".nav");
+    const toggle = document.querySelector(".nav__mobile-toggle");
+    const drawer = document.querySelector(".nav__drawer");
+    if (!nav || !toggle) return;
 
-    toggle.addEventListener('click', () => {
-      const isOpen = nav.classList.toggle('is-open')
-      toggle.setAttribute('aria-expanded', String(isOpen))
-      if (drawer) drawer.classList.toggle('is-open', isOpen)
-    })
+    toggle.addEventListener("click", () => {
+      const isOpen = nav.classList.toggle("is-open");
+      toggle.setAttribute("aria-expanded", String(isOpen));
+      if (drawer) drawer.classList.toggle("is-open", isOpen);
+    });
 
     // Close drawer when a link inside it is clicked
     drawer &&
-      drawer.addEventListener('click', (e) => {
-        if (e.target.closest('a')) {
-          nav.classList.remove('is-open')
-          toggle.setAttribute('aria-expanded', 'false')
-          drawer.classList.remove('is-open')
+      drawer.addEventListener("click", (e) => {
+        if (e.target.closest("a")) {
+          nav.classList.remove("is-open");
+          toggle.setAttribute("aria-expanded", "false");
+          drawer.classList.remove("is-open");
         }
-      })
+      });
   }
 
   /* ------------------------------------------------------------------
@@ -72,13 +91,13 @@
      ------------------------------------------------------------------ */
 
   function wireLangToggle() {
-    document.querySelectorAll('[data-lang-toggle]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const current = window.i18n.getCurrentLang()
-        const next = current === 'en' ? 'es' : 'en'
-        window.i18n.setLang(next)
-      })
-    })
+    document.querySelectorAll("[data-lang-toggle]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const current = window.i18n.getCurrentLang();
+        const next = current === "en" ? "es" : "en";
+        window.i18n.setLang(next);
+      });
+    });
   }
 
   /* ------------------------------------------------------------------
@@ -86,18 +105,21 @@
      ------------------------------------------------------------------ */
 
   function markActiveLink() {
-    const path = window.location.pathname
-    document.querySelectorAll('.nav__link').forEach((link) => {
-      const href = link.getAttribute('href')
-      if (!href) return
+    const path = window.location.pathname;
+    document.querySelectorAll(".nav__link").forEach((link) => {
+      const href = link.getAttribute("href");
+      if (!href) return;
       // Strip fragment from href for comparison
-      const hrefPath = href.split('#')[0]
-      if (hrefPath && path.endsWith(hrefPath) && hrefPath !== '/') {
-        link.classList.add('is-active')
-      } else if (hrefPath === '/' && (path === '/' || path.endsWith('/index.html'))) {
+      const hrefPath = href.split("#")[0];
+      if (hrefPath && path.endsWith(hrefPath) && hrefPath !== "/") {
+        link.classList.add("is-active");
+      } else if (
+        hrefPath === "/" &&
+        (path === "/" || path.endsWith("/index.html"))
+      ) {
         // Root page — don't mark nav links as active to avoid confusion
       }
-    })
+    });
   }
 
   /* ------------------------------------------------------------------
@@ -105,34 +127,34 @@
      ------------------------------------------------------------------ */
 
   async function boot() {
-    const b = base()
+    const b = base();
 
     // Phase A — load partials and translations in parallel
     await Promise.all([
       injectPartial('[data-partial="nav"]', `${b}/partials/nav.html`),
       injectPartial('[data-partial="footer"]', `${b}/partials/footer.html`),
       window.i18n.init(), // loads translations; does NOT touch DOM yet
-    ])
+    ]);
 
     // Phase B — apply translations to entire DOM (including fresh partials)
-    window.i18n.apply()
+    window.i18n.apply();
 
     // Phase C — wire interactivity
-    wireLangToggle()
-    wireMobileNav()
-    markActiveLink()
+    wireLangToggle();
+    wireMobileNav();
+    markActiveLink();
 
     // Phase D — signal readiness to page-level scripts
-    document.dispatchEvent(new CustomEvent('vantx:ready'))
+    document.dispatchEvent(new CustomEvent("vantx:ready"));
   }
 
   /* ------------------------------------------------------------------
      Entry point
      ------------------------------------------------------------------ */
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', boot)
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
   } else {
-    boot()
+    boot();
   }
-})()
+})();

@@ -11,7 +11,8 @@
     "about": "Acerca de",
     "login": "Login",
     "cta": "Agendar Call",
-    "logo_aria": "Vantx — Inicio"
+    "logo_aria": "Vantx — Inicio",
+    "skip_link": "Ir al contenido"
   },
   "credibility": {
     "exp_number": "10+",
@@ -143,6 +144,7 @@
   "compare": {
     "heading": "Vantx vs. contratar full-time",
     "subheading": "La experiencia sin el overhead.",
+    "col_aspect": "Aspecto",
     "col_hiring": "Contratar in-house",
     "col_vantix": "Vantx",
     "row_cost": "Costo",
