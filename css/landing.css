@@ -486,6 +486,12 @@
   border-top: 1px solid var(--color-border);
 }
 
+.svc-card__footer-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
 .svc-card__price {
   display: flex;
   align-items: baseline;
@@ -535,8 +541,16 @@
 }
 
 .svc-card--sold-out {
-  opacity: 0.7;
   position: relative;
+}
+
+/* Dim subscription content but not the one-time section */
+.svc-card--sold-out > .svc-card__tag,
+.svc-card--sold-out > .svc-card__headline,
+.svc-card--sold-out > .svc-card__desc,
+.svc-card--sold-out > .svc-card__features,
+.svc-card--sold-out > .svc-card__footer {
+  opacity: 0.5;
 }
 
 .svc-card--sold-out .btn:not(.btn--outline) {
@@ -545,6 +559,93 @@
 }
 
 .svc-card--sold-out .btn--outline {
+  pointer-events: auto;
+  opacity: 1;
+}
+
+/* One-time entry products — available even on sold-out cards */
+.svc-card__onetime {
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 1px dashed var(--color-border);
+}
+
+.svc-card__onetime-or {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--color-text-subtle);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  font-weight: var(--font-semibold);
+  margin-bottom: var(--space-3);
+}
+
+.svc-card__onetime-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--color-success);
+  background: var(--color-success-subtle);
+  border: 1px solid var(--color-success-border);
+  border-radius: var(--radius-full);
+  padding: var(--space-1) var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.svc-card__onetime-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.svc-card__onetime-name {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-1);
+}
+
+.svc-card__onetime-desc {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  line-height: var(--leading-normal);
+}
+
+.svc-card__onetime-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.svc-card__onetime-price {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-1);
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  color: var(--color-text);
+}
+
+.svc-card__onetime-suffix {
+  font-size: var(--text-xs);
+  font-weight: var(--font-normal);
+  color: var(--color-text-subtle);
+}
+
+/* Override sold-out opacity for the one-time section */
+.svc-card--sold-out .svc-card__onetime--available {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.svc-card--sold-out .svc-card__onetime--available .btn {
   pointer-events: auto;
   opacity: 1;
 }

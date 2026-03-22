@@ -17,8 +17,8 @@
   "credibility": {
     "exp_number": "10+",
     "exp_label": "years of experience",
-    "team_number": "1",
-    "team_label": "senior engineer — not outsourced, not rotated",
+    "team_number": "6+",
+    "team_label": "specialists — engineers, strategists, and AI agents",
     "stack_number": "4",
     "stack_label": "disciplines: Performance, SRE, DevOps, QA",
     "tools_number": "0",
@@ -45,7 +45,7 @@
   },
   "pain": {
     "heading": "Does this sound familiar?",
-    "subheading": "If you're a CTO or engineering manager at a scaling SaaS, you've probably faced at least one of these.",
+    "subheading": "If you're a CTO or engineering manager at a scaling company, you've probably faced at least one of these.",
     "cta": "Let's fix this",
     "cards": [
       {
@@ -79,6 +79,22 @@
     "subheading": "Four managed capabilities, designed to be combined.",
     "learn_more": "Learn More",
     "sold_out": "Sold out",
+    "onetime_or": "Or start with",
+    "onetime_tag": "One-time",
+    "perf_checkup": {
+      "name": "Performance Checkup",
+      "desc": "5-day assessment: capacity baseline, load test, performance audit, and a prioritized action plan.",
+      "price": "$2,995",
+      "price_suffix": "one-time",
+      "cta": "Get Checkup"
+    },
+    "obs_setup": {
+      "name": "Observability Setup",
+      "desc": "Full instrumentation, dashboards, alert tuning, SLO definition, and IRM configuration — production-ready in 4 weeks.",
+      "price": "$19,995",
+      "price_suffix": "one-time",
+      "cta": "Get Setup"
+    },
     "observability": {
       "tag": "Observability as a Service",
       "headline": "Your next incident, diagnosed in 30 seconds.",
@@ -90,7 +106,7 @@
         "IRM: on-call routing, incidents, status pages",
         "Telemetry cost optimization (30–50% reduction)"
       ],
-      "price": "$3,500",
+      "price": "$6,995",
       "price_period": "/month"
     },
     "performance": {
@@ -104,7 +120,7 @@
         "Weekly Lighthouse + Core Web Vitals",
         "Monthly load test + capacity planning report"
       ],
-      "price": "$2,800",
+      "price": "$5,995",
       "price_period": "/month"
     },
     "sre": {
@@ -118,7 +134,7 @@
         "Escalation path during incidents"
       ],
       "price_prefix": "From",
-      "price": "$4,000",
+      "price": "$7,995",
       "price_period": "/month"
     },
     "qa": {
@@ -132,7 +148,7 @@
         "Mentoring & pair programming for your team"
       ],
       "price_prefix": "From",
-      "price": "$3,500",
+      "price": "$6,995",
       "price_period": "/month"
     }
   },
@@ -155,7 +171,7 @@
     "vantix_time": "Active in 1 week",
     "row_expertise": "Expertise",
     "hiring_expertise": "1 person, 1 skill set",
-    "vantix_expertise": "One senior engineer: Performance, SRE, DevOps, QA",
+    "vantix_expertise": "Dedicated team: Performance, SRE, DevOps, QA, Growth, SEO",
     "row_risk": "Risk",
     "hiring_risk": "They leave, you start over",
     "vantix_risk": "Continuous, documented, transferable",
@@ -165,8 +181,8 @@
   },
   "team": {
     "heading": "Who's behind Vantx",
-    "subheading": "One senior engineer. 10+ years in performance, observability, and SRE.",
-    "body": "Vantx is not a staffing agency. Behind every engagement is a single senior engineer with 10+ years of hands-on experience in performance engineering, observability, site reliability, and QA automation — the same person who defines the strategy is the one who implements it. Not outsourced. Not rotated. Not a junior consultant supervised by a manager. One practitioner who knows your systems, builds the dashboards, writes the load tests, leads the incident response, and delivers the reports. That continuity is what makes the difference.",
+    "subheading": "A dedicated team of senior specialists, augmented by AI agents.",
+    "body": "Vantx is not a staffing agency. Behind every engagement is a tight, multidisciplinary team of senior engineers and strategists — performance engineering, SRE, DevOps, QA automation, growth marketing, and SEO — augmented by AI agents that accelerate delivery. The same team that defines your strategy is the one that implements it. Not outsourced. Not rotated. Not junior consultants supervised by a manager. Senior practitioners who know your systems, build the dashboards, write the load tests, lead the incident response, and deliver the reports. That continuity is what makes the difference.",
     "perf": "Performance Engineering",
     "sre": "Site Reliability",
     "devops": "DevOps",
@@ -191,7 +207,7 @@
       },
       {
         "q": "Who works on my systems?",
-        "a": "A senior engineer with 10+ years of experience in performance, observability, and SRE. Not outsourced, not rotated."
+        "a": "A dedicated team of senior specialists in performance, SRE, DevOps, and QA — augmented by AI agents. Not outsourced, not rotated."
       },
       {
         "q": "What if I need to pause?",
@@ -211,7 +227,7 @@
       },
       {
         "q": "Not sure which service you need?",
-        "a": "Start with a Performance Checkup ($3,500). In 5 days you'll know exactly what problems you have and which service solves them. No commitment."
+        "a": "Start with a Performance Checkup ($2,995, one-time). In 5 days you'll have a capacity baseline, load test results, and a prioritized action plan. No subscription required."
       }
     ]
   },
@@ -219,8 +235,24 @@
     "heading": "Ready to stop guessing?",
     "subheading": "Tell us about your system. We'll review it and show you exactly what we'd change first.",
     "cta_primary": "Get Started",
-    "cta_secondary": "Have questions? Let's talk.",
+    "cta_join": "Join today",
+    "cta_secondary": "Book a Call",
     "slots": "Vantx is experiencing high demand — slots are limited. For faster response, email <a href=\"mailto:hello@vantx.io\">hello@vantx.io</a>"
+  },
+  "welcome": {
+    "meta_title": "Welcome to Vantx",
+    "pill": "You're in",
+    "headline": "Welcome to Vantx.",
+    "subheadline": "Your payment is confirmed. Here's what happens next.",
+    "step1_title": "We reach out within 24 hours",
+    "step1_body": "You'll get an email from our team to schedule onboarding and get access to your systems.",
+    "step2_title": "Kickoff call",
+    "step2_body": "We review your stack, define priorities, and align on the first deliverables.",
+    "step3_title": "First results in 5 days",
+    "step3_body": "Expect your first capacity baseline, dashboards, or audit within the first week.",
+    "cta_text": "Want to schedule the kickoff now?",
+    "cta": "Schedule Kickoff Call",
+    "cta_email": "Email us"
   },
   "obs_page": {
     "meta_title": "Observability as a Service — Vantx",

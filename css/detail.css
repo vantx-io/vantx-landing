@@ -581,4 +581,51 @@
   font-weight: var(--font-bold);
 }
 
+/* ==========================================================================
+   8. Welcome page steps
+   ========================================================================== */
+
+.welcome-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 480px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.welcome-step {
+  display: flex;
+  gap: var(--space-5);
+  align-items: flex-start;
+}
+
+.welcome-step__num {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: var(--color-accent-subtle);
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-weight: var(--font-bold);
+  font-size: var(--text-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.welcome-step__title {
+  font-size: var(--text-base);
+  font-weight: var(--font-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-1);
+}
+
+.welcome-step__body {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  line-height: var(--leading-normal);
+}
+
 /* FAQ styles moved to base.css (shared across landing + detail pages) */

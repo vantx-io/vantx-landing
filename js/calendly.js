@@ -16,7 +16,18 @@
 (function () {
   "use strict";
 
-  var CALENDLY_URL = "https://calendly.com/hello-vantx/15min";
+  var CALENDLY_URLS = {
+    en: "https://calendly.com/hello-vantx/15min",
+    es: "https://calendly.com/hello-vantx/15min-es",
+  };
+
+  function getCalendlyUrl() {
+    var lang =
+      window.i18n && typeof window.i18n.currentLang === "function"
+        ? window.i18n.currentLang()
+        : "en";
+    return CALENDLY_URLS[lang] || CALENDLY_URLS.en;
+  }
 
   var widgetLoaded = false;
   var widgetLoading = false;
@@ -52,10 +63,10 @@
 
   function openCalendly() {
     if (window.Calendly) {
-      Calendly.initPopupWidget({ url: CALENDLY_URL });
+      Calendly.initPopupWidget({ url: getCalendlyUrl() });
     } else {
       // Widget not yet loaded — open in new tab as fallback
-      window.open(CALENDLY_URL, "_blank", "noopener,noreferrer");
+      window.open(getCalendlyUrl(), "_blank", "noopener,noreferrer");
     }
   }
 
@@ -80,7 +91,7 @@
         } else if (attempts > 50) {
           // 5 seconds max — fall back to new tab
           clearInterval(interval);
-          window.open(CALENDLY_URL, "_blank", "noopener,noreferrer");
+          window.open(getCalendlyUrl(), "_blank", "noopener,noreferrer");
         }
       }, 100);
     }
