@@ -4,8 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Vantx — Managed performance engineering, observability, and fractional SRE at startup speed.">
+  <meta name="theme-color" content="#F8F7F4" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1A1917" media="(prefers-color-scheme: dark)">
 
   <title>Vantx — Performance Engineering · Observability · Fractional SRE</title>
+
+  <!-- Preconnect to third-party origins (DNS + TCP + TLS ahead of time) -->
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+  <link rel="preconnect" href="https://assets.calendly.com" crossorigin>
+  <link rel="preconnect" href="https://buy.stripe.com" crossorigin>
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
@@ -22,7 +29,8 @@
   <meta name="twitter:card" content="summary_large_image">
 
   <!-- Fonts — self-hosted, eliminates 2 cross-origin roundtrips -->
-  <link rel="preload" href="./fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
+  <link rel="preload" href="./fonts/jb-mono-latin.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
   <link rel="stylesheet" href="./css/fonts.css">
 
   <!-- Design system -->
@@ -50,6 +58,16 @@
 
   <a href="#main-content" class="skip-link" data-i18n="nav.skip_link">Skip to content</a>
 
+  <noscript>
+    <div style="background:#1B6B4A;color:#fff;text-align:center;padding:12px 16px;font-family:system-ui,sans-serif;font-size:14px;">
+      Vantx — Performance Engineering &middot; Observability &middot; Fractional SRE
+      &nbsp;|&nbsp;
+      <a href="mailto:hello@vantx.io" style="color:#fff;text-decoration:underline;">hello@vantx.io</a>
+      &nbsp;|&nbsp;
+      <a href="https://calendly.com/hello-vantx/15min" style="color:#fff;text-decoration:underline;">Book a Call</a>
+    </div>
+  </noscript>
+
   <!-- Nav partial injected here -->
   <div data-partial="nav"></div>
 
@@ -64,7 +82,7 @@
         <div class="hero__inner">
 
           <!-- Pill badge -->
-          <div class="pill hero__pill" data-i18n="hero.pill">Managed Performance Engineering</div>
+          <div class="pill hero__pill" data-i18n="hero.pill">Performance & SRE, on demand</div>
 
           <!-- Main headline — \n in translation renders via white-space: pre-line -->
           <h1 class="hero__headline">
@@ -74,7 +92,7 @@ Your team doesn't know why.</span>
           </h1>
 
           <p class="hero__sub" data-i18n="hero.subheadline">
-            Vantx is your external performance and SRE engineer. Monitoring, load testing, and observability as a continuously improving managed capability.
+            Vantx is your external performance and SRE team. We run your monitoring, load testing, and observability — so your engineers can focus on shipping.
           </p>
 
           <div class="hero__actions">
@@ -82,8 +100,8 @@ Your team doesn't know why.</span>
               class="btn btn--primary btn--lg js-calendly-trigger"
               type="button"
               data-i18n="hero.cta_primary"
-            >Book a Strategy Call</button>
-            <a href="#services" class="btn btn--outline btn--lg" data-i18n="hero.cta_secondary">See Pricing</a>
+            >Book a Call</button>
+            <a href="#services" class="btn btn--outline btn--lg" data-i18n="hero.cta_secondary">Explore Services</a>
           </div>
 
         </div><!-- /.hero__inner -->
@@ -109,8 +127,8 @@ Your team doesn't know why.</span>
             <span class="credibility__label" data-i18n="credibility.stack_label">disciplines: Performance, SRE, DevOps, QA</span>
           </div>
           <div class="credibility__stat">
-            <span class="credibility__number" data-i18n="credibility.tools_number">0</span>
-            <span class="credibility__label" data-i18n="credibility.tools_label">vendor lock-in — 100% open-source</span>
+            <span class="credibility__number" data-i18n="credibility.tools_number">100%</span>
+            <span class="credibility__label" data-i18n="credibility.tools_label">open-source — zero vendor lock-in</span>
           </div>
         </div>
       </div>
@@ -176,10 +194,6 @@ Your team doesn't know why.</span>
 
         </div><!-- /.pain__grid -->
 
-        <div class="pain__cta">
-          <button class="btn btn--primary btn--lg js-calendly-trigger" type="button" data-i18n="pain.cta">Let's fix this</button>
-        </div>
-
       </div><!-- /.container -->
     </section>
 
@@ -192,56 +206,11 @@ Your team doesn't know why.</span>
 
         <div class="section-header">
           <h2 id="services-heading" class="section-title" data-i18n="services.heading">What we deliver</h2>
-          <p class="section-sub" data-i18n="services.subheading">Four managed capabilities, designed to be combined.</p>
         </div>
 
         <div class="services__grid">
 
-          <!-- Observability as a Service -->
-          <!-- SLOT_STATUS: SOLD_OUT — remove .svc-card--sold-out class to re-enable -->
-          <article class="svc-card svc-card--observability svc-card--sold-out">
-            <span class="svc-card__sold-out" data-i18n="services.sold_out">Sold out</span>
-            <span class="svc-card__tag" data-i18n="services.observability.tag">Observability as a Service</span>
-            <h3 class="svc-card__headline" data-i18n="services.observability.headline">Your next incident, diagnosed in 30 seconds.</h3>
-            <p class="svc-card__desc" data-i18n="services.observability.description">
-              We instrument your systems, build dashboards that answer incident questions, and tune alerts so your team trusts them. IRM included: on-call routing, incident timeline, status pages.
-            </p>
-            <ul class="svc-card__features" aria-label="Features">
-              <li data-i18n="services.observability.features.0">Instrumentation + telemetry strategy</li>
-              <li data-i18n="services.observability.features.1">Dashboards that answer incident questions in 30 seconds</li>
-              <li data-i18n="services.observability.features.2">Alerts your team trusts + SLOs the business understands</li>
-              <li data-i18n="services.observability.features.3">IRM: on-call routing, incidents, status pages</li>
-              <li data-i18n="services.observability.features.4">Telemetry cost optimization (30–50% reduction)</li>
-            </ul>
-            <div class="svc-card__footer">
-              <div class="svc-card__price">
-                <span class="svc-card__price-amount" data-i18n="services.observability.price">$6,995</span>
-                <span class="svc-card__price-period" data-i18n="services.observability.price_period">/month</span>
-              </div>
-              <a href="./services/observability.html" class="btn btn--outline btn--sm" data-i18n="services.learn_more">Learn More</a>
-            </div>
-
-            <!-- One-time entry product — SOLD OUT (subscription sold out) -->
-            <div class="svc-card__onetime">
-              <span class="svc-card__onetime-badge" data-i18n="services.onetime_tag">One-time</span>
-              <div class="svc-card__onetime-body">
-                <div class="svc-card__onetime-info">
-                  <span class="svc-card__onetime-name" data-i18n="services.obs_setup.name">Observability Setup</span>
-                  <span class="svc-card__onetime-desc" data-i18n="services.obs_setup.desc">Full instrumentation, dashboards, alert tuning, SLO definition, and IRM configuration — production-ready in 4 weeks.</span>
-                </div>
-                <div class="svc-card__onetime-action">
-                  <span class="svc-card__onetime-price">
-                    <span data-i18n="services.obs_setup.price">$19,995</span>
-                    <span class="svc-card__onetime-suffix" data-i18n="services.obs_setup.price_suffix">one-time</span>
-                  </span>
-                  <!-- Link ready — re-enable when slot opens -->
-                  <a href="https://buy.stripe.com/test_3cI4gA3va9NBgrvdutgEg02" class="btn btn--primary btn--sm btn--disabled" aria-disabled="true" data-i18n="services.sold_out">Sold out</a>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- Performance as a Service -->
+          <!-- Performance as a Service — the ONE available subscription -->
           <article class="svc-card svc-card--performance">
             <span class="svc-card__tag" data-i18n="services.performance.tag">Performance as a Service</span>
             <h3 class="svc-card__headline" data-i18n="services.performance.headline">Know your limits before your users do.</h3>
@@ -261,7 +230,7 @@ Your team doesn't know why.</span>
                 <span class="svc-card__price-period" data-i18n="services.performance.price_period">/month</span>
               </div>
               <div class="svc-card__footer-actions">
-                <a href="https://buy.stripe.com/test_00wfZi8Pu4th2AFcqpgEg00" class="btn btn--primary btn--sm" data-i18n="cta_section.cta_join">Join today</a>
+                <a href="https://buy.stripe.com/test_00wfZi8Pu4th2AFcqpgEg00" class="btn btn--primary btn--sm" data-i18n="cta_section.cta_join">Start Today</a>
                 <a href="./services/performance.html" class="btn btn--outline btn--sm" data-i18n="services.learn_more">Learn More</a>
               </div>
             </div>
@@ -279,64 +248,22 @@ Your team doesn't know why.</span>
                     <span data-i18n="services.perf_checkup.price">$2,995</span>
                     <span class="svc-card__onetime-suffix" data-i18n="services.perf_checkup.price_suffix">one-time</span>
                   </span>
-                  <!-- TODO: Replace href with your real Stripe payment link for checkup -->
-                  <a href="https://buy.stripe.com/test_7sY14o3va5xl6QV765gEg01" class="btn btn--outline btn--sm" data-i18n="services.perf_checkup.cta">Get Checkup</a>
+                  <a href="https://buy.stripe.com/test_7sY14o3va5xl6QV765gEg01" class="btn btn--outline btn--sm" data-i18n="services.perf_checkup.cta">Start with a Checkup</a>
                 </div>
               </div>
             </div>
           </article>
 
-          <!-- Fractional SRE -->
-          <!-- SLOT_STATUS: SOLD_OUT — remove .svc-card--sold-out class to re-enable -->
-          <article class="svc-card svc-card--sre svc-card--sold-out">
-            <span class="svc-card__sold-out" data-i18n="services.sold_out">Sold out</span>
-            <span class="svc-card__tag" data-i18n="services.sre.tag">Fractional SRE</span>
-            <h3 class="svc-card__headline" data-i18n="services.sre.headline">Incidents resolved in 45 minutes, not 4 hours.</h3>
-            <p class="svc-card__desc" data-i18n="services.sre.description">
-              A dedicated SRE embedded in your team — handling architecture review, incident command, post-mortems, and the reliability work that never gets prioritized.
-            </p>
-            <ul class="svc-card__features" aria-label="Features">
-              <li data-i18n="services.sre.features.0">Dedicated fractional SRE embedded in your team</li>
-              <li data-i18n="services.sre.features.1">Incident command & post-mortem facilitation</li>
-              <li data-i18n="services.sre.features.2">Reliability roadmap and architecture review</li>
-              <li data-i18n="services.sre.features.3">Escalation path during incidents</li>
-            </ul>
-            <div class="svc-card__footer">
-              <div class="svc-card__price">
-                <span class="svc-card__price-prefix" data-i18n="services.sre.price_prefix">From</span>
-                <span class="svc-card__price-amount" data-i18n="services.sre.price">$7,995</span>
-                <span class="svc-card__price-period" data-i18n="services.sre.price_period">/month</span>
-              </div>
-              <a href="./services/fractional-sre.html" class="btn btn--outline btn--sm" data-i18n="services.learn_more">Learn More</a>
-            </div>
-          </article>
-
-          <!-- Fractional QA Tech Lead -->
-          <!-- SLOT_STATUS: SOLD_OUT — remove .svc-card--sold-out class to re-enable -->
-          <article class="svc-card svc-card--qa svc-card--sold-out">
-            <span class="svc-card__sold-out" data-i18n="services.sold_out">Sold out</span>
-            <span class="svc-card__tag" data-i18n="services.qa.tag">Fractional QA Tech Lead</span>
-            <h3 class="svc-card__headline" data-i18n="services.qa.headline">Testing strategy that scales with your team.</h3>
-            <p class="svc-card__desc" data-i18n="services.qa.description">
-              A senior QA/Automation expert embedded in your team — defining test strategy, building automation frameworks, integrating tests into CI/CD, and training your team to maintain quality autonomously.
-            </p>
-            <ul class="svc-card__features" aria-label="Features">
-              <li data-i18n="services.qa.features.0">Test strategy + automation framework</li>
-              <li data-i18n="services.qa.features.1">CI/CD integration (GitHub Actions, GitLab CI)</li>
-              <li data-i18n="services.qa.features.2">Playwright/Cypress E2E + contract testing</li>
-              <li data-i18n="services.qa.features.3">Mentoring & pair programming for your team</li>
-            </ul>
-            <div class="svc-card__footer">
-              <div class="svc-card__price">
-                <span class="svc-card__price-prefix" data-i18n="services.qa.price_prefix">From</span>
-                <span class="svc-card__price-amount" data-i18n="services.qa.price">$6,995</span>
-                <span class="svc-card__price-period" data-i18n="services.qa.price_period">/month</span>
-              </div>
-              <a href="./services/qa-tech-lead.html" class="btn btn--outline btn--sm" data-i18n="services.learn_more">Learn More</a>
-            </div>
-          </article>
-
         </div><!-- /.services__grid -->
+
+        <!-- Other services — waitlist -->
+        <p class="services__waitlist">
+          <span data-i18n="services.waitlist_prefix">Also available:</span>
+          <a href="./services/observability.html" data-i18n="services.observability.tag">Observability as a Service</a>,
+          <a href="./services/fractional-sre.html" data-i18n="services.sre.tag">Fractional SRE</a>,
+          <a href="./services/qa-tech-lead.html" data-i18n="services.qa.tag">Fractional QA Tech Lead</a>
+          — <button class="services__waitlist-btn js-calendly-trigger" type="button" data-i18n="services.waitlist_cta">book a call to get started</button>
+        </p>
       </div><!-- /.container -->
     </section>
 
@@ -351,6 +278,7 @@ Your team doesn't know why.</span>
         </div>
         <div class="compare__table-wrap">
           <table class="compare__table">
+            <caption class="sr-only" data-i18n="compare.caption">Comparison of hiring in-house vs. Vantx</caption>
             <thead>
               <tr>
                 <th scope="col"><span class="sr-only" data-i18n="compare.col_aspect">Aspect</span></th>
@@ -361,28 +289,28 @@ Your team doesn't know why.</span>
             <tbody>
               <tr>
                 <th scope="row" data-i18n="compare.row_cost">Cost</th>
-                <td data-i18n="compare.hiring_cost">$150K–$200K/yr + equity + benefits</td>
-                <td class="compare__highlight" data-i18n="compare.vantix_cost">Flat monthly rate, cancel anytime</td>
+                <td data-label="In-house" data-i18n="compare.hiring_cost">$150K–$200K/yr + equity + benefits</td>
+                <td class="compare__highlight" data-label="Vantx" data-i18n="compare.vantix_cost">Flat monthly rate, cancel anytime</td>
               </tr>
               <tr>
                 <th scope="row" data-i18n="compare.row_time">Time to start</th>
-                <td data-i18n="compare.hiring_time">3–6 months recruiting</td>
-                <td class="compare__highlight" data-i18n="compare.vantix_time">Active in 1 week</td>
+                <td data-label="In-house" data-i18n="compare.hiring_time">3–6 months recruiting</td>
+                <td class="compare__highlight" data-label="Vantx" data-i18n="compare.vantix_time">Active in 1 week</td>
               </tr>
               <tr>
                 <th scope="row" data-i18n="compare.row_expertise">Expertise</th>
-                <td data-i18n="compare.hiring_expertise">1 person, 1 skill set</td>
-                <td class="compare__highlight" data-i18n="compare.vantix_expertise">Dedicated team: Performance, SRE, DevOps, QA, Growth, SEO</td>
+                <td data-label="In-house" data-i18n="compare.hiring_expertise">1 person, 1 skill set</td>
+                <td class="compare__highlight" data-label="Vantx" data-i18n="compare.vantix_expertise">Dedicated team: Performance, SRE, DevOps, QA, Growth, SEO</td>
               </tr>
               <tr>
                 <th scope="row" data-i18n="compare.row_risk">Risk</th>
-                <td data-i18n="compare.hiring_risk">They leave, you start over</td>
-                <td class="compare__highlight" data-i18n="compare.vantix_risk">Continuous, documented, transferable</td>
+                <td data-label="In-house" data-i18n="compare.hiring_risk">They leave, you start over</td>
+                <td class="compare__highlight" data-label="Vantx" data-i18n="compare.vantix_risk">Continuous, documented, fully transferable knowledge</td>
               </tr>
               <tr>
                 <th scope="row" data-i18n="compare.row_tools">Tools</th>
-                <td data-i18n="compare.hiring_tools">Whatever they know</td>
-                <td class="compare__highlight" data-i18n="compare.vantix_tools">Open-source stack, no vendor lock-in</td>
+                <td data-label="In-house" data-i18n="compare.hiring_tools">Whatever they know</td>
+                <td class="compare__highlight" data-label="Vantx" data-i18n="compare.vantix_tools">Open-source stack, no vendor lock-in</td>
               </tr>
             </tbody>
           </table>
@@ -400,7 +328,7 @@ Your team doesn't know why.</span>
           <p class="section-sub" data-i18n="team.subheading">A dedicated team of senior specialists, augmented by AI agents.</p>
         </div>
         <p class="team__body" data-i18n="team.body">
-          Vantx is not a staffing agency. Behind every engagement is a tight, multidisciplinary team of senior engineers and strategists — performance engineering, SRE, DevOps, QA automation, growth marketing, and SEO — augmented by AI agents that accelerate delivery. The same team that defines your strategy is the one that implements it. Not outsourced. Not rotated. Not junior consultants supervised by a manager. Senior practitioners who know your systems, build the dashboards, write the load tests, lead the incident response, and deliver the reports. That continuity is what makes the difference.
+          Behind every engagement is a tight, multidisciplinary team — not outsourced, not rotated. The same people who define your strategy implement it: they know your systems, build the dashboards, write the load tests, and deliver the reports.
         </p>
         <div class="team__disciplines">
           <div class="team__discipline">
@@ -430,7 +358,7 @@ Your team doesn't know why.</span>
       <div class="container">
 
         <div class="section-header">
-          <h2 id="faq-heading" class="section-title" data-i18n="faq.heading">FAQs</h2>
+          <h2 id="faq-heading" class="section-title" data-i18n="faq.heading">Common Questions</h2>
         </div>
 
         <div class="faq__list">
@@ -484,7 +412,7 @@ Your team doesn't know why.</span>
 
         <div class="faq__cta">
           <p class="faq__cta-text" data-i18n="faq.cta_text">Still have questions?</p>
-          <a href="mailto:hello@vantx.io" class="btn btn--outline btn--sm" data-i18n="faq.cta_link">Email us — we reply same day</a>
+          <a href="mailto:hello@vantx.io" class="btn btn--outline btn--sm" data-i18n="faq.cta_link">Email us — we reply the same day</a>
         </div>
 
       </div><!-- /.container -->
@@ -501,13 +429,9 @@ Your team doesn't know why.</span>
             Tell us about your system. We'll review it and show you exactly what we'd change first.
           </p>
           <div class="cta-section__actions">
-            <a href="https://buy.stripe.com/test_00wfZi8Pu4th2AFcqpgEg00" class="btn btn--primary btn--lg" data-i18n="cta_section.cta_join">Join today</a>
+            <a href="https://buy.stripe.com/test_00wfZi8Pu4th2AFcqpgEg00" class="btn btn--primary btn--lg" data-i18n="cta_section.cta_join">Start Today</a>
             <button class="btn btn--outline btn--lg js-calendly-trigger" type="button" data-i18n="cta_section.cta_secondary">Book a Call</button>
           </div>
-          <p class="cta-section__slots" data-i18n-html="cta_section.slots">
-            Vantx is experiencing high demand — slots are limited. For faster response, email <a href="mailto:hello@vantx.io">hello@vantx.io</a>
-          </p>
-
           <!-- LATAM + Spain startup discount — geo-targeted -->
           <div class="latam-banner" id="latam-banner" hidden>
             <p class="latam-banner__headline" data-i18n="cta_section.latam_headline">Company or startup in Latin America or Spain?</p>
@@ -517,7 +441,7 @@ Your team doesn't know why.</span>
 
           <!-- Vibecoding startup discount — global -->
           <div class="latam-banner" id="vibecoding-banner">
-            <p class="latam-banner__headline" data-i18n="cta_section.vibe_headline">Building with AI / Vibecoding?</p>
+            <p class="latam-banner__headline" data-i18n="cta_section.vibe_headline">Building with AI?</p>
             <p class="latam-banner__desc" data-i18n="cta_section.vibe_desc">Early-stage teams building with AI get special pricing. Book a call and ask about your discount.</p>
             <button class="btn btn--outline btn--sm js-calendly-trigger" type="button" data-i18n="cta_section.vibe_cta">Ask About Your Discount</button>
           </div>

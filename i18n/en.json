@@ -21,8 +21,8 @@
     "team_label": "specialists — engineers, strategists, and AI agents",
     "stack_number": "4",
     "stack_label": "disciplines: Performance, SRE, DevOps, QA",
-    "tools_number": "0",
-    "tools_label": "vendor lock-in — 100% open-source"
+    "tools_number": "100%",
+    "tools_label": "open-source — zero vendor lock-in"
   },
   "footer": {
     "tagline": "Managed performance engineering, at startup speed.",
@@ -36,12 +36,12 @@
     "copyright": "© 2026 Vantx Engineering"
   },
   "hero": {
-    "pill": "Managed Performance Engineering",
+    "pill": "Performance & SRE, on demand",
     "headline": "Your systems are slow.\nYour team doesn't know why.",
     "headline_accent": "We do.",
-    "subheadline": "Vantx is your external performance and SRE engineer. Monitoring, load testing, and observability as a continuously improving managed capability.",
-    "cta_primary": "Book a Strategy Call",
-    "cta_secondary": "See Pricing"
+    "subheadline": "Vantx is your external performance and SRE team. We run your monitoring, load testing, and observability — so your engineers can focus on shipping.",
+    "cta_primary": "Book a Call",
+    "cta_secondary": "Explore Services"
   },
   "pain": {
     "heading": "Does this sound familiar?",
@@ -77,6 +77,8 @@
   "services": {
     "heading": "What we deliver",
     "subheading": "Four managed capabilities, designed to be combined.",
+    "waitlist_prefix": "Also available:",
+    "waitlist_cta": "book a call to get started",
     "learn_more": "Learn More",
     "sold_out": "Sold out",
     "onetime_or": "Or start with",
@@ -86,7 +88,7 @@
       "desc": "5-day assessment: capacity baseline, load test, performance audit, and a prioritized action plan.",
       "price": "$2,995",
       "price_suffix": "one-time",
-      "cta": "Get Checkup"
+      "cta": "Start with a Checkup"
     },
     "obs_setup": {
       "name": "Observability Setup",
@@ -174,24 +176,25 @@
     "vantix_expertise": "Dedicated team: Performance, SRE, DevOps, QA, Growth, SEO",
     "row_risk": "Risk",
     "hiring_risk": "They leave, you start over",
-    "vantix_risk": "Continuous, documented, transferable",
+    "vantix_risk": "Continuous, documented, fully transferable knowledge",
     "row_tools": "Tools",
     "hiring_tools": "Whatever they know",
-    "vantix_tools": "Open-source stack, no vendor lock-in"
+    "vantix_tools": "Open-source stack, no vendor lock-in",
+    "caption": "Comparison of hiring in-house vs. Vantx"
   },
   "team": {
     "heading": "Who's behind Vantx",
     "subheading": "A dedicated team of senior specialists, augmented by AI agents.",
-    "body": "Vantx is not a staffing agency. Behind every engagement is a tight, multidisciplinary team of senior engineers and strategists — performance engineering, SRE, DevOps, QA automation, growth marketing, and SEO — augmented by AI agents that accelerate delivery. The same team that defines your strategy is the one that implements it. Not outsourced. Not rotated. Not junior consultants supervised by a manager. Senior practitioners who know your systems, build the dashboards, write the load tests, lead the incident response, and deliver the reports. That continuity is what makes the difference.",
+    "body": "Behind every engagement is a tight, multidisciplinary team — not outsourced, not rotated. The same people who define your strategy implement it: they know your systems, build the dashboards, write the load tests, and deliver the reports.",
     "perf": "Performance Engineering",
     "sre": "Site Reliability",
     "devops": "DevOps",
     "qa": "QA Automation"
   },
   "faq": {
-    "heading": "FAQs",
+    "heading": "Common Questions",
     "cta_text": "Still have questions?",
-    "cta_link": "Email us — we reply same day",
+    "cta_link": "Email us — we reply the same day",
     "items": [
       {
         "q": "How does the subscription work?",
@@ -235,13 +238,13 @@
     "heading": "Ready to stop guessing?",
     "subheading": "Tell us about your system. We'll review it and show you exactly what we'd change first.",
     "cta_primary": "Get Started",
-    "cta_join": "Join today",
+    "cta_join": "Start Today",
     "cta_secondary": "Book a Call",
     "slots": "Vantx is experiencing high demand — slots are limited. For faster response, email <a href=\"mailto:hello@vantx.io\">hello@vantx.io</a>",
     "latam_headline": "Company or startup in Latin America or Spain?",
     "latam_desc": "We offer special pricing for companies and startups in LATAM and Spain. Book a call and ask about your discount.",
     "latam_cta": "Ask About Your Discount",
-    "vibe_headline": "Building with AI / Vibecoding?",
+    "vibe_headline": "Building with AI?",
     "vibe_desc": "Early-stage teams building with AI get special pricing. Book a call and ask about your discount.",
     "vibe_cta": "Ask About Your Discount"
   },

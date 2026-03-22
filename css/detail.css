@@ -69,6 +69,7 @@
   font-family: var(--font-mono);
   font-size: var(--text-2xl);
   font-weight: var(--font-bold);
+  font-variant-numeric: tabular-nums;
   color: var(--color-text);
 }
 
@@ -82,7 +83,7 @@
 .page-hero--observability .pill {
   background: var(--color-obs-subtle);
   color: var(--color-obs);
-  border-color: rgba(13, 148, 136, 0.20);
+  border-color: var(--color-obs-border);
 }
 
 .page-hero--sre .pill {
@@ -95,7 +96,7 @@
 .page-hero--performance .pill {
   background: var(--color-perf-subtle);
   color: var(--color-perf);
-  border-color: rgba(37, 99, 235, 0.20);
+  border-color: var(--color-perf-border);
 }
 
 /* QA: purple pill */

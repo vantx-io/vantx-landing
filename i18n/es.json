@@ -21,8 +21,8 @@
     "team_label": "especialistas — ingenieros, estrategas y agentes de IA",
     "stack_number": "4",
     "stack_label": "disciplinas: Performance, SRE, DevOps, QA",
-    "tools_number": "0",
-    "tools_label": "vendor lock-in — 100% open-source"
+    "tools_number": "100%",
+    "tools_label": "open-source — cero vendor lock-in"
   },
   "footer": {
     "tagline": "Ingeniería de performance gestionada, a velocidad startup.",
@@ -36,12 +36,12 @@
     "copyright": "© 2026 Vantx Engineering"
   },
   "hero": {
-    "pill": "Ingeniería de Performance Gestionada",
+    "pill": "Performance & SRE, on demand",
     "headline": "Tus sistemas son lentos.\nTu equipo no sabe por qué.",
     "headline_accent": "Nosotros sí.",
-    "subheadline": "Vantx es tu ingeniero externo de performance y SRE. Monitoreo, load testing y observabilidad como una capacidad gestionada en mejora continua.",
-    "cta_primary": "Agendar Strategy Call",
-    "cta_secondary": "Ver Precios"
+    "subheadline": "Vantx es tu equipo externo de performance y SRE. Gestionamos tu monitoreo, load testing y observabilidad — para que tus ingenieros se enfoquen en entregar.",
+    "cta_primary": "Agendar Call",
+    "cta_secondary": "Ver Servicios"
   },
   "pain": {
     "heading": "¿Te suena familiar?",
@@ -77,6 +77,8 @@
   "services": {
     "heading": "Qué entregamos",
     "subheading": "Cuatro capacidades gestionadas, diseñadas para combinarse.",
+    "waitlist_prefix": "También disponible:",
+    "waitlist_cta": "agenda una llamada",
     "learn_more": "Ver más",
     "sold_out": "Agotado",
     "onetime_or": "O empieza con",
@@ -86,14 +88,14 @@
       "desc": "Assessment de 5 días: baseline de capacidad, load test, auditoría de performance y plan de acción priorizado.",
       "price": "$2,995",
       "price_suffix": "one-time",
-      "cta": "Obtener Checkup"
+      "cta": "Empezar con un Checkup"
     },
     "obs_setup": {
       "name": "Observability Setup",
       "desc": "Instrumentación completa, dashboards, tuning de alertas, definición de SLOs y configuración de IRM — production-ready en 4 semanas.",
       "price": "$19,995",
       "price_suffix": "one-time",
-      "cta": "Obtener Setup"
+      "cta": "Empezar con un Setup"
     },
     "observability": {
       "tag": "Observabilidad como Servicio",
@@ -174,15 +176,16 @@
     "vantix_expertise": "Equipo dedicado: Performance, SRE, DevOps, QA, Growth, SEO",
     "row_risk": "Riesgo",
     "hiring_risk": "Se va y empiezas de cero",
-    "vantix_risk": "Continuo, documentado, transferible",
+    "vantix_risk": "Continuo, documentado, conocimiento 100% transferible",
     "row_tools": "Herramientas",
     "hiring_tools": "Lo que esa persona conozca",
-    "vantix_tools": "Stack open-source, sin vendor lock-in"
+    "vantix_tools": "Stack open-source, sin vendor lock-in",
+    "caption": "Comparación entre contratar in-house y Vantx"
   },
   "team": {
     "heading": "Quién está detrás de Vantx",
     "subheading": "Un equipo dedicado de especialistas senior, potenciado por agentes de IA.",
-    "body": "Vantx no es una agencia de staffing. Detrás de cada engagement hay un equipo compacto y multidisciplinario de ingenieros y estrategas senior — performance engineering, SRE, DevOps, QA automation, growth marketing y SEO — potenciado por agentes de IA que aceleran la entrega. El mismo equipo que define tu estrategia es el que la implementa. No tercerizado. No rotado. No consultores junior supervisados por un manager. Practicantes senior que conocen tus sistemas, construyen los dashboards, escriben los load tests, lideran el incident response y entregan los reportes. Esa continuidad es lo que marca la diferencia.",
+    "body": "Detrás de cada engagement hay un equipo compacto y multidisciplinario — no tercerizado, no rotado. Las mismas personas que definen tu estrategia la implementan: conocen tus sistemas, construyen los dashboards, escriben los load tests y entregan los reportes.",
     "perf": "Performance Engineering",
     "sre": "Site Reliability",
     "devops": "DevOps",
@@ -235,13 +238,13 @@
     "heading": "¿Listo para dejar de adivinar?",
     "subheading": "Cuéntanos sobre tu sistema. Lo revisamos y te mostramos exactamente qué cambiaríamos primero.",
     "cta_primary": "Empezar",
-    "cta_join": "Suscribirse hoy",
+    "cta_join": "Empezar hoy",
     "cta_secondary": "Agendar Call",
     "slots": "Vantx está recibiendo alta demanda — los slots son limitados. Para respuesta más rápida, escribe a <a href=\"mailto:hello@vantx.io\">hello@vantx.io</a>",
     "latam_headline": "¿Empresa o startup en Latinoamérica o España?",
     "latam_desc": "Ofrecemos precios especiales para empresas y startups en LATAM y España. Agenda una llamada y consulta por tu descuento.",
     "latam_cta": "Consultar Descuento",
-    "vibe_headline": "¿Construyendo con IA / Vibecoding?",
+    "vibe_headline": "¿Construyendo con IA?",
     "vibe_desc": "Equipos early-stage construyendo con IA tienen precios especiales. Agenda una llamada y consulta por tu descuento.",
     "vibe_cta": "Consultar Descuento"
   },

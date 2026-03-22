@@ -9,7 +9,7 @@
      Color Palette — Background
      ------------------------------------------------------------------------- */
   --color-bg:              #F8F7F4; /* warm parchment — page background */
-  --color-surface:         #FFFFFF; /* white — cards, panels */
+  --color-surface:         #FDFCFA; /* warm off-white — cards, panels */
   --color-surface-elevated:#F0EFE9; /* warm gray — hover states, dropdowns */
   --color-surface-overlay: rgba(248, 247, 244, 0.85); /* frosted nav */
 
@@ -25,7 +25,7 @@
      ------------------------------------------------------------------------- */
   --color-text:            #1A1A17; /* near-black — primary text */
   --color-text-muted:      #5C5C56; /* warm gray — secondary text */
-  --color-text-subtle:     #8A8A82; /* lighter gray — placeholder, meta */
+  --color-text-subtle:     #6B6B64; /* warm gray — placeholder, meta (5.0:1 on bg) */
   --color-text-on-accent:  #FFFFFF; /* text on accent backgrounds */
 
   /* -------------------------------------------------------------------------
@@ -54,12 +54,14 @@
      ------------------------------------------------------------------------- */
   --color-obs:             #0D9488; /* teal-600 */
   --color-obs-subtle:      rgba(13, 148, 136, 0.08);
+  --color-obs-border:      rgba(13, 148, 136, 0.20);
 
   /* -------------------------------------------------------------------------
      Color Palette — Service: Performance (blue)
      ------------------------------------------------------------------------- */
   --color-perf:            #2563EB; /* blue-600 */
   --color-perf-subtle:     rgba(37, 99, 235, 0.08);
+  --color-perf-border:     rgba(37, 99, 235, 0.20);
 
   /* -------------------------------------------------------------------------
      Color Palette — Service: QA (purple)
@@ -105,8 +107,9 @@
   /* -------------------------------------------------------------------------
      Typography — Line Heights
      ------------------------------------------------------------------------- */
-  --leading-none:   1;
-  --leading-tight:  1.15;
+  --leading-none:    1;
+  --leading-display: 1.05;
+  --leading-tight:   1.15;
   --leading-snug:   1.375;
   --leading-normal: 1.6;
   --leading-relaxed:1.75;
@@ -114,8 +117,9 @@
   /* -------------------------------------------------------------------------
      Typography — Letter Spacing
      ------------------------------------------------------------------------- */
-  --tracking-tight: -0.03em;
-  --tracking-snug:  -0.02em;
+  --tracking-tighter:-0.04em;
+  --tracking-tight:  -0.03em;
+  --tracking-snug:   -0.02em;
   --tracking-normal: 0;
   --tracking-wide:  0.05em;
   --tracking-wider: 0.08em;
@@ -126,6 +130,7 @@
   --space-px:  1px;
   --space-0-5: 0.125rem;  /* 2px */
   --space-1:   0.25rem;   /* 4px */
+  --space-1-5: 0.375rem;  /* 6px */
   --space-2:   0.5rem;    /* 8px */
   --space-3:   0.75rem;   /* 12px */
   --space-4:   1rem;      /* 16px */
@@ -184,4 +189,70 @@
   --container-padding: 1.5rem; /* 24px */
   --nav-height:        64px;
   --section-padding-y: 6rem;   /* 96px — generous breathing room */
+}
+
+/* ==========================================================================
+   Dark Mode — automatic via prefers-color-scheme
+   All component CSS references tokens, so overriding here is sufficient.
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Backgrounds — warm dark tones, not cold/blue */
+    --color-bg:              #1A1917;
+    --color-surface:         #242320;
+    --color-surface-elevated:#2E2D28;
+    --color-surface-overlay: rgba(26, 25, 23, 0.85);
+
+    /* Borders */
+    --color-border:          rgba(255, 255, 255, 0.08);
+    --color-border-strong:   rgba(255, 255, 255, 0.15);
+    --color-border-focus:    rgba(37, 155, 110, 0.5);
+
+    /* Text — warm off-white, not blue-white */
+    --color-text:            #EDECE7;
+    --color-text-muted:      #9C9B93; /* 6.2:1 on bg */
+    --color-text-subtle:     #8C8B83; /* 5.0:1 on bg, 4.5:1 on surface */
+    --color-text-on-accent:  #FFFFFF;
+
+    /* Accent — brighter green for dark backgrounds (5:1 on bg) */
+    --color-accent:          #259B6E;
+    --color-accent-hover:    #2DAE7C;
+    --color-accent-active:   #1F8A60;
+    --color-accent-subtle:   rgba(37, 155, 110, 0.10);
+    --color-accent-border:   rgba(37, 155, 110, 0.25);
+    --color-accent-glow:     rgba(37, 155, 110, 0.12);
+
+    /* Semantic — brighter variants for dark bg contrast */
+    --color-success:         #22C55E;
+    --color-success-subtle:  rgba(34, 197, 94, 0.10);
+    --color-success-border:  rgba(34, 197, 94, 0.25);
+    --color-warning:         #F59E0B;
+    --color-warning-subtle:  rgba(245, 158, 11, 0.10);
+    --color-warning-border:  rgba(245, 158, 11, 0.25);
+    --color-danger:          #EF4444;
+    --color-danger-subtle:   rgba(239, 68, 68, 0.08);
+    --color-danger-border:   rgba(239, 68, 68, 0.25);
+
+    /* Services — brighter variants */
+    --color-obs:             #14B8A6;
+    --color-obs-subtle:      rgba(20, 184, 166, 0.10);
+    --color-obs-border:      rgba(20, 184, 166, 0.25);
+
+    --color-perf:            #60A5FA;
+    --color-perf-subtle:     rgba(96, 165, 250, 0.10);
+    --color-perf-border:     rgba(96, 165, 250, 0.25);
+
+    --color-qa:              #A78BFA;
+    --color-qa-subtle:       rgba(167, 139, 250, 0.10);
+    --color-qa-border:       rgba(167, 139, 250, 0.25);
+
+    /* Shadows — deeper for dark surfaces */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.24);
+    --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.28);
+    --shadow:    0 4px 16px rgba(0, 0, 0, 0.32);
+    --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.40);
+    --shadow-xl: 0 24px 60px rgba(0, 0, 0, 0.50);
+    --shadow-glow: 0 4px 12px rgba(37, 155, 110, 0.20);
+  }
 }

@@ -69,21 +69,53 @@
     const drawer = document.querySelector(".nav__drawer");
     if (!nav || !toggle) return;
 
+    function closeDrawer() {
+      nav.classList.remove("is-open");
+      toggle.setAttribute("aria-expanded", "false");
+      if (drawer) drawer.classList.remove("is-open");
+      document.body.classList.remove("nav-open");
+      toggle.focus();
+    }
+
+    function openDrawer() {
+      nav.classList.add("is-open");
+      toggle.setAttribute("aria-expanded", "true");
+      if (drawer) {
+        drawer.classList.add("is-open");
+        var firstLink = drawer.querySelector("a, button");
+        if (firstLink) firstLink.focus();
+      }
+      document.body.classList.add("nav-open");
+    }
+
     toggle.addEventListener("click", () => {
-      const isOpen = nav.classList.toggle("is-open");
-      toggle.setAttribute("aria-expanded", String(isOpen));
-      if (drawer) drawer.classList.toggle("is-open", isOpen);
+      if (nav.classList.contains("is-open")) {
+        closeDrawer();
+      } else {
+        openDrawer();
+      }
     });
 
     // Close drawer when a link inside it is clicked
-    drawer &&
+    if (drawer) {
       drawer.addEventListener("click", (e) => {
-        if (e.target.closest("a")) {
-          nav.classList.remove("is-open");
-          toggle.setAttribute("aria-expanded", "false");
-          drawer.classList.remove("is-open");
-        }
+        if (e.target.closest("a")) closeDrawer();
       });
+    }
+
+    // Close on Escape key
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && nav.classList.contains("is-open")) {
+        closeDrawer();
+      }
+    });
+
+    // Close when clicking outside the nav (on page content behind drawer)
+    document.addEventListener("click", (e) => {
+      if (nav.classList.contains("is-open") && !e.target.closest(".nav")) {
+        closeDrawer();
+      }
+    });
   }
 
   /* ------------------------------------------------------------------
@@ -130,10 +162,18 @@
     const b = base();
 
     // Phase A — load partials and translations in parallel
+    // Individual .catch() prevents one failure from blocking the others
     await Promise.all([
-      injectPartial('[data-partial="nav"]', `${b}/partials/nav.html`),
-      injectPartial('[data-partial="footer"]', `${b}/partials/footer.html`),
-      window.i18n.init(), // loads translations; does NOT touch DOM yet
+      injectPartial('[data-partial="nav"]', `${b}/partials/nav.html`).catch(
+        (e) => console.error("partials: nav load failed", e),
+      ),
+      injectPartial(
+        '[data-partial="footer"]',
+        `${b}/partials/footer.html`,
+      ).catch((e) => console.error("partials: footer load failed", e)),
+      window.i18n
+        .init()
+        .catch((e) => console.error("partials: i18n init failed", e)),
     ]);
 
     // Phase B — apply translations to entire DOM (including fresh partials)
