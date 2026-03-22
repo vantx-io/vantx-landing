@@ -8,6 +8,7 @@
   <meta name="theme-color" content="#1A1917" media="(prefers-color-scheme: dark)">
 
   <title>Vantx — Performance Engineering · Observability · Fractional SRE</title>
+  <link rel="canonical" href="https://vantx.io/">
 
   <!-- Preconnect to third-party origins (DNS + TCP + TLS ahead of time) -->
   <link rel="dns-prefetch" href="https://www.googletagmanager.com">
@@ -43,6 +44,7 @@
   <script defer src="./js/i18n.js"></script>
   <script defer src="./js/partials.js"></script>
   <script defer src="./js/calendly.js"></script>
+  <script defer src="./js/reveal.js"></script>
 
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-VMTZXQG4HX"></script>
@@ -51,6 +53,134 @@
     function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
     gtag('config', 'G-VMTZXQG4HX');
+  </script>
+  <script defer src="./js/analytics.js"></script>
+
+  <!-- Structured Data — Organization + Services (SEO + AEO) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Vantx",
+    "url": "https://vantx.io",
+    "logo": "https://vantx.io/img/vantx-logo-horizontal-white.webp",
+    "email": "hello@vantx.io",
+    "description": "Managed performance engineering, observability, and fractional SRE at startup speed. Flat monthly subscription, 100% open-source stack.",
+    "priceRange": "$2,995 – $7,995/month",
+    "areaServed": ["US", "MX", "CO", "AR", "BR", "CL", "PE", "ES"],
+    "knowsAbout": ["Performance Engineering", "Load Testing", "Site Reliability Engineering", "Observability", "OpenTelemetry", "k6", "Grafana"],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Services",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Performance as a Service",
+            "description": "Continuous load testing, synthetic monitoring 24/7, and monthly capacity planning.",
+            "url": "https://vantx.io/services/performance.html"
+          },
+          "price": "5995",
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": "5995",
+            "priceCurrency": "USD",
+            "unitText": "month"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Performance Checkup",
+            "description": "5-day assessment: capacity baseline, load test, performance audit, and a prioritized action plan.",
+            "url": "https://vantx.io/services/performance.html"
+          },
+          "price": "2995",
+          "priceCurrency": "USD"
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Observability as a Service",
+            "description": "Managed observability: instrumentation, dashboards, SLOs, and alert tuning. Diagnose any incident in 30 seconds.",
+            "url": "https://vantx.io/services/observability.html"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Fractional SRE",
+            "description": "Senior SRE embedded in your team. Incident command, post-mortems, reliability roadmap.",
+            "url": "https://vantx.io/services/fractional-sre.html"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Fractional QA Tech Lead",
+            "description": "Test strategy, automation framework, CI/CD gates, and mentoring for engineering teams.",
+            "url": "https://vantx.io/services/qa-tech-lead.html"
+          }
+        }
+      ]
+    }
+  }
+  </script>
+
+  <!-- FAQ Structured Data (rich results in Google) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How does the subscription work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Pick a service, subscribe, we start. Flat monthly rate. No hourly tracking, no surprise invoices. Pause or cancel anytime."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is there a long-term contract?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Month-to-month. Cancel anytime. No lock-in, no exit fees."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How fast do you start delivering?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Most services are activated within the first week. Ongoing deliverables follow a clear weekly and monthly cadence."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Who works on my systems?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A dedicated team of senior specialists in performance, SRE, DevOps, and QA — augmented by AI agents. Not outsourced, not rotated."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do we communicate?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "100% async by default. Slack for questions, Loom for walkthroughs, PDF for reports. Video calls only when they add real value."
+        }
+      }
+    ]
+  }
   </script>
 </head>
 
@@ -92,16 +222,16 @@ Your team doesn't know why.</span>
           </h1>
 
           <p class="hero__sub" data-i18n="hero.subheadline">
-            Vantx is your external performance and SRE team. We run your monitoring, load testing, and observability — so your engineers can focus on shipping.
+            Your external performance and SRE team. We run monitoring, load testing, and observability — so your engineers focus on shipping.
           </p>
 
           <div class="hero__actions">
+            <a href="https://buy.stripe.com/test_00wfZi8Pu4th2AFcqpgEg00" class="btn btn--primary btn--lg" data-i18n="cta_section.cta_join">Start Today</a>
             <button
-              class="btn btn--primary btn--lg js-calendly-trigger"
+              class="btn btn--outline btn--lg js-calendly-trigger"
               type="button"
-              data-i18n="hero.cta_primary"
+              data-i18n="cta_section.cta_secondary"
             >Book a Call</button>
-            <a href="#services" class="btn btn--outline btn--lg" data-i18n="hero.cta_secondary">Explore Services</a>
           </div>
 
         </div><!-- /.hero__inner -->
@@ -113,7 +243,7 @@ Your team doesn't know why.</span>
          ================================================================ -->
     <section class="credibility section section--compact" aria-label="Credibility">
       <div class="container">
-        <p class="credibility__summary" data-i18n="credibility.summary">6+ specialists across Performance, SRE, DevOps, and QA. 10+ years of experience. 100% open-source — zero vendor lock-in.</p>
+        <p class="credibility__summary" data-i18n="credibility.summary">10+ years in performance engineering and SRE. 100% open-source stack — k6, Grafana, OpenTelemetry. Everything we build is yours.</p>
       </div>
     </section>
 
@@ -179,16 +309,14 @@ Your team doesn't know why.</span>
           <!-- Performance as a Service — the ONE available subscription -->
           <article class="svc-card svc-card--performance">
             <span class="svc-card__tag" data-i18n="services.performance.tag">Performance as a Service</span>
-            <h3 class="svc-card__headline" data-i18n="services.performance.headline">Know your limits before your users do.</h3>
+            <h3 class="svc-card__headline"><a href="./services/performance.html" class="svc-card__headline-link" data-i18n="services.performance.headline">Know your limits before your users do.</a></h3>
             <p class="svc-card__desc" data-i18n="services.performance.description">
-              Continuous load testing, synthetic monitoring 24/7, RUM from real browsers, and monthly performance evaluations. Real data every week — not a one-off test before a release.
+              Continuous load testing, synthetic monitoring 24/7, and monthly capacity planning. Real data every week — not a one-off test before a release.
             </p>
             <ul class="svc-card__features" aria-label="Features">
               <li data-i18n="services.performance.features.0">Measured capacity baseline (Max TPS, breakpoint, p95)</li>
               <li data-i18n="services.performance.features.1">Uptime + synthetic monitoring 24/7</li>
-              <li data-i18n="services.performance.features.2">RUM + JS error tracking (50K sessions included)</li>
-              <li data-i18n="services.performance.features.3">Weekly Lighthouse + Core Web Vitals</li>
-              <li data-i18n="services.performance.features.4">Monthly load test + capacity planning report</li>
+              <li data-i18n="services.performance.features.2">Monthly load test + capacity planning report</li>
             </ul>
             <div class="svc-card__footer">
               <div class="svc-card__price">
@@ -197,7 +325,6 @@ Your team doesn't know why.</span>
               </div>
               <div class="svc-card__footer-actions">
                 <a href="https://buy.stripe.com/test_00wfZi8Pu4th2AFcqpgEg00" class="btn btn--primary btn--sm" data-i18n="cta_section.cta_join">Start Today</a>
-                <a href="./services/performance.html" class="btn btn--outline btn--sm" data-i18n="services.learn_more">Learn More</a>
               </div>
             </div>
 
@@ -222,49 +349,34 @@ Your team doesn't know why.</span>
 
         </div><!-- /.services__grid -->
 
-        <!-- Other services — waitlist -->
-        <p class="services__waitlist">
-          <span data-i18n="services.waitlist_prefix">Also available:</span>
-          <a href="./services/observability.html" data-i18n="services.observability.tag">Observability as a Service</a>,
-          <a href="./services/fractional-sre.html" data-i18n="services.sre.tag">Fractional SRE</a>,
-          <a href="./services/qa-tech-lead.html" data-i18n="services.qa.tag">Fractional QA Tech Lead</a>
-          — <button class="services__waitlist-btn js-calendly-trigger" type="button" data-i18n="services.waitlist_cta">book a call to get started</button>
-        </p>
+        <!-- Other services — compact rows -->
+        <div class="services__also">
+          <p class="services__also-label" data-i18n="services.waitlist_prefix">Also available:</p>
+          <ul class="services__also-list">
+            <li class="services__also-row services__also-row--obs">
+              <div class="services__also-info">
+                <a href="./services/observability.html" class="services__also-name" data-i18n="services.observability.tag">Observability as a Service</a>
+                <span class="services__also-desc" data-i18n="services.observability.short_desc">Diagnose any incident in 30 seconds. Alerts your team trusts, dashboards that answer questions, telemetry bill reduced 30–50%.</span>
+              </div>
+              <button class="btn btn--outline btn--sm js-calendly-trigger" type="button" data-i18n="hero.cta_primary">Book a Call</button>
+            </li>
+            <li class="services__also-row services__also-row--sre">
+              <div class="services__also-info">
+                <a href="./services/fractional-sre.html" class="services__also-name" data-i18n="services.sre.tag">Fractional SRE</a>
+                <span class="services__also-desc" data-i18n="services.sre.short_desc">Senior SRE embedded in your team. Incident command, post-mortems, reliability roadmap — $150K expertise at a flat monthly rate.</span>
+              </div>
+              <button class="btn btn--outline btn--sm js-calendly-trigger" type="button" data-i18n="hero.cta_primary">Book a Call</button>
+            </li>
+            <li class="services__also-row services__also-row--qa">
+              <div class="services__also-info">
+                <a href="./services/qa-tech-lead.html" class="services__also-name" data-i18n="services.qa.tag">Fractional QA Tech Lead</a>
+                <span class="services__also-desc" data-i18n="services.qa.short_desc">Your team ships fast — now make it safe. Test strategy, automation framework, CI/CD gates, and mentoring.</span>
+              </div>
+              <button class="btn btn--outline btn--sm js-calendly-trigger" type="button" data-i18n="hero.cta_primary">Book a Call</button>
+            </li>
+          </ul>
+        </div>
       </div><!-- /.container -->
-    </section>
-
-    <!-- ================================================================
-         Process — How we start
-         ================================================================ -->
-    <section class="process section" id="process" aria-labelledby="process-heading">
-      <div class="container">
-        <div class="section-header">
-          <h2 id="process-heading" class="section-title" data-i18n="process.heading">How we start</h2>
-          <p class="section-sub" data-i18n="process.subheading">From first call to first results in under two weeks.</p>
-        </div>
-        <div class="process__steps">
-          <div class="process__step">
-            <span class="process__step-num">1</span>
-            <h3 class="process__step-title" data-i18n="process.steps.0.title">Book a call</h3>
-            <p class="process__step-body" data-i18n="process.steps.0.body">15-minute intro. We understand your stack, your pain, and whether we're a fit.</p>
-          </div>
-          <div class="process__step">
-            <span class="process__step-num">2</span>
-            <h3 class="process__step-title" data-i18n="process.steps.1.title">Mutual NDA</h3>
-            <p class="process__step-body" data-i18n="process.steps.1.body">Before we access anything, we sign a mutual NDA to protect your systems and data.</p>
-          </div>
-          <div class="process__step">
-            <span class="process__step-num">3</span>
-            <h3 class="process__step-title" data-i18n="process.steps.2.title">Kickoff + access</h3>
-            <p class="process__step-body" data-i18n="process.steps.2.body">You grant access to monitoring, repos, and Slack. We define priorities and first deliverables.</p>
-          </div>
-          <div class="process__step">
-            <span class="process__step-num">4</span>
-            <h3 class="process__step-title" data-i18n="process.steps.3.title">First results in 5 days</h3>
-            <p class="process__step-body" data-i18n="process.steps.3.body">Capacity baseline, dashboards, or audit — real data from day one.</p>
-          </div>
-        </div>
-      </div>
     </section>
 
     <!-- ================================================================
@@ -368,7 +480,7 @@ Your team doesn't know why.</span>
         <div class="cta-section__inner">
           <h2 id="cta-heading" class="cta-section__heading" data-i18n="cta_section.heading">Ready to stop guessing?</h2>
           <p class="cta-section__sub" data-i18n="cta_section.subheading">
-            Tell us about your system. We'll review it and show you exactly what we'd change first.
+            Start a subscription today, or book a 15-minute call — we'll review your architecture and show you exactly where it breaks under load.
           </p>
           <div class="cta-section__actions">
             <a href="https://buy.stripe.com/test_00wfZi8Pu4th2AFcqpgEg00" class="btn btn--primary btn--lg" data-i18n="cta_section.cta_join">Start Today</a>
@@ -389,6 +501,12 @@ Your team doesn't know why.</span>
 
   <!-- Footer partial injected here -->
   <div data-partial="footer"></div>
+
+  <!-- Console greeting for curious developers -->
+  <script>
+  console.log('%cVantx','font-size:20px;font-weight:bold;color:#1B6B4A',
+    '\nPerformance engineering, at startup speed.\nCurious? hello@vantx.io');
+  </script>
 
   <!-- Geo-detect LATAM visitors via Cloudflare trace (free, no external API) -->
   <script>

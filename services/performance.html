@@ -5,16 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" data-i18n-attr="content:perf_page.meta_description" content="Managed performance engineering: continuous load testing, synthetic monitoring, web performance tracking, and capacity planning. Know your limits before your users do.">
   <title data-i18n="perf_page.meta_title">Performance as a Service — Vantx</title>
+  <link rel="canonical" href="https://vantx.io/services/performance.html">
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="../img/apple-touch-icon.png">
+  <meta name="theme-color" content="#F8F7F4" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1A1917" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Performance as a Service — Vantx">
+  <meta property="og:description" content="Managed performance engineering: continuous load testing, synthetic monitoring, web performance tracking, and capacity planning. Know your limits before your users do.">
+  <meta property="og:url" content="https://vantx.io/services/performance.html">
   <meta property="og:image" content="https://vantx.io/img/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
 
+  <!-- Preconnect to third-party origins (DNS + TCP + TLS ahead of time) -->
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+  <link rel="preconnect" href="https://assets.calendly.com" crossorigin>
+  <link rel="preconnect" href="https://buy.stripe.com" crossorigin>
+
   <!-- Fonts — self-hosted, eliminates 2 cross-origin roundtrips -->
-  <link rel="preload" href="../fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
+  <link rel="preload" href="../fonts/jb-mono-latin.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
   <link rel="stylesheet" href="../css/fonts.css">
 
   <!-- Design system — paths use ../ because this page is one level deep -->
@@ -27,6 +40,7 @@
   <script defer src="../js/i18n.js"></script>
   <script defer src="../js/partials.js"></script>
   <script defer src="../js/calendly.js"></script>
+  <script defer src="../js/reveal.js"></script>
 
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-VMTZXQG4HX"></script>
@@ -35,6 +49,63 @@
     function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
     gtag('config', 'G-VMTZXQG4HX');
+  </script>
+  <script defer src="../js/analytics.js"></script>
+
+  <!-- Structured Data — Service + FAQ (SEO + AEO) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Performance as a Service",
+    "provider": { "@type": "Organization", "name": "Vantx", "url": "https://vantx.io" },
+    "description": "Continuous load testing, synthetic monitoring 24/7, monthly capacity planning, web performance tracking, and real-time Grafana dashboards. Know your limits before your users do.",
+    "url": "https://vantx.io/services/performance.html",
+    "offers": [
+      {
+        "@type": "Offer",
+        "name": "Performance as a Service — Monthly",
+        "price": "5995",
+        "priceCurrency": "USD",
+        "priceSpecification": { "@type": "UnitPriceSpecification", "price": "5995", "priceCurrency": "USD", "unitText": "month" }
+      },
+      {
+        "@type": "Offer",
+        "name": "Performance Checkup — One-time",
+        "price": "2995",
+        "priceCurrency": "USD",
+        "description": "5-day assessment: capacity baseline, load test, performance audit, and a prioritized action plan."
+      }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Do you need access to our production environment?",
+        "acceptedAnswer": { "@type": "Answer", "text": "For load testing, we only need a target URL and agreed-upon test parameters. For synthetic monitoring, we hit your public endpoints externally. No production access, no SSH keys, no credentials." }
+      },
+      {
+        "@type": "Question",
+        "name": "Will load tests affect our production traffic?",
+        "acceptedAnswer": { "@type": "Answer", "text": "We always test against staging or a dedicated environment first. For production load tests, we coordinate timing with your team and ramp traffic gradually. You approve every test before it runs." }
+      },
+      {
+        "@type": "Question",
+        "name": "What tools do you use?",
+        "acceptedAnswer": { "@type": "Answer", "text": "k6 for load testing, Grafana for dashboards, Playwright for synthetic monitoring, Lighthouse CI for web performance. All open-source. If you cancel, every script, dashboard, and config stays with you." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I start with the one-time Performance Checkup instead?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. The Checkup is a standalone 5-day engagement: capacity baseline, load test, performance audit, and an action plan. Many clients start here and upgrade to the subscription after seeing the first report." }
+      }
+    ]
+  }
   </script>
 </head>
 
@@ -94,11 +165,8 @@
          ================================================================ -->
     <section class="section section--surface" id="problem">
       <div class="container">
-        <p class="deliverables__intro" data-i18n="perf_page.problem.body_1">
-          Your '99.9% uptime' is an estimate. You haven't measured it. You don't know how much traffic your system handles before it degrades. You don't know if the last deploy made performance worse. And when Black Friday or a marketing campaign arrives, you cross your fingers.
-        </p>
-        <p class="deliverables__intro" data-i18n="perf_page.problem.body_2">
-          The problem isn't that your team can't run a load test. It's that no one has time to do it continuously — and a one-off test before a release doesn't count. We solve that with a managed capability that gives you real data every week and gets sharper every month.
+        <p class="deliverables__intro" data-i18n="perf_page.problem.body">
+          Your '99.9% uptime' is an estimate. You haven't measured it. You don't know how much traffic your system handles before it degrades, or whether the last deploy made things worse. Your team can run a load test — but no one has time to do it continuously. And a one-off test before a release doesn't count.
         </p>
       </div>
     </section>
@@ -114,7 +182,7 @@
         </div>
 
         <p class="deliverables__intro" data-i18n="perf_page.deliverables.intro">
-          Seven concrete deliverables. One outcome: you always know exactly how your system is performing — and what to do about it.
+          Six concrete deliverables. One outcome: you always know exactly how your system is performing — and what to do about it.
         </p>
 
         <!-- Deliverable 1 -->
@@ -167,6 +235,8 @@
           </div>
         </div>
 
+        <hr class="deliverable-break">
+
         <!-- Deliverable 4 -->
         <div class="deliverable">
           <div class="deliverable__num deliverable__num--blue">4</div>
@@ -214,57 +284,6 @@
               <span class="deliverable__badge" data-i18n="perf_page.deliverables.items.5.badges.2">Monthly report → PDF</span>
               <span class="deliverable__badge deliverable__badge--freq-blue" data-i18n="perf_page.deliverables.items.5.freq">Ongoing</span>
             </div>
-          </div>
-        </div>
-
-        <!-- Deliverable 7 -->
-        <div class="deliverable">
-          <div class="deliverable__num deliverable__num--blue">7</div>
-          <div>
-            <h3 class="deliverable__title" data-i18n="perf_page.deliverables.items.6.title">Async-first communication — with calls when they really matter</h3>
-            <p class="deliverable__body" data-i18n="perf_page.deliverables.items.6.body">
-              We operate 100% async by default: Slack for questions, Loom for explanations, PDF for formal reports. We include a 15-minute kick-off call to align priorities, optional 15-min calls for incidents or complex findings, and an optional monthly video walkthrough.
-            </p>
-            <div class="deliverable__badges">
-              <span class="deliverable__badge deliverable__badge--freq-blue" data-i18n="perf_page.deliverables.items.6.badges.0">Kick-off: 15 min video call</span>
-              <span class="deliverable__badge deliverable__badge--freq-blue" data-i18n="perf_page.deliverables.items.6.badges.1">Incidents: optional 15 min call</span>
-              <span class="deliverable__badge deliverable__badge--freq-blue" data-i18n="perf_page.deliverables.items.6.badges.2">Monthly report: optional video meet</span>
-              <span class="deliverable__badge" data-i18n="perf_page.deliverables.items.6.badges.3">Slack async always</span>
-            </div>
-          </div>
-        </div>
-
-      </div><!-- /.container -->
-    </section>
-
-    <!-- ================================================================
-         Outcomes
-         ================================================================ -->
-    <section class="section section--surface" id="outcomes" aria-labelledby="outcomes-heading">
-      <div class="container">
-
-        <div class="section-header">
-          <h2 id="outcomes-heading" class="section-title" data-i18n="perf_page.outcomes.heading">The result</h2>
-        </div>
-
-        <div class="outcomes-grid">
-          <div class="outcome-card">
-            <h4 class="outcome-card__title" data-i18n="perf_page.outcomes.items.0.title">No more surprises</h4>
-            <p class="outcome-card__body" data-i18n="perf_page.outcomes.items.0.body">
-              You know your real capacity, your measured uptime, and your bottlenecks before they become incidents. Black Friday is no longer a gamble.
-            </p>
-          </div>
-          <div class="outcome-card">
-            <h4 class="outcome-card__title" data-i18n="perf_page.outcomes.items.1.title">Faster diagnosis</h4>
-            <p class="outcome-card__body" data-i18n="perf_page.outcomes.items.1.body">
-              When something degrades, you have dashboards with real data, historical trending, and a team that already knows your system.
-            </p>
-          </div>
-          <div class="outcome-card">
-            <h4 class="outcome-card__title" data-i18n="perf_page.outcomes.items.2.title">A system that improves every month</h4>
-            <p class="outcome-card__body" data-i18n="perf_page.outcomes.items.2.body">
-              Not a report that gets filed. A cycle: measure → find → prioritize → implement → validate. Every month the baseline rises.
-            </p>
           </div>
         </div>
 
@@ -347,34 +366,29 @@
       <div class="container">
 
         <div class="section-header">
-          <h2 id="faq-heading" class="section-title" data-i18n="faq.heading">Common Questions</h2>
+          <h2 id="faq-heading" class="section-title" data-i18n="perf_faq.heading">Performance Questions</h2>
         </div>
 
         <div class="faq__list">
 
           <details class="faq__item">
-            <summary class="faq__question" data-i18n="faq.items.0.q">How does the subscription work?</summary>
-            <p class="faq__answer" data-i18n="faq.items.0.a">Pick a service, subscribe, we start. Flat monthly rate. No hourly tracking, no surprise invoices. Pause or cancel anytime.</p>
+            <summary class="faq__question" data-i18n="perf_faq.items.0.q">Do you need access to our production environment?</summary>
+            <p class="faq__answer" data-i18n="perf_faq.items.0.a">For load testing, we only need a target URL and agreed-upon test parameters. For synthetic monitoring, we hit your public endpoints externally. No production access, no SSH keys, no credentials.</p>
           </details>
 
           <details class="faq__item">
-            <summary class="faq__question" data-i18n="faq.items.1.q">Is there a long-term contract?</summary>
-            <p class="faq__answer" data-i18n="faq.items.1.a">No. Month-to-month. Cancel anytime. No lock-in, no exit fees.</p>
+            <summary class="faq__question" data-i18n="perf_faq.items.1.q">Will load tests affect our production traffic?</summary>
+            <p class="faq__answer" data-i18n="perf_faq.items.1.a">We always test against staging or a dedicated environment first. For production load tests, we coordinate timing with your team and ramp traffic gradually. You approve every test before it runs.</p>
           </details>
 
           <details class="faq__item">
-            <summary class="faq__question" data-i18n="faq.items.2.q">How fast do you start delivering?</summary>
-            <p class="faq__answer" data-i18n="faq.items.2.a">Most services are activated within the first week. Ongoing deliverables follow a clear weekly and monthly cadence.</p>
+            <summary class="faq__question" data-i18n="perf_faq.items.2.q">What tools do you use?</summary>
+            <p class="faq__answer" data-i18n="perf_faq.items.2.a">k6 for load testing, Grafana for dashboards, Playwright for synthetic monitoring, Lighthouse CI for web performance. All open-source. If you cancel, every script, dashboard, and config stays with you.</p>
           </details>
 
           <details class="faq__item">
-            <summary class="faq__question" data-i18n="faq.items.3.q">Who works on my systems?</summary>
-            <p class="faq__answer" data-i18n="faq.items.3.a">A senior engineer with 10+ years of experience in performance, observability, and SRE. Not outsourced, not rotated.</p>
-          </details>
-
-          <details class="faq__item">
-            <summary class="faq__question" data-i18n="faq.items.4.q">How do we communicate?</summary>
-            <p class="faq__answer" data-i18n="faq.items.4.a">100% async by default. Slack for questions, Loom for walkthroughs, PDF for reports. Video calls only when they add real value.</p>
+            <summary class="faq__question" data-i18n="perf_faq.items.3.q">Can I start with the one-time Performance Checkup instead?</summary>
+            <p class="faq__answer" data-i18n="perf_faq.items.3.a">Yes. The Checkup is a standalone 5-day engagement: capacity baseline, load test, performance audit, and an action plan. Many clients start here and upgrade to the subscription after seeing the first report.</p>
           </details>
 
         </div><!-- /.faq__list -->
@@ -388,8 +402,8 @@
       <div class="container">
         <div class="cta-section__inner">
           <h2 id="page-cta-heading" class="cta-section__heading" data-i18n="cta_section.heading">Ready to stop guessing?</h2>
-          <p class="cta-section__sub" data-i18n="cta_section.subheading">
-            Tell us about your system. We'll review it and show you exactly what we'd change first.
+          <p class="cta-section__sub" data-i18n="cta_section.sub_performance">
+            Book a 15-minute call. We'll show you your system's real capacity and exactly where it breaks under load.
           </p>
           <div class="cta-section__actions">
 

@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vantx Brand Style Guide</title>
+  <style>
+    /* Use the same fonts as the brand */
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #1A1A17;
+      background: #F8F7F4;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page { max-width: 900px; margin: 0 auto; padding: 80px 24px; }
+
+    /* Header */
+    .guide-header { margin-bottom: 80px; border-bottom: 1px solid rgba(0,0,0,0.08); padding-bottom: 48px; }
+    .guide-header h1 { font-size: 36px; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 8px; }
+    .guide-header p { font-size: 16px; color: #5C5C56; max-width: 540px; }
+    .guide-header .version { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6B6B64; margin-top: 16px; }
+
+    /* Sections */
+    section { margin-bottom: 80px; }
+    h2 { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #1B6B4A; margin-bottom: 32px; }
+    h3 { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 16px; margin-top: 40px; }
+    h3:first-of-type { margin-top: 0; }
+    p.desc { font-size: 14px; color: #5C5C56; margin-bottom: 24px; max-width: 600px; }
+
+    /* Color swatches */
+    .colors { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
+    .swatch { border-radius: 12px; overflow: hidden; border: 1px solid rgba(0,0,0,0.08); }
+    .swatch__color { height: 80px; }
+    .swatch__info { padding: 12px; background: #FDFCFA; }
+    .swatch__name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+    .swatch__hex { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6B6B64; }
+
+    /* Typography samples */
+    .type-sample { margin-bottom: 32px; padding: 24px; background: #FDFCFA; border: 1px solid rgba(0,0,0,0.08); border-radius: 12px; }
+    .type-sample .label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B6B64; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 12px; }
+    .type-sample .demo { color: #1A1A17; }
+    .type-sample .specs { font-size: 12px; color: #5C5C56; margin-top: 8px; }
+
+    /* Logo usage */
+    .logo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .logo-card { border-radius: 12px; padding: 48px 32px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(0,0,0,0.08); }
+    .logo-card img { max-width: 200px; height: auto; }
+    .logo-card--dark { background: #1A1917; }
+    .logo-card--light { background: #F8F7F4; }
+    .logo-card--light img { filter: brightness(0); }
+    .logo-card--green { background: #1B6B4A; }
+    .logo-card--surface { background: #FDFCFA; }
+    .logo-card--surface img { filter: brightness(0); }
+
+    /* Spacing scale */
+    .spacing-row { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
+    .spacing-bar { height: 24px; background: rgba(27, 107, 74, 0.15); border-radius: 4px; }
+    .spacing-label { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #5C5C56; min-width: 80px; }
+
+    /* Do/Don't */
+    .rules { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .rule { padding: 20px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.08); }
+    .rule--do { border-left: 3px solid #16A34A; }
+    .rule--dont { border-left: 3px solid #DC2626; }
+    .rule__label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+    .rule--do .rule__label { color: #16A34A; }
+    .rule--dont .rule__label { color: #DC2626; }
+    .rule__text { font-size: 14px; color: #5C5C56; }
+
+    /* Table */
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th { text-align: left; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #6B6B64; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.08); }
+    td { padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.04); color: #5C5C56; }
+    td:first-child { font-weight: 600; color: #1A1A17; }
+    td code { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: rgba(0,0,0,0.04); padding: 2px 6px; border-radius: 4px; }
+
+    /* Print */
+    @media print {
+      body { background: white; }
+      .page { padding: 40px 0; }
+      section { break-inside: avoid; }
+    }
+
+    @media (max-width: 600px) {
+      .logo-grid, .rules { grid-template-columns: 1fr; }
+      .colors { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <header class="guide-header">
+    <h1>Vantx Brand Style Guide</h1>
+    <p>Reference for documents, presentations, proposals, and any branded material outside the website. All values match the web design system.</p>
+    <div class="version">v1.0 &mdash; March 2026</div>
+  </header>
+
+  <!-- =================================================================
+       1. LOGO
+       ================================================================= -->
+  <section>
+    <h2>Logo</h2>
+    <p class="desc">The Vantx logo consists of a geometric hexagonal mark and the wordmark "VANTX" in DM Sans Bold. Always use the provided assets &mdash; never recreate or modify the logo.</p>
+
+    <h3>Primary usage</h3>
+    <div class="logo-grid">
+      <div class="logo-card logo-card--dark">
+        <img src="../img/vantx-logo-horizontal-white-sm.png" alt="Vantx logo white on dark">
+      </div>
+      <div class="logo-card logo-card--light">
+        <img src="../img/vantx-logo-horizontal-white-sm.png" alt="Vantx logo dark on light">
+      </div>
+    </div>
+    <p class="desc" style="margin-top:16px">
+      <strong>White version</strong> &mdash; use on dark backgrounds (#1A1917 or darker).<br>
+      <strong>Dark version</strong> &mdash; use on light backgrounds (#F8F7F4 or lighter). Currently rendered via CSS filter; a native dark asset (logomark in #1B6B4A, wordmark in #1A1A17) is pending.
+    </p>
+
+    <h3>On brand green</h3>
+    <div class="logo-grid">
+      <div class="logo-card logo-card--green">
+        <img src="../img/vantx-logo-horizontal-white-sm.png" alt="Vantx logo on green">
+      </div>
+      <div class="logo-card logo-card--surface">
+        <img src="../img/vantx-logo-horizontal-white-sm.png" alt="Vantx logo on off-white">
+      </div>
+    </div>
+
+    <h3>Clear space &amp; minimum size</h3>
+    <p class="desc">Maintain clear space equal to the height of the "V" letterform on all sides. Minimum width: 100px for digital, 25mm for print.</p>
+
+    <h3>Logo don'ts</h3>
+    <div class="rules">
+      <div class="rule rule--dont"><div class="rule__label">Don't</div><div class="rule__text">Rotate, skew, or distort the logo</div></div>
+      <div class="rule rule--dont"><div class="rule__label">Don't</div><div class="rule__text">Add drop shadows, gradients, or effects</div></div>
+      <div class="rule rule--dont"><div class="rule__label">Don't</div><div class="rule__text">Place on busy backgrounds or photos without overlay</div></div>
+      <div class="rule rule--dont"><div class="rule__label">Don't</div><div class="rule__text">Change the logo colors (only white or dark)</div></div>
+    </div>
+
+    <h3 style="margin-top:40px">Pending: dark logo asset</h3>
+    <p class="desc">The site currently only has a white logo. For light backgrounds it uses a CSS <code>filter: brightness(0)</code> hack that turns it solid black. You need a proper dark version: logomark in forest green (#1B6B4A) and wordmark in near-black (#1A1A17). Export as SVG + PNG at 1x, 2x, and 3x.</p>
+  </section>
+
+  <!-- =================================================================
+       2. COLORS
+       ================================================================= -->
+  <section>
+    <h2>Colors</h2>
+
+    <h3>Core palette</h3>
+    <p class="desc">The Vantx palette is warm, not cold. Backgrounds are parchment, not white. Grays are warm, not blue-gray.</p>
+
+    <div class="colors">
+      <div class="swatch">
+        <div class="swatch__color" style="background:#1B6B4A"></div>
+        <div class="swatch__info"><div class="swatch__name">Forest Green (Primary)</div><div class="swatch__hex">#1B6B4A</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__color" style="background:#155A3E"></div>
+        <div class="swatch__info"><div class="swatch__name">Green Hover</div><div class="swatch__hex">#155A3E</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__color" style="background:#1A1A17"></div>
+        <div class="swatch__info"><div class="swatch__name">Near Black (Text)</div><div class="swatch__hex">#1A1A17</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__color" style="background:#5C5C56"></div>
+        <div class="swatch__info"><div class="swatch__name">Warm Gray (Secondary text)</div><div class="swatch__hex">#5C5C56</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__color" style="background:#F8F7F4"></div>
+        <div class="swatch__info"><div class="swatch__name">Parchment (Background)</div><div class="swatch__hex">#F8F7F4</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__color" style="background:#FDFCFA"></div>
+        <div class="swatch__info"><div class="swatch__name">Off-White (Surface)</div><div class="swatch__hex">#FDFCFA</div></div>
+      </div>
+    </div>
+
+    <h3>Dark mode</h3>
+    <div class="colors">
+      <div class="swatch">
+        <div class="swatch__color" style="background:#1A1917"></div>
+        <div class="swatch__info"><div class="swatch__name">Dark Background</div><div class="swatch__hex">#1A1917</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__color" style="background:#242320"></div>
+        <div class="swatch__info"><div class="swatch__name">Dark Surface</div><div class="swatch__hex">#242320</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__color" style="background:#259B6E"></div>
+        <div class="swatch__info"><div class="swatch__name">Green (Dark mode)</div><div class="swatch__hex">#259B6E</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__color" style="background:#EDECE7"></div>
+        <div class="swatch__info"><div class="swatch__name">Off-White Text</div><div class="swatch__hex">#EDECE7</div></div>
+      </div>
+    </div>
+
+    <h3>Service colors</h3>
+    <p class="desc">Each service line has a dedicated accent color for differentiation.</p>
+    <div class="colors">
+      <div class="swatch">
+        <div class="swatch__color" style="background:#2563EB"></div>
+        <div class="swatch__info"><div class="swatch__name">Performance (Blue)</div><div class="swatch__hex">#2563EB</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__color" style="background:#0D9488"></div>
+        <div class="swatch__info"><div class="swatch__name">Observability (Teal)</div><div class="swatch__hex">#0D9488</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__color" style="background:#D97706"></div>
+        <div class="swatch__info"><div class="swatch__name">Fractional SRE (Amber)</div><div class="swatch__hex">#D97706</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__color" style="background:#7C3AED"></div>
+        <div class="swatch__info"><div class="swatch__name">QA Tech Lead (Purple)</div><div class="swatch__hex">#7C3AED</div></div>
+      </div>
+    </div>
+
+    <h3>Semantic colors</h3>
+    <div class="colors">
+      <div class="swatch">
+        <div class="swatch__color" style="background:#16A34A"></div>
+        <div class="swatch__info"><div class="swatch__name">Success</div><div class="swatch__hex">#16A34A</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__color" style="background:#D97706"></div>
+        <div class="swatch__info"><div class="swatch__name">Warning</div><div class="swatch__hex">#D97706</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__color" style="background:#DC2626"></div>
+        <div class="swatch__info"><div class="swatch__name">Danger / Error</div><div class="swatch__hex">#DC2626</div></div>
+      </div>
+    </div>
+
+    <h3>Color usage rules</h3>
+    <div class="rules">
+      <div class="rule rule--do"><div class="rule__label">Do</div><div class="rule__text">Use forest green (#1B6B4A) as primary accent for CTAs, links, highlights</div></div>
+      <div class="rule rule--do"><div class="rule__label">Do</div><div class="rule__text">Use parchment (#F8F7F4) as the default background, not pure white</div></div>
+      <div class="rule rule--dont"><div class="rule__label">Don't</div><div class="rule__text">Use service colors (blue, teal, amber, purple) for general brand materials &mdash; they're for service-specific contexts only</div></div>
+      <div class="rule rule--dont"><div class="rule__label">Don't</div><div class="rule__text">Use cool grays, blue-grays, or pure black (#000). The Vantx palette is warm throughout</div></div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       3. TYPOGRAPHY
+       ================================================================= -->
+  <section>
+    <h2>Typography</h2>
+
+    <h3>Font families</h3>
+    <table>
+      <thead><tr><th>Role</th><th>Font</th><th>Fallback</th><th>Usage</th></tr></thead>
+      <tbody>
+        <tr><td>Primary</td><td><code>DM Sans</code></td><td>-apple-system, sans-serif</td><td>All body text, headings, UI</td></tr>
+        <tr><td>Mono</td><td><code>JetBrains Mono</code></td><td>Fira Code, monospace</td><td>Prices, data, code, badges, step numbers</td></tr>
+      </tbody>
+    </table>
+    <p class="desc" style="margin-top:12px">For Google Slides/Docs, use <strong>DM Sans</strong> (available on Google Fonts). For monospace data, use <strong>JetBrains Mono</strong> or <strong>Roboto Mono</strong> as fallback.</p>
+
+    <h3>Type scale</h3>
+
+    <div class="type-sample">
+      <div class="label">Display / Hero headline</div>
+      <div class="demo" style="font-size:48px;font-weight:700;letter-spacing:-0.04em;line-height:1.05">Your systems are slow.</div>
+      <div class="specs">48&ndash;84px &middot; Bold (700) &middot; Tracking: -0.04em &middot; Line height: 1.05</div>
+    </div>
+
+    <div class="type-sample">
+      <div class="label">Section heading (h2)</div>
+      <div class="demo" style="font-size:30px;font-weight:700;letter-spacing:-0.03em;line-height:1.15">What we deliver</div>
+      <div class="specs">24&ndash;48px (fluid) &middot; Bold (700) &middot; Tracking: -0.03em &middot; Line height: 1.15</div>
+    </div>
+
+    <div class="type-sample">
+      <div class="label">Card / subsection heading (h3)</div>
+      <div class="demo" style="font-size:20px;font-weight:700;letter-spacing:-0.02em;line-height:1.375">Know your limits before your users do.</div>
+      <div class="specs">20px &middot; Bold (700) &middot; Tracking: -0.02em &middot; Line height: 1.375</div>
+    </div>
+
+    <div class="type-sample">
+      <div class="label">Body text</div>
+      <div class="demo" style="font-size:16px;font-weight:400;line-height:1.6;color:#5C5C56">We run your monitoring, load testing, and observability &mdash; so your engineers can focus on shipping.</div>
+      <div class="specs">16px &middot; Regular (400) &middot; Line height: 1.6 &middot; Color: #5C5C56 (muted)</div>
+    </div>
+
+    <div class="type-sample">
+      <div class="label">Small / caption</div>
+      <div class="demo" style="font-size:14px;font-weight:400;line-height:1.6;color:#5C5C56">Flat monthly rate. No hourly tracking, no surprise invoices.</div>
+      <div class="specs">14px &middot; Regular (400) &middot; Line height: 1.6</div>
+    </div>
+
+    <div class="type-sample">
+      <div class="label">Label / overline</div>
+      <div class="demo" style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#1B6B4A">Performance as a Service</div>
+      <div class="specs">12px &middot; Semibold (600) &middot; Uppercase &middot; Tracking: 0.08em &middot; Color: accent green</div>
+    </div>
+
+    <div class="type-sample">
+      <div class="label">Data / prices (monospace)</div>
+      <div class="demo" style="font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;font-variant-numeric:tabular-nums">$5,995<span style="font-size:12px;color:#6B6B64;font-weight:400">/month</span></div>
+      <div class="specs">JetBrains Mono &middot; Bold (700) &middot; Tabular numerals &middot; Period in muted color</div>
+    </div>
+
+    <h3>Typography rules</h3>
+    <div class="rules">
+      <div class="rule rule--do"><div class="rule__label">Do</div><div class="rule__text">Use negative letter-spacing on headings (-0.03 to -0.04em). Tight tracking signals premium.</div></div>
+      <div class="rule rule--do"><div class="rule__label">Do</div><div class="rule__text">Use JetBrains Mono for any data: prices, metrics, percentages, code snippets</div></div>
+      <div class="rule rule--dont"><div class="rule__label">Don't</div><div class="rule__text">Use more than 2 font weights per slide/page. Stick to Regular (400) + Bold (700)</div></div>
+      <div class="rule rule--dont"><div class="rule__label">Don't</div><div class="rule__text">Use all-caps body text. Uppercase is reserved for labels and overlines only</div></div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       4. SPACING & LAYOUT
+       ================================================================= -->
+  <section>
+    <h2>Spacing &amp; Layout</h2>
+
+    <h3>Spacing scale (4px base grid)</h3>
+    <p class="desc">All spacing uses multiples of 4px. Use these values in presentations and documents for consistent rhythm.</p>
+
+    <div style="margin-top:20px">
+      <div class="spacing-row"><span class="spacing-label">4px</span><div class="spacing-bar" style="width:4px"></div></div>
+      <div class="spacing-row"><span class="spacing-label">8px</span><div class="spacing-bar" style="width:8px"></div></div>
+      <div class="spacing-row"><span class="spacing-label">12px</span><div class="spacing-bar" style="width:12px"></div></div>
+      <div class="spacing-row"><span class="spacing-label">16px</span><div class="spacing-bar" style="width:16px"></div></div>
+      <div class="spacing-row"><span class="spacing-label">24px</span><div class="spacing-bar" style="width:24px"></div></div>
+      <div class="spacing-row"><span class="spacing-label">32px</span><div class="spacing-bar" style="width:32px"></div></div>
+      <div class="spacing-row"><span class="spacing-label">48px</span><div class="spacing-bar" style="width:48px"></div></div>
+      <div class="spacing-row"><span class="spacing-label">64px</span><div class="spacing-bar" style="width:64px"></div></div>
+      <div class="spacing-row"><span class="spacing-label">96px</span><div class="spacing-bar" style="width:96px"></div></div>
+    </div>
+
+    <h3>Border radius</h3>
+    <table>
+      <thead><tr><th>Name</th><th>Value</th><th>Usage</th></tr></thead>
+      <tbody>
+        <tr><td>Small</td><td><code>4px</code></td><td>Small buttons, badges</td></tr>
+        <tr><td>Medium</td><td><code>8px</code></td><td>Buttons, inputs, small cards</td></tr>
+        <tr><td>Large</td><td><code>12px</code></td><td>Cards, panels</td></tr>
+        <tr><td>XL</td><td><code>16px</code></td><td>Large cards, modals</td></tr>
+        <tr><td>Full</td><td><code>9999px</code></td><td>Pills, badges, avatars</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Content width</h3>
+    <table>
+      <thead><tr><th>Element</th><th>Max width</th></tr></thead>
+      <tbody>
+        <tr><td>Page container</td><td><code>1100px</code></td></tr>
+        <tr><td>Content body text</td><td><code>650px</code></td></tr>
+        <tr><td>Hero inner</td><td><code>820px</code></td></tr>
+        <tr><td>CTA section</td><td><code>640px</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- =================================================================
+       5. VOICE & TONE
+       ================================================================= -->
+  <section>
+    <h2>Voice &amp; Tone</h2>
+
+    <h3>Brand personality</h3>
+    <p class="desc">Vantx sounds like a senior engineer who happens to be good at explaining things. Technical, direct, specific &mdash; but never condescending.</p>
+
+    <div class="rules">
+      <div class="rule rule--do"><div class="rule__label">Do</div><div class="rule__text"><strong>Be specific.</strong> "CREATE INDEX idx_x ON settlements(merchant_id)" not "consider optimizing the database"</div></div>
+      <div class="rule rule--do"><div class="rule__label">Do</div><div class="rule__text"><strong>Use data.</strong> "p95 latency dropped from 1.2s to 340ms" not "we improved performance significantly"</div></div>
+      <div class="rule rule--do"><div class="rule__label">Do</div><div class="rule__text"><strong>Be direct.</strong> "Flat monthly rate. Cancel anytime." not "We offer flexible subscription options"</div></div>
+      <div class="rule rule--do"><div class="rule__label">Do</div><div class="rule__text"><strong>Name the pain.</strong> "Alerts firing at 3 AM" not "Operational challenges"</div></div>
+    </div>
+
+    <div class="rules" style="margin-top:16px">
+      <div class="rule rule--dont"><div class="rule__label">Don't</div><div class="rule__text">Use hourly language. Never "per hour", "hourly rate", "X hours/month". The model is flat monthly subscription.</div></div>
+      <div class="rule rule--dont"><div class="rule__label">Don't</div><div class="rule__text">Use corporate filler: "leverage", "synergy", "best-in-class", "cutting-edge", "innovative solution"</div></div>
+      <div class="rule rule--dont"><div class="rule__label">Don't</div><div class="rule__text">Be vague. Every claim needs a number, an example, or a deliverable behind it.</div></div>
+      <div class="rule rule--dont"><div class="rule__label">Don't</div><div class="rule__text">Oversell. "We help your system handle more traffic" not "We 10x your revenue"</div></div>
+    </div>
+
+    <h3>Key phrases</h3>
+    <table>
+      <thead><tr><th>Use</th><th>Avoid</th></tr></thead>
+      <tbody>
+        <tr><td>"Flat monthly rate"</td><td>"Competitive pricing"</td></tr>
+        <tr><td>"Cancel anytime"</td><td>"Flexible terms"</td></tr>
+        <tr><td>"The data shows"</td><td>"We believe"</td></tr>
+        <tr><td>"Managed capability"</td><td>"Managed service" (too generic)</td></tr>
+        <tr><td>"Senior specialists"</td><td>"World-class team"</td></tr>
+        <tr><td>"Open-source, no vendor lock-in"</td><td>"Industry-leading technology"</td></tr>
+        <tr><td>"100% async by default"</td><td>"We're always available"</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- =================================================================
+       6. PRESENTATION TEMPLATES
+       ================================================================= -->
+  <section>
+    <h2>Presentation &amp; Document Guidelines</h2>
+
+    <h3>Slide backgrounds</h3>
+    <div class="colors" style="grid-template-columns: repeat(3, 1fr);">
+      <div class="swatch">
+        <div class="swatch__color" style="background:#F8F7F4; height:100px; display:flex; align-items:center; justify-content:center; font-size:13px; color:#5C5C56">Default slide</div>
+        <div class="swatch__info"><div class="swatch__name">Parchment</div><div class="swatch__hex">#F8F7F4</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__color" style="background:#1A1917; height:100px; display:flex; align-items:center; justify-content:center; font-size:13px; color:#EDECE7">Section divider</div>
+        <div class="swatch__info"><div class="swatch__name">Near Black</div><div class="swatch__hex">#1A1917</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch__color" style="background:#1B6B4A; height:100px; display:flex; align-items:center; justify-content:center; font-size:13px; color:#FFFFFF">CTA / highlight</div>
+        <div class="swatch__info"><div class="swatch__name">Forest Green</div><div class="swatch__hex">#1B6B4A</div></div>
+      </div>
+    </div>
+
+    <h3>Document formatting</h3>
+    <table>
+      <thead><tr><th>Element</th><th>Font</th><th>Size</th><th>Weight</th><th>Color</th></tr></thead>
+      <tbody>
+        <tr><td>Slide title</td><td>DM Sans</td><td>36&ndash;48px</td><td>Bold</td><td>#1A1A17</td></tr>
+        <tr><td>Section label</td><td>DM Sans</td><td>12px</td><td>Semibold, uppercase</td><td>#1B6B4A</td></tr>
+        <tr><td>Body text</td><td>DM Sans</td><td>16&ndash;18px</td><td>Regular</td><td>#5C5C56</td></tr>
+        <tr><td>Data / metrics</td><td>JetBrains Mono</td><td>24&ndash;48px</td><td>Bold</td><td>#1A1A17</td></tr>
+        <tr><td>Footnote / caption</td><td>DM Sans</td><td>12px</td><td>Regular</td><td>#6B6B64</td></tr>
+      </tbody>
+    </table>
+
+    <h3>General rules</h3>
+    <div class="rules">
+      <div class="rule rule--do"><div class="rule__label">Do</div><div class="rule__text">Use parchment (#F8F7F4) as the default slide background, not white</div></div>
+      <div class="rule rule--do"><div class="rule__label">Do</div><div class="rule__text">Place the logo in the bottom-left or top-left corner of every slide</div></div>
+      <div class="rule rule--do"><div class="rule__label">Do</div><div class="rule__text">Use generous whitespace. If it looks empty, it's probably right.</div></div>
+      <div class="rule rule--dont"><div class="rule__label">Don't</div><div class="rule__text">Use more than 3 colors per slide (background + text + 1 accent)</div></div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       7. QUICK REFERENCE
+       ================================================================= -->
+  <section>
+    <h2>Quick Copy-Paste Reference</h2>
+
+    <h3>Brand essentials</h3>
+    <table>
+      <thead><tr><th>Property</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Brand name</td><td>Vantx (capital V, lowercase antx)</td></tr>
+        <tr><td>Domain</td><td>vantx.io</td></tr>
+        <tr><td>Email</td><td>hello@vantx.io</td></tr>
+        <tr><td>Primary font</td><td>DM Sans</td></tr>
+        <tr><td>Mono font</td><td>JetBrains Mono</td></tr>
+        <tr><td>Primary green</td><td>#1B6B4A</td></tr>
+        <tr><td>Background</td><td>#F8F7F4</td></tr>
+        <tr><td>Text primary</td><td>#1A1A17</td></tr>
+        <tr><td>Text secondary</td><td>#5C5C56</td></tr>
+        <tr><td>Dark background</td><td>#1A1917</td></tr>
+        <tr><td>Dark text</td><td>#EDECE7</td></tr>
+        <tr><td>Dark accent</td><td>#259B6E</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Service colors</h3>
+    <table>
+      <thead><tr><th>Service</th><th>Light mode</th><th>Dark mode</th></tr></thead>
+      <tbody>
+        <tr><td>Performance</td><td>#2563EB</td><td>#60A5FA</td></tr>
+        <tr><td>Observability</td><td>#0D9488</td><td>#14B8A6</td></tr>
+        <tr><td>Fractional SRE</td><td>#D97706</td><td>#F59E0B</td></tr>
+        <tr><td>QA Tech Lead</td><td>#7C3AED</td><td>#A78BFA</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</div>
+</body>
+</html>

@@ -43,7 +43,7 @@
      ------------------------------------------------------------------------- */
   --color-success:         #16A34A; /* green-600 */
   --color-success-subtle:  rgba(22, 163, 74, 0.08);
-  --color-warning:         #D97706; /* amber-600 */
+  --color-warning:         #B45309; /* amber-700 — 4.7:1 on bg for WCAG AA */
   --color-warning-subtle:  rgba(217, 119, 6, 0.08);
   --color-danger:          #DC2626; /* red-600 */
   --color-danger-subtle:   rgba(220, 38, 38, 0.06);

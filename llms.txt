@@ -1,0 +1,78 @@
+# Vantx
+
+> Managed performance engineering, observability, and fractional SRE at startup speed.
+
+Vantx is the external Performance and SRE team for scaling tech companies. We deliver monitoring, load testing, observability, and reliability practices as a managed subscription — so engineering teams focus on shipping, not firefighting.
+
+## Services
+
+### Performance as a Service — $5,995/month
+Continuous load testing, synthetic monitoring 24/7, and monthly capacity planning. Know your limits before your users do.
+- Measured capacity baseline (Max TPS, breakpoint, p95)
+- Uptime + synthetic monitoring 24/7
+- Monthly load test + capacity planning report
+- Weekly Lighthouse CI scans (Core Web Vitals trending)
+- Real-time Grafana dashboards
+- Weekly report via Slack, monthly PDF report
+- Entry option: Performance Checkup — $2,995 one-time (5-day assessment)
+
+URL: https://vantx.io/services/performance.html
+
+### Observability as a Service
+Diagnose any incident in 30 seconds. Alerts your team trusts, dashboards that answer questions, telemetry bill reduced 30–50%.
+- OpenTelemetry instrumentation (up to 5 services)
+- Business-aligned SLOs + error budget tracking
+- 10–15 Grafana dashboards (RED + USE methodology)
+- Monthly alert review + service onboarding
+- Telemetry cost optimization (cardinality analysis, log sampling)
+- Quarterly 2h team workshop
+
+URL: https://vantx.io/services/observability.html
+
+### Fractional SRE
+Senior SRE embedded in your team. Incident command, post-mortems, reliability roadmap — $150K expertise at a flat monthly rate.
+- Embedded in your workflow (Slack, PR reviews, standups)
+- Architecture review + reliability roadmap (weeks 1–2)
+- Incident command + structured post-mortems
+- P1 escalation: 15 min response
+- SLO program definition + monthly reviews
+
+URL: https://vantx.io/services/fractional-sre.html
+
+### Fractional QA Tech Lead
+Test strategy, automation framework, CI/CD gates, and mentoring.
+- Test coverage audit + strategy document (week 1)
+- Automation framework (Playwright / Cypress / Selenium)
+- CI/CD integration with PR-level test gates
+- Contract testing (Pact) + visual regression
+- Pair programming, code reviews, workshops
+
+URL: https://vantx.io/services/qa-tech-lead.html
+
+## Model
+
+Inspired by DesignJoy: flat monthly subscription, no hourly tracking, no surprise invoices. Pause or cancel anytime. Month-to-month, no lock-in, no exit fees. 100% async by default (Slack, Loom, PDF reports). 100% open-source stack — k6, Grafana, OpenTelemetry, Prometheus, Playwright. Everything we build is yours.
+
+## Target Audience
+
+CTOs and engineering managers at scaling companies (Series A–C, 50–500 employees) who lack dedicated performance engineering, SRE, or observability talent. Primarily in Latin America, Spain, and the United States.
+
+## Tech Stack
+
+k6 (load testing), Grafana (dashboards), OpenTelemetry (instrumentation), Prometheus (metrics), Playwright (synthetic monitoring + E2E), Lighthouse CI (web performance).
+
+## Contact
+
+- Website: https://vantx.io
+- Email: hello@vantx.io
+- Book a call: https://calendly.com/hello-vantx/15min
+
+## Links
+
+- [Performance as a Service](https://vantx.io/services/performance.html)
+- [Observability as a Service](https://vantx.io/services/observability.html)
+- [Fractional SRE](https://vantx.io/services/fractional-sre.html)
+- [Fractional QA Tech Lead](https://vantx.io/services/qa-tech-lead.html)
+- [Mission & Values](https://vantx.io/about/mission.html)
+- [Privacy Policy](https://vantx.io/legal/privacy.html)
+- [Terms of Service](https://vantx.io/legal/terms.html)

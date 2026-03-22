@@ -1,0 +1,17 @@
+# Vantx — robots.txt
+# https://vantx.io/robots.txt
+
+User-agent: *
+Allow: /
+
+# Private pages
+Disallow: /welcome.html
+Disallow: /_archive/
+Disallow: /.planning/
+Disallow: /.agent/
+Disallow: /.agents/
+Disallow: /.claude/
+Disallow: /brand/
+
+# Sitemap
+Sitemap: https://vantx.io/sitemap.xml

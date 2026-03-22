@@ -5,16 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" data-i18n-attr="content:obs_page.meta_description" content="Managed observability: instrumentation, dashboards, SLOs, and alert tuning as a continuously improving capability. From chaotic to reliable.">
   <title data-i18n="obs_page.meta_title">Observability as a Service — Vantx</title>
+  <link rel="canonical" href="https://vantx.io/services/observability.html">
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="../img/apple-touch-icon.png">
+  <meta name="theme-color" content="#F8F7F4" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1A1917" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Observability as a Service — Vantx">
+  <meta property="og:description" content="Managed observability: instrumentation, dashboards, SLOs, and alert tuning as a continuously improving capability. From chaotic to reliable.">
+  <meta property="og:url" content="https://vantx.io/services/observability.html">
   <meta property="og:image" content="https://vantx.io/img/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
 
+  <!-- Preconnect to third-party origins (DNS + TCP + TLS ahead of time) -->
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+  <link rel="preconnect" href="https://assets.calendly.com" crossorigin>
+
   <!-- Fonts — self-hosted, eliminates 2 cross-origin roundtrips -->
-  <link rel="preload" href="../fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
+  <link rel="preload" href="../fonts/jb-mono-latin.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
   <link rel="stylesheet" href="../css/fonts.css">
 
   <!-- Design system — paths use ../ because this page is one level deep -->
@@ -27,6 +39,7 @@
   <script defer src="../js/i18n.js"></script>
   <script defer src="../js/partials.js"></script>
   <script defer src="../js/calendly.js"></script>
+  <script defer src="../js/reveal.js"></script>
 
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-VMTZXQG4HX"></script>
@@ -35,6 +48,26 @@
     function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
     gtag('config', 'G-VMTZXQG4HX');
+  </script>
+  <script defer src="../js/analytics.js"></script>
+
+  <!-- Structured Data — Service (SEO + AEO) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Observability as a Service",
+    "provider": { "@type": "Organization", "name": "Vantx", "url": "https://vantx.io" },
+    "description": "Managed observability: OpenTelemetry instrumentation, Grafana dashboards, business-aligned SLOs, alert tuning, and telemetry cost optimization. From chaotic to reliable.",
+    "url": "https://vantx.io/services/observability.html",
+    "offers": {
+      "@type": "Offer",
+      "name": "Observability as a Service — Monthly",
+      "price": "6995",
+      "priceCurrency": "USD",
+      "priceSpecification": { "@type": "UnitPriceSpecification", "price": "6995", "priceCurrency": "USD", "unitText": "month" }
+    }
+  }
   </script>
 </head>
 
@@ -65,8 +98,8 @@
 
           <!-- Main headline -->
           <h1 class="page-hero__headline">
-            <span data-i18n="obs_page.hero.headline">Your team doesn't lack observability.</span>
-            <span class="page-hero__headline-accent" data-i18n="obs_page.hero.headline_accent"> They lack a way to execute it well.</span>
+            <span data-i18n="obs_page.hero.headline">Your next incident, diagnosed in 30 seconds.</span>
+            <span class="page-hero__headline-accent" data-i18n="obs_page.hero.headline_accent"> Not discovered by a user.</span>
           </h1>
 
           <!-- Subheadline -->
@@ -76,12 +109,12 @@
 
           <!-- Hero CTAs -->
           <div class="page-hero__actions">
+            <a href="https://buy.stripe.com/test_4gMfZi8PucZNdfj765gEg03" class="btn btn--primary btn--lg" data-i18n="cta_section.cta_join">Start Today</a>
             <button
-              class="btn btn--primary btn--lg js-calendly-trigger"
+              class="btn btn--outline btn--lg js-calendly-trigger"
               type="button"
-              data-i18n="cta_section.cta_primary"
-            >Book a Strategy Call</button>
-            <a href="../#services" class="btn btn--outline btn--lg" data-i18n="hero.cta_secondary">View Services</a>
+              data-i18n="cta_section.cta_secondary"
+            >Book a Call</button>
           </div>
 
         </div><!-- /.page-hero__inner -->
@@ -93,11 +126,8 @@
          ================================================================ -->
     <section class="section section--surface" id="problem">
       <div class="container">
-        <p class="deliverables__intro" data-i18n="obs_page.problem.body_1">
-          If your monitoring stack feels 'implemented' but chaotic, it's probably the same story: alerts no one trusts, so they get ignored. Dashboards that don't answer the questions you have during an incident. Telemetry volumes growing — and with them, the bill. Inconsistent instrumentation across teams. And everyone assuming 'the platform team will fix it'... between emergencies.
-        </p>
-        <p class="deliverables__intro" data-i18n="obs_page.problem.body_2">
-          That's exactly what we solve. This is not a tool. This is not a one-off project. It's a managed capability — designed to keep your signals useful, your costs controlled, and your team confident when something breaks.
+        <p class="deliverables__intro" data-i18n="obs_page.problem.body">
+          Most monitoring stacks are 'implemented' — and completely useless during an actual incident. Alerts no one trusts, so they get ignored. Dashboards that don't answer the questions you need under pressure. A telemetry bill that grows every month with no one knowing why. And the team assumes someone else will fix it — until users start complaining.
         </p>
       </div>
     </section>
@@ -113,7 +143,7 @@
         </div>
 
         <p class="deliverables__intro" data-i18n="obs_page.deliverables.intro">
-          Six concrete deliverables that transform your monitoring from 'implemented but chaotic' to 'reliable and useful'.
+          Five concrete deliverables that transform your monitoring from 'implemented but chaotic' to 'reliable and useful'.
         </p>
 
         <!-- Deliverable 1 -->
@@ -149,6 +179,8 @@
             </div>
           </div>
         </div>
+
+        <hr class="deliverable-break">
 
         <!-- Deliverable 3 -->
         <div class="deliverable">
@@ -196,57 +228,6 @@
               <span class="deliverable__badge" data-i18n="obs_page.deliverables.items.4.badges.2">Cost reduction roadmap</span>
               <span class="deliverable__badge deliverable__badge--freq-green" data-i18n="obs_page.deliverables.items.4.freq">Monthly</span>
             </div>
-          </div>
-        </div>
-
-        <!-- Deliverable 6 -->
-        <div class="deliverable">
-          <div class="deliverable__num deliverable__num--green">6</div>
-          <div>
-            <h3 class="deliverable__title" data-i18n="obs_page.deliverables.items.5.title">Async-first communication — with calls when they really matter</h3>
-            <p class="deliverable__body" data-i18n="obs_page.deliverables.items.5.body">
-              Slack for day-to-day questions. Loom for explaining findings. PDF for formal reports. We include a 15-minute kick-off call to align, optional calls for incidents or findings, and an optional video walkthrough of the monthly report if you want to present results to your team or management.
-            </p>
-            <div class="deliverable__badges">
-              <span class="deliverable__badge deliverable__badge--freq-green" data-i18n="obs_page.deliverables.items.5.badges.0">Kick-off: 15 min video call</span>
-              <span class="deliverable__badge deliverable__badge--freq-green" data-i18n="obs_page.deliverables.items.5.badges.1">Incidents: optional 15 min call</span>
-              <span class="deliverable__badge deliverable__badge--freq-green" data-i18n="obs_page.deliverables.items.5.badges.2">Monthly report: optional video meet</span>
-              <span class="deliverable__badge" data-i18n="obs_page.deliverables.items.5.badges.3">Slack async always</span>
-            </div>
-          </div>
-        </div>
-
-      </div><!-- /.container -->
-    </section>
-
-    <!-- ================================================================
-         Outcomes
-         ================================================================ -->
-    <section class="section section--surface" id="outcomes" aria-labelledby="outcomes-heading">
-      <div class="container">
-
-        <div class="section-header">
-          <h2 id="outcomes-heading" class="section-title" data-i18n="obs_page.outcomes.heading">The result</h2>
-        </div>
-
-        <div class="outcomes-grid">
-          <div class="outcome-card">
-            <h4 class="outcome-card__title" data-i18n="obs_page.outcomes.items.0.title">Fewer surprises</h4>
-            <p class="outcome-card__body" data-i18n="obs_page.outcomes.items.0.body">
-              Alerts people trust. Incidents detected before users complain. Error budget as a prioritization tool.
-            </p>
-          </div>
-          <div class="outcome-card">
-            <h4 class="outcome-card__title" data-i18n="obs_page.outcomes.items.1.title">Faster diagnosis</h4>
-            <p class="outcome-card__body" data-i18n="obs_page.outcomes.items.1.body">
-              Dashboards that answer incident questions in 30 seconds, not 30 minutes. End-to-end correlation with traces.
-            </p>
-          </div>
-          <div class="outcome-card">
-            <h4 class="outcome-card__title" data-i18n="obs_page.outcomes.items.2.title">A platform that improves every month</h4>
-            <p class="outcome-card__body" data-i18n="obs_page.outcomes.items.2.body">
-              This is not a project that gets delivered and forgotten. It's a capability that's continuously refined. Every month more precise, more useful, more efficient.
-            </p>
           </div>
         </div>
 
@@ -317,17 +298,6 @@
             </p>
           </div>
 
-          <!-- Step 6 -->
-          <div class="timeline__step">
-            <h4 class="timeline__step-title">
-              <span data-i18n="obs_page.how.steps.5.title">Optional: Monthly video meet</span>
-              <span class="timeline__badge" data-i18n="obs_page.how.steps.5.badge">15-30 min</span>
-            </h4>
-            <p class="timeline__step-body" data-i18n="obs_page.how.steps.5.body">
-              Walkthrough of observability status, improvement metrics, and next steps.
-            </p>
-          </div>
-
         </div><!-- /.timeline -->
 
       </div><!-- /.container -->
@@ -340,8 +310,8 @@
       <div class="container">
         <div class="cta-section__inner">
           <h2 id="page-cta-heading" class="cta-section__heading" data-i18n="cta_section.heading">Ready to stop guessing?</h2>
-          <p class="cta-section__sub" data-i18n="cta_section.subheading">
-            Book a 30-minute strategy call. We'll review your current setup and show you exactly what we'd change first.
+          <p class="cta-section__sub" data-i18n="cta_section.sub_observability">
+            Book a 15-minute call. We'll review your monitoring stack and show you what's missing.
           </p>
           <div class="cta-section__actions">
             <a href="https://buy.stripe.com/test_4gMfZi8PucZNdfj765gEg03" class="btn btn--primary btn--lg" data-i18n="cta_section.cta_join">Start Today</a>

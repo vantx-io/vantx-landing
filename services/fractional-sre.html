@@ -5,16 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" data-i18n-attr="content:sre_page.meta_description" content="A dedicated fractional SRE embedded in your team. Architecture review, incident command, reliability roadmap — senior SRE expertise at startup budget.">
   <title data-i18n="sre_page.meta_title">Fractional SRE — Vantx</title>
+  <link rel="canonical" href="https://vantx.io/services/fractional-sre.html">
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="../img/apple-touch-icon.png">
+  <meta name="theme-color" content="#F8F7F4" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1A1917" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Fractional SRE — Vantx">
+  <meta property="og:description" content="A dedicated fractional SRE embedded in your team. Architecture review, incident command, reliability roadmap — senior SRE expertise at startup budget.">
+  <meta property="og:url" content="https://vantx.io/services/fractional-sre.html">
   <meta property="og:image" content="https://vantx.io/img/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
 
+  <!-- Preconnect to third-party origins (DNS + TCP + TLS ahead of time) -->
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+  <link rel="preconnect" href="https://assets.calendly.com" crossorigin>
+
   <!-- Fonts — self-hosted, eliminates 2 cross-origin roundtrips -->
-  <link rel="preload" href="../fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
+  <link rel="preload" href="../fonts/jb-mono-latin.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
   <link rel="stylesheet" href="../css/fonts.css">
 
   <!-- Design system — paths use ../ because this page is one level deep -->
@@ -27,6 +39,7 @@
   <script defer src="../js/i18n.js"></script>
   <script defer src="../js/partials.js"></script>
   <script defer src="../js/calendly.js"></script>
+  <script defer src="../js/reveal.js"></script>
 
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-VMTZXQG4HX"></script>
@@ -35,6 +48,59 @@
     function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
     gtag('config', 'G-VMTZXQG4HX');
+  </script>
+  <script defer src="../js/analytics.js"></script>
+
+  <!-- Structured Data — Service + FAQ (SEO + AEO) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Fractional SRE",
+    "provider": { "@type": "Organization", "name": "Vantx", "url": "https://vantx.io" },
+    "description": "A dedicated fractional SRE embedded in your team. Architecture review, incident command, post-mortems, reliability roadmap, and SLO program — senior SRE expertise at startup budget.",
+    "url": "https://vantx.io/services/fractional-sre.html",
+    "offers": {
+      "@type": "Offer",
+      "name": "Fractional SRE — Monthly",
+      "price": "7995",
+      "priceCurrency": "USD",
+      "priceSpecification": { "@type": "UnitPriceSpecification", "price": "7995", "priceCurrency": "USD", "unitText": "month" }
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How does the subscription work?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Pick a service, subscribe, we start. Flat monthly rate. No hourly tracking, no surprise invoices. Pause or cancel anytime." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is there a long-term contract?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. Month-to-month. Cancel anytime. No lock-in, no exit fees." }
+      },
+      {
+        "@type": "Question",
+        "name": "How fast do you start delivering?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Most services are activated within the first week. Ongoing deliverables follow a clear weekly and monthly cadence." }
+      },
+      {
+        "@type": "Question",
+        "name": "Who works on my systems?",
+        "acceptedAnswer": { "@type": "Answer", "text": "A senior engineer with 10+ years of experience in performance, observability, and SRE. Not outsourced, not rotated." }
+      },
+      {
+        "@type": "Question",
+        "name": "How do we communicate?",
+        "acceptedAnswer": { "@type": "Answer", "text": "100% async by default. Slack for questions, Loom for walkthroughs, PDF for reports. Video calls only when they add real value." }
+      }
+    ]
+  }
   </script>
 </head>
 
@@ -76,12 +142,12 @@
 
           <!-- Hero CTAs -->
           <div class="page-hero__actions">
+            <a href="https://buy.stripe.com/test_bJe3cw0iYaRFfnr765gEg04" class="btn btn--primary btn--lg" data-i18n="cta_section.cta_join">Start Today</a>
             <button
-              class="btn btn--primary btn--lg js-calendly-trigger"
+              class="btn btn--outline btn--lg js-calendly-trigger"
               type="button"
-              data-i18n="cta_section.cta_primary"
-            >Book a Strategy Call</button>
-            <a href="../#services" class="btn btn--outline btn--lg" data-i18n="hero.cta_secondary">View Services</a>
+              data-i18n="cta_section.cta_secondary"
+            >Book a Call</button>
           </div>
 
         </div><!-- /.page-hero__inner -->
@@ -93,11 +159,8 @@
          ================================================================ -->
     <section class="section section--surface" id="problem">
       <div class="container">
-        <p class="deliverables__intro" data-i18n="sre_page.problem.body_1">
-          A senior SRE costs $150K+/year in salary alone. Your engineering team is shipping features, not building reliability practices. Incidents take hours to resolve because no one owns the process. Post-mortems get written and filed — then the same incident happens again three months later. You know reliability matters, but you can't justify a full-time hire at this stage.
-        </p>
-        <p class="deliverables__intro" data-i18n="sre_page.problem.body_2">
-          That's the exact gap a fractional SRE fills. Not a consultant who delivers a report and disappears — a dedicated practitioner embedded in your team, owning reliability the same way your engineers own their services.
+        <p class="deliverables__intro" data-i18n="sre_page.problem.body">
+          A senior SRE costs $150K+/year in salary alone. Your engineering team is shipping features, not building reliability practices. Incidents drag on because no one owns the process. Post-mortems get written and filed — then the same incident happens again three months later. You need a dedicated practitioner embedded in your team, not a consultant who delivers a report and disappears.
         </p>
       </div>
     </section>
@@ -113,7 +176,7 @@
         </div>
 
         <p class="deliverables__intro" data-i18n="sre_page.deliverables.intro">
-          Six concrete deliverables that bring senior SRE capability to your team without the full-time headcount.
+          Five concrete deliverables that bring senior SRE capability to your team without the full-time headcount.
         </p>
 
         <!-- Deliverable 1 -->
@@ -149,6 +212,8 @@
             </div>
           </div>
         </div>
+
+        <hr class="deliverable-break">
 
         <!-- Deliverable 3 -->
         <div class="deliverable">
@@ -196,56 +261,6 @@
               <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.4.badges.1">Error budget tracking</span>
               <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.4.badges.2">Monthly SLO review</span>
             </div>
-          </div>
-        </div>
-
-        <!-- Deliverable 6 -->
-        <div class="deliverable">
-          <div class="deliverable__num deliverable__num--amber">6</div>
-          <div>
-            <h3 class="deliverable__title" data-i18n="sre_page.deliverables.items.5.title">Async communication (Slack) + optional weekly sync</h3>
-            <p class="deliverable__body" data-i18n="sre_page.deliverables.items.5.body">
-              All communication defaults to async: Slack for questions, Loom for explaining architectural decisions, written reports for status updates. An optional 30-minute weekly sync to align on priorities. We respect your team's time — meetings happen when they add value that async doesn't.
-            </p>
-            <div class="deliverable__badges">
-              <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.5.badges.0">Slack async always</span>
-              <span class="deliverable__badge deliverable__badge--freq-amber" data-i18n="sre_page.deliverables.items.5.badges.1">Optional weekly sync: 30 min</span>
-              <span class="deliverable__badge" data-i18n="sre_page.deliverables.items.5.badges.2">Written status reports</span>
-            </div>
-          </div>
-        </div>
-
-      </div><!-- /.container -->
-    </section>
-
-    <!-- ================================================================
-         Outcomes
-         ================================================================ -->
-    <section class="section section--surface" id="outcomes" aria-labelledby="outcomes-heading">
-      <div class="container">
-
-        <div class="section-header">
-          <h2 id="outcomes-heading" class="section-title" data-i18n="sre_page.outcomes.heading">The result</h2>
-        </div>
-
-        <div class="outcomes-grid">
-          <div class="outcome-card">
-            <h4 class="outcome-card__title" data-i18n="sre_page.outcomes.items.0.title">Reliability without headcount</h4>
-            <p class="outcome-card__body" data-i18n="sre_page.outcomes.items.0.body">
-              Senior SRE capability embedded in your team at a fraction of the cost. No recruiting, no onboarding overhead, no $150K salary commitment.
-            </p>
-          </div>
-          <div class="outcome-card">
-            <h4 class="outcome-card__title" data-i18n="sre_page.outcomes.items.1.title">Faster incident resolution</h4>
-            <p class="outcome-card__body" data-i18n="sre_page.outcomes.items.1.body">
-              Clear incident command process. Runbooks that exist. A practitioner who knows your systems and leads the response. Incidents that used to take 4 hours get resolved in 45 minutes.
-            </p>
-          </div>
-          <div class="outcome-card">
-            <h4 class="outcome-card__title" data-i18n="sre_page.outcomes.items.2.title">A reliability culture that sticks</h4>
-            <p class="outcome-card__body" data-i18n="sre_page.outcomes.items.2.body">
-              SLOs your team actually tracks. Post-mortems that produce changes. Architecture decisions made with reliability data. The practices don't disappear when the engagement ends — they're built into how your team works.
-            </p>
           </div>
         </div>
 
@@ -369,8 +384,8 @@
       <div class="container">
         <div class="cta-section__inner">
           <h2 id="page-cta-heading" class="cta-section__heading" data-i18n="cta_section.heading">Ready to stop guessing?</h2>
-          <p class="cta-section__sub" data-i18n="cta_section.subheading">
-            Tell us about your system. We'll review it and show you exactly what we'd change first.
+          <p class="cta-section__sub" data-i18n="cta_section.sub_sre">
+            Book a 15-minute call. We'll map your top reliability risks and show you what to fix first.
           </p>
           <div class="cta-section__actions">
             <a href="https://buy.stripe.com/test_bJe3cw0iYaRFfnr765gEg04" class="btn btn--primary btn--lg" data-i18n="cta_section.cta_join">Start Today</a>

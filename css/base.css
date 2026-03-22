@@ -142,6 +142,20 @@ ul, ol {
   padding: var(--section-padding-y) 0;
 }
 
+/* Tighter section — lighter content that doesn't need the full 96px gap.
+   Use on compare, FAQ, and similar mid-weight sections. */
+.section--snug {
+  padding-top: var(--space-16);
+  padding-bottom: var(--space-16);
+}
+
+/* Generous section — final CTA or key conversion moments.
+   Extra breathing room draws the eye and signals importance. */
+.section--generous {
+  padding-top: var(--space-24);
+  padding-bottom: var(--space-24);
+}
+
 /* --------------------------------------------------------------------------
    Typography Utilities
    -------------------------------------------------------------------------- */
@@ -219,8 +233,9 @@ ul, ol {
 }
 .btn--primary:active {
   background: var(--color-accent-active);
-  transform: translateY(0);
+  transform: translateY(1px) scale(0.98);
   box-shadow: none;
+  transition-duration: var(--duration-fast);
 }
 
 /* Outline — transparent with border */
@@ -235,7 +250,8 @@ ul, ol {
 }
 .btn--outline:active {
   background: var(--color-surface-elevated);
-  transform: translateY(0);
+  transform: translateY(1px) scale(0.98);
+  transition-duration: var(--duration-fast);
 }
 
 /* Ghost — no border, subtle hover */
@@ -250,6 +266,8 @@ ul, ol {
 }
 .btn--ghost:active {
   background: var(--color-surface-elevated);
+  transform: translateY(1px) scale(0.98);
+  transition-duration: var(--duration-fast);
 }
 
 /* Sizes */
@@ -316,7 +334,7 @@ ul, ol {
 
 .nav__logo-img {
   display: block;
-  height: 32px;
+  height: var(--space-8); /* 32px */
   width: auto;
   /* Darken white logo for light theme — replace with dark logo asset when available */
   filter: brightness(0);
@@ -435,7 +453,7 @@ ul, ol {
   display: none;
   flex-direction: column;
   justify-content: center;
-  gap: 5px;
+  gap: var(--space-1); /* 4px — optically balanced hamburger lines */
   width: 44px;
   height: 44px;
   background: none;
@@ -460,15 +478,15 @@ ul, ol {
   transition: transform var(--transition), opacity var(--transition);
 }
 
-/* Mobile nav open state */
+/* Mobile nav open state — translateY = gap + line-height = 4px + 1.5px = 5.5px */
 .nav.is-open .nav__mobile-toggle span:nth-child(1) {
-  transform: translateY(6.5px) rotate(45deg);
+  transform: translateY(5.5px) rotate(45deg);
 }
 .nav.is-open .nav__mobile-toggle span:nth-child(2) {
   opacity: 0;
 }
 .nav.is-open .nav__mobile-toggle span:nth-child(3) {
-  transform: translateY(-6.5px) rotate(-45deg);
+  transform: translateY(-5.5px) rotate(-45deg);
 }
 
 /* Mobile drawer */
@@ -551,6 +569,21 @@ ul, ol {
   line-height: var(--leading-snug);
 }
 
+.footer__brand-link {
+  display: inline-block;
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: var(--color-border-strong);
+  transition: color var(--transition-fast);
+}
+
+.footer__brand-link:hover {
+  color: var(--color-text);
+}
+
 .footer__nav {
   display: flex;
   gap: var(--space-16);
@@ -592,9 +625,38 @@ ul, ol {
   padding: var(--space-6) 0;
 }
 
+.footer__bottom-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
 .footer__copyright {
   font-size: var(--text-xs);
   color: var(--color-text-subtle);
+}
+
+.footer__legal {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.footer__legal-link {
+  font-size: var(--text-xs);
+  color: var(--color-text-subtle);
+  transition: color var(--transition-fast);
+}
+
+.footer__legal-link:hover {
+  color: var(--color-text-muted);
+}
+
+.footer__legal-link:focus-visible,
+.footer__brand-link:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
 }
 
 /* --------------------------------------------------------------------------
@@ -629,7 +691,10 @@ ul, ol {
    -------------------------------------------------------------------------- */
 
 .faq {
-  background: var(--color-surface);
+  /* FAQ is a compact Q&A list — snug padding prevents it from
+     spreading out like a heavyweight content section */
+  padding-top: var(--space-16);
+  padding-bottom: var(--space-16);
   content-visibility: auto;
   contain-intrinsic-size: auto 600px;
 }
@@ -700,7 +765,24 @@ ul, ol {
 }
 
 @keyframes faq-reveal {
-  from { opacity: 0; transform: translateY(-4px); }
+  from { opacity: 0; transform: translateY(-8px); }
+}
+
+/* --------------------------------------------------------------------------
+   Scroll-reveal — sections fade up when entering viewport (JS-driven)
+   .reveal is added by js/reveal.js to sections below the initial viewport.
+   .is-visible is added by IntersectionObserver when the section enters view.
+   -------------------------------------------------------------------------- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
 }
 
 /* --------------------------------------------------------------------------
@@ -754,6 +836,21 @@ ul, ol {
     gap: var(--space-8);
   }
 
+  /* Scale rhythm variants for small screens */
+  .section--snug,
+  .faq,
+  .compare,
+  .timeline-section {
+    padding-top: var(--space-10);
+    padding-bottom: var(--space-10);
+  }
+
+  .section--generous,
+  .cta-section {
+    padding-top: var(--space-16);
+    padding-bottom: var(--space-16);
+  }
+
   .faq__question {
     font-size: var(--text-base);
     padding: var(--space-5) 0;
@@ -779,15 +876,18 @@ ul, ol {
 
 @media (hover: none) {
   .svc-card:hover {
-    transform: none;
     box-shadow: var(--shadow-sm);
-  }
-  .outcome-card:hover {
-    transform: none;
-    box-shadow: none;
   }
   .value-card:hover {
     border-color: var(--color-border);
+    box-shadow: none;
+  }
+  .pain__card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  .services__also-row:hover {
+    transform: none;
     box-shadow: none;
   }
 }

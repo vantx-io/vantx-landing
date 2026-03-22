@@ -5,16 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" data-i18n-attr="content:mission_page.meta_description" content="Vantx mission, vision, and values — data-driven performance engineering with async-first communication and no vendor lock-in.">
   <title data-i18n="mission_page.meta_title">Mission &amp; Values — Vantx</title>
+  <link rel="canonical" href="https://vantx.io/about/mission.html">
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="../img/apple-touch-icon.png">
+  <meta name="theme-color" content="#F8F7F4" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1A1917" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Mission &amp; Values — Vantx">
+  <meta property="og:description" content="Vantx mission, vision, and values — data-driven performance engineering with async-first communication and no vendor lock-in.">
+  <meta property="og:url" content="https://vantx.io/about/mission.html">
   <meta property="og:image" content="https://vantx.io/img/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
 
+  <!-- Preconnect to third-party origins (DNS + TCP + TLS ahead of time) -->
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+  <link rel="preconnect" href="https://assets.calendly.com" crossorigin>
+
   <!-- Fonts — self-hosted, eliminates 2 cross-origin roundtrips -->
-  <link rel="preload" href="../fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
+  <link rel="preload" href="../fonts/jb-mono-latin.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
   <link rel="stylesheet" href="../css/fonts.css">
 
   <!-- Design system — paths use ../ because this page is one level deep -->
@@ -27,6 +39,7 @@
   <script defer src="../js/i18n.js"></script>
   <script defer src="../js/partials.js"></script>
   <script defer src="../js/calendly.js"></script>
+  <script defer src="../js/reveal.js"></script>
 
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-VMTZXQG4HX"></script>
@@ -36,6 +49,7 @@
     gtag('js', new Date());
     gtag('config', 'G-VMTZXQG4HX');
   </script>
+  <script defer src="../js/analytics.js"></script>
 </head>
 
 <body>
@@ -59,8 +73,8 @@
           <div class="pill" data-i18n="mission_page.header.sub">Performance Engineering · Observability · Fractional SRE</div>
 
           <!-- Page headline — uses mission heading as h1 for SEO -->
-          <h1 class="page-hero__headline" data-i18n="mission_page.mission.heading">
-            That every technology team knows exactly how their system behaves under load — and has a concrete plan to improve it.
+          <h1 class="page-hero__headline" data-i18n="mission_page.header.headline">
+            Reliability is a practice, not a product.
           </h1>
 
         </div><!-- /.page-hero__inner -->
@@ -114,7 +128,7 @@
     <section class="section" id="values" aria-labelledby="values-heading">
       <div class="container">
 
-        <div class="label values-heading" id="values-heading" data-i18n="mission_page.values.section_label">Values</div>
+        <h2 class="label values-heading" id="values-heading" data-i18n="mission_page.values.section_label">Values</h2>
 
         <div class="values-grid">
 
@@ -179,7 +193,7 @@
       <div class="container">
 
         <div class="manifesto">
-          <div class="manifesto__label" id="manifesto-heading" data-i18n="mission_page.manifesto.label">What we believe</div>
+          <h2 class="manifesto__label" id="manifesto-heading" data-i18n="mission_page.manifesto.label">What we believe</h2>
           <ul class="manifesto__list">
             <li class="manifesto__item" data-i18n="mission_page.manifesto.items.0">
               Most teams don't lack tools. They lack someone who operates them correctly.
@@ -219,8 +233,8 @@
       <div class="container">
         <div class="cta-section__inner">
           <h2 id="page-cta-heading" class="cta-section__heading" data-i18n="cta_section.heading">Ready to stop guessing?</h2>
-          <p class="cta-section__sub" data-i18n="cta_section.subheading">
-            Book a 30-minute strategy call. We'll review your current setup and show you exactly what we'd change first.
+          <p class="cta-section__sub" data-i18n="cta_section.sub_mission">
+            Book a 15-minute call. We'll review your setup and show you exactly what we'd improve first.
           </p>
           <div class="cta-section__actions">
             <button class="btn btn--primary btn--lg js-calendly-trigger" type="button" data-i18n="cta_section.cta_primary">Get Started</button>

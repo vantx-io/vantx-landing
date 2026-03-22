@@ -9,7 +9,7 @@
 .page-hero {
   position: relative;
   overflow: hidden;
-  padding: var(--space-20) 0 var(--space-16);
+  padding: var(--space-24) 0 var(--space-12);
 }
 
 /* Subtle bottom fade — matches .hero::before in landing.css */
@@ -30,9 +30,9 @@
 /* .page-hero__pill reuses .pill from base.css — no extra styles needed */
 
 .page-hero__headline {
-  font-size: var(--text-4xl);
+  font-size: clamp(2.25rem, 4.5vw, 3.25rem);
   font-weight: var(--font-bold);
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: var(--tracking-tighter);
   line-height: var(--leading-tight);
   color: var(--color-text);
   margin-bottom: var(--space-6);
@@ -41,11 +41,12 @@
 
 .page-hero__headline-accent {
   color: var(--color-accent);
-  font-style: italic;
+  border-bottom: 3px solid var(--color-accent);
+  padding-bottom: 2px;
 }
 
 .page-hero__sub {
-  font-size: var(--text-base);
+  font-size: var(--text-lg);
   color: var(--color-text-muted);
   line-height: var(--leading-normal);
   max-width: 600px;
@@ -72,6 +73,12 @@
   font-weight: var(--font-bold);
   font-variant-numeric: tabular-nums;
   color: var(--color-text);
+}
+
+.page-hero__price-prefix {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  font-weight: var(--font-normal);
 }
 
 .page-hero__price-period {
@@ -119,19 +126,30 @@
   border-color: var(--color-accent-border);
 }
 
+/* Detail page hero entrance choreography — staggered reveal */
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(28px); }
+}
+
+.page-hero .pill            { animation: page-enter 600ms var(--ease-out) 100ms both; }
+.page-hero__price           { animation: page-enter 600ms var(--ease-out) 200ms both; }
+.page-hero__headline        { animation: page-enter 600ms var(--ease-out) 300ms both; }
+.page-hero__sub             { animation: page-enter 600ms var(--ease-out) 450ms both; }
+.page-hero__actions         { animation: page-enter 600ms var(--ease-out) 600ms both; }
+
 /* Mobile: headline scale down */
 @media (max-width: 768px) {
   .page-hero {
     padding: var(--space-12) 0 var(--space-10);
   }
   .page-hero__headline {
-    font-size: var(--text-2xl);
+    font-size: var(--text-3xl);
   }
 }
 
 @media (max-width: 480px) {
   .page-hero__headline {
-    font-size: var(--text-xl);
+    font-size: var(--text-2xl);
   }
   .mission-block,
   .vision-block,
@@ -153,9 +171,54 @@
   }
 }
 
+/* Detail page section headings — subordinate to page hero.
+   Landing page uses .hero (not .page-hero), so this only affects detail pages.
+   Hierarchy: hero 52px → section 36px → deliverable 24px → body 16px (≈1.5:1 steps) */
+.page-hero ~ .section .section-title {
+  font-size: clamp(1.25rem, 3vw, 2.25rem);
+}
+
 /* Alternating surface background for problem/outcome sections */
 .section--surface {
   background: var(--color-surface);
+}
+
+/* Problem section directly below hero — reduce top gap for tighter
+   hero→content flow (hero bottom 48px + this 64px = 112px, vs 160px before) */
+.page-hero + .section--surface {
+  padding-top: var(--space-16);
+  padding-bottom: var(--space-16);
+}
+
+/* Problem callout — left accent border turns the orphaned paragraph
+   into an intentional design element.  Color inherits from the
+   page-hero variant via custom property set on .page-hero--*. */
+.section--surface .deliverables__intro:only-child {
+  border-left: 3px solid var(--color-accent);
+  padding-left: var(--space-6);
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  max-width: 700px;
+}
+
+/* Service-specific accent for problem callout */
+.page-hero--performance ~ .section--surface .deliverables__intro:only-child {
+  border-left-color: var(--color-perf);
+}
+.page-hero--observability ~ .section--surface .deliverables__intro:only-child {
+  border-left-color: var(--color-obs);
+}
+.page-hero--sre ~ .section--surface .deliverables__intro:only-child {
+  border-left-color: var(--color-warning);
+}
+.page-hero--qa ~ .section--surface .deliverables__intro:only-child {
+  border-left-color: var(--color-qa);
+}
+
+/* Compact section variant — less vertical padding for lightweight content */
+.section--compact-v {
+  padding-top: var(--space-12);
+  padding-bottom: var(--space-12);
 }
 
 /* Remove bottom margin on last paragraph in problem sections */
@@ -176,7 +239,7 @@
 }
 
 .deliverable {
-  margin-bottom: var(--space-8);
+  margin-bottom: var(--space-10);
   display: grid;
   grid-template-columns: 56px 1fr;
   gap: var(--space-5);
@@ -184,8 +247,40 @@
   min-width: 0; /* prevent grid children from overflowing */
 }
 
+/* Subtle number badge lift on deliverable hover */
+.deliverable__num {
+  transition: transform var(--transition-fast), box-shadow var(--transition);
+}
+
+.deliverable:hover .deliverable__num {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Visual group divider — insert between deliverable clusters to break
+   the wall of identical blocks.  Generous asymmetric spacing: more above
+   (closing the first group) than below (opening the second). */
+.deliverable-break {
+  margin: var(--space-16) 0 var(--space-12);
+  border: none;
+  border-top: 1px solid var(--color-border);
+}
+
+/* Tighten the last deliverable before a break — the break itself
+   provides the group separation, so double-spacing feels wasteful. */
+.deliverable-break + .deliverable {
+  /* First item after break — normal spacing (inherited) */
+}
+
+/* Last deliverable before break: reduce bottom margin since the
+   break's top margin handles the gap */
+.deliverable:has(+ .deliverable-break) {
+  margin-bottom: var(--space-6);
+}
+
 .deliverable > div {
   min-width: 0; /* allow text to wrap inside grid cell */
+  max-width: 640px; /* ~70 chars at 16px — readable line length */
 }
 
 .deliverable__num {
@@ -220,7 +315,7 @@
 }
 
 .deliverable__title {
-  font-size: var(--text-xl);
+  font-size: var(--text-2xl);
   font-weight: var(--font-bold);
   color: var(--color-text);
   margin-bottom: var(--space-2);
@@ -288,65 +383,16 @@
 }
 
 /* ==========================================================================
-   3. Outcomes Grid (.outcomes-grid)
-   3-column outcome cards — used on observability and SRE pages.
-   ========================================================================== */
-
-.outcomes-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-4);
-}
-
-.outcome-card {
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-6);
-  transition: transform var(--transition), box-shadow var(--transition);
-  min-width: 0; /* prevent grid children from overflowing */
-}
-
-.outcome-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow);
-}
-
-.outcome-card__title {
-  font-size: var(--text-base);
-  font-weight: var(--font-bold);
-  color: var(--color-text);
-  margin-bottom: var(--space-2);
-}
-
-.outcome-card__body {
-  font-size: var(--text-base);
-  color: var(--color-text-muted);
-  line-height: var(--leading-normal);
-  overflow-wrap: break-word;
-}
-
-/* Tablet: 2-column layout */
-@media (max-width: 900px) {
-  .outcomes-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* Mobile: single column */
-@media (max-width: 600px) {
-  .outcomes-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ==========================================================================
    4. Timeline (.timeline)
    Vertical timeline for "How it works" — used on observability and SRE pages.
    ========================================================================== */
 
 .timeline-section {
   border-top: 1px solid var(--color-border);
+  /* Snug padding — timeline is a compact checklist, not a heavy
+     content section, so it doesn't need the full 96px gap */
+  padding-top: var(--space-16);
+  padding-bottom: var(--space-16);
   content-visibility: auto;
   contain-intrinsic-size: auto 400px;
 }
@@ -354,6 +400,7 @@
 .timeline {
   position: relative;
   padding-left: var(--space-8);
+  max-width: 640px; /* constrain line length for readability */
 }
 
 /* Vertical connector line */
@@ -385,6 +432,21 @@
   border: 3px solid var(--color-bg);
   box-shadow: 0 0 0 2px var(--color-border);
 }
+
+/* Stagger dot entrance when timeline section has scroll-reveal active.
+   .reveal is only added by JS to sections below the viewport — dots
+   render normally if reveal is not active or JS is disabled. */
+.reveal .timeline__step::before {
+  transform: scale(0);
+  transition: transform 400ms var(--ease-out);
+}
+
+.reveal.is-visible .timeline__step::before { transform: scale(1); }
+.reveal.is-visible .timeline__step:nth-child(1)::before { transition-delay: 0ms; }
+.reveal.is-visible .timeline__step:nth-child(2)::before { transition-delay: 100ms; }
+.reveal.is-visible .timeline__step:nth-child(3)::before { transition-delay: 200ms; }
+.reveal.is-visible .timeline__step:nth-child(4)::before { transition-delay: 300ms; }
+.reveal.is-visible .timeline__step:nth-child(5)::before { transition-delay: 400ms; }
 
 .timeline__step-title {
   font-size: var(--text-base);
@@ -636,6 +698,13 @@
   max-width: 520px;
 }
 
+.page-hero__sub--warm {
+  font-size: var(--text-lg);
+  color: var(--color-accent);
+  font-weight: var(--font-semibold);
+  margin-bottom: var(--space-2);
+}
+
 .page-hero--welcome .page-hero__actions {
   justify-content: center;
 }
@@ -691,3 +760,57 @@
 }
 
 /* FAQ styles moved to base.css (shared across landing + detail pages) */
+
+/* ==========================================================================
+   9. Legal pages (.legal-content)
+   Prose styling for Privacy Policy and Terms of Service.
+   ========================================================================== */
+
+.legal-content {
+  max-width: 700px;
+}
+
+.legal-content h2 {
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  color: var(--color-text);
+  margin-top: var(--space-10);
+  margin-bottom: var(--space-3);
+}
+
+.legal-content h2:first-child {
+  margin-top: 0;
+}
+
+.legal-content h3 {
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  color: var(--color-text);
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-2);
+}
+
+.legal-content p {
+  font-size: var(--text-base);
+  color: var(--color-text-muted);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-4);
+}
+
+.legal-content ul {
+  margin-bottom: var(--space-4);
+  padding-left: var(--space-6);
+}
+
+.legal-content li {
+  font-size: var(--text-base);
+  color: var(--color-text-muted);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-2);
+  list-style: disc;
+}
+
+.legal-content strong {
+  color: var(--color-text);
+  font-weight: var(--font-semibold);
+}
