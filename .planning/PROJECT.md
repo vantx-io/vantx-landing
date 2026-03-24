@@ -23,7 +23,10 @@ Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay f
 
 ### Active
 
-(No active requirements — define next milestone with `/gsd:new-milestone`)
+- [ ] Tests automatizados — cobertura completa (unit, integration, e2e con Playwright)
+- [ ] Admin dashboard — gestión interna Vantix (clientes, suscripciones, métricas)
+- [ ] Notificaciones in-app + email transaccional (pagos, tareas, suscripciones)
+- [ ] Task attachments — upload de archivos en comentarios (schema listo, falta UI + storage)
 
 ### Out of Scope
 
@@ -72,5 +75,32 @@ Hosted as static files in `landing/` directory.
 | detail.css shared stylesheet for all detail pages | 530 lines, 180 token refs — consistent styling | ✓ Good |
 | Dark mode CTA: dark text (#1A1917) on green button | Fixed contrast from 3.50:1 to 5.01:1 WCAG AA pass | ✓ Good |
 
+## Current Milestone: v1.1 Platform Hardening & Admin
+
+**Goal:** Solidificar la plataforma con testing completo, dashboard administrativo interno, sistema de notificaciones in-app + email, y uploads de archivos en tareas.
+
+**Target features:**
+- Tests automatizados (unit + integration + e2e Playwright)
+- Admin dashboard (equipo Vantix: admin/engineer/seller)
+- Notificaciones in-app + email transaccional
+- Task attachments (file upload en comentarios)
+
+## Evolution
+
+This document evolves at phase transitions and milestone boundaries.
+
+**After each phase transition** (via `/gsd:transition`):
+1. Requirements invalidated? → Move to Out of Scope with reason
+2. Requirements validated? → Move to Validated with phase reference
+3. New requirements emerged? → Add to Active
+4. Decisions to log? → Add to Key Decisions
+5. "What This Is" still accurate? → Update if drifted
+
+**After each milestone** (via `/gsd:complete-milestone`):
+1. Full review of all sections
+2. Core Value check — still the right priority?
+3. Audit Out of Scope — reasons still valid?
+4. Update Context with current state
+
 ---
-*Last updated: 2026-03-24 after v1.0 milestone completion*
+*Last updated: 2026-03-24 after v1.1 milestone start*
