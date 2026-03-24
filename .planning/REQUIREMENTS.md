@@ -14,7 +14,7 @@
 ### Design
 
 - [x] **DSNG-01**: Dark & techy visual (estética Vercel/Linear) con CSS Custom Properties para tokens de color, tipografía y espaciado — WCAG-compliant (ratio ≥4.5:1 en todos los textos)
-- [ ] **DSNG-02**: Auditoría con impeccable.style/cheatsheet superada antes de ship
+- [x] **DSNG-02**: Auditoría con impeccable.style/cheatsheet superada antes de ship
 
 ### Main Landing (/)
 
@@ -67,7 +67,7 @@
 | FOUND-02 | Phase 1 | ✓ Done |
 | FOUND-03 | Phase 1 | ✓ Done |
 | DSNG-01 | Phase 1 | ✓ Done |
-| DSNG-02 | Phase 4 | Pending |
+| DSNG-02 | Phase 4 | Complete |
 | LAND-01 | Phase 2 | Pending |
 | LAND-02 | Phase 2 | Pending |
 | LAND-03 | Phase 2 | Pending |
