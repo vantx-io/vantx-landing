@@ -61,19 +61,23 @@ Plans:
 **Requirements**: DSNG-02
 **Success Criteria** (what must be TRUE):
   1. The impeccable.style/cheatsheet audit passes on all four pages — no unresolved design issues
-  2. All body text and secondary text passes WCAG 2.1 AA contrast (ratio ≥ 4.5:1) verified with axe DevTools across every page
+  2. All body text and secondary text passes WCAG 2.1 AA contrast (ratio >= 4.5:1) verified with axe DevTools across every page
   3. The language preference persists correctly after a hard reload in a private/incognito window (localStorage behavior confirmed)
   4. Pages render correctly on iOS Safari (tested on a real device, not only DevTools emulation)
-**Plans**: TBD
+**Plans:** 3 plans
+Plans:
+- [ ] 04-01-PLAN.md — CSS bug fixes: credibility bar animation, hero height, dashed border, CLS, LATAM banner, Also Available CTAs
+- [ ] 04-02-PLAN.md — Content additions: social proof placeholder, service-specific FAQs (4 pages), deliverables grid layout
+- [ ] 04-03-PLAN.md — Accessibility audit, contrast token fixes, full launch gate verification checkpoint
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 1/1 | ✓ Done | 2026-03-20 |
-| 2. Main Landing | 1/1 | ✓ Done | 2026-03-20 |
+| 1. Foundation | 1/1 | Done | 2026-03-20 |
+| 2. Main Landing | 1/1 | Done | 2026-03-20 |
 | 3. Detail Pages | 3/3 | Complete   | 2026-03-21 |
-| 4. Polish & Launch Gate | 0/TBD | Not started | - |
+| 4. Polish & Launch Gate | 0/3 | Planning complete | - |
