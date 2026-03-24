@@ -23,7 +23,7 @@ Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay f
 
 ### Active
 
-- [ ] Tests automatizados — cobertura completa (unit, integration, e2e con Playwright)
+- [x] Tests automatizados — foundation completa (Vitest unit 32 tests, Playwright E2E scaffold, CI pipeline) — Validated in Phase 05
 - [ ] Admin dashboard — gestión interna Vantix (clientes, suscripciones, métricas)
 - [ ] Notificaciones in-app + email transaccional (pagos, tareas, suscripciones)
 - [ ] Task attachments — upload de archivos en comentarios (schema listo, falta UI + storage)
@@ -103,4 +103,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-24 after v1.1 milestone start*
+*Last updated: 2026-03-24 after Phase 05 (Foundation) complete*
