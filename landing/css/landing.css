@@ -191,6 +191,35 @@
    conveyed in the comparison table and FAQ. */
 
 /* --------------------------------------------------------------------------
+   Social proof — placeholder structure (D-12)
+   -------------------------------------------------------------------------- */
+
+.social-proof__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: var(--space-6);
+}
+
+.social-proof__card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+
+.social-proof__quote {
+  margin: 0;
+}
+
+.social-proof__text {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  line-height: var(--leading-normal);
+  font-style: italic;
+}
+
+/* --------------------------------------------------------------------------
    Comparison table
    -------------------------------------------------------------------------- */
 
@@ -487,6 +516,30 @@
   font-size: var(--text-sm);
   color: var(--color-text-muted);
   line-height: var(--leading-snug);
+}
+
+/* Single footer link replaces 3 per-row CTAs — see D-16 */
+.services__also-footer {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.services__also-link {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.services__also-link:hover {
+  color: var(--color-accent);
+}
+
+.services__also-link:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
 }
 
 @media (max-width: 480px) {

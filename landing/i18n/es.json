@@ -64,6 +64,7 @@
   "services": {
     "heading": "Qué entregamos",
     "waitlist_prefix": "También disponible:",
+    "see_all": "Ver todos los servicios \u2192",
     "onetime_or": "O empieza con",
     "perf_checkup": {
       "name": "Performance Checkup",
@@ -661,5 +662,11 @@
         }
       ]
     }
+  },
+  "social_proof": {
+    "label": "Resultados",
+    "heading": "Lo que dicen los clientes",
+    "placeholder_quote": "Testimonio de cliente próximamente. Contáctanos para conocer la experiencia de nuestros primeros clientes.",
+    "placeholder_logo": "Logos de clientes próximamente."
   }
 }
