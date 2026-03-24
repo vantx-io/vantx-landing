@@ -41,11 +41,11 @@ See: `.planning/milestones/v1.0-ROADMAP.md` for full details.
   3. Unit tests for stripe.ts, slack.ts, and onboard.ts all pass and cover the primary code paths
   4. The i18n CI check fails the build if any key exists in EN but not in ES (or vice versa)
   5. `notifications` table and `task-attachments` storage bucket exist in Supabase with RLS policies applied (migration files in `supabase/migrations/`)
-**Plans:** 3 plans
+**Plans:** 2/3 plans executed
 
 Plans:
-- [ ] 05-01-PLAN.md — DB migrations (notifications table + storage bucket) and Notification type
-- [ ] 05-02-PLAN.md — Vitest infrastructure + unit tests for stripe.ts, slack.ts, onboard.ts
+- [x] 05-01-PLAN.md — DB migrations (notifications table + storage bucket) and Notification type
+- [x] 05-02-PLAN.md — Vitest infrastructure + unit tests for stripe.ts, slack.ts, onboard.ts
 - [ ] 05-03-PLAN.md — Playwright E2E setup + i18n parity script + GitHub Actions CI workflow
 
 ### Phase 6: Server-Side Integration
@@ -101,7 +101,7 @@ Plans:
 | 2. Main Landing | v1.0 | 1/1 | Complete | 2026-03-20 |
 | 3. Detail Pages | v1.0 | 3/3 | Complete | 2026-03-21 |
 | 4. Polish & Launch Gate | v1.0 | 3/3 | Complete | 2026-03-24 |
-| 5. Foundation | v1.1 | 0/3 | Planning | - |
+| 5. Foundation | v1.1 | 2/3 | In Progress|  |
 | 6. Server-Side Integration | v1.1 | 0/TBD | Not started | - |
 | 7. Notification UI | v1.1 | 0/TBD | Not started | - |
 | 8. Admin Dashboard | v1.1 | 0/TBD | Not started | - |
