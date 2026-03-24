@@ -23,7 +23,10 @@
     "setup": "npm install && npx supabase start && npx supabase db reset && node scripts/seed-demo.js && docker compose up -d && echo \"✅ Ready! Open http://localhost:3000\"",
     "test": "vitest",
     "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "e2e": "playwright test",
+    "e2e:headed": "playwright test --headed",
+    "check-i18n": "node scripts/check-i18n.js"
   },
   "dependencies": {
     "@supabase/ssr": "^0.9.0",
@@ -40,6 +43,7 @@
     "stripe": "^17.4.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
