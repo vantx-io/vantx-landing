@@ -18,6 +18,14 @@
   background: var(--color-surface);
 }
 
+@media (min-width: 1024px) {
+  .hero {
+    min-height: 0;
+    padding-top: var(--space-24);
+    padding-bottom: var(--space-24);
+  }
+}
+
 /* Fade from white hero into warm parchment background */
 .hero::before {
   content: '';
@@ -161,7 +169,11 @@
 
 .credibility {
   border-bottom: 1px solid var(--color-border);
-  animation: hero-enter 600ms var(--ease-out) 700ms both; /* lands after hero CTAs */
+  animation: fade-in 400ms var(--ease-out) both;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
 }
 
 .credibility__summary {
@@ -189,7 +201,7 @@
   padding-top: var(--space-16);
   padding-bottom: var(--space-16);
   content-visibility: auto;
-  contain-intrinsic-size: auto 500px;
+  contain-intrinsic-size: auto 520px;
 }
 
 .compare__table-wrap {
@@ -684,7 +696,7 @@
   border: 1px solid var(--color-accent-border);
   border-radius: var(--radius-lg);
   padding: var(--space-6) var(--space-8);
-  text-align: center;
+  text-align: left;
   margin-top: var(--space-10);
 }
 
@@ -709,7 +721,7 @@
 .svc-card__onetime {
   margin-top: var(--space-6);
   padding-top: var(--space-6);
-  border-top: 1px dashed var(--color-border);
+  border-top: 1px solid var(--color-border);
 }
 
 .svc-card__onetime-or {
@@ -826,7 +838,7 @@
   padding-top: var(--space-24);
   padding-bottom: var(--space-24);
   content-visibility: auto;
-  contain-intrinsic-size: auto 500px;
+  contain-intrinsic-size: auto 380px;
 }
 
 .cta-section__inner {
