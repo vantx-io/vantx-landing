@@ -12,16 +12,16 @@ Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay f
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] Landing page principal (/) con hero, servicios, cómo funciona, pricing teaser y CTA Calendly — Validated in Phase 2: Main Landing
+- [x] Páginas de detalle de servicio: Performance as a Service, Observability as a Service, Fractional Perf & SRE — Validated in Phase 3: Detail Pages
+- [x] Sistema de idioma bilingüe (EN/ES) con auto-detect del browser + toggle en navbar — Validated in Phase 1: Foundation
+- [x] Embed de Calendly como mecanismo principal de contacto/agendado de demos — Validated in Phase 2: Main Landing
+- [x] Diseño dark & techy (estética tipo Vercel/Linear) auditado con impeccable.style — Validated in Phase 4: Polish & Launch Gate
+- [x] Combinar el mejor contenido de las 4 páginas HTML existentes en `06-landing-pages/` — Validated in Phase 3: Detail Pages
 
 ### Active
 
-- [ ] Landing page principal (/) con hero, servicios, cómo funciona, pricing teaser y CTA Calendly
-- [ ] Páginas de detalle de servicio: Performance as a Service, Observability as a Service, Fractional Perf & SRE
-- [ ] Sistema de idioma bilingüe (EN/ES) con auto-detect del browser + toggle en navbar
-- [ ] Embed de Calendly como mecanismo principal de contacto/agendado de demos
-- [ ] Diseño dark & techy (estética tipo Vercel/Linear) auditado con impeccable.style
-- [ ] Combinar el mejor contenido de las 4 páginas HTML existentes en `06-landing-pages/`
+(All v1 requirements validated — ready to ship)
 
 ### Out of Scope
 
@@ -50,11 +50,15 @@ Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay f
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Hybrid structure (main + detail pages) | Main page convierte, detail pages educan — flujo natural | — Pending |
-| Auto-detect + toggle de idioma | Maximiza UX para ambos mercados sin URLs separadas | — Pending |
-| Calendly embed (no formulario propio) | Elimina fricción — reserva directa sin intermediarios | — Pending |
-| Dark & techy visual | Comunica credibilidad técnica, diferencia de consultoras genéricas | — Pending |
-| Combinar contenido existente | El copy ya está validado; no reinventar, refinar | — Pending |
+| Hybrid structure (main + detail pages) | Main page convierte, detail pages educan — flujo natural | ✓ Shipped |
+| Auto-detect + toggle de idioma | Maximiza UX para ambos mercados sin URLs separadas | ✓ Shipped |
+| Calendly embed (no formulario propio) | Elimina fricción — reserva directa sin intermediarios | ✓ Shipped |
+| Dark & techy visual | Comunica credibilidad técnica, diferencia de consultoras genéricas | ✓ Shipped |
+| Combinar contenido existente | El copy ya está validado; no reinventar, refinar | ✓ Shipped |
+
+## Current State
+
+Phase 4 complete — all 4 phases of v1 milestone shipped. Site passes WCAG 2.1 AA contrast, impeccable.style audit, keyboard nav, and iOS Safari verification. Social proof section has placeholder content ready for real testimonials.
 
 ---
-*Last updated: 2026-03-20 after initialization*
+*Last updated: 2026-03-24 after Phase 4: Polish & Launch Gate completion*
