@@ -9,15 +9,15 @@ Requirements for Platform Hardening & Admin milestone. Each maps to roadmap phas
 
 ### Testing Infrastructure
 
-- [ ] **TEST-01**: Vitest configured with Supabase manual mocks and test helpers
-- [ ] **TEST-02**: Unit tests for stripe.ts (getPriceId, formatCurrency, webhook signature)
-- [ ] **TEST-03**: Unit tests for slack.ts (channel creation, message posting)
-- [ ] **TEST-04**: Unit tests for onboard.ts (orchestration flow)
-- [ ] **TEST-05**: Playwright configured against local dev server with auth helpers
+- [x] **TEST-01**: Vitest configured with Supabase manual mocks and test helpers
+- [x] **TEST-02**: Unit tests for stripe.ts (getPriceId, formatCurrency, webhook signature)
+- [x] **TEST-03**: Unit tests for slack.ts (channel creation, message posting)
+- [x] **TEST-04**: Unit tests for onboard.ts (orchestration flow)
+- [x] **TEST-05**: Playwright configured against local dev server with auth helpers
 - [ ] **TEST-06**: E2E test: login flow (email/password → portal redirect)
 - [ ] **TEST-07**: E2E test: task CRUD (create, edit, status change)
 - [ ] **TEST-08**: E2E test: admin route redirects client-role users to portal
-- [ ] **TEST-09**: CI check: i18n key parity between EN and ES JSON files
+- [x] **TEST-09**: CI check: i18n key parity between EN and ES JSON files
 
 ### Admin Dashboard
 
@@ -89,15 +89,15 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| TEST-01 | Phase 5 | Pending |
-| TEST-02 | Phase 5 | Pending |
-| TEST-03 | Phase 5 | Pending |
-| TEST-04 | Phase 5 | Pending |
-| TEST-05 | Phase 5 | Pending |
+| TEST-01 | Phase 5 | Complete |
+| TEST-02 | Phase 5 | Complete |
+| TEST-03 | Phase 5 | Complete |
+| TEST-04 | Phase 5 | Complete |
+| TEST-05 | Phase 5 | Complete |
 | TEST-06 | Phase 9 | Pending |
 | TEST-07 | Phase 9 | Pending |
 | TEST-08 | Phase 8 | Pending |
-| TEST-09 | Phase 5 | Pending |
+| TEST-09 | Phase 5 | Complete |
 | ADMIN-01 | Phase 8 | Pending |
 | ADMIN-02 | Phase 8 | Pending |
 | ADMIN-03 | Phase 8 | Pending |

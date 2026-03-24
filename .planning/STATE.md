@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Platform Hardening & Admin
 status: unknown
-stopped_at: Completed 05-02-PLAN.md
-last_updated: "2026-03-24T22:56:17.154Z"
+stopped_at: Completed 05-03-PLAN.md
+last_updated: "2026-03-24T23:18:30.598Z"
 progress:
   total_phases: 5
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 3
-  completed_plans: 2
+  completed_plans: 3
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-24)
 ## Current Position
 
 Phase: 05 (foundation) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 
 ## Performance Metrics
 
@@ -42,6 +42,7 @@ Plan: 2 of 3
 
 *Updated after each plan completion*
 | Phase 05 P02 | 5m | 2 tasks | 7 files |
+| Phase 05 P03 | 8m | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -59,6 +60,8 @@ Key architectural decisions for v1.1:
 - [Phase 05]: Vitest globals:true avoids explicit imports in every test file
 - [Phase 05]: onboard.ts accepts supabase as parameter — injected mock in tests, no module mock needed
 - [Phase 05]: vi.stubEnv + vi.unstubAllEnvs pattern for env var isolation between tests
+- [Phase 05]: Playwright setup project pattern chosen over per-test auth — runs once, reuses storageState
+- [Phase 05]: 4-job CI with lint-and-typecheck as single gate for unit-tests, e2e-tests, i18n-check
 
 ### Pending Todos
 
@@ -74,6 +77,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-24T22:56:17.150Z
-Stopped at: Completed 05-02-PLAN.md
+Last session: 2026-03-24T23:18:30.594Z
+Stopped at: Completed 05-03-PLAN.md
 Resume file: None
