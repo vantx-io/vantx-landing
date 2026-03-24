@@ -1,17 +1,17 @@
 # Project Research Summary
 
-**Project:** Vantix Kit — B2B landing page system
-**Domain:** Static multi-page B2B SaaS marketing site — bilingual EN/ES, dark techy design, Calendly conversion
-**Researched:** 2026-03-20
+**Project:** Vantix Platform v1.1 — Platform Hardening & Admin
+**Domain:** B2B SRE/performance client portal — testing, admin dashboard, notifications, file uploads
+**Researched:** 2026-03-24
 **Confidence:** HIGH
 
 ## Executive Summary
 
-Vantix is a static, no-build B2B landing page system for a performance/SRE consultancy targeting mid-market LATAM and US engineering leaders. The research is unambiguous: vanilla HTML/CSS/JS is the correct and constrained approach — no framework, no bundler, no SSR. The architecture pattern is a fetch-inject partial system (nav/footer loaded once per page) with a data-i18n DOM-walking i18n module backed by JSON translation files. The entire stack is browser-native, CDN-delivered (Calendly, Google Fonts), and collocated with an existing 4-page site that already defines the color palette and typography.
+Vantix v1.1 is a hardening milestone layered on a fully-shipped v1.0 platform. The foundation is Next.js 14.2.18 + Supabase + Stripe, with auth, RLS, billing webhooks, Slack, Grafana, and a bilingual UI already in production. The four additions — testing infrastructure, an admin dashboard, in-app/email notifications, and task file attachments — are narrowly scoped integrations that must slot into the existing architecture without introducing new service layers. Research confirms that every required capability is already present in the stack (Supabase Storage, Supabase Realtime, existing role types, existing webhook handler, existing `attachments TEXT[]` column) and only needs wiring, UI, and a test harness to complete.
 
-The recommended build order is design tokens first, then shared CSS, then i18n infrastructure, then the main conversion page, then service detail pages. This sequence is non-negotiable: the i18n system depends on the DOM being fully assembled (partials injected) before translations are applied, and the CSS token layer must exist before components are built or color/spacing values scatter across files. The highest-value conversions happen on `index.html` via Calendly popup — the detail pages exist to satisfy deep-evaluation buyers, not as primary conversion surfaces.
+The recommended approach is to build in strict dependency order: database migrations and test infrastructure first, then server-side API routes, then shared UI components, then the admin dashboard, then file upload. This order is driven by hard architectural dependencies — nothing in the notification system works before the `notifications` table exists; no admin page is safe before middleware protection is in place; no upload UI is useful before the storage bucket and RLS policies exist. Each phase delivers a testable, demoable increment and does not require rework in subsequent phases.
 
-The top risk is the cluster of Calendly-related pitfalls: performance blocking, conversion tracking failures, and FOUC from the language system are each independently capable of making the launch embarrassing for a performance consultancy. All three must be addressed at integration time, not post-launch. A secondary risk is the SEO tradeoff of a single-URL bilingual toggle — this sacrifices Spanish organic search and must be explicitly accepted as a v1 tradeoff rather than discovered after launch.
+The dominant risks are security and data isolation, not technical complexity. Admin route protection must use middleware (not client-side `useEffect`), Supabase Realtime subscriptions must include `user_id` filters to prevent cross-tenant data leakage, and the storage bucket must be private with signed URLs from day one. Cutting corners on any of these in the name of speed creates P0 incidents in a platform that handles confidential SRE data for paying clients at $5,995/month.
 
 ---
 
@@ -19,154 +19,123 @@ The top risk is the cluster of Calendly-related pitfalls: performance blocking, 
 
 ### Recommended Stack
 
-The stack is entirely zero-build: HTML5 with `data-i18n` attributes for translation targets, CSS3 Custom Properties for the dark theme design token system, and Vanilla JavaScript (ES2022 modules) for i18n logic and partial injection. The Calendly Embed Widget is loaded async from CDN and triggered via `Calendly.initPopupWidget()` on CTA buttons. Typography is DM Sans + JetBrains Mono, already established across the codebase — self-host woff2 files before production launch to eliminate the two-server round-trip that would be especially ironic for a performance consultancy.
-
-The key architectural constraint is that no build tooling is introduced. Any solution that requires npm, a compiler, or a bundler is ruled out. This means CSS preprocessors, Tailwind, React, Astro, and separate-HTML-per-language patterns are all off the table. All existing 4 pages confirm the pattern: CSS inline `<style>` blocks will be extracted to a shared `css/` folder as part of the rebuild.
+The stack requires minimal additions. All infrastructure for notifications, file uploads, and admin already exists in Supabase — no new services, no new WebSocket providers, no new storage vendors. The only net-new dependency is Resend + React Email for transactional email. For testing, Vitest replaces Jest (Next.js official recommendation; fewer transform dependencies) and Playwright handles E2E for async Server Components that Vitest cannot render.
 
 **Core technologies:**
-- HTML5 with `data-i18n` attributes: Document structure + i18n markup — project-constrained, zero runtime cost, consistent with existing pages
-- CSS Custom Properties (`tokens.css`): Dark theme design tokens — browser-native, no preprocessor, single source of truth for all color/spacing
-- Vanilla JS ES2022 modules: i18n detection/toggle + partial injection — ~50 lines covers the full requirement, no library overhead
-- Calendly Embed Widget (CDN async): Primary conversion mechanism — popup pattern preferred for performance; pass `background_color`/`text_color`/`primary_color` URL params for dark theme alignment
-- DM Sans + JetBrains Mono: Typography — already in brand system; self-host woff2 for production
+- `vitest` + `@testing-library/react`: unit and component tests — Next.js-official, ESM-native, zero transform config; replaces Jest cleanly on a codebase with no existing tests
+- `@playwright/test`: E2E tests for auth flows, task creation, admin routes — Next.js-maintained `with-playwright` example; required for async RSC which Vitest cannot render
+- `resend` + `@react-email/components`: transactional email — purpose-built for Next.js/App Router, React JSX templates, dead-simple API, free tier covers Vantix's scale
+- `react-dropzone`: file upload UI — headless, 7KB, `useDropzone` hook fits existing Tailwind component style
+- `@radix-ui/react-dialog` + `@radix-ui/react-dropdown-menu` + `@radix-ui/react-select`: admin UI primitives — headless, WCAG-compliant, avoids shadcn migration complexity on an already-styled codebase
+- Supabase Storage (built-in): task attachment storage — same JWT auth as DB, same `createClient()`, no new credentials
+- Supabase Realtime (built-in): live notification push — already in `@supabase/supabase-js` ^2.47, `supabase.channel()` API stable since v2.0
 
 ### Expected Features
 
-The 10 P1 features that must ship at launch form a tight, interdependent set. The bilingual toggle depends on complete copy in both languages — partial translations look broken, so EN-only is preferable to shipping incomplete ES. Calendly is the single conversion mechanism; every CTA on every page should point to it. Transparent pricing is a differentiator for Vantix specifically (competitor gap: "Contact us for quote"), so the existing JetBrains Mono price display format must be preserved.
+**Must have (table stakes) — v1.1:**
+- Admin dashboard: client list, subscription status, cross-client task view — team cannot operate without this visibility
+- Admin route protection (`/admin` rejects non-admin/engineer roles) — security prerequisite before any admin page exists
+- In-app notification bell + `notifications` table with unread count and mark-as-read — core portal UX; absence is conspicuous
+- Email on payment success/failure — clients expect receipts; Stripe webhook handler already exists, just needs email trigger wired in
+- Email on task status change — closes the async communication loop for clients who don't log in daily
+- Slack message on new task created by client — highest-value notification for the Vantix team; lowest implementation cost (extends existing `slack.ts`)
+- Vitest setup + unit tests for `stripe.ts` and `slack.ts` — protects the money path and communication path from regressions
+- Playwright E2E: login + task creation — regression safety for the two most-used portal flows
+- Supabase Storage bucket `task-attachments` + RLS policies — prerequisite for upload UI
+- File upload UI in task comment form + attachment display — closes the visible schema gap (`attachments TEXT[]` exists but has no UI)
 
-**Must have (table stakes):**
-- Hero with outcome-first headline + single above-the-fold CTA — first 5 seconds decide everything
-- Service cards (3) with deliverables and transparent pricing — B2B buyers evaluate before committing
-- Problem/pain section (6 cards) — qualification filter; confirms ICP recognition
-- How it works (4-step process) — reduces friction for async-model skeptics
-- Social proof: client logos (LATAM Airlines, Mercado Libre, etc.) + stats — reduces purchase anxiety
-- Final CTA section with Calendly inline or popup — the conversion moment
-- Mobile-responsive layout — non-negotiable for any 2026 page
-- Navigation linking all pages — users must reach detail pages without friction
-- Service detail pages (3: performance, observability, fractional SRE) — deep-evaluation buyers need this
-
-**Should have (competitive differentiators):**
-- Bilingual EN/ES with `navigator.language` auto-detect + `localStorage` toggle — LATAM market access; 76% of B2B buyers prefer native-language content
-- Calendly inline embed (not just popup link) — eliminates click-away friction
-- Problem-first narrative leading into services — resonates with ICP who already feel the pain
-- "Alternative to $150K+ SRE hire" positioning near pricing — comparative value frame
-- Add-on / one-shot services section — lowers entry commitment for prospects not ready for retainer
-- Dark/techy visual design consistently applied — "built by engineers for engineers" signal
+**Should have (competitive advantage) — v1.x after validation:**
+- Admin MRR trend chart (Recharts already in deps) — operational visibility once admin baseline ships
+- Image preview for attachments — low effort, once upload ships and usage confirms it matters
+- Integration tests for API routes (`checkout`, `billing-portal`, `webhook`) — add incrementally after unit test foundation is stable
+- Drag-and-drop file upload — once basic upload is in production and friction is confirmed
 
 **Defer (v2+):**
-- Blog / resources section — requires content production workflow, CMS
-- Case studies with metrics — requires completed engagements and client approval
-- Named testimonial quotes — add when 2-3 clients are available
-- SEO optimization with separate `/en/` and `/es/` URL routes — meaningful only after domain and content are stable
-- Analytics (Plausible or similar) — ship v1, then add tracking to optimize
+- Weekly email digest to clients — requires cron job; meaningful only after notification system is proven
+- Notification preferences per user — over-engineering at current team size
+- Admin user management (invite/role change) — defer until Supabase dashboard management becomes painful
+- Playwright visual regression tests — high maintenance burden, low immediate value
+- Two-factor authentication — dedicated security hardening phase
 
 ### Architecture Approach
 
-The system is a fetch-inject partial architecture: every HTML page is a self-contained file that, on `DOMContentLoaded`, fetches `partials/nav.html` and `partials/footer.html` via `main.js`, injects them via `innerHTML`, and then (and only then) initializes `i18n.js`. The critical dependency rule is that i18n runs after partial injection — the nav contains `data-i18n` nodes that must exist in the DOM before `applyTranslations()` walks it. CSS is split into 4 files: `tokens.css` (custom properties, loaded first), `base.css`, `layout.css`, `components.css`. Translation strings live in `translations/en.json` and `translations/es.json` with flat dot-notation keys.
+The v1.1 architecture is additive, not restructuring. The platform is all-client-component pages with `useEffect` Supabase calls and no global state. New features follow this same pattern. The three meaningful structural additions are: (1) a new `/admin` route group with its own layout and role guard; (2) a single `NotificationBell` shared component mounted in both portal and admin layouts, holding the only Supabase Realtime subscription in the platform; and (3) two new Supabase migrations (`notifications` table, storage bucket policy). Cross-user notification inserts (admin action notifying a client user) must route through a server API route using `createServiceClient()` because the browser client respects RLS and cannot write rows owned by a different `user_id`.
 
 **Major components:**
-1. `css/tokens.css` — all color/spacing/type design tokens; everything else depends on these being defined first
-2. `js/i18n.js` — language detection (`localStorage` first, `navigator.languages` fallback), JSON fetch, DOM walking, toggle handler
-3. `js/main.js` — orchestrator: fetches partials, injects them, then calls `i18n.init()`; also owns scroll behavior
-4. `partials/nav.html` + `partials/footer.html` — shared fragments (no `<html>` shell); fetched once per page load
-5. `index.html` — primary conversion page: hero, pain, services, how-it-works, pricing, Calendly CTA
-6. `services/performance.html`, `services/observability.html`, `services/fractional-sre.html` — detail pages for deep-evaluation buyers
-7. `translations/en.json` + `translations/es.json` — flat-keyed copy files; single source of truth for all visible text
+1. `/admin` route group + layout — role-gated (admin/engineer/seller), separate from `/portal`, queries existing tables without `client_id` filter leveraging existing admin RLS policies
+2. `NotificationBell.tsx` — shared component, Realtime subscription filtered to `user_id=eq.{userId}`, mounted in both layouts, persists across page navigation
+3. `src/lib/email.ts` — Resend transactional email helper, called fire-and-forget from Stripe webhook and admin task/report routes
+4. `supabase/migrations/002_notifications.sql` + `003_storage.sql` — unblock all notification and upload work
+5. `__tests__/` + `playwright/` directories — Vitest unit/integration tests and Playwright E2E specs
 
 ### Critical Pitfalls
 
-1. **Language Toggle FOUC** — The language initialization script must run as a blocking `<script>` in `<head>` before any content renders. Do NOT defer or async it. Read `localStorage` synchronously and set `document.documentElement.lang` before first paint. Testing only in English Chrome will miss this.
+1. **Supabase mock missing in tests** — without `vi.mock('@/lib/supabase/client')` manual mocks, every test couples to a live DB; tests pass locally and fail in CI with `ECONNREFUSED`; establish mock infrastructure before writing any test
 
-2. **Calendly Blocks Core Web Vitals** — Calendly's widget adds 1-2s on desktop, 2-3s on mobile, plus ~1s CPU for bot-protection fingerprinting. Load the `<script>` with `async`; prefer the popup pattern over inline embed so the widget script doesn't block initial render; add `<link rel="preconnect" href="https://assets.calendly.com">` in `<head>`. A slow page from a performance consultancy is a brand-credibility failure.
+2. **Admin route protected only by `useEffect` client-side check** — clients briefly see admin UI before the check resolves and can navigate directly to `/admin` URLs; middleware must check session existence, admin `layout.tsx` must check role, neither alone is sufficient
 
-3. **Calendly Conversion Tracking Broken by Default** — Native GA4 integration fires events on `calendly.com`, not on the Vantix site. Add `window.addEventListener('message', ...)` to capture the `calendly.event_scheduled` postMessage and fire a GA4 custom event from the parent page. Verify with a test booking in GA4 Realtime before launch.
+3. **Realtime cross-tenant notification leak** — `postgres_changes` subscriptions without a `filter: 'user_id=eq.${userId}'` clause broadcast all table events to all subscribers; RLS controls SELECT but not Realtime broadcast; must enable `REPLICA IDENTITY FULL` and verify with a cross-tenant isolation test before shipping
 
-4. **Dark Theme Color Contrast Failures** — `#8A9BC0` on `#1B2A4A` fails WCAG 2.1 AA. Use `#E2E8F0` for body text, `#94A3B8` minimum for secondary/muted text. Run axe DevTools and the impeccable.style audit on the full page (not just the hero) before calling the design done. Lock tokens before building components — fixing contrast after the fact ripples through everything.
+4. **Storage bucket set to public or path/RLS mismatch** — define canonical path structure (`task-attachments/{client_id}/{task_id}/{filename}`) before writing any upload code, keep bucket private, generate signed URLs at display time; a public bucket on a confidential SRE platform is a P0 incident
 
-5. **SEO Invisibility for Spanish Content** — A single-URL JS toggle means Googlebot indexes only English. This is a known, accepted tradeoff for v1 but must be explicitly documented rather than discovered post-launch. If Spanish SEO becomes a requirement in v2, it means creating separate `/es/` pages, adding `hreflang` annotations, and resubmitting to Search Console — weeks of recovery if not planned for.
+5. **Webhook test with re-serialized body** — `stripe.webhooks.constructEvent` requires exact raw bytes; `JSON.stringify(JSON.parse(rawBody))` invalidates the HMAC signature; use `stripe.webhooks.generateTestHeaderString` with a pre-serialized raw fixture file
 
 ---
 
 ## Implications for Roadmap
 
-Based on the dependency chain from ARCHITECTURE.md and the phase warnings in PITFALLS.md, the build must follow a strict foundation-first order. The CSS token layer gates everything visual. The i18n system gates all copy. The partial system gates all shared UI. Only after those three foundations are solid should page content be added.
+The architecture research explicitly defines a dependency-driven build order. Phases map directly to that structure.
 
-### Phase 1: Foundation — File Structure, CSS Tokens, and Language System
+### Phase 1: Foundation — Database Migrations, Types, and Testing Infrastructure
+**Rationale:** Everything downstream depends on this phase. The `notifications` table unblocks all notification work. The storage bucket migration unblocks all upload work. Vitest + mock infrastructure must exist before new code is written or tests become an afterthought. The i18n key-parity CI check must be in place from the start so every subsequent phase is automatically enforced.
+**Delivers:** `002_notifications.sql` + `003_storage.sql` migrations applied; `Notification` type added to `types.ts`; Vitest configured with Supabase manual mocks; unit tests for `stripe.ts` and `slack.ts` passing; Playwright configured against local dev server; i18n key-parity CI check passing.
+**Addresses:** Testing (all table-stakes), i18n gap prevention from day one.
+**Avoids:** Pitfall 1 (mock infrastructure), Pitfall 2 (webhook test body), Pitfall 6 (translation key parity).
 
-**Rationale:** The fetch-inject sequence (main.js → inject partials → i18n.init()) and the CSS token layer are the two technical decisions everything else depends on. Getting the language system wrong here (FOUC, incorrect initialization order, overwriting stored preferences) affects every page and every element — it is far cheaper to get right first than to fix after content is authored. The SEO/URL architecture decision must also be made and documented here before any URLs are committed.
+### Phase 2: Server-Side Integration — Email Helper and Notification API Routes
+**Rationale:** `src/lib/email.ts` and the notifications API routes have no UI dependencies and can be built, unit-tested, and merged before any component needs them. The Stripe webhook extension (adding notification inserts + email sends) belongs here because it modifies existing server-side code and needs integration tests before UI is built on top.
+**Delivers:** `src/lib/email.ts` with `sendTransactionalEmail()`; `POST /api/notifications` route; `POST /api/notifications/[id]/read` route; Stripe webhook updated to insert notifications and send payment emails (fire-and-forget); webhook integration tests passing with raw fixture files.
+**Uses:** `resend` + `@react-email/components`, `createServiceClient()` pattern.
+**Avoids:** Pitfall 2 (webhook body), Pitfall 3 (email sent synchronously blocking webhook response), email recipient derived from session not request body.
 
-**Delivers:** Project directory structure, `css/tokens.css` with full dark palette and typography, `js/i18n.js` with auto-detect and toggle, `js/main.js` with partial orchestration, `translations/en.json` + `translations/es.json` skeleton, `partials/nav.html` + `partials/footer.html` skeleton, documented SEO language tradeoff decision.
+### Phase 3: Shared UI — NotificationBell Component
+**Rationale:** `NotificationBell` is a dependency of both the portal layout and the admin layout. Build it as a standalone, testable component before either layout is modified. It holds the platform's only Realtime subscription, so the cross-tenant isolation test must pass before it is mounted in any layout.
+**Delivers:** `NotificationBell.tsx` with Realtime subscription (filtered to `user_id`), unread badge, dropdown list, mark-as-read via API; Playwright `notifications.spec.ts` with cross-tenant isolation assertion; portal `layout.tsx` updated to include bell.
+**Uses:** Supabase Realtime, `REPLICA IDENTITY FULL` on notifications table.
+**Avoids:** Pitfall 4 (cross-tenant Realtime leak).
 
-**Addresses:** Bilingual EN/ES toggle (P1 feature dependency foundation), navigation shared across all pages
+### Phase 4: Admin Dashboard
+**Rationale:** Admin dashboard depends on the notifications infrastructure (Phase 3) to mount the bell. It also requires middleware protection be designed correctly before any admin page code is written. Admin task creation routes must call `POST /api/notifications` (Phase 2) to notify clients. Building this after Phases 1-3 means all dependencies are resolved.
+**Delivers:** `/admin/layout.tsx` with role guard (admin/engineer/seller), middleware extended for `/admin` path auth; `/admin/page.tsx` overview; `/admin/clients/page.tsx`; `/admin/tasks/page.tsx` with notification dispatch; `/admin/billing/page.tsx`; Playwright `admin-clients.spec.ts` verifying redirect for client-role user navigating to `/admin`.
+**Uses:** Radix UI primitives (dialog, dropdown, select), existing Recharts for MRR chart.
+**Avoids:** Pitfall 3 (client-side-only admin route protection); service role misuse in admin API routes.
 
-**Avoids:** FOUC pitfall (Pitfall 1), CSS duplication/drift anti-pattern (Architecture anti-pattern 1), separate HTML per language anti-pattern, i18n-before-partials sequencing bug (Pitfall notes + Architecture anti-pattern 4)
-
----
-
-### Phase 2: Design System and Shared Components
-
-**Rationale:** Once tokens exist, build the full CSS component library (`base.css`, `layout.css`, `components.css`) and wire the real nav/footer partials. This phase is a multiplier — every page benefits from it. Contrast and accessibility checks belong here, before any page uses the components. Running the impeccable.style audit here catches design failures before they are baked into 4 pages.
-
-**Delivers:** Complete CSS component library (hero section, service cards, CTA buttons, nav, footer, how-it-works, pricing display), real `partials/nav.html` with language toggle, `partials/footer.html`, WCAG contrast verified across all token combinations.
-
-**Uses:** CSS Custom Properties token system, DM Sans + JetBrains Mono (self-hosting decision made in Phase 1, woff2 files added here if self-hosting)
-
-**Avoids:** Dark theme contrast failures (Pitfall 4 — fix tokens here, not after pages are built), Google Fonts render-blocking (Performance trap — add `display=swap`, `preconnect`, or switch to self-hosted)
-
----
-
-### Phase 3: Main Conversion Page (`index.html`)
-
-**Rationale:** `index.html` is the primary conversion surface and the full-stack integration test. Building it before the detail pages validates that partials, i18n, Calendly, and CSS all work end-to-end on the page that matters most. The Calendly integration (async loading, popup pattern, postMessage tracking) is implemented and verified here — performance tested with PageSpeed Insights before moving on.
-
-**Delivers:** Complete `index.html` with hero, pain section, services overview, how-it-works, social proof (client logos + stats), transparent pricing, and Calendly popup CTA. Calendly conversion tracking verified. PageSpeed score > 80 with Calendly active.
-
-**Implements:** `index.html` main page, Calendly popup integration, postMessage conversion tracking
-
-**Avoids:** Calendly blocking Core Web Vitals (Pitfall 2 — lazy-load, async, preconnect), Calendly conversion tracking broken by default (Pitfall 3 — postMessage listener before launch), multiple competing CTAs (Pitfall 6 — one visible primary CTA per viewport)
-
----
-
-### Phase 4: Service Detail Pages
-
-**Rationale:** The three detail pages (`services/performance.html`, `services/observability.html`, `services/fractional-sre.html`) reuse everything built in Phases 1-3. They are structurally similar and primarily additive HTML. The Calendly integration on detail pages uses `initInlineWidget()` (full booking experience visible without a click) vs. the popup pattern on the main page. Content is migrated from existing `06-landing-pages/*.html` files.
-
-**Delivers:** Three service detail pages with consistent nav/footer, shared CSS, i18n support, and Calendly inline embeds. All cross-linking between index and detail pages verified.
-
-**Implements:** `services/performance.html`, `services/observability.html`, `services/fractional-sre.html`, Calendly inline widget on each, content migrated from existing HTML files
-
-**Avoids:** Service detail pages drifting visually from main page (Feature dependency note — shared CSS prevents this), missing mobile tap targets (Pitfall UX section — all buttons min 44x44px)
-
----
-
-### Phase 5: Polish, Audit, and Cross-Device Verification
-
-**Rationale:** The "looks done but isn't" checklist from PITFALLS.md identifies a class of failures that only appear in production-like conditions: language preference persistence on reload, Calendly tracking on a real booking, mobile rendering on iOS Safari (not DevTools), fonts on slow 3G in Incognito. This phase is the systematic verification sweep before launch.
-
-**Delivers:** Confirmed language persistence (localStorage tested on reload), confirmed Calendly booking event in GA4 Realtime, impeccable.style audit passed on all pages (not just hero), iOS Safari tested on real device, Lighthouse/PageSpeed > 80 on production URL, Spanish SEO tradeoff documented.
-
-**Avoids:** All "looks done but isn't" pitfalls simultaneously — this phase exists specifically to catch them
-
----
+### Phase 5: File Uploads
+**Rationale:** File upload UI modifies the existing `tasks/page.tsx`. All storage infrastructure (migration in Phase 1) and type definitions are already in place. Building last ensures changes to an existing production page are isolated after all other features are stable and tested.
+**Delivers:** File upload UI in task comment form using `react-dropzone`; direct Supabase Storage upload with client-side size/type validation; attachment display in comment thread (image preview + download links); signed URL generation at display time; Playwright `portal-tasks.spec.ts` covering upload flow and cross-tenant access test returning 403.
+**Uses:** `react-dropzone`, `supabase.storage.from('task-attachments')`.
+**Avoids:** Pitfall 5 (public bucket, path/RLS mismatch, permanent public URLs stored in DB).
 
 ### Phase Ordering Rationale
 
-- **Tokens before components, components before pages:** A color token change ripples through everything. Lock the system before building on top of it.
-- **i18n foundation before copy:** Writing content into HTML before the `data-i18n` system is wired produces untranslatable markup. Wire the system first with placeholder keys; add real copy later.
-- **Main page before detail pages:** Index.html is the full integration test. Catching a partial-injection/i18n sequencing bug on the main page is far cheaper than finding it on the third detail page.
-- **Calendly performance and tracking in Phase 3, not Phase 5:** These cannot be post-launch fixes. A slow page or a broken conversion funnel must be caught during the phase that introduces Calendly.
-- **Audit phase last but mandatory:** The impeccable.style audit, WCAG contrast check, and iOS Safari test are never "done" incrementally — they require a complete page to audit meaningfully.
+- **Migrations first:** `notifications` table and storage bucket are hard prerequisites; nothing works without them; putting them in Phase 1 eliminates blocked waiting in every subsequent phase
+- **Server before client:** email helper and notification API routes have no UI dependencies and can be independently tested; building them before any component reduces integration risk
+- **Shared component before consumers:** `NotificationBell` is mounted in two layouts; building it in isolation with a cross-tenant test before either layout is modified is cleaner than building it inline with admin or portal layout work
+- **Admin before file uploads:** admin dashboard has more security surface (role gating, cross-user writes) and higher business priority; file uploads touch one existing page and can ship last without blocking the team
+- **Pitfall-driven ordering:** Pitfalls 1 and 6 (test mocks, i18n parity) are placed in Phase 1 precisely so they enforce discipline on every subsequent phase automatically
 
 ### Research Flags
 
-Phases likely needing deeper research during planning:
-- **Phase 1 (Language System):** The FOUC prevention technique (blocking `<script>` in `<head>` vs. `visibility: hidden` CSS approach) has implementation nuance. The postMessage sequencing with partial injection may need a spike to verify the exact callback order.
-- **Phase 3 (Calendly Integration):** Calendly's widget API behavior (dark theme param coverage, `hideEventTypeDetails`, UTM passthrough, `calendly.event_scheduled` postMessage format) should be verified against a live Calendly account during planning — the CDN script is unversioned and can change without notice.
+All five phases follow well-documented patterns. No phase requires `/gsd:research-phase` before planning.
 
 Phases with standard patterns (skip research-phase):
-- **Phase 2 (Design System):** CSS Custom Properties theming is a well-documented, stable pattern. Implementing dark tokens is mechanical given the palette is already defined.
-- **Phase 4 (Service Detail Pages):** These are structural replicas of the main page. No novel patterns; content migration from existing HTML files is mechanical.
-- **Phase 5 (Polish/Audit):** The checklist is already written in PITFALLS.md. Execution, not research, is needed.
+- **Phase 1:** Vitest, Playwright, Supabase migration — official docs, no ambiguity
+- **Phase 2:** Resend SDK, Supabase service client, Stripe test helpers — well-documented
+- **Phase 3:** Supabase Realtime channel API — stable, well-documented v2 pattern
+- **Phase 4:** Next.js App Router route groups, role-based layouts — established pattern
+- **Phase 5:** Supabase Storage JS client, react-dropzone — stable, low-churn libraries
+
+Implementation-time verification is needed only for Resend free tier limits and exact `react-dropzone` version at install time (see Gaps below).
 
 ---
 
@@ -174,44 +143,45 @@ Phases with standard patterns (skip research-phase):
 
 | Area | Confidence | Notes |
 |------|------------|-------|
-| Stack | HIGH | All decisions verifiable from existing codebase + official Calendly docs + browser standards. Zero ambiguity: no framework, no build step. |
-| Features | HIGH | Multiple corroborated sources (B2B conversion research, existing page content, competitor analysis). P1 feature set is clear. |
-| Architecture | HIGH | Well-documented patterns (fetch-inject, data-i18n, CSS custom properties). The partial-injection/i18n sequencing dependency is the main non-obvious detail — fully documented. |
-| Pitfalls | HIGH (technical) / MEDIUM (SEO) | Calendly performance, FOUC, contrast failures are verified from specific audits and official sources. SEO single-URL limitation is medium confidence — Googlebot JS execution behavior is partially documented. |
+| Stack | HIGH | Vitest and Playwright from Next.js official docs; Supabase Storage and Realtime from direct codebase analysis; Resend is MEDIUM (training data only, no live docs fetch available during research) |
+| Features | HIGH | Derived from direct codebase analysis of 13 DB tables, 4 role types, and existing code patterns; not from market inference |
+| Architecture | HIGH | Based on direct codebase analysis; integration points verified against existing middleware, layout, and API route code |
+| Pitfalls | HIGH | Testing/Supabase/Stripe patterns are well-documented; Realtime cross-tenant behavior and Storage RLS path matching are MEDIUM (verified in training data but benefit from live doc check at implementation) |
 
 **Overall confidence:** HIGH
 
 ### Gaps to Address
 
-- **Calendly account configuration:** Research confirms the embed API but cannot verify Vantix's specific Calendly scheduling link URL, timezone settings, or ES locale support. Verify against the live account before Phase 3.
-- **Copy completeness in both languages:** The bilingual system depends on complete EN and ES translations. The existing pages have validated Spanish copy, but the restructured sections (new service card formats, how-it-works rewrite) will need new strings authored in both languages simultaneously — this is a content production dependency, not a technical one.
-- **Google Fonts vs. self-hosted decision:** Research recommends self-hosting woff2 for production Core Web Vitals, but the decision timing (Phase 1 setup vs. Phase 5 polish) should be made explicit in roadmap planning. Self-hosting has no technical complexity but requires the woff2 files to be downloaded and committed before the CSS is written.
-- **Calendly dark theme parameter coverage:** The `background_color`/`text_color`/`primary_color` URL params have a known limitation (some internal Calendly UI elements may override them). Whether this is visually acceptable requires a live test.
+- **Resend pricing and API surface:** WebFetch was blocked during research; verify free tier limits (currently understood as 3,000 emails/month) and exact SDK version at implementation time before committing to the provider
+- **react-dropzone version:** Stable library but confirm exact npm version resolves to `^14.x` at install time; no hard incompatibilities expected with React 18.3
+- **Supabase Realtime `REPLICA IDENTITY FULL`:** Must be enabled per table in the Supabase Dashboard for row-level filter matching to work in `postgres_changes` subscriptions; confirm in the project settings at the start of Phase 3
+- **Supabase Storage RLS `storage.foldername` path syntax:** Verify array indexing syntax against current Supabase Storage docs at migration time (Phase 1); canonical path structure must be locked before any upload code is written
+- **Email i18n for LATAM clients:** Research flags that `client.market` should determine email template locale; verify the `market` field exists on the `clients` table before Phase 2 email templates are authored — if absent, an alternative locale signal must be identified
 
 ---
 
 ## Sources
 
 ### Primary (HIGH confidence)
-- Existing codebase `06-landing-pages/vantix-landing-v3.html` — palette, typography, structure confirmed
-- `.planning/PROJECT.md` — explicit stack constraint: vanilla HTML/CSS/JS, no frameworks
-- [Calendly developer embed docs](https://developer.calendly.com/how-to-display-the-scheduling-page-for-users-of-your-app) — `initInlineWidget` / `initPopupWidget` API
-- [MDN: Navigator.language](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/language) — language detection
-- [Calendly Web Performance Audit — DebugBear](https://www.debugbear.com/blog/calendly-web-performance-audit) — specific performance metrics (4.5s LCP, 464 KB CSS, 1s CPU bot-protection)
-- [Track Calendly with GTM and GA4 — Analytics Mania](https://www.analyticsmania.com/post/how-to-track-calendly-with-google-tag-manager-and-google-analytics-4/) — postMessage tracking approach
+- `platform/package.json` — confirmed existing stack (Next.js 14.2.18, Supabase JS ^2.47, Stripe v17.4, next-intl 4.8, Recharts, Lucide)
+- `platform/supabase/migrations/001_schema.sql` — 13 tables, RLS policies, `attachments TEXT[]` column confirmed
+- `platform/src/lib/types.ts` — `TaskComment.attachments: string[] | null` confirmed
+- `platform/src/middleware.ts` — existing auth guard scope confirmed (portal + login only)
+- `platform/src/app/[locale]/portal/layout.tsx` — client-side role pattern confirmed
+- `platform/src/app/api/webhooks/stripe/route.ts` — synchronous handler structure confirmed
+- `platform/src/lib/supabase/client.ts` — `createBrowserClient` shared by storage + realtime
+- [Next.js Vitest Testing Guide](https://nextjs.org/docs/app/guides/testing/vitest) — official, verified 2026-03-20
+- [Next.js Playwright Testing Guide](https://nextjs.org/docs/app/guides/testing/playwright) — official, verified 2026-03-20
 
 ### Secondary (MEDIUM confidence)
-- [9 B2B Landing Page Lessons — Instapage](https://instapage.com/blog/b2b-landing-page-best-practices) — single CTA, social proof placement
-- [We studied 100 devtool landing pages — Evil Martians](https://evilmartians.com/chronicles/we-studied-100-devtool-landing-pages-here-is-what-actually-works-in-2025) — dark techy design trust signals
-- [Inclusive Dark Mode — Smashing Magazine](https://www.smashingmagazine.com/2025/04/inclusive-dark-mode-designing-accessible-dark-themes/) — contrast failure patterns
-- [Managing Multi-Regional Sites — Google Search Central](https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites) — single-URL toggle SEO limitations
-- [Localization for B2B SaaS Landing Pages — OCNJ Daily](https://ocnjdaily.com/news/2026/feb/18/localization-for-b2b-saas-landing-pages-messaging-adaptation-that-improves-conversions/) — bilingual conversion lift
+- Resend + React Email ecosystem — training data through August 2025; designed for Next.js/App Router; verify free tier and SDK version at implementation
+- Supabase Realtime `postgres_changes` filter syntax — training data; `REPLICA IDENTITY FULL` requirement confirmed in training data; verify in live docs
+- Supabase Storage RLS `storage.foldername` path matching — training data; verify syntax in current Supabase Storage docs
+- react-dropzone `^14.x` — training data; stable library; verify current npm version at install
 
-### Tertiary (LOW confidence / needs live validation)
-- Calendly `?locale=es` parameter for Spanish embed — confirmed mentioned in community sources; requires live account test
-- `#8A9BC0` on `#1B2A4A` contrast failure — inferred from WCAG math; verify with axe DevTools
+### Tertiary (LOW confidence)
+- Competitor feature analysis (Linear, Basecamp portals) — training data inference; used only for table-stakes validation, not for technical decisions
 
 ---
-
-*Research completed: 2026-03-20*
+*Research completed: 2026-03-24*
 *Ready for roadmap: yes*

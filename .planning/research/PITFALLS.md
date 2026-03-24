@@ -1,279 +1,300 @@
 # Pitfalls Research
 
-**Domain:** B2B landing page — static HTML, bilingual EN/ES, dark theme, Calendly embed
-**Researched:** 2026-03-20
-**Confidence:** HIGH (Calendly performance, i18n FOUC, dark theme contrast) / MEDIUM (SEO single-page toggle, conversion patterns)
+**Domain:** Adding testing, admin dashboard, real-time notifications, and file uploads to an existing Next.js 14 + Supabase platform (v1.1 — Platform Hardening & Admin)
+**Researched:** 2026-03-24
+**Confidence:** HIGH (testing/Supabase patterns, RLS behavior, file upload mechanics) / MEDIUM (real-time channel scoping, email i18n edge cases)
 
 ---
 
 ## Critical Pitfalls
 
-### Pitfall 1: Language Toggle Flash of Untranslated Content (FOUC)
+### Pitfall 1: Mocking Supabase in Tests Without Isolating the Service Client
 
 **What goes wrong:**
-The page renders in the default language (English) before the JavaScript reads `localStorage` and applies the saved language preference. Spanish-preferring users see a brief flash of English content on every page load. For a technically sophisticated ICP (CTOs/EMs), this signals poor craftsmanship immediately.
+Tests that import components or route handlers pull in `createClient()` or `createServiceClient()` from `src/lib/supabase/`. Without a mock, they attempt a real network connection to `localhost:54321`. When the local Supabase instance is not running (CI, first checkout), every test fails with a connection error instead of a meaningful assertion failure. Worse: tests that succeed only because the local DB has matching seed data give false confidence — they break on any other machine.
 
 **Why it happens:**
-The `navigator.language` check and DOM swap happen in JavaScript, which executes after the HTML renders. If the script tag is at the bottom of `<body>` or deferred, even a few hundred milliseconds of English content shows before Spanish replaces it. The existing `vantix-landing-v3.html` has `<html lang="es">` hardcoded — switching to a JS-driven toggle without careful sequencing will produce this flicker.
+The browser client (`createBrowserClient`) and server client (`createServerClient`) are both instantiated at module import time in the current codebase. Vitest/Jest can't intercept those calls without explicit mocking setup. Developers add a test, it "passes locally," and they move on without realizing the test is coupling to a live database.
 
 **How to avoid:**
-- Read `localStorage` and apply the `lang` attribute on `<html>` in a blocking `<script>` in `<head>` — before any content renders.
-- Use CSS: `[data-lang="es"] .lang-en { display: none; }` so the correct content is visible from first paint.
-- Do NOT use `defer` or `async` on the language initialization script.
-- Store preference as `localStorage.setItem('lang', 'es')` and read it synchronously on each page load.
+- Create `src/lib/supabase/__mocks__/client.ts` and `server.ts` as Vitest manual mocks. Return a typed object with `from`, `auth`, `storage` chains that return `{ data: ..., error: null }` by default, overridable per test.
+- Never import the real Supabase client in unit tests. Use `vi.mock('@/lib/supabase/client')` in every test file that touches portal pages.
+- For integration tests that need the real DB: gate them with a `TEST_INTEGRATION=true` env flag so they only run when local Supabase is explicitly started.
+- Add `supabase:start` as a prerequisite step in the CI integration test job (not in the unit test job).
 
 **Warning signs:**
-- Language toggle script placed at bottom of `<body>`.
-- No `localStorage` check before first render.
-- All translations managed via JS class-toggling after DOMContentLoaded.
-- Testing only in Chrome with language set to English.
+- Tests pass locally but fail in CI with `ECONNREFUSED`.
+- Test files import from `@/lib/supabase/client` or `@/lib/supabase/server` without a corresponding `vi.mock()` call.
+- `npm test` output shows different counts on different machines.
 
-**Phase to address:** Foundation / HTML structure phase (before any content is added). Get this right first — it affects every page and every element.
+**Phase to address:** Testing phase (Phase 1). Establish the mock infrastructure before writing a single test. Getting this wrong means every subsequent test needs to be rewritten.
 
 ---
 
-### Pitfall 2: Calendly Embed Tanks Core Web Vitals
+### Pitfall 2: Testing Stripe Webhook Handler Without Raw Body Preservation
 
 **What goes wrong:**
-Calendly's inline embed widget adds a render-blocking or slow-loading `<script>` tag that increases page load by 1–2 seconds on desktop and 2–3 seconds on mobile. The Calendly booking page itself has a 4.5s desktop load at the 75th percentile and 5.2s on mobile. Their CSS bundle is 464 KB with Base64-embedded fonts that are render-blocking. Google PageSpeed will flag this. Since Vantix is positioning itself as a performance engineering firm, a slow landing page is a brand-credibility failure.
+The Stripe webhook handler at `src/app/api/webhooks/stripe/route.ts` calls `stripe.webhooks.constructEvent(body, sig, secret)` where `body` is obtained via `req.text()`. In test environments, developers typically mock `Request` by passing a JSON object or parsed body. `constructEvent` requires the **exact raw byte string** that was signed — any re-serialization (even `JSON.stringify(JSON.parse(rawBody))`) changes whitespace and invalidates the signature. Tests using a constructed `Request` with `JSON.stringify(payload)` will always fail signature verification.
 
 **Why it happens:**
-Developers copy-paste Calendly's embed snippet directly into `<body>` without deferring it. The script loads synchronously, blocking the main thread before the page is interactive. The bot-protection fingerprinting script alone consumes ~1 second of CPU.
+The Stripe signing mechanism is documented in webhook setup guides but developers writing unit tests construct Request objects with `new Request(url, { body: JSON.stringify(event) })` without realizing Stripe's HMAC is computed over the original raw bytes.
 
 **How to avoid:**
-- Use the `async` attribute on the Calendly `<script>` tag at minimum.
-- Prefer lazy-loading the Calendly widget: initialize it only when the user scrolls the booking section into view (`IntersectionObserver`) or clicks a "Book a Demo" button (popup/modal pattern).
-- For the popup pattern: load only the lightweight Calendly badge widget script, not the full inline embed, until user interaction.
-- Add `<link rel="preconnect" href="https://assets.calendly.com">` in `<head>` to reduce connection overhead.
-- Test with Google PageSpeed Insights with and without the Calendly embed to quantify the delta.
+- In webhook tests, use Stripe's official test helper: `stripe.webhooks.generateTestHeaderString({ payload: rawBody, secret: testSecret })` to produce a valid `stripe-signature` header for the exact raw body string you're testing.
+- Capture real Stripe event payloads using `stripe listen --print-json` and store them as `.json` fixture files in `src/app/api/webhooks/stripe/__fixtures__/`. Load them with `fs.readFileSync` (as raw string, not parsed) in tests.
+- For the idempotency tests (duplicate event delivery), reuse the same raw fixture string with a new header to verify the handler returns 200 without double-inserting.
 
 **Warning signs:**
-- Calendly `<script>` tag placed synchronously in `<head>`.
-- No `async`/`defer` attribute on the script.
-- Full inline embed rendered at page load on a section below the fold.
-- PageSpeed Insights showing third-party blocking scripts from `assets.calendly.com`.
+- Webhook test always hits the `catch` block with "No signatures found matching the expected signature for payload."
+- Webhook test uses `body: JSON.stringify(event)` instead of a pre-serialized fixture string.
+- No fixture files in the webhooks directory — raw payloads are constructed inline.
 
-**Phase to address:** Calendly integration phase. Treat embed performance as a first-class requirement, not a post-launch fix.
+**Phase to address:** Testing phase (Phase 1). The webhook handler contains the most critical business logic (subscription creation, payment recording). It must be the first integration test written.
 
 ---
 
-### Pitfall 3: Calendly Conversion Tracking is Broken by Default
+### Pitfall 3: Admin Dashboard Using Client-Side Role Check Instead of Server-Side
 
 **What goes wrong:**
-Standard Google Analytics 4 conversion tracking does not fire for Calendly bookings when using an inline embed. The booking confirmation lives inside an `<iframe>` on Calendly's domain, so GA4 events from the confirmation page fire against `calendly.com`, not the Vantix site. This makes it impossible to know how many demo bookings the landing page generated without extra setup. For a v1 launch, flying blind on the primary conversion metric is a significant operational risk.
+The current portal layout (`src/app/[locale]/portal/layout.tsx`) is a `'use client'` component that fetches the user profile via `supabase.auth.getUser()` + `supabase.from('users').select()` in a `useEffect`. Adding admin-only nav items or admin pages by checking `user.role === 'admin'` in JSX means the role check happens **after** the page has rendered. A client user briefly sees admin controls (or can navigate to admin URLs) before the check resolves.
 
 **Why it happens:**
-The Calendly embed is a cross-origin iframe. The browser blocks cross-origin access to the iframe's window/document, so standard `gtag()` calls on the parent page do not detect the booking event. Most tutorials describe the GA native integration in Calendly's settings, but that fires GA events from Calendly's own measurement ID, not the site's.
+The existing pattern for the entire portal is client-side data fetching. Developers extending it for admin will naturally follow the same pattern: add a role check in the useEffect callback, conditionally render admin nav items. This works visually but provides zero actual protection.
 
 **How to avoid:**
-- Use the `window.addEventListener('message', ...)` approach: Calendly posts `postMessage` events to the parent window when a booking is scheduled. Listen for `calendly.event_scheduled` in the parent window and fire a GA4 custom event from there.
-- Alternatively, use the Calendly + GTM integration: add a Custom HTML tag in GTM that listens for the Calendly postMessage and pushes to the dataLayer.
-- Verify tracking works in GA4 Realtime reports during testing — do not assume it works until you see a test booking registered.
+- Admin routes (`/portal/admin/*`) must be protected at the middleware level, not in `useEffect`. Extend `src/middleware.ts` to check `user.role` from the session or a fast DB lookup before serving admin pages. Redirect non-admins to `/portal` with a 307.
+- Do NOT rely on the existing portal layout's `useEffect` check as the authorization gate. It is a UX convenience, not a security boundary.
+- The admin section should use a separate layout (`src/app/[locale]/portal/admin/layout.tsx`) that is a Server Component fetching the user role server-side on every request.
+- Add a RLS policy on any admin-writable tables: `USING ((SELECT role FROM users WHERE id = auth.uid()) IN ('admin', 'engineer'))`. The schema already has `"Admins see all tasks"` policy — add equivalent INSERT/UPDATE/DELETE policies for admin-only operations.
 
 **Warning signs:**
-- GA4 integration configured only in Calendly's settings panel (not on the site).
-- No `window.addEventListener('message', ...)` code on the landing page.
-- No test booking recorded in GA4 Realtime before launch.
+- Admin nav items appear in the sidebar before the `useEffect` resolves (visible briefly in loading state).
+- Admin page route is accessible by navigating directly to the URL as a client-role user.
+- Role check is the only thing in a `useEffect` or inside a JSX ternary in a client component.
+- No middleware extension for `/portal/admin`.
 
-**Phase to address:** Calendly integration phase. Tracking must be verified before launch, not added after.
+**Phase to address:** Admin dashboard phase (Phase 2). Design the authorization model first, before building any admin UI. A retroactive security fix on admin is far more expensive than designing it correctly.
 
 ---
 
-### Pitfall 4: Dark Theme Color Contrast Failures on Accent Text
+### Pitfall 4: Supabase Realtime Subscriptions Leaking Across Clients
 
 **What goes wrong:**
-The existing pages use `#8A9BC0` (muted blue-gray) for subtitle/secondary text on a dark `#1B2A4A` or `#0F1B33` background. This combination fails WCAG 2.1 AA contrast ratio (4.5:1 required for normal text). Additionally, pure white `#fff` on pure black (`#000`) creates a halation/blooming effect that causes eye strain — affecting users with astigmatism, a not-uncommon condition among the target demographic (engineers who stare at screens all day). Low-contrast borders and muted icon colors are invisible in certain display environments.
+When adding real-time notifications (e.g., `supabase.channel('notifications').on('postgres_changes', ...).subscribe()`), subscriptions are scoped by the JS runtime, not by RLS. A bug in channel naming or filter configuration causes one client's connection to receive notification events intended for another client. In a multi-tenant platform where clients pay for confidential SRE work, data leakage across tenants is a P0 incident.
 
 **Why it happens:**
-Developers visually approve colors on their own calibrated displays under controlled lighting. The Vercel/Linear aesthetic uses intentionally muted secondary text — but those products prioritize app-interface readability after login, not landing-page conversion. On a landing page, every word must be readable to convert.
+Developers assume RLS on the `notifications` table will automatically restrict what Postgres changes are broadcast over Realtime. RLS does control what a user can SELECT — but Supabase Realtime's `postgres_changes` event is broadcast based on the table-level `REPLICA IDENTITY` and the channel filter, not purely on RLS. If the filter is misconfigured or missing, all row changes broadcast to all subscribers of that table.
 
 **How to avoid:**
-- Use `#E2E8F0` (off-white) or `#CBD5E1` for body text, never pure `#fff` for large text blocks.
-- Use `#94A3B8` at minimum for secondary/muted text — verify with a contrast checker.
-- Use `#1E2A3A` or `#121820` instead of pure black for backgrounds.
-- Run the full page through the impeccable.style cheatsheet (already in project requirements) AND an automated WCAG contrast checker (e.g., WebAIM Contrast Checker or axe DevTools).
-- Specifically test: hero subtitle, service card descriptions, "how it works" step text, footer links.
-- Check that `#2E75B6` (accent blue) on dark backgrounds meets 3:1 for large text (bold headings) and 4.5:1 for body text.
+- Always include a `filter` clause that scopes to the current user's `client_id`: `{ event: '*', schema: 'public', table: 'notifications', filter: 'client_id=eq.' + clientId }`.
+- Enable `REPLICA IDENTITY FULL` on the notifications table so Supabase can evaluate row-level filters correctly.
+- In Supabase Dashboard > Realtime, explicitly enable the table for Realtime (it is opt-in per table, not automatic).
+- Test cross-tenant isolation: log in as Client A, subscribe to notifications, then from a service-role client trigger an insert for Client B — verify Client A's subscription receives nothing.
+- Use unique channel names per user session: `'notifications:' + userId` prevents accidental shared channel state.
 
 **Warning signs:**
-- Secondary text colors in the `#8A9BC0` or `#999` range used on dark backgrounds.
-- Approving colors only on a designer's Retina display.
-- impeccable.style audit done only on the hero section, not the full page.
-- No contrast ratio check on service cards, pricing, or footer.
+- Channel subscription has no `filter` property — subscribed to all changes on the table.
+- No cross-tenant isolation test in the test suite.
+- Realtime not enabled on the notifications table in Supabase Dashboard.
+- `REPLICA IDENTITY` is set to `DEFAULT` (only broadcasts PK) instead of `FULL`.
 
-**Phase to address:** Design system / CSS phase. Lock in the color tokens before building components. Do not iterate on contrast after all components are built.
+**Phase to address:** Notifications phase (Phase 3). The tenant isolation test must be written and pass before the feature ships.
 
 ---
 
-### Pitfall 5: SEO Invisibility from Single-Page Language Toggle
+### Pitfall 5: File Upload Bypassing RLS via Storage Bucket Path Mismatch
 
 **What goes wrong:**
-Using a JavaScript toggle that swaps visible text in-place (show/hide EN vs ES content on the same URL) means Google indexes only one language — whichever renders in the initial HTML. The Googlebot crawler originates from the US, uses English Accept-Language headers, and does not execute all JavaScript path variations. Spanish-language organic search (a real channel for Latin American CTOs) receives zero benefit. There are no separate URLs to set `hreflang` on.
+Supabase Storage uses RLS policies with path-based matching (e.g., `storage.foldername(name)[1] = auth.uid()`). When uploading task attachments, developers set the storage path to something like `task-attachments/{filename}` — a flat structure. The RLS policy is written expecting `{user_id}/{filename}`. The policy silently fails to match, and the fallback behavior depends on whether the bucket is public or private. On a private bucket with misconfigured policy, uploads fail for all users. On an accidentally public bucket, all files are readable by anyone with the URL.
 
 **Why it happens:**
-The single-URL approach feels architecturally clean for a static site. Developers assume Googlebot executes JavaScript like a real user — it does not do so reliably for dynamically swapped content.
+Storage RLS policies require the developer to reason about path structure at policy definition time, then enforce that same structure at upload time. These two places are written at different moments, by potentially different people, with no type-safety between them. The mismatch is invisible until runtime.
 
 **How to avoid:**
-- For SEO purposes, separate URLs are the correct approach: `/` (English) and `/es/` (Spanish), or `index.html` and `index.es.html` for static file hosting.
-- If true separate pages are too costly for v1, at minimum pre-render both language versions as separate `.html` files and add `<link rel="alternate" hreflang="es" href="/es/">` in the English page and vice versa.
-- The toggle can still exist as a UX convenience that redirects between the two pages.
-- Accept that v1 with a single-URL toggle sacrifices Spanish SEO. Document this as a known tradeoff, not an oversight.
+- Define the canonical storage path structure before writing any upload code: `task-attachments/{client_id}/{task_id}/{filename}`. Document it as a constant.
+- Write the RLS policy to match this exact structure: `(storage.foldername(name))[1] = (SELECT client_id::text FROM users WHERE id = auth.uid())`.
+- Keep the bucket **private** by default. Generate signed URLs for file download with a short expiry (1 hour).
+- Write an integration test that: (a) uploads a file as Client A, (b) attempts to download it as Client B, (c) verifies Client B gets a 403/401.
+- The `task_comments` table already has `attachments TEXT[]` — store only the Supabase Storage path (not a public URL) in this column. Generate signed URLs at display time.
 
 **Warning signs:**
-- Both EN and ES content present in the same HTML file with CSS `display:none`.
-- No separate URL structure for the two languages.
-- No `hreflang` annotations in `<head>`.
-- No Spanish-language content discoverable by searching `site:yourdomain.com` in Google.
+- Storage bucket is public.
+- Upload path is flat (`{filename}`) with no user or client namespace.
+- Signed URL generation is not implemented — raw storage URLs are stored in the DB.
+- No cross-tenant file access test.
 
-**Phase to address:** HTML architecture / URL structure phase. This decision must be made before any pages are built — restructuring URLs after launch requires redirects and re-indexing.
+**Phase to address:** File uploads phase (Phase 4). Storage RLS design must be settled before a single upload button exists in the UI.
 
 ---
 
-### Pitfall 6: Multiple Competing CTAs Diluting the Primary Conversion
+### Pitfall 6: next-intl Translation Keys Missing for New Features Cause Silent Fallback
 
 **What goes wrong:**
-Landing pages for technical products accumulate CTAs: "Book a Demo," "See Pricing," "Read Case Study," "Contact Us," "Learn More," "Watch Video." Each CTA added reduces the click rate on the primary CTA. For Vantix, the primary conversion is demo booking via Calendly. Any secondary CTA that competes with it reduces demo bookings. A CTO who clicks "Learn More" and navigates to a detail page may never return to book.
+The platform already uses `next-intl` with `en.json` and `es.json` message files. When adding new features (admin dashboard, notifications, file uploads), developers add English UI strings inline or as new translation keys in `en.json` but forget to add the equivalent to `es.json`. `next-intl` does not throw — it silently returns the key name as the rendered string (e.g., "admin.clients.title" appears verbatim in the Spanish UI). This is only caught during manual testing in ES locale, which developers often skip.
 
 **Why it happens:**
-The existing 4 HTML pages have rich content (missions, services, process) that naturally generates multiple link opportunities. Combining them into a unified landing page creates temptation to link everything.
+The two JSON files must be kept in sync manually. There is no build-time check that both files have all the same keys. Adding a string to `en.json` is the natural workflow; syncing `es.json` is an afterthought.
 
 **How to avoid:**
-- One primary CTA per section: the Calendly booking button.
-- Secondary CTAs (service detail pages) are acceptable ONLY below the fold, styled as text links — not buttons.
-- The hero section must have exactly one prominent button: "Book a Free Discovery Call" (or equivalent) pointing to Calendly.
-- "Learn More about [Service]" links should open detail pages but NOT appear in the hero or primary CTA sections.
-- Test the page by squinting: if multiple blue/prominent buttons are visible at once, reduce.
+- Add a CI check (or `package.json` script) that diffs the key structure of `en.json` and `es.json`: `node -e "const en = require('./en.json'); const es = require('./es.json'); /* walk keys, assert structural parity */"`. Fail the build if keys are missing in either file.
+- In development, set `next-intl`'s `onError` handler in `src/i18n/request.ts` to `throw` in development mode (it defaults to logging), making missing translation keys loud.
+- Work in pairs: write the English key and Spanish key in the same commit. Code review must check that both files were updated.
+- For admin-only strings that will never appear to Spanish-speaking clients, document the decision explicitly rather than leaving Spanish keys empty.
 
 **Warning signs:**
-- Two buttons in the hero section.
-- "Contact Us" AND "Book a Demo" both styled as primary buttons anywhere on the page.
-- Navigation links to detail pages placed before the first Calendly CTA.
+- Literal key strings like `"admin.clients.title"` visible in the ES locale UI.
+- `en.json` and `es.json` have different key counts.
+- Pull requests modifying UI text only touch `en.json`.
+- No automated key-parity check in CI.
 
-**Phase to address:** Content/copy phase. Define CTA hierarchy before writing any copy or placing any buttons.
+**Phase to address:** All phases. Add the key-parity CI check in Phase 1 (testing infrastructure) so it is enforced from the start.
 
 ---
 
 ## Technical Debt Patterns
 
+Shortcuts that seem reasonable but create long-term problems.
+
 | Shortcut | Immediate Benefit | Long-term Cost | When Acceptable |
 |----------|-------------------|----------------|-----------------|
-| Copy-paste all 4 HTML files' CSS into one `<style>` block | Fast to start | 400-800 lines of unorganized CSS, impossible to maintain or audit with impeccable.style | Never — extract CSS to a shared file from the start |
-| Inline all translations in HTML with `display:none` toggle | No JS translation logic | FOUC, SEO indexing only one language, DOM is 2x larger | Only if SEO is explicitly out of scope for v1 |
-| Calendly link only (no embed) | Zero performance impact | Higher friction (new tab/window), breaks conversion flow | Acceptable for v1 if embed performance is unresolved |
-| Hardcode `<html lang="es">` without toggle | Matches existing pages | English-speaking visitors get wrong language, no auto-detect | Never for a bilingual site |
-| Use Google Fonts CDN without fallback | Easy, works on fast connections | Render-blocking on slow connections, GDPR concerns in EU | Only with `display=swap` and system font fallback |
-| Pure `#000000` background and `#ffffff` text | Looks "dark" immediately | Halation effect, accessibility failures, high CLS if fonts load slowly | Never |
+| Testing only the happy path in webhook tests | Faster test writing | Payment failures, cancellations, duplicate events are untested — first real billing issue hits production cold | Never — webhook handlers need adversarial tests |
+| Admin check in `useEffect` only (client-side) | Reuses existing portal layout pattern | Admin routes accessible via direct URL navigation; security depends entirely on RLS | Never — middleware protection is required |
+| Polling for notifications (`setInterval` + `supabase.from('notifications').select()`) | No Realtime subscription setup needed | Every connected user hammers the DB every N seconds; 10 concurrent users = 10 req/s on a free Supabase tier | Only acceptable as MVP fallback if Realtime encounters blocking issues |
+| Storing public storage URLs in `task_comments.attachments` | No signed-URL generation code needed | Files permanently publicly accessible; storage URLs do not expire; leak risk if someone gets the path | Never in production — always use signed URLs with expiry |
+| Using `any` type in upload/download code | Faster implementation | TypeScript won't catch incorrect field names; storage path bugs become runtime errors | Never — Supabase Storage operations have well-typed SDKs |
+| Sending transactional email in the webhook handler synchronously (await inside switch) | Simple — no queue | Webhook times out (>30s) on email provider slowness; Stripe retries the webhook; duplicate emails sent | Never — fire-and-forget with logging, or use a queue |
+| Hard-coding `'en'` as the email template locale | Removes bilingual email complexity | LATAM clients (`market = 'LATAM'`) receive English emails for a product sold in Spanish | Only acceptable as an explicitly documented v1.1 deferral, not an accident |
 
 ---
 
 ## Integration Gotchas
 
+Common mistakes when connecting to external services.
+
 | Integration | Common Mistake | Correct Approach |
 |-------------|----------------|------------------|
-| Calendly inline embed | Placing `<script src="https://assets.calendly.com/assets/external/widget.js">` synchronously in `<head>` | Add `async`, place at bottom of `<body>`, or lazy-load with IntersectionObserver |
-| Calendly conversion tracking | Using only Calendly's native GA integration (tracks on calendly.com, not your site) | Add `window.addEventListener('message', ...)` to capture `calendly.event_scheduled` postMessage and fire GA4 event from parent page |
-| Google Fonts | Blocking render with synchronous `<link>` in `<head>` without `display=swap` | Use `<link rel="preconnect" href="https://fonts.googleapis.com">` and `font-display: swap` |
-| navigator.language detection | Using `navigator.language` alone and overriding stored user preference | Check `localStorage.getItem('lang')` first; only fall back to `navigator.language` if no stored preference; never override an explicit user choice |
-| Calendly popup vs inline | Defaulting to inline embed for "seamless feel" without testing performance | Test both options; popup/modal triggered by CTA button often has better Core Web Vitals because the widget script doesn't block initial render |
+| Supabase Realtime | Subscribe to a table without enabling it in Dashboard > Realtime | Enable Realtime per table explicitly; it is opt-in |
+| Supabase Realtime | Missing `filter` parameter in `postgres_changes` subscription | Always pass `filter: 'client_id=eq.' + clientId` for tenant isolation |
+| Supabase Storage | Creating a public bucket for task attachments | Create a private bucket; generate 1-hour signed URLs at download time |
+| Supabase Storage | Writing RLS policy using `auth.uid()` path matching but uploading to a client-scoped path | Keep path structure and RLS policy in sync; document the canonical path as a constant |
+| Stripe webhook (tests) | Using `JSON.stringify(mockEvent)` as the request body in unit tests | Use Stripe's `generateTestHeaderString` with a pre-serialized raw fixture string |
+| Stripe webhook (production) | Sending email in the same `async switch` block | Fire email asynchronously (`.then().catch()`) to avoid timeout-triggered retries |
+| next-intl email templates | Using `useTranslations()` hook inside a server-side email renderer | Use `getTranslations(locale)` (async, server-safe) instead of the React hook |
+| Grafana iframe (admin view) | Embedding admin-level Grafana dashboards in the admin portal using the same anonymous-viewer URL | Admin views should use a separate Grafana service account token scoped to admin org; do not reuse the client-facing anonymous token |
 
 ---
 
 ## Performance Traps
 
+Patterns that work at small scale but fail as usage grows.
+
 | Trap | Symptoms | Prevention | When It Breaks |
 |------|----------|------------|----------------|
-| Calendly widget loaded at page init | LCP > 3s, PageSpeed score < 50, Google flags third-party blocking scripts | Defer/lazy-load Calendly; use IntersectionObserver to load on scroll | Immediately — even on fast connections, adds 1-2s |
-| Unoptimized hero image | LCP > 2.5s, image takes longest to paint | Use WebP, set `width`/`height` attributes, add `fetchpriority="high"` to hero `<img>` | Always on mobile; intermittently on desktop |
-| Google Fonts blocking render | FCP delayed, FOUC on slow connections | Add `display=swap`, preconnect hints, consider self-hosting DM Sans + JetBrains Mono | On 3G/slow connections, noticeably on mobile |
-| Inline `<style>` blocks per page | Works fine, but code duplication, can't cache | Extract shared CSS to `styles.css`, keep page-specific overrides inline | Not a performance issue per se — a maintenance trap that compounds over time |
-| Both language versions in DOM simultaneously | DOM size doubles, layout time increases | Use separate pages or server-side rendering per language | At high content volume; manageable for small pages but bad practice |
+| Notification polling with `setInterval` | DB query count spikes with concurrent users; free Supabase tier rate limits | Use Supabase Realtime channel subscription instead | ~5-10 concurrent logged-in users |
+| Portal layout fetching auth + profile + client + subscription on every navigation (existing bug) | Each page change fires 3 Supabase queries; adds ~200-400ms per navigation | Extract to a React context provider wrapping the portal; fetch once on mount, not on every route change | Immediately visible; gets worse as the portal grows |
+| Admin page loading all clients + all subscriptions + all metrics in one query without pagination | Admin dashboard takes 3-5s to load as data grows | Add pagination (limit/offset or cursor) from the first render; never `select('*')` on admin tables without a LIMIT | When clients table exceeds ~50 rows |
+| Uploading files directly to Supabase Storage from the browser on slow connections without progress indication | User clicks upload, waits with no feedback, clicks again, double-uploads | Show upload progress using the `onUploadProgress` callback from the Supabase storage JS client | First user on a slow mobile connection |
+| Generating signed URLs for all attachments on every comment load | If a task has 20 comments each with 3 attachments, that is 60 signed URL API calls on page load | Batch generate signed URLs only for the visible/expanded comment; lazy-generate on expand | ~10+ comments with attachments per task |
 
 ---
 
 ## Security Mistakes
 
+Domain-specific security issues beyond general web security.
+
 | Mistake | Risk | Prevention |
 |---------|------|------------|
-| Trusting `navigator.language` for displaying sensitive regional content | Fingerprinting vector; not a security issue for this project | N/A — language is cosmetic, not security-sensitive here |
-| Calendly link exposed to scraping | Demo booking spam / calendar pollution | Use Calendly's built-in spam protection; consider requiring email verification in Calendly settings; no server-side mitigation needed on static site |
-| No Content-Security-Policy header | XSS risk from third-party scripts (Calendly, Google Fonts) | Add CSP via HTML `<meta>` tag or hosting provider headers; whitelist `assets.calendly.com` and `fonts.googleapis.com` explicitly |
-| localStorage used to store user preferences | Low risk — but data exposed to any JS on page | Language preference is non-sensitive; acceptable for this use case |
+| Admin routes protected only by client-side role check in `useEffect` | Any client-role user can navigate to `/portal/admin` and see admin data before the check resolves | Extend `src/middleware.ts` to gate `/portal/admin/*` with a server-side role check |
+| `/api/checkout` and `/api/billing-portal` routes accept `clientId` from request body without session validation (existing concern) | Authenticated user can trigger checkout/billing portal for any other client's account | Derive `clientId` from the authenticated session server-side; never trust the request body for identity |
+| Service role key (`createServiceClient`) used in admin API routes | Admin API routes that use service role bypass all RLS — a single injection vulnerability gives full DB access | Scope service role strictly to webhook handlers; use the user's session client for admin operations and rely on admin-scoped RLS policies |
+| Supabase Storage bucket set to public for "convenience" during development | Anyone with a guessed storage path can download client attachments (task files, reports) | Keep buckets private; signed URLs with short expiry; never store public URL in DB |
+| Email sending triggered from a client component via a fetch to an unprotected API route | Any caller can trigger transactional emails for arbitrary email addresses | Email-sending API routes must validate the session and derive recipient from `auth.uid()`, not from request body |
+| Admin impersonation (viewing platform as a specific client) without audit log | No trace of which admin accessed which client data | Log admin access events to a `audit_log` table before building any admin impersonation feature |
 
 ---
 
 ## UX Pitfalls
 
+Common user experience mistakes in this domain.
+
 | Pitfall | User Impact | Better Approach |
 |---------|-------------|-----------------|
-| Language toggle not visible in navbar | Spanish-speaking CTOs get stuck in English, bounce | Language toggle must be in the top navbar, always visible, high contrast against dark background |
-| Calendly embed opens to wrong timezone or in wrong language | First impression is confusion; user closes the widget | Verify Calendly account settings match target audience; Calendly supports locale settings in the embed URL via `?locale=es` parameter |
-| Calendly inline embed below a long scroll | CTO has to scroll far to find the booking form | Primary CTA in hero section opens Calendly popup/modal; do not rely only on the inline section at the bottom |
-| Feature descriptions instead of outcome descriptions | Technical buyers skim past "we offer SRE" and look for ROI | Lead with outcomes: "reduce MTTR by 60%", "eliminate $150K/yr SRE hire" — not service names |
-| No pricing information (or hidden behind contact form) | B2B buyers self-qualify on price; hiding it filters serious leads OUT | Show starting prices or price ranges in the pricing teaser section; the existing pages have JetBrains Mono price display — keep it |
-| Mobile CTAs with tap targets under 44px | CTOs reviewing on phone cannot tap the booking button | All buttons must be `min-height: 44px; min-width: 44px`; test on actual iPhone/Android, not just Chrome DevTools responsive mode |
-| Auto-redirect on language detection without user confirmation | Visiting from US VPN shows English to a Spanish-speaking user; visiting from LATAM shows Spanish to an English speaker | Use detection as a soft suggestion banner, not a hard redirect; preserve toggle override |
+| Admin and client views sharing the same sidebar with admin items hidden by JS | Clients on slow connections briefly see admin nav items before the role check resolves | Admin lives at a separate route prefix (`/portal/admin`) protected by middleware; the shared sidebar never renders admin items for clients |
+| Real-time notification badge disappearing on page navigation (no persistence) | User sees a notification, navigates away, badge disappears — unread state is lost | Store read/unread state in the `notifications` table, not in React state; derive badge count from DB |
+| File upload replacing the comment form submit button with a separate "Attach" button | Confusing UX — users try to submit the comment before attaching, or forget to attach | Integrate attachment into the comment form; one submit action posts comment + attachments atomically |
+| Email notifications sent in English to LATAM clients | Feels impersonal and unprofessional to Spanish-speaking clients paying $5,995/mo | Use `client.market` or `user` locale preference to select email template language; default to Spanish for `market = 'LATAM'` |
+| Notification bell shows total notification count including dismissed ones | Stale badge count creates "crying wolf" effect — users stop acting on notifications | Badge count = unread (not dismissed) notifications only; implement dismiss/mark-as-read before shipping the bell |
+| Admin dashboard loads all data eagerly without loading states | Admin sees a blank/broken UI for 2-3 seconds on first load | Show skeleton loaders per card/section; load critical summary stats first, detail tables lazily |
 
 ---
 
 ## "Looks Done But Isn't" Checklist
 
-- [ ] **Calendly embed:** Widget loads, but conversion tracking is NOT verified — check GA4 Realtime for a test booking before calling it done.
-- [ ] **Language toggle:** Switching language works, but saved preference is NOT tested on page refresh — reload the page after switching to confirm localStorage persists.
-- [ ] **Dark theme:** Looks good on developer's calibrated display, but WCAG contrast ratio is NOT checked — run axe DevTools or WebAIM on every text/background combination.
-- [ ] **Mobile layout:** Chrome DevTools responsive mode shows OK, but page is NOT tested on actual iOS Safari — test on a real phone; Safari renders fonts and dark backgrounds differently.
-- [ ] **Performance:** Page loads fast in development, but Calendly widget is NOT accounted for — run PageSpeed Insights on the production URL after Calendly is integrated.
-- [ ] **SEO language:** Both languages appear to work in browser, but Google CANNOT index the Spanish content — verify with `site:` search or Google Search Console after launch.
-- [ ] **Google Fonts:** Fonts load locally (cached), but behavior on first visit / slow connection is NOT tested — test in Incognito with network throttling set to "Slow 3G."
-- [ ] **impeccable.style audit:** Hero section reviewed, but service cards, pricing teaser, "how it works" section, and footer are NOT audited — run the full page, not just above the fold.
+Things that appear complete but are missing critical pieces.
+
+- [ ] **Testing:** Test suite runs `npm test` and all pass — but tests mock nothing. Verify tests pass with `NEXT_PUBLIC_SUPABASE_URL` pointing to a non-existent host.
+- [ ] **Testing:** Webhook handler tests cover `invoice.payment_failed` and `customer.subscription.deleted`, not just the happy path `checkout.session.completed`.
+- [ ] **Admin dashboard:** Admin nav item appears in sidebar conditionally — but verify direct URL navigation to `/portal/admin` as a `client`-role user returns a redirect, not the page.
+- [ ] **Admin dashboard:** Admin can view all clients — but verify the RLS policy prevents a client user from calling the same query and seeing other clients' data.
+- [ ] **Notifications (Realtime):** Channel subscription appears to work — but verify in the Network tab that no notification events from Client B appear in Client A's WebSocket messages.
+- [ ] **Notifications (email):** Email sends in development — but verify the `to:` address is derived from `auth.uid()` session, not from the request body.
+- [ ] **File uploads:** Upload succeeds and file appears in Supabase Storage — but verify that navigating to the raw storage URL as a different authenticated user returns 403.
+- [ ] **File uploads:** Attachment shows in the task comment — but verify the display URL is a signed URL (short expiry), not a permanent public URL.
+- [ ] **i18n:** All new UI strings appear correctly in EN locale — but manually test every new screen in ES locale and verify no literal key strings render.
+- [ ] **Email i18n:** Email sends correctly with EN template — but verify LATAM-market clients receive the ES template.
+- [ ] **Types:** `src/lib/types.ts` comment says "generated" but there is no `db:types` script. After adding the `notifications` table migration, verify `types.ts` was updated to include the new table type.
 
 ---
 
 ## Recovery Strategies
 
+When pitfalls occur despite prevention, how to recover.
+
 | Pitfall | Recovery Cost | Recovery Steps |
 |---------|---------------|----------------|
-| FOUC on language toggle | LOW | Move language init script to `<head>` blocking position; takes ~30 min |
-| Calendly embed blocking performance | MEDIUM | Switch from inline to popup pattern; requires restructuring one page section |
-| Broken conversion tracking | LOW | Add postMessage listener + GA4 event; 1–2 hours of work; no design changes needed |
-| Dark theme contrast failures found post-launch | MEDIUM | Update CSS color tokens; ripples through all components if tokens not centralized |
-| SEO single-URL language decision | HIGH | Requires creating separate `/es/` pages, adding redirects, resubmitting to Search Console; weeks of SEO recovery time |
-| Multiple CTAs diluting conversion | LOW | Remove or downgrade competing CTAs to text links; A/B test not needed — just simplify |
+| Tests coupled to live DB are already written | MEDIUM | Add Vitest manual mocks; rewrite tests to use mocks; gate DB-hitting tests behind `TEST_INTEGRATION=true` flag |
+| Admin route was protected only by client-side check and a client user accessed it | HIGH | Audit all admin data that user could have seen; rotate any sensitive data displayed; add middleware protection immediately; consider logging the access |
+| Supabase Storage bucket created as public by mistake and files were uploaded | HIGH | Change bucket to private immediately; invalidate any distributed public URLs (not possible natively — regenerate all stored file references); audit who accessed the bucket in Supabase logs |
+| Realtime subscription missing `filter` — cross-tenant notification events received | HIGH | Unsubscribe all active channels; add filter to subscription code; verify isolation; notify affected clients if sensitive data was exposed |
+| Transactional email sent twice due to Stripe webhook retry on timeout | LOW | Implement idempotency key check before sending: store `stripe_event_id` on the notification record; check for existing record before inserting/sending |
+| Translation key missing in `es.json` ships to production | LOW | Add the missing key to `es.json`; deploy; no data migration needed |
+| `types.ts` diverged from schema after adding `notifications` table | MEDIUM | Run `npx supabase gen types typescript --local > src/lib/types.ts`; fix any TypeScript errors that surface; likely reveals queries that were silently using wrong field names |
 
 ---
 
 ## Pitfall-to-Phase Mapping
 
+How roadmap phases should address these pitfalls.
+
 | Pitfall | Prevention Phase | Verification |
 |---------|------------------|--------------|
-| FOUC on language toggle | Phase 1: HTML architecture & language system | Reload page after switching to Spanish; confirm no English flash |
-| Calendly blocking performance | Phase 3: Calendly integration | PageSpeed Insights score > 80 with Calendly active |
-| Broken Calendly conversion tracking | Phase 3: Calendly integration | GA4 Realtime shows event when test booking is made |
-| Dark theme contrast failures | Phase 2: Design system / CSS tokens | axe DevTools zero critical issues; impeccable.style cheatsheet audit passes |
-| SEO invisibility for Spanish | Phase 1: URL architecture decision | Explicit decision documented; if single-URL, tradeoff is accepted in writing |
-| Multiple competing CTAs | Phase 2: Copy & CTA hierarchy | Page has exactly one visually prominent CTA per viewport |
-| Google Fonts render blocking | Phase 2: Performance baseline | LCP < 2.5s on Lighthouse with fonts loaded |
-| Mobile tap target failures | Phase 4: Cross-device testing | All interactive elements pass 44×44px minimum on iOS Safari |
-| Language preference not persisting | Phase 1: Language system | Automated check: set lang to ES, refresh, confirm ES is active |
+| Supabase mock missing in tests | Phase 1: Testing infrastructure | `npm test` passes with `NEXT_PUBLIC_SUPABASE_URL=http://0.0.0.0:1` |
+| Webhook test using re-serialized body | Phase 1: Testing infrastructure | Webhook test uses `generateTestHeaderString` with raw fixture string |
+| Translation key parity CI check | Phase 1: Testing infrastructure | CI fails when `en.json` and `es.json` key counts differ |
+| Admin route protected client-side only | Phase 2: Admin dashboard | Direct URL navigation to `/portal/admin` as `client` role returns 307 |
+| Admin using service role client | Phase 2: Admin dashboard | Admin API routes use `createServerSupabase()` (user-scoped), not `createServiceClient()` |
+| Realtime cross-tenant notification leak | Phase 3: Notifications | Integration test: Client B's subscription receives zero events after Client A insert |
+| Notification email sent synchronously in webhook | Phase 3: Notifications | Webhook handler returns 200 within 5s even when email provider is unavailable |
+| Email locale not derived from client market | Phase 3: Notifications | LATAM-market user receives ES email in test fixture |
+| Storage bucket public by accident | Phase 4: File uploads | Bucket policy is `PRIVATE`; raw storage URL for a test file returns 403 as a different user |
+| Storage path/RLS policy mismatch | Phase 4: File uploads | Cross-tenant file access test returns 403 |
+| `types.ts` not updated after new migration | All phases | `db:types` script in `package.json`; run after every migration |
 
 ---
 
 ## Sources
 
-- [Calendly Web Performance Audit — DebugBear](https://www.debugbear.com/blog/calendly-web-performance-audit): Specific metrics (4.5s desktop LCP, 464 KB render-blocking CSS, bot protection script adding 1s CPU time)
-- [How to Embed Calendly Without Slowing Page Load — Calendly Community](https://community.calendly.com/how-do-i-40/how-to-embed-calendly-on-my-website-without-slowing-down-page-load-times-3039): Real-world reports of 1–2s increases
-- [Calendly + Google Analytics — Help Center](https://help.calendly.com/hc/en-us/articles/360001575393-Calendly-Google-Analytics): Native GA integration scope and limitations
-- [Track Calendly with GTM and GA4 — Analytics Mania](https://www.analyticsmania.com/post/how-to-track-calendly-with-google-tag-manager-and-google-analytics-4/): postMessage-based tracking approach
-- [Inclusive Dark Mode: Accessible Dark Themes — Smashing Magazine](https://www.smashingmagazine.com/2025/04/inclusive-dark-mode-designing-accessible-dark-themes/): Dark mode contrast failure patterns, astigmatism impact
-- [Beyond Dark Mode: White on Black Accessibility](https://the-brain.blog/white-on-black-text-accessibility-38435/): Halation effect, pure white on pure black pitfalls
-- [8 Costly B2B Landing Page Mistakes — Exit Five](https://www.exitfive.com/articles/8-reasons-your-b2b-landing-pages-arent-converting): Competing CTAs, trust signals, form placement
-- [Every Way to Detect a User's Locale — DEV Community](https://dev.to/lingodotdev/every-way-to-detect-a-users-locale-from-best-to-worst-369i): navigator.language detection order and pitfalls
-- [Language in localStorage Gets Overwritten — i18next GitHub](https://github.com/i18next/i18next-browser-languageDetector/issues/250): Real bug: detection overwriting stored preference
-- [Managing Multi-Regional and Multilingual Sites — Google Search Central](https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites): Single-URL toggle SEO limitations, hreflang requirements
-- [Multilingual SEO Issues — Seobility](https://www.seobility.net/en/blog/multilingual-seo-issues/): Googlebot crawling limitations for JS-toggled content
-- [B2B Landing Page Best Practices 2025 — Instapage](https://instapage.com/blog/b2b-landing-page-best-practices): Mobile responsiveness, CTA focus, technical buyer expectations
-- [Core Web Vitals Top Improvements — web.dev](https://web.dev/articles/top-cwv): LCP, INP, CLS thresholds and static HTML optimization
-- [Localization Best Practices: 10 Common Mistakes — Phrase](https://phrase.com/blog/posts/10-common-mistakes-in-software-localization/): i18n pitfalls beyond translation (pluralization, text expansion)
+- Codebase analysis: `platform/supabase/migrations/001_schema.sql` — existing RLS policy patterns
+- Codebase analysis: `platform/src/middleware.ts` — current auth middleware scope (only `/portal` and `/login`)
+- Codebase analysis: `platform/src/app/api/webhooks/stripe/route.ts` — synchronous webhook handler structure
+- Codebase analysis: `platform/src/app/[locale]/portal/layout.tsx` — client-side role pattern
+- Codebase analysis: `platform/src/lib/supabase/server.ts` — service role client usage
+- Codebase analysis: `.planning/codebase/CONCERNS.md` — documented tech debt and security concerns
+- Codebase analysis: `.planning/codebase/TESTING.md` — zero automated tests currently
+- Supabase documentation (authoritative): Realtime Postgres Changes filtering, Storage RLS, `supabase gen types`
+- Stripe documentation (authoritative): Webhook signature verification, `generateTestHeaderString` test helper
+- next-intl documentation (authoritative): `getTranslations` vs `useTranslations` for server-side rendering
 
 ---
-*Pitfalls research for: B2B landing page — static HTML, bilingual EN/ES, dark theme, Calendly embed*
-*Researched: 2026-03-20*
+*Pitfalls research for: Next.js 14 + Supabase platform — v1.1 testing, admin, notifications, file uploads*
+*Researched: 2026-03-24*
