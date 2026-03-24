@@ -42,10 +42,10 @@ Declared values (all multiples of 4 — matches existing `tokens.css` `--space-*
 | xl | `--space-8` | 32px | Section inner spacing |
 | 2xl | `--space-12` | 48px | Major section breaks |
 | 3xl | `--space-16` | 64px | Page-level spacing |
-| section | `--section-padding-y` | 96px | Vertical section padding (all pages) |
-| nav | `--nav-height` | 64px | Navigation bar height |
 
 Exceptions:
+- `--section-padding-y: 96px` — pre-existing production token for section-level vertical rhythm. Used on all full-width sections for consistent page cadence. Not used for element spacing. Outside the standard scale by design; do not convert to `--space-16`.
+- `--nav-height: 64px` — navigation bar height, layout constraint, not a spacing token.
 - Touch targets: minimum 44x44px (already enforced in `base.css` — do not reduce)
 - Container max-width: `--container-max` 1100px with `--container-padding` 24px side padding
 - Hero desktop override (D-05 fix): remove `min-height: 100vh`; replace with `padding-top: var(--space-24); padding-bottom: var(--space-24)` at `min-width: 1024px`
@@ -58,16 +58,18 @@ Exceptions:
 
 All type uses `--font-sans` (DM Sans). Monospace (`--font-mono` JetBrains Mono) is reserved strictly for pricing figures, data stats, and code abbreviations — never for prose labels.
 
+**Declared sizes (4 total):**
+
 | Role | CSS Variable | Size | Weight | Line Height | Letter Spacing |
 |------|-------------|------|--------|-------------|----------------|
 | Body | `--text-base` | 16px | `--font-normal` (400) | `--leading-normal` (1.6) | `--tracking-normal` (0) |
-| Label / eyebrow | `--text-sm` | 14px | `--font-semibold` (600) | 1 | `--tracking-wider` (0.08em) |
+| Label / eyebrow / badge / tag / overline | `--text-sm` | 14px | `--font-normal` (400) | 1 | `--tracking-wider` (0.08em) + uppercase |
 | Heading (section) | `--text-3xl` / clamp(1.75rem, 4vw, 3rem) | 30px–48px fluid | `--font-bold` (700) | `--leading-tight` (1.15) | `--tracking-snug` (-0.02em) |
 | Display (hero h1) | `--text-5xl` / `--text-6xl` | 48px–60px | `--font-bold` (700) | `--leading-display` (1.05) | `--tracking-tight` (-0.03em) |
 
-Active weights in use: regular 400 + bold 700. Semibold 600 reserved for labels/eyebrows only.
+**Declared weights (2 total):** regular 400 + bold 700.
 
-Sub-body / meta text: `--text-xs` (12px) at `--font-semibold` (600) for badges, tags, overlines.
+Labels, eyebrows, badges, tags, and overlines differentiate from body text via `letter-spacing: 0.08em` + `text-transform: uppercase` at weight 400 — semibold is not required and is not used.
 
 **Source:** `landing/css/base.css` lines 27–29, 94–95, 165–166, 173–176, `.impeccable.md` typography rules
 
@@ -275,8 +277,8 @@ Visual rules:
 - 1px `--color-border` border
 - `--radius-md` (8px) border-radius
 - `--space-6` (24px) padding
-- Deliverable title: `--text-base` `--font-semibold`
-- Deliverable description: `--text-sm` `--font-normal` `--color-text-muted`
+- Deliverable title: `--text-base` `--font-bold` (700)
+- Deliverable description: `--text-sm` `--font-normal` (400) `--color-text-muted`
 
 On mobile: single column. No accordion or progressive disclosure — all deliverables remain visible. Trimming to 4–5 items (from 7) is acceptable if it removes genuinely redundant entries.
 
