@@ -185,6 +185,8 @@
           Six concrete deliverables. One outcome: you always know exactly how your system is performing — and what to do about it.
         </p>
 
+        <div class="deliverables__grid">
+
         <!-- Deliverable 1 -->
         <div class="deliverable">
           <div class="deliverable__num deliverable__num--blue">1</div>
@@ -235,8 +237,6 @@
           </div>
         </div>
 
-        <hr class="deliverable-break">
-
         <!-- Deliverable 4 -->
         <div class="deliverable">
           <div class="deliverable__num deliverable__num--blue">4</div>
@@ -286,6 +286,8 @@
             </div>
           </div>
         </div>
+
+        </div><!-- /.deliverables__grid -->
 
       </div><!-- /.container -->
     </section>
@@ -370,6 +372,26 @@
         </div>
 
         <div class="faq__list">
+
+          <details class="faq__item">
+            <summary class="faq__question" data-i18n="perf_page.faq.items.0.question">What performance tools do you use?</summary>
+            <p class="faq__answer" data-i18n="perf_page.faq.items.0.answer">We use profiling tools native to your stack — flame graphs, APM traces, browser DevTools, load testing with k6 or Gatling. We optimize with your existing toolchain, not by adding new vendors.</p>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__question" data-i18n="perf_page.faq.items.1.question">How do you measure impact?</summary>
+            <p class="faq__answer" data-i18n="perf_page.faq.items.1.answer">Before-and-after benchmarks on the metrics that matter: p50/p95/p99 latency, throughput, error rates, Core Web Vitals. Every optimization ships with measured proof.</p>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__question" data-i18n="perf_page.faq.items.2.question">Will optimizations break existing functionality?</summary>
+            <p class="faq__answer" data-i18n="perf_page.faq.items.2.answer">We don't ship changes without validation. Every optimization goes through your existing CI pipeline and is tested under realistic load before production. Zero surprises.</p>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__question" data-i18n="perf_page.faq.items.3.question">What results are realistic in the first month?</summary>
+            <p class="faq__answer" data-i18n="perf_page.faq.items.3.answer">A full performance baseline, your top 3 bottlenecks identified and fixed, and a roadmap for the next 90 days. Most teams see 30–60% improvement on their worst endpoints in week two.</p>
+          </details>
 
           <details class="faq__item">
             <summary class="faq__question" data-i18n="perf_faq.items.0.q">Do you need access to our production environment?</summary>
