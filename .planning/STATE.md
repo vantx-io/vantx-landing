@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 04-01-PLAN.md
-last_updated: "2026-03-24T14:24:30.805Z"
+stopped_at: Completed 04-02-PLAN.md
+last_updated: "2026-03-24T14:29:06.378Z"
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 6
-  completed_plans: 4
+  completed_plans: 5
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 ## Current Position
 
 Phase: 04 (polish-launch-gate) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 
 ## Performance Metrics
 
@@ -48,6 +48,7 @@ Plan: 2 of 3
 | Phase 03 P03 | 2 minutes | 1 tasks | 1 files |
 | Phase 03 P02 | 3 | 2 tasks | 2 files |
 | Phase 04 P01 | 3 | 2 tasks | 4 files |
+| Phase 04 P02 | 7 | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -71,6 +72,8 @@ Recent decisions affecting current work:
 - [Phase 04]: fade-in 400ms (no delay) for credibility bar — eliminates pop-in, opacity-only entrance
 - [Phase 04]: Hero desktop override at 1024px: min-height: 0 + padding-top/bottom space-24 — preserves mobile 100dvh
 - [Phase 04]: Also Available rows: 3 per-row Book a Call buttons replaced by single services__also-footer text link (D-16)
+- [Phase 04]: Service-specific FAQ keys use page-scoped dot notation (obs_page.faq.items.0.question) — not global faq.items.0.q pattern — to avoid key collisions and maintain page isolation
+- [Phase 04]: Deliverables grid hides number badges in grid mode via CSS — card boundaries replace numbers as visual organizer on desktop
 
 ### Pending Todos
 
@@ -89,6 +92,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-24T14:24:30.799Z
-Stopped at: Completed 04-01-PLAN.md
+Last session: 2026-03-24T14:29:06.366Z
+Stopped at: Completed 04-02-PLAN.md
 Resume file: None
