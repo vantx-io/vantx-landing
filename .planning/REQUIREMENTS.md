@@ -23,8 +23,8 @@ Requirements for Platform Hardening & Admin milestone. Each maps to roadmap phas
 
 - [x] **ADMIN-01**: Middleware extended to protect /admin routes (admin/engineer/seller roles only)
 - [x] **ADMIN-02**: Admin layout with role-gated sidebar navigation
-- [ ] **ADMIN-03**: Admin overview page with active clients count, MRR, recent activity
-- [ ] **ADMIN-04**: Client list page with search, subscription status, plan details
+- [x] **ADMIN-03**: Admin overview page with active clients count, MRR, recent activity
+- [x] **ADMIN-04**: Client list page with search, subscription status, plan details
 - [ ] **ADMIN-05**: Cross-client task view with filtering by client, priority, status
 - [ ] **ADMIN-06**: Billing overview with MRR trend, recent payments, subscription statuses
 
@@ -100,8 +100,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TEST-09 | Phase 5 | Complete |
 | ADMIN-01 | Phase 8 | Complete |
 | ADMIN-02 | Phase 8 | Complete |
-| ADMIN-03 | Phase 8 | Pending |
-| ADMIN-04 | Phase 8 | Pending |
+| ADMIN-03 | Phase 8 | Complete |
+| ADMIN-04 | Phase 8 | Complete |
 | ADMIN-05 | Phase 8 | Pending |
 | ADMIN-06 | Phase 8 | Pending |
 | NOTIF-01 | Phase 5 | Pending |

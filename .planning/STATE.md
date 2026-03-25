@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Platform Hardening & Admin
 status: unknown
-stopped_at: Completed 08-01-PLAN.md
-last_updated: "2026-03-25T09:55:56.999Z"
+stopped_at: Completed 08-03-PLAN.md
+last_updated: "2026-03-25T09:59:53.972Z"
 progress:
   total_phases: 5
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 10
-  completed_plans: 8
+  completed_plans: 10
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-24)
 ## Current Position
 
 Phase: 08 (admin-dashboard) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 
 ## Performance Metrics
 
@@ -48,6 +48,8 @@ Plan: 2 of 3
 | Phase 07-notification-ui P01 | 15min | 2 tasks | 4 files |
 | Phase 07-notification-ui P02 | 12min | 2 tasks | 4 files |
 | Phase 08-admin-dashboard P01 | 12min | 2 tasks | 6 files |
+| Phase 08 P02 | 8min | 2 tasks | 2 files |
+| Phase 08-admin-dashboard P03 | 2min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -83,6 +85,7 @@ Key architectural decisions for v1.1:
 - [Phase 08-admin-dashboard]: Admin role guard in middleware queries users table for role — never client-side only (ADMIN-01)
 - [Phase 08-admin-dashboard]: Seller role added to all admin RLS policies — was missing from 001_schema.sql existing admin policies
 - [Phase 08-admin-dashboard]: Admin layout uses useTranslations('admin') separate namespace — isolates admin/portal i18n keys
+- [Phase 08]: Removed Supabase join syntax from admin queries — TypeScript never inference; explicit type casts resolve cleanly
 
 ### Pending Todos
 
@@ -98,6 +101,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-25T09:55:56.993Z
-Stopped at: Completed 08-01-PLAN.md
+Last session: 2026-03-25T09:59:53.967Z
+Stopped at: Completed 08-03-PLAN.md
 Resume file: None

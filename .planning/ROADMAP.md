@@ -26,7 +26,7 @@ See: `.planning/milestones/v1.0-ROADMAP.md` for full details.
 - [x] **Phase 5: Foundation** - DB migrations + Vitest/Playwright test infrastructure + i18n CI check (completed 2026-03-24)
 - [x] **Phase 6: Server-Side Integration** - Email helper (Resend) + notification API routes + Stripe webhook extension + Slack on task created (completed 2026-03-25)
 - [x] **Phase 7: Notification UI** - NotificationBell component with Realtime subscription + cross-tenant isolation test + portal mount (completed 2026-03-25)
-- [ ] **Phase 8: Admin Dashboard** - Middleware role guard + admin layout + all four admin pages + bell mount
+- [x] **Phase 8: Admin Dashboard** - Middleware role guard + admin layout + all four admin pages + bell mount (completed 2026-03-25)
 - [ ] **Phase 9: File Uploads** - Storage RLS + upload UI in task comments + validation + preview + signed URLs
 
 ## Phase Details
@@ -88,12 +88,12 @@ Plans:
   3. The client list page shows all clients with subscription status and plan details, with a working search input
   4. The cross-client task view lists tasks across all clients and can be filtered by client, priority, and status
   5. The billing page shows recent payments and current subscription statuses for all clients
-**Plans:** 1/3 plans executed
+**Plans:** 3/3 plans complete
 
 Plans:
 - [x] 08-01-PLAN.md — RLS migration + middleware role guard + admin layout + i18n namespace
-- [ ] 08-02-PLAN.md — Admin overview page + client list page
-- [ ] 08-03-PLAN.md — Cross-client task view + billing overview + E2E admin redirect test
+- [x] 08-02-PLAN.md — Admin overview page + client list page
+- [x] 08-03-PLAN.md — Cross-client task view + billing overview + E2E admin redirect test
 
 ### Phase 9: File Uploads
 **Goal**: Team members and clients can attach files to task comments, view image previews inline, and download files via time-limited signed URLs — storage is private and scoped per client.
@@ -117,5 +117,5 @@ Plans:
 | 5. Foundation | v1.1 | 3/3 | Complete   | 2026-03-24 |
 | 6. Server-Side Integration | v1.1 | 2/2 | Complete   | 2026-03-25 |
 | 7. Notification UI | v1.1 | 2/2 | Complete   | 2026-03-25 |
-| 8. Admin Dashboard | v1.1 | 1/3 | In Progress|  |
+| 8. Admin Dashboard | v1.1 | 3/3 | Complete   | 2026-03-25 |
 | 9. File Uploads | v1.1 | 0/TBD | Not started | - |
