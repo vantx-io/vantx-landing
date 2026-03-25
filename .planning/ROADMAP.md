@@ -35,28 +35,26 @@ See: `.planning/milestones/v1.1-ROADMAP.md` for full details.
 
 ### v1.2 Security & Polish (Phases 10-13)
 
-- [ ] **Phase 10: Security Foundation** — Rate limiting on all API routes + TOTP 2FA enrollment, challenge, and AAL2 enforcement
+- [ ] **Phase 10: Rate Limiting** — Upstash Redis rate limiting on all API routes
 - [ ] **Phase 11: Notification Polish** — Per-type notification preferences with enforcement + weekly Monday email digest
 - [ ] **Phase 12: Admin Capabilities** — User invite, role change, and deactivation + MRR trend chart on billing page
 - [ ] **Phase 13: Test Coverage** — API route integration tests + Playwright visual regression baselines
 
 ## Phase Details
 
-### Phase 10: Security Foundation
-**Goal**: The platform actively protects against brute-force attacks and requires enrolled users to complete a TOTP challenge before accessing admin routes
-**Depends on**: Nothing (rate limiting is dependency-free; AAL2 enforcement builds on existing middleware)
-**Requirements**: SEC-01, SEC-02, SEC-03, SEC-04, SEC-05
+### Phase 10: Rate Limiting
+**Goal**: All API routes are protected against brute-force and abuse via Upstash Redis sliding-window rate limiting
+**Depends on**: Nothing (dependency-free)
+**Requirements**: SEC-04, SEC-05
 **Success Criteria** (what must be TRUE):
   1. Calling any API route more than the allowed limit returns HTTP 429 with a `Retry-After` header
-  2. A user can open the security settings page, scan a QR code with an authenticator app, enter the TOTP code, and see 2FA confirmed as active
-  3. A user with 2FA enrolled who logs in is redirected to a TOTP challenge page and cannot access the portal until the code is verified
-  4. A user without 2FA enrolled who logs in proceeds directly to the portal without hitting the challenge page
-  5. Accessing any `/admin` route while at AAL1 (unverified TOTP) redirects to the TOTP challenge page
+  2. Rate limits are enforced across concurrent Vercel serverless instances (not in-memory)
+  3. Different route types have appropriate thresholds (auth stricter than general API)
 **Plans**: TBD
 
 ### Phase 11: Notification Polish
 **Goal**: Users control which notification channels they receive, and enrolled clients automatically get a weekly email digest of task activity every Monday
-**Depends on**: Phase 10 (preferences are enforced in the same orchestrator path SEC-03 relies on)
+**Depends on**: Nothing (notification pipeline is independent of rate limiting)
 **Requirements**: NOTIF-10, NOTIF-11, NOTIF-12
 **Success Criteria** (what must be TRUE):
   1. A user can open portal settings and toggle email and in-app notifications on or off per notification type
@@ -67,7 +65,7 @@ See: `.planning/milestones/v1.1-ROADMAP.md` for full details.
 
 ### Phase 12: Admin Capabilities
 **Goal**: Admins can manage the full user lifecycle from within the platform and can track MRR trends over time without leaving the admin dashboard
-**Depends on**: Phase 10 (invited users encounter a complete auth flow including TOTP enrollment)
+**Depends on**: Nothing (admin APIs use existing auth flow)
 **Requirements**: ADMIN-07, ADMIN-08, ADMIN-09, ADMIN-10, ADMIN-11
 **Success Criteria** (what must be TRUE):
   1. An admin can invite a new user by email, assigning a role and client; the invited user's public profile row is automatically created when they accept
@@ -100,7 +98,7 @@ See: `.planning/milestones/v1.1-ROADMAP.md` for full details.
 | 7. Notification UI | v1.1 | 2/2 | Complete | 2026-03-25 |
 | 8. Admin Dashboard | v1.1 | 3/3 | Complete | 2026-03-25 |
 | 9. File Uploads | v1.1 | 3/3 | Complete | 2026-03-25 |
-| 10. Security Foundation | v1.2 | 0/? | Not started | - |
+| 10. Rate Limiting | v1.2 | 0/? | Not started | - |
 | 11. Notification Polish | v1.2 | 0/? | Not started | - |
 | 12. Admin Capabilities | v1.2 | 0/? | Not started | - |
 | 13. Test Coverage | v1.2 | 0/? | Not started | - |

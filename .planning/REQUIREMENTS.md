@@ -9,9 +9,6 @@ Requirements for Security & Polish milestone. Each maps to roadmap phases.
 
 ### Security
 
-- [ ] **SEC-01**: User can enable TOTP 2FA via enrollment page with QR code
-- [ ] **SEC-02**: User sees TOTP challenge page after login when 2FA is enrolled
-- [ ] **SEC-03**: Admin routes enforce AAL2 (2FA verified) in middleware
 - [ ] **SEC-04**: API routes are rate-limited via Upstash Redis sliding window
 - [ ] **SEC-05**: Rate-limited users receive 429 response with retry-after header
 
@@ -67,7 +64,13 @@ Deferred to future release. Tracked but not in current roadmap.
 - **ADMIN-12**: MRR chart subscription overlay (new/cancelled markers)
 - **ADMIN-13**: Admin-assisted 2FA unenrollment UI
 
-### Security
+### Security (v1.3)
+
+- **SEC-01**: User can enable TOTP 2FA via enrollment page with QR code
+- **SEC-02**: User sees TOTP challenge page after login when 2FA is enrolled
+- **SEC-03**: Admin routes enforce AAL2 (2FA verified) in middleware
+
+### Security (v2+)
 
 - **SEC-06**: SMS/phone 2FA (only if enterprise client mandates)
 - **SEC-07**: Recovery codes for 2FA
@@ -92,9 +95,6 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SEC-01 | Phase 10 | Pending |
-| SEC-02 | Phase 10 | Pending |
-| SEC-03 | Phase 10 | Pending |
 | SEC-04 | Phase 10 | Pending |
 | SEC-05 | Phase 10 | Pending |
 | NOTIF-10 | Phase 11 | Pending |
@@ -109,8 +109,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TEST-11 | Phase 13 | Pending |
 
 **Coverage:**
-- v1.2 requirements: 15 total
-- Mapped to phases: 15
+- v1.2 requirements: 12 total
+- Mapped to phases: 12
 - Unmapped: 0
 
 ---

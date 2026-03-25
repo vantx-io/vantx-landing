@@ -27,12 +27,11 @@ Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay f
 
 ### Active
 
-- [ ] Two-factor authentication (SEC-01)
-- [ ] Rate limiting on API routes (SEC-02)
+- [ ] Rate limiting on API routes (SEC-04, SEC-05)
 - [ ] Weekly email digest to clients (NOTIF-10)
-- [ ] User notification preferences (NOTIF-11)
-- [ ] Admin user management — invite, role change, deactivate (ADMIN-07)
-- [ ] Admin MRR trend chart (ADMIN-08)
+- [ ] User notification preferences (NOTIF-11, NOTIF-12)
+- [ ] Admin user management — invite, role change, deactivate (ADMIN-07..10)
+- [ ] Admin MRR trend chart (ADMIN-11)
 - [ ] Integration tests for API routes (TEST-10)
 - [ ] Playwright visual regression tests (TEST-11)
 
@@ -44,6 +43,7 @@ Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay f
 - Mobile app — responsive web sufficient at current scale
 - Admin user management UI — promoted to v1.2 (ADMIN-07)
 - Notification preferences UI — promoted to v1.2 (NOTIF-11)
+- Two-factor authentication (TOTP) — deferred to v1.3 (SEC-01, SEC-02, SEC-03)
 
 ## Context
 
@@ -85,11 +85,10 @@ Tech: Next.js 15, Supabase (Postgres + Auth + Storage + Realtime), Stripe, Resen
 
 ## Current Milestone: v1.2 Security & Polish
 
-**Goal:** Harden the platform with 2FA, rate limiting, notification preferences, admin user management, MRR chart, and comprehensive test coverage (integration + visual regression).
+**Goal:** Harden the platform with rate limiting, notification preferences, admin user management, MRR chart, and comprehensive test coverage (integration + visual regression). 2FA deferred to v1.3.
 
 **Target features:**
-- Two-factor authentication (TOTP)
-- Rate limiting on API routes
+- Rate limiting on API routes (Upstash Redis)
 - Weekly email digest + notification preferences
 - Admin user management (invite, role change, deactivate)
 - Admin MRR trend chart (Recharts)
