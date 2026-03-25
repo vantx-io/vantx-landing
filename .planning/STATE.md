@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Platform Hardening & Admin
 status: unknown
-stopped_at: Completed 09-01-PLAN.md
-last_updated: "2026-03-25T15:29:54.079Z"
+stopped_at: Completed 09-02-PLAN.md
+last_updated: "2026-03-25T15:35:32.762Z"
 progress:
   total_phases: 5
   completed_phases: 4
   total_plans: 13
-  completed_plans: 11
+  completed_plans: 12
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-24)
 ## Current Position
 
 Phase: 09 (file-uploads) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 
 ## Performance Metrics
 
@@ -51,6 +51,7 @@ Plan: 2 of 3
 | Phase 08 P02 | 8min | 2 tasks | 2 files |
 | Phase 08-admin-dashboard P03 | 2min | 3 tasks | 3 files |
 | Phase 09 P01 | 5min | 2 tasks | 8 files |
+| Phase 09 P02 | 3min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -90,6 +91,8 @@ Key architectural decisions for v1.1:
 - [Phase 08-admin-dashboard]: Cross-client queries omit .eq('client_id') — RLS grants admin/engineer/seller full SELECT via 002_admin_rls.sql
 - [Phase 09]: react-dropzone v15 installed (v14 in blockers, v15 resolved cleanly)
 - [Phase 09]: Simulated progress ticker for Supabase Storage uploads (SDK lacks native progress events)
+- [Phase 09]: Image signed URLs eagerly on mount; non-image lazily on click (Pitfall 6)
+- [Phase 09]: File sizes fetched from Supabase Storage list() metadata — no schema changes (D-07)
 
 ### Pending Todos
 
@@ -105,6 +108,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-25T15:29:54.074Z
-Stopped at: Completed 09-01-PLAN.md
+Last session: 2026-03-25T15:35:32.754Z
+Stopped at: Completed 09-02-PLAN.md
 Resume file: None

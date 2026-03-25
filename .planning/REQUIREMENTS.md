@@ -46,8 +46,8 @@ Requirements for Platform Hardening & Admin milestone. Each maps to roadmap phas
 - [ ] **UPLOAD-02**: Storage RLS policies scoped to client_id path structure
 - [x] **UPLOAD-03**: File upload UI in task comment form (drag-and-drop + click)
 - [x] **UPLOAD-04**: Client-side file validation (size limit, allowed types)
-- [ ] **UPLOAD-05**: Image preview thumbnails for uploaded images in comments
-- [ ] **UPLOAD-06**: Signed URL generation for file downloads (time-limited)
+- [x] **UPLOAD-05**: Image preview thumbnails for uploaded images in comments
+- [x] **UPLOAD-06**: Signed URL generation for file downloads (time-limited)
 
 ## v2 Requirements
 
@@ -117,8 +117,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | UPLOAD-02 | Phase 5 | Pending |
 | UPLOAD-03 | Phase 9 | Complete |
 | UPLOAD-04 | Phase 9 | Complete |
-| UPLOAD-05 | Phase 9 | Pending |
-| UPLOAD-06 | Phase 9 | Pending |
+| UPLOAD-05 | Phase 9 | Complete |
+| UPLOAD-06 | Phase 9 | Complete |
 
 **Coverage:**
 - v1.1 requirements: 30 total
