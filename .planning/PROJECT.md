@@ -26,7 +26,7 @@ Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay f
 - [x] Tests automatizados — foundation completa (Vitest unit 32 tests, Playwright E2E scaffold, CI pipeline) — Validated in Phase 05
 - [ ] Admin dashboard — gestión interna Vantix (clientes, suscripciones, métricas)
 - [~] Notificaciones — server-side complete (Phase 06) + in-app bell UI complete (Phase 07): Realtime badge, dropdown, mark-read, cross-tenant isolation. Pending: bell in admin layout (Phase 08)
-- [ ] Task attachments — upload de archivos en comentarios (schema listo, falta UI + storage)
+- [x] Task attachments — file upload UI, attachment display, signed URL downloads, E2E tests — Validated in Phase 09
 
 ### Out of Scope
 
@@ -103,4 +103,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-25 after Phase 07 (Notification UI) complete*
+*Last updated: 2026-03-25 after Phase 09 (File Uploads) complete*
