@@ -54,7 +54,9 @@ See: `.planning/milestones/v1.1-ROADMAP.md` for full details.
   1. Calling any API route more than the allowed limit returns HTTP 429 with a `Retry-After` header
   2. Rate limits are enforced across concurrent Vercel serverless instances (not in-memory)
   3. Different route types have appropriate thresholds (auth stricter than general API)
-**Plans**: TBD
+**Plans:** 1 plan
+Plans:
+- [ ] 10-01-PLAN.md — Rate limit helper library + integration into all 6 API routes
 
 ### Phase 11: Notification Polish
 **Goal**: Users control which notification channels they receive, and enrolled clients automatically get a weekly email digest of task activity every Monday
@@ -145,7 +147,7 @@ See: `.planning/milestones/v1.1-ROADMAP.md` for full details.
 | 7. Notification UI | v1.1 | 2/2 | Complete | 2026-03-25 |
 | 8. Admin Dashboard | v1.1 | 3/3 | Complete | 2026-03-25 |
 | 9. File Uploads | v1.1 | 3/3 | Complete | 2026-03-25 |
-| 10. Rate Limiting | v1.2 | 0/? | Not started | - |
+| 10. Rate Limiting | v1.2 | 0/1 | Not started | - |
 | 11. Notification Polish | v1.2 | 0/? | Not started | - |
 | 12. Admin Capabilities | v1.2 | 0/? | Not started | - |
 | 13. Auth UX | v1.2 | 0/? | Not started | - |
