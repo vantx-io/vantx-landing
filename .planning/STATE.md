@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Platform Hardening & Admin
 status: unknown
-stopped_at: Completed 07-01-PLAN.md
-last_updated: "2026-03-25T03:28:03.926Z"
+stopped_at: "Checkpoint: 07-02 Task 2 human-verify"
+last_updated: "2026-03-25T03:32:39.468Z"
 progress:
   total_phases: 5
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 7
-  completed_plans: 6
+  completed_plans: 7
 ---
 
 # Project State
@@ -76,6 +76,8 @@ Key architectural decisions for v1.1:
 - [Phase 07-01]: AppNotification declared before Database type to avoid DOM global Notification interface collision (lib:dom in tsconfig)
 - [Phase 07-01]: userId guard in NotificationBell: returns null render until auth resolves — bell invisible to unauthenticated users
 - [Phase 07-01]: Realtime subscription cleanup returns supabase.removeChannel(channel) to prevent double-mount leak in React Strict Mode
+- [Phase 07]: NotificationBell placed in portal sidebar header after client badges — always visible on all portal routes for authenticated users
+- [Phase 07]: Cross-tenant E2E: dual browser contexts with separate storageState + service role insert prove RLS isolation from client perspective
 
 ### Pending Todos
 
@@ -91,6 +93,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-25T03:28:03.922Z
-Stopped at: Completed 07-01-PLAN.md
+Last session: 2026-03-25T03:32:29.213Z
+Stopped at: Checkpoint: 07-02 Task 2 human-verify
 Resume file: None
