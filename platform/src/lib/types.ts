@@ -1,5 +1,27 @@
 // ═══ src/lib/types.ts — Generated from Supabase schema ═══
 
+// ═══ Notification types (declared before Database to avoid DOM Notification conflict) ═══
+
+export type NotificationType =
+  | "payment_success"
+  | "payment_failed"
+  | "task_updated"
+  | "task_created";
+
+export interface AppNotification {
+  id: string;
+  user_id: string;
+  type: NotificationType;
+  title: string;
+  body: string;
+  read: boolean;
+  action_link: string | null;
+  created_at: string;
+}
+
+// Alias for backward compatibility — prefer AppNotification in new code
+export type Notification = AppNotification;
+
 export type Database = {
   public: {
     Tables: {
@@ -106,6 +128,13 @@ export type Database = {
             | "sort_order"
           >;
         Update: Partial<Tutorial>;
+        Relationships: [];
+      };
+      notifications: {
+        Row: AppNotification;
+        Insert: Partial<Omit<AppNotification, "id" | "created_at">> &
+          Pick<AppNotification, "user_id" | "type" | "title" | "body">;
+        Update: Partial<AppNotification>;
         Relationships: [];
       };
     };
@@ -376,25 +405,6 @@ export type Tutorial = {
   sort_order: number;
   created_at: string;
 };
-
-// ═══ Notification types ═══
-
-export type NotificationType =
-  | "payment_success"
-  | "payment_failed"
-  | "task_updated"
-  | "task_created";
-
-export interface Notification {
-  id: string;
-  user_id: string;
-  type: NotificationType;
-  title: string;
-  body: string;
-  read: boolean;
-  action_link: string | null;
-  created_at: string;
-}
 
 // ═══ Onboarding types ═══
 
