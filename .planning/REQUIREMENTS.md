@@ -21,8 +21,8 @@ Requirements for Platform Hardening & Admin milestone. Each maps to roadmap phas
 
 ### Admin Dashboard
 
-- [ ] **ADMIN-01**: Middleware extended to protect /admin routes (admin/engineer/seller roles only)
-- [ ] **ADMIN-02**: Admin layout with role-gated sidebar navigation
+- [x] **ADMIN-01**: Middleware extended to protect /admin routes (admin/engineer/seller roles only)
+- [x] **ADMIN-02**: Admin layout with role-gated sidebar navigation
 - [ ] **ADMIN-03**: Admin overview page with active clients count, MRR, recent activity
 - [ ] **ADMIN-04**: Client list page with search, subscription status, plan details
 - [ ] **ADMIN-05**: Cross-client task view with filtering by client, priority, status
@@ -38,7 +38,7 @@ Requirements for Platform Hardening & Admin milestone. Each maps to roadmap phas
 - [x] **NOTIF-06**: Email notification on failed payment (Resend)
 - [x] **NOTIF-07**: Email notification on task status change
 - [x] **NOTIF-08**: Slack message to client channel on new task created
-- [ ] **NOTIF-09**: NotificationBell mounted in both portal and admin layouts
+- [x] **NOTIF-09**: NotificationBell mounted in both portal and admin layouts
 
 ### File Uploads
 
@@ -98,8 +98,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TEST-07 | Phase 9 | Pending |
 | TEST-08 | Phase 8 | Pending |
 | TEST-09 | Phase 5 | Complete |
-| ADMIN-01 | Phase 8 | Pending |
-| ADMIN-02 | Phase 8 | Pending |
+| ADMIN-01 | Phase 8 | Complete |
+| ADMIN-02 | Phase 8 | Complete |
 | ADMIN-03 | Phase 8 | Pending |
 | ADMIN-04 | Phase 8 | Pending |
 | ADMIN-05 | Phase 8 | Pending |
@@ -112,7 +112,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | NOTIF-06 | Phase 6 | Complete |
 | NOTIF-07 | Phase 6 | Complete |
 | NOTIF-08 | Phase 6 | Complete |
-| NOTIF-09 | Phase 7 | Pending |
+| NOTIF-09 | Phase 7 | Complete |
 | UPLOAD-01 | Phase 5 | Pending |
 | UPLOAD-02 | Phase 5 | Pending |
 | UPLOAD-03 | Phase 9 | Pending |

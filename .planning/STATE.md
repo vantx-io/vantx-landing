@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Platform Hardening & Admin
 status: unknown
-stopped_at: Completed 07-02-PLAN.md
-last_updated: "2026-03-25T03:42:13.093Z"
+stopped_at: Completed 08-01-PLAN.md
+last_updated: "2026-03-25T09:55:56.999Z"
 progress:
   total_phases: 5
   completed_phases: 3
-  total_plans: 7
-  completed_plans: 7
+  total_plans: 10
+  completed_plans: 8
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-24)
 
 **Core value:** Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay forma fácil de reservar tiempo, todo lo demás falla.
-**Current focus:** Phase 07 — notification-ui
+**Current focus:** Phase 08 — admin-dashboard
 
 ## Current Position
 
-Phase: 8
-Plan: Not started
+Phase: 08 (admin-dashboard) — EXECUTING
+Plan: 2 of 3
 
 ## Performance Metrics
 
@@ -47,6 +47,7 @@ Plan: Not started
 | Phase 06 P02 | 6min | 2 tasks | 7 files |
 | Phase 07-notification-ui P01 | 15min | 2 tasks | 4 files |
 | Phase 07-notification-ui P02 | 12min | 2 tasks | 4 files |
+| Phase 08-admin-dashboard P01 | 12min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -79,6 +80,9 @@ Key architectural decisions for v1.1:
 - [Phase 07-01]: Realtime subscription cleanup returns supabase.removeChannel(channel) to prevent double-mount leak in React Strict Mode
 - [Phase 07]: NotificationBell placed in portal sidebar header after client badges — always visible on all portal routes for authenticated users
 - [Phase 07]: Cross-tenant E2E: dual browser contexts with separate storageState + service role insert prove RLS isolation from client perspective
+- [Phase 08-admin-dashboard]: Admin role guard in middleware queries users table for role — never client-side only (ADMIN-01)
+- [Phase 08-admin-dashboard]: Seller role added to all admin RLS policies — was missing from 001_schema.sql existing admin policies
+- [Phase 08-admin-dashboard]: Admin layout uses useTranslations('admin') separate namespace — isolates admin/portal i18n keys
 
 ### Pending Todos
 
@@ -94,6 +98,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-25T03:42:00.000Z
-Stopped at: Completed 07-02-PLAN.md
+Last session: 2026-03-25T09:55:56.993Z
+Stopped at: Completed 08-01-PLAN.md
 Resume file: None
