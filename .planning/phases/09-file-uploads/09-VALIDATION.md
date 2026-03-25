@@ -2,7 +2,7 @@
 phase: 9
 slug: file-uploads
 status: draft
-nyquist_compliant: false
+nyquist_compliant: true
 wave_0_complete: false
 created: 2026-03-25
 ---
@@ -38,14 +38,14 @@ created: 2026-03-25
 
 | Task ID | Plan | Wave | Requirement | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
-| 09-01-01 | 01 | 1 | UPLOAD-03 | unit | `npx vitest run` | ❌ W0 | ⬜ pending |
-| 09-01-02 | 01 | 1 | UPLOAD-04 | unit | `npx vitest run` | ❌ W0 | ⬜ pending |
-| 09-02-01 | 02 | 1 | UPLOAD-05 | unit | `npx vitest run` | ❌ W0 | ⬜ pending |
-| 09-02-02 | 02 | 1 | UPLOAD-06 | unit | `npx vitest run` | ❌ W0 | ⬜ pending |
-| 09-03-01 | 03 | 2 | TEST-06 | E2E | `npx playwright test login` | ❌ W0 | ⬜ pending |
-| 09-03-02 | 03 | 2 | TEST-07 | E2E | `npx playwright test task-crud` | ❌ W0 | ⬜ pending |
+| 09-01-01 | 01 | 1 | UPLOAD-03 | unit | `npx vitest run` | W0 | pending |
+| 09-01-02 | 01 | 1 | UPLOAD-04 | unit | `npx vitest run` | W0 | pending |
+| 09-02-01 | 02 | 2 | UPLOAD-05 | unit | `npx vitest run` | W0 | pending |
+| 09-02-02 | 02 | 2 | UPLOAD-06 | unit | `npx vitest run` | W0 | pending |
+| 09-03-01 | 03 | 3 | TEST-06 | E2E | `npx playwright test login` | W0 | pending |
+| 09-03-02 | 03 | 3 | TEST-07 | E2E | `npx playwright test task-crud` | W0 | pending |
 
-*Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
+*Status: pending / green / red / flaky*
 
 ---
 
@@ -69,11 +69,11 @@ created: 2026-03-25
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
+- [x] All tasks have `<automated>` verify or Wave 0 dependencies
 - [ ] Sampling continuity: no 3 consecutive tasks without automated verify
 - [ ] Wave 0 covers all MISSING references
 - [ ] No watch-mode flags
 - [ ] Feedback latency < 75s
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] `nyquist_compliant: true` set in frontmatter
 
 **Approval:** pending
