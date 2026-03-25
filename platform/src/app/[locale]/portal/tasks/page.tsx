@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import type { Task, TaskComment } from "@/lib/types";
 import CommentForm from "./CommentForm";
+import AttachmentPreview from "./AttachmentPreview";
 
 function Badge({ text, color }: { text: string; color: string }) {
   return (
@@ -357,9 +358,7 @@ export default function TasksPage() {
               </div>
 
               {comments.length === 0 && (
-                <p className="text-sm text-gray-400 mb-3">
-                  {t("no_comments")}
-                </p>
+                <p className="text-sm text-gray-400 mb-3">{t("no_comments")}</p>
               )}
               {comments.map((c) => (
                 <div
@@ -372,6 +371,9 @@ export default function TasksPage() {
                     )}
                   </div>
                   <div className="text-sm text-gray-700">{c.content}</div>
+                  {c.attachments && c.attachments.length > 0 && (
+                    <AttachmentPreview attachments={c.attachments} />
+                  )}
                 </div>
               ))}
               <CommentForm
