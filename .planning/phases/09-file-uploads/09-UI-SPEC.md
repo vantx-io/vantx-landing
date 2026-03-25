@@ -45,9 +45,8 @@ Exceptions:
 - Touch target minimum for paperclip button: 44px (use `min-w-[44px] min-h-[44px]` with centered icon)
 - Image thumbnail size: 120×120px (locked from D-05, not a spacing token — explicit `w-[120px] h-[120px]`)
 - Progress bar height: 4px (`h-1`)
-- Notification badge height: 18px (existing pattern from NotificationBell — not a standard token)
 
-Source: Existing tasks page and NotificationBell patterns; D-05 in 09-CONTEXT.md
+Source: Existing tasks page patterns; D-05 in 09-CONTEXT.md
 
 ---
 
@@ -57,7 +56,7 @@ Source: Existing tasks page and NotificationBell patterns; D-05 in 09-CONTEXT.md
 |------|------|--------|-------------|
 | Body | 14px (text-sm) | 400 (regular) | 1.5 |
 | Label / Badge | 10px (text-[10px]) | 600 (semibold) | 1.2 |
-| Heading | 24px (text-2xl) | 700 (bold) | 1.2 |
+| Heading | 24px (text-2xl) | 600 (semibold) | 1.2 |
 | Meta / Timestamp | 12px (text-xs / text-[12px]) | 400 (regular) | 1.4 |
 
 Notes:
@@ -65,6 +64,7 @@ Notes:
 - File size text (e.g., "2.3 MB") uses 12px regular — same as meta/timestamp role.
 - File type badge text (e.g., "PDF", "HAR") uses 10px semibold — same as existing Badge component in tasks/page.tsx.
 - No new font sizes introduced by this phase. Work within the 4 sizes above.
+- Heading at 24px/600 is visually distinct from body at 14px/400 by size alone; 700 bold is not needed.
 
 Source: `platform/src/app/[locale]/portal/tasks/page.tsx` — existing className patterns
 
@@ -108,6 +108,8 @@ Source: `platform/tailwind.config.ts`, `platform/src/app/[locale]/portal/tasks/p
 
 This phase introduces new UI elements. Each must be implemented as a self-contained unit within `tasks/page.tsx` or extracted as a component file.
 
+Primary visual anchor: the Send button (`bg-brand-accent text-white`) in the comment form — it is the only element using the brand-accent fill color and anchors user attention to the submit action.
+
 ### 1. Comment Form with File Input
 
 **Location:** Replaces the existing `<div className="flex gap-2 mt-3">` comment input area in tasks/page.tsx
@@ -141,7 +143,7 @@ This phase introduces new UI elements. Each must be implemented as a self-contai
 Note: Preview strip uses 80×80px thumbnails (compact for the form). The 120×120px size (D-05) applies to the **comment thread display**, not the pre-upload preview strip.
 
 **Non-image file item:**
-- Container: `flex items-center gap-2 px-2 py-1.5 rounded-lg border border-gray-100 bg-white max-w-[200px]`
+- Container: `flex items-center gap-2 px-2 py-2 rounded-lg border border-gray-100 bg-white max-w-[200px]`
 - File icon: `FileText` / `File` from lucide-react (w-4 h-4 text-brand-muted)
 - Filename: `text-xs text-brand-dark truncate flex-1`
 - Remove `x` button: `w-4 h-4 text-gray-400 hover:text-gray-600 flex-shrink-0` using `X` icon
@@ -162,7 +164,7 @@ Note: Preview strip uses 80×80px thumbnails (compact for the form). The 120×12
 - On click: opens lightbox (see component 4)
 
 **Non-image file list** (when comment has non-image attachments):
-- Container: `flex flex-col gap-1.5 mt-2`
+- Container: `flex flex-col gap-2 mt-2`
 - Each file row: `flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-100 bg-brand-bg hover:bg-gray-100 transition cursor-pointer`
 - File icon: `FileText` / `File` / `Archive` from lucide-react (w-4 h-4 text-brand-muted)
 - Filename: `text-sm text-brand-dark flex-1 truncate`
