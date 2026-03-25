@@ -3,10 +3,10 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Security & Polish
 status: roadmap-ready
-stopped_at: Roadmap created for v1.2 — 4 phases (10-13) defined
+stopped_at: Roadmap expanded for v1.2 — 8 phases (10-17), 26 requirements
 last_updated: "2026-03-25T00:00:00.000Z"
 progress:
-  total_phases: 4
+  total_phases: 8
   completed_phases: 0
   total_plans: 0
   completed_plans: 0

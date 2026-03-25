@@ -26,10 +26,36 @@ Requirements for Security & Polish milestone. Each maps to roadmap phases.
 - [ ] **ADMIN-10**: Admin can deactivate/reactivate user accounts
 - [ ] **ADMIN-11**: Admin can view MRR trend chart on billing page (Recharts)
 
+### Auth UX
+
+- [ ] **AUTH-01**: User can reset password via "forgot password" link on login page
+- [ ] **AUTH-02**: User can change password from portal settings
+- [ ] **AUTH-03**: User can view and edit their profile (name) from portal settings
+
+### Polish UX
+
+- [ ] **UX-01**: Portal pages show loading skeletons during data fetch
+- [ ] **UX-02**: New users see onboarding guide on first login
+- [ ] **UX-03**: Section-level error boundaries catch and display errors gracefully
+
+### Security Hardening
+
+- [ ] **SECURE-01**: CSP headers configured for all platform routes
+- [ ] **SECURE-02**: Admin actions are audit-logged (who, what, when)
+
 ### Testing
 
 - [ ] **TEST-10**: Integration tests cover API routes (checkout, billing-portal, webhook) using NTARH + MSW
 - [ ] **TEST-11**: Playwright visual regression baselines for portal and admin pages (CI-generated)
+
+### Pre-Launch
+
+- [ ] **LAUNCH-01**: Calendly URL configured with real booking link
+- [ ] **LAUNCH-02**: GA4 Measurement ID configured with real ID
+- [ ] **LAUNCH-03**: Landing site deployed to Cloudflare Pages with vantx.io domain
+- [ ] **LAUNCH-04**: Platform deployed to Vercel with custom domain
+- [ ] **LAUNCH-05**: Stripe live keys configured
+- [ ] **LAUNCH-06**: Supabase production project provisioned and migrated
 
 ## v1.1 Requirements (Complete)
 
@@ -105,14 +131,28 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ADMIN-09 | Phase 12 | Pending |
 | ADMIN-10 | Phase 12 | Pending |
 | ADMIN-11 | Phase 12 | Pending |
-| TEST-10 | Phase 13 | Pending |
-| TEST-11 | Phase 13 | Pending |
+| AUTH-01 | Phase 13 | Pending |
+| AUTH-02 | Phase 13 | Pending |
+| AUTH-03 | Phase 13 | Pending |
+| UX-01 | Phase 14 | Pending |
+| UX-02 | Phase 14 | Pending |
+| UX-03 | Phase 14 | Pending |
+| SECURE-01 | Phase 15 | Pending |
+| SECURE-02 | Phase 15 | Pending |
+| TEST-10 | Phase 16 | Pending |
+| TEST-11 | Phase 16 | Pending |
+| LAUNCH-01 | Phase 17 | Pending |
+| LAUNCH-02 | Phase 17 | Pending |
+| LAUNCH-03 | Phase 17 | Pending |
+| LAUNCH-04 | Phase 17 | Pending |
+| LAUNCH-05 | Phase 17 | Pending |
+| LAUNCH-06 | Phase 17 | Pending |
 
 **Coverage:**
-- v1.2 requirements: 12 total
-- Mapped to phases: 12
+- v1.2 requirements: 26 total
+- Mapped to phases: 26
 - Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-24*
-*Last updated: 2026-03-25 after v1.2 roadmap creation*
+*Last updated: 2026-03-25 after v1.2 scope expansion (auth UX, polish, security hardening, pre-launch)*

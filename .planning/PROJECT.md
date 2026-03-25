@@ -32,8 +32,12 @@ Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay f
 - [ ] User notification preferences (NOTIF-11, NOTIF-12)
 - [ ] Admin user management — invite, role change, deactivate (ADMIN-07..10)
 - [ ] Admin MRR trend chart (ADMIN-11)
+- [ ] Forgot password + password change + user profile (AUTH-01..03)
+- [ ] Loading skeletons, onboarding guide, error boundaries (UX-01..03)
+- [ ] CSP headers + audit logging (SECURE-01..02)
 - [ ] Integration tests for API routes (TEST-10)
 - [ ] Playwright visual regression tests (TEST-11)
+- [ ] Production deploy — Cloudflare, Vercel, Supabase, Stripe, Calendly, GA4 (LAUNCH-01..06)
 
 ### Out of Scope
 
@@ -51,7 +55,7 @@ Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay f
 Tech: HTML + CSS Custom Properties + vanilla JS. ~8,779 LOC.
 
 **Shipped v1.1 Platform Hardening & Admin** on 2026-03-25. Full-stack platform in `platform/`.
-Tech: Next.js 15, Supabase (Postgres + Auth + Storage + Realtime), Stripe, Resend, Slack.
+Tech: Next.js 14.2, Supabase (Postgres + Auth + Storage + Realtime), Stripe, Resend, Slack.
 ~6,143 LOC TypeScript + 380 LOC E2E tests. 5 DB migrations. 13 plans across 5 phases.
 
 **Pre-launch blockers (manual):**
@@ -62,7 +66,7 @@ Tech: Next.js 15, Supabase (Postgres + Auth + Storage + Realtime), Stripe, Resen
 ## Constraints
 
 - **Landing:** HTML estático + CSS + vanilla JS — no frameworks, no build step
-- **Platform:** Next.js 15 + Supabase + Stripe + Resend + Slack
+- **Platform:** Next.js 14.2 + Supabase + Stripe + Resend + Slack
 - **Hosting:** Static files on Cloudflare Pages (landing), Vercel (platform)
 - **Idiomas:** English default, Spanish alternative; next-intl for platform, auto-detect for landing
 - **Auth:** Supabase Auth with email/password, role-based (admin/engineer/seller/client)
@@ -92,8 +96,11 @@ Tech: Next.js 15, Supabase (Postgres + Auth + Storage + Realtime), Stripe, Resen
 - Weekly email digest + notification preferences
 - Admin user management (invite, role change, deactivate)
 - Admin MRR trend chart (Recharts)
-- Integration tests for API routes
-- Visual regression tests (Playwright)
+- Auth UX (forgot password, password change, user profile)
+- Polish UX (loading skeletons, onboarding, error boundaries)
+- Security hardening (CSP headers, audit logging)
+- Integration tests + visual regression tests
+- Production deploy (Cloudflare, Vercel, Supabase, Stripe live)
 
 ## Evolution
 
