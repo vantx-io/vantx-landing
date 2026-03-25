@@ -88,7 +88,12 @@ Plans:
   3. The client list page shows all clients with subscription status and plan details, with a working search input
   4. The cross-client task view lists tasks across all clients and can be filtered by client, priority, and status
   5. The billing page shows recent payments and current subscription statuses for all clients
-**Plans**: TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 08-01-PLAN.md — RLS migration + middleware role guard + admin layout + i18n namespace
+- [ ] 08-02-PLAN.md — Admin overview page + client list page
+- [ ] 08-03-PLAN.md — Cross-client task view + billing overview + E2E admin redirect test
 
 ### Phase 9: File Uploads
 **Goal**: Team members and clients can attach files to task comments, view image previews inline, and download files via time-limited signed URLs — storage is private and scoped per client.
@@ -112,5 +117,5 @@ Plans:
 | 5. Foundation | v1.1 | 3/3 | Complete   | 2026-03-24 |
 | 6. Server-Side Integration | v1.1 | 2/2 | Complete   | 2026-03-25 |
 | 7. Notification UI | v1.1 | 2/2 | Complete   | 2026-03-25 |
-| 8. Admin Dashboard | v1.1 | 0/TBD | Not started | - |
+| 8. Admin Dashboard | v1.1 | 0/3 | Not started | - |
 | 9. File Uploads | v1.1 | 0/TBD | Not started | - |
