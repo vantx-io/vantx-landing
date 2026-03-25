@@ -109,7 +109,21 @@
     "view_comments": "View comments",
     "no_comments": "No comments yet.",
     "comment_placeholder": "Write a comment...",
-    "send": "Send"
+    "send": "Send",
+    "attach_file": "Attach file",
+    "drop_files_here": "Drop files here",
+    "error_executable": "{filename} — executables not allowed",
+    "error_size": "{filename} — exceeds 50 MB limit",
+    "uploading": "Uploading...",
+    "download_file": "Download {filename}",
+    "close_preview": "Close preview",
+    "attachment_alt": "Attachment: {filename}",
+    "error_comment_submit": "Failed to post comment. Please try again.",
+    "error_upload_failed": "Upload failed — try again",
+    "edit_title": "Edit title",
+    "save_title": "Save",
+    "change_status": "Change status",
+    "error_update_failed": "Failed to update task. Please try again."
   },
   "billing": {
     "title": "Billing & Subscription",

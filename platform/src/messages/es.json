@@ -109,7 +109,21 @@
     "view_comments": "Ver comentarios",
     "no_comments": "Sin comentarios aún.",
     "comment_placeholder": "Escribe un comentario...",
-    "send": "Enviar"
+    "send": "Enviar",
+    "attach_file": "Adjuntar archivo",
+    "drop_files_here": "Soltar archivos aqui",
+    "error_executable": "{filename} — ejecutables no permitidos",
+    "error_size": "{filename} — excede el limite de 50 MB",
+    "uploading": "Subiendo...",
+    "download_file": "Descargar {filename}",
+    "close_preview": "Cerrar vista previa",
+    "attachment_alt": "Adjunto: {filename}",
+    "error_comment_submit": "Error al publicar comentario. Intenta de nuevo.",
+    "error_upload_failed": "Error al subir — intenta de nuevo",
+    "edit_title": "Editar titulo",
+    "save_title": "Guardar",
+    "change_status": "Cambiar estado",
+    "error_update_failed": "Error al actualizar tarea. Intenta de nuevo."
   },
   "billing": {
     "title": "Pagos y Suscripción",
