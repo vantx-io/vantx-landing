@@ -1,5 +1,27 @@
 # Milestones
 
+## v1.1 Platform Hardening & Admin (Shipped: 2026-03-25)
+
+**Phases completed:** 5 phases, 13 plans, 25 tasks
+
+**Key accomplishments:**
+
+- Notifications table (RLS + indexes) and private task-attachments storage bucket provisioned as SQL migrations, with matching TypeScript Notification type exported from types.ts
+- Task 1: Vitest infrastructure
+- GitHub Actions secrets required before E2E tests pass in CI:
+- Resend + React Email payment pipeline: bilingual payment success/failure emails via Stripe webhook with matching in-app notification rows, all fire-and-forget
+- Task notification pipeline: notifyTaskEvent orchestrator dispatches bilingual email + Slack Block Kit + notification rows for task_created/task_updated, with API routes replacing direct Supabase inserts
+- Supabase Realtime bell component with live unread badge (9+ cap, animate-ping), dropdown list with type icons and relative timestamps, markRead/markAllRead, click-outside/Escape close, and i18n in EN/ES
+- NotificationBell mounted in portal sidebar header plus Playwright cross-tenant E2E test proving RLS isolation between two users via service-role insert and dual browser context
+- Supabase RLS migration for cross-client access, middleware role guard on /admin routes, and admin layout with dark sidebar and NotificationBell completing NOTIF-09
+- Admin overview page (ADMIN-03) with 4 stat cards and 20-event activity feed, plus searchable client list page (ADMIN-04) with subscription details.
+- Cross-client task view with three filter dropdowns, billing overview with 4 stat cards and payment/subscription tables, and Playwright E2E test proving middleware redirect enforcement for client-role users
+- CommentForm with react-dropzone drag-and-drop, client-side validation (executables + 50MB), simulated progress bars, Supabase Storage upload, plus inline task title editing and status dropdown
+- Image thumbnails with lightbox modal, non-image file cards with file size from Storage metadata, and signed URL downloads in comment thread
+- Login flow, task CRUD with inline title edit + status change + file attachment, and cross-tenant storage isolation E2E tests using Playwright filechooser and dual browser contexts
+
+---
+
 ## v1.0 MVP (Shipped: 2026-03-24)
 
 **Phases completed:** 4 phases, 8 plans
