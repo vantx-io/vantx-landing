@@ -36,8 +36,8 @@ Requirements for Platform Hardening & Admin milestone. Each maps to roadmap phas
 - [ ] **NOTIF-04**: Supabase Realtime subscription filtered by user_id (cross-tenant safe)
 - [x] **NOTIF-05**: Email notification on successful payment (Resend)
 - [x] **NOTIF-06**: Email notification on failed payment (Resend)
-- [ ] **NOTIF-07**: Email notification on task status change
-- [ ] **NOTIF-08**: Slack message to client channel on new task created
+- [x] **NOTIF-07**: Email notification on task status change
+- [x] **NOTIF-08**: Slack message to client channel on new task created
 - [ ] **NOTIF-09**: NotificationBell mounted in both portal and admin layouts
 
 ### File Uploads
@@ -110,8 +110,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | NOTIF-04 | Phase 7 | Pending |
 | NOTIF-05 | Phase 6 | Complete |
 | NOTIF-06 | Phase 6 | Complete |
-| NOTIF-07 | Phase 6 | Pending |
-| NOTIF-08 | Phase 6 | Pending |
+| NOTIF-07 | Phase 6 | Complete |
+| NOTIF-08 | Phase 6 | Complete |
 | NOTIF-09 | Phase 7 | Pending |
 | UPLOAD-01 | Phase 5 | Pending |
 | UPLOAD-02 | Phase 5 | Pending |
