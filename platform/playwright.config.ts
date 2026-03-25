@@ -24,6 +24,12 @@ export default defineConfig({
       dependencies: ["setup", "setup-b"],
       use: { ...devices["Desktop Chrome"] },
     },
+    {
+      name: "storage-isolation",
+      testMatch: /storage-isolation\.spec\.ts/,
+      dependencies: ["setup", "setup-b"],
+      use: { ...devices["Desktop Chrome"] },
+    },
   ],
   webServer: {
     command: "npm run dev",
