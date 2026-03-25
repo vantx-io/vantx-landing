@@ -105,10 +105,10 @@ Plans:
   3. Uploaded images render as inline preview thumbnails in the comment thread without requiring a separate download step
   4. Clicking a non-image attachment generates a signed download URL that expires — no permanent public URLs are stored in the database
   5. The Playwright login flow test and task CRUD test pass against the updated task page with uploads present
-**Plans:** 3 plans
+**Plans:** 1/3 plans executed
 
 Plans:
-- [ ] 09-01-PLAN.md — Comment form with file upload, drag-and-drop, validation, progress, comment API route, i18n
+- [x] 09-01-PLAN.md — Comment form with file upload, drag-and-drop, validation, progress, comment API route, i18n
 - [ ] 09-02-PLAN.md — Attachment display in comments (image thumbnails + lightbox + non-image file cards + signed URLs)
 - [ ] 09-03-PLAN.md — E2E tests: login flow (TEST-06), task CRUD with attachment (TEST-07), cross-tenant storage isolation
 
@@ -124,4 +124,4 @@ Plans:
 | 6. Server-Side Integration | v1.1 | 2/2 | Complete   | 2026-03-25 |
 | 7. Notification UI | v1.1 | 2/2 | Complete   | 2026-03-25 |
 | 8. Admin Dashboard | v1.1 | 3/3 | Complete   | 2026-03-25 |
-| 9. File Uploads | v1.1 | 0/3 | Not started | - |
+| 9. File Uploads | v1.1 | 1/3 | In Progress|  |

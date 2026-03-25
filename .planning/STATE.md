@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Platform Hardening & Admin
 status: unknown
-stopped_at: Completed 08-03-PLAN.md
-last_updated: "2026-03-25T10:02:46.018Z"
+stopped_at: Completed 09-01-PLAN.md
+last_updated: "2026-03-25T15:29:54.079Z"
 progress:
   total_phases: 5
   completed_phases: 4
-  total_plans: 10
-  completed_plans: 10
+  total_plans: 13
+  completed_plans: 11
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-24)
 
 **Core value:** Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay forma fácil de reservar tiempo, todo lo demás falla.
-**Current focus:** Phase 08 — admin-dashboard
+**Current focus:** Phase 09 — file-uploads
 
 ## Current Position
 
-Phase: 9
-Plan: Not started
+Phase: 09 (file-uploads) — EXECUTING
+Plan: 2 of 3
 
 ## Performance Metrics
 
@@ -50,6 +50,7 @@ Plan: Not started
 | Phase 08-admin-dashboard P01 | 12min | 2 tasks | 6 files |
 | Phase 08 P02 | 8min | 2 tasks | 2 files |
 | Phase 08-admin-dashboard P03 | 2min | 3 tasks | 3 files |
+| Phase 09 P01 | 5min | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -87,6 +88,8 @@ Key architectural decisions for v1.1:
 - [Phase 08-admin-dashboard]: Admin layout uses useTranslations('admin') separate namespace — isolates admin/portal i18n keys
 - [Phase 08]: Removed Supabase join syntax from admin queries — TypeScript never inference; explicit type casts resolve cleanly
 - [Phase 08-admin-dashboard]: Cross-client queries omit .eq('client_id') — RLS grants admin/engineer/seller full SELECT via 002_admin_rls.sql
+- [Phase 09]: react-dropzone v15 installed (v14 in blockers, v15 resolved cleanly)
+- [Phase 09]: Simulated progress ticker for Supabase Storage uploads (SDK lacks native progress events)
 
 ### Pending Todos
 
@@ -102,6 +105,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-25T09:59:53.967Z
-Stopped at: Completed 08-03-PLAN.md
+Last session: 2026-03-25T15:29:54.074Z
+Stopped at: Completed 09-01-PLAN.md
 Resume file: None

@@ -16,7 +16,7 @@ Requirements for Platform Hardening & Admin milestone. Each maps to roadmap phas
 - [x] **TEST-05**: Playwright configured against local dev server with auth helpers
 - [ ] **TEST-06**: E2E test: login flow (email/password → portal redirect)
 - [ ] **TEST-07**: E2E test: task CRUD (create, edit, status change)
-- [ ] **TEST-08**: E2E test: admin route redirects client-role users to portal
+- [x] **TEST-08**: E2E test: admin route redirects client-role users to portal
 - [x] **TEST-09**: CI check: i18n key parity between EN and ES JSON files
 
 ### Admin Dashboard
@@ -25,8 +25,8 @@ Requirements for Platform Hardening & Admin milestone. Each maps to roadmap phas
 - [x] **ADMIN-02**: Admin layout with role-gated sidebar navigation
 - [x] **ADMIN-03**: Admin overview page with active clients count, MRR, recent activity
 - [x] **ADMIN-04**: Client list page with search, subscription status, plan details
-- [ ] **ADMIN-05**: Cross-client task view with filtering by client, priority, status
-- [ ] **ADMIN-06**: Billing overview with MRR trend, recent payments, subscription statuses
+- [x] **ADMIN-05**: Cross-client task view with filtering by client, priority, status
+- [x] **ADMIN-06**: Billing overview with MRR trend, recent payments, subscription statuses
 
 ### Notifications
 
@@ -44,8 +44,8 @@ Requirements for Platform Hardening & Admin milestone. Each maps to roadmap phas
 
 - [ ] **UPLOAD-01**: Supabase Storage bucket 'task-attachments' with private access
 - [ ] **UPLOAD-02**: Storage RLS policies scoped to client_id path structure
-- [ ] **UPLOAD-03**: File upload UI in task comment form (drag-and-drop + click)
-- [ ] **UPLOAD-04**: Client-side file validation (size limit, allowed types)
+- [x] **UPLOAD-03**: File upload UI in task comment form (drag-and-drop + click)
+- [x] **UPLOAD-04**: Client-side file validation (size limit, allowed types)
 - [ ] **UPLOAD-05**: Image preview thumbnails for uploaded images in comments
 - [ ] **UPLOAD-06**: Signed URL generation for file downloads (time-limited)
 
@@ -96,14 +96,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TEST-05 | Phase 5 | Complete |
 | TEST-06 | Phase 9 | Pending |
 | TEST-07 | Phase 9 | Pending |
-| TEST-08 | Phase 8 | Pending |
+| TEST-08 | Phase 8 | Complete |
 | TEST-09 | Phase 5 | Complete |
 | ADMIN-01 | Phase 8 | Complete |
 | ADMIN-02 | Phase 8 | Complete |
 | ADMIN-03 | Phase 8 | Complete |
 | ADMIN-04 | Phase 8 | Complete |
-| ADMIN-05 | Phase 8 | Pending |
-| ADMIN-06 | Phase 8 | Pending |
+| ADMIN-05 | Phase 8 | Complete |
+| ADMIN-06 | Phase 8 | Complete |
 | NOTIF-01 | Phase 5 | Pending |
 | NOTIF-02 | Phase 7 | Complete |
 | NOTIF-03 | Phase 7 | Complete |
@@ -115,8 +115,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | NOTIF-09 | Phase 7 | Complete |
 | UPLOAD-01 | Phase 5 | Pending |
 | UPLOAD-02 | Phase 5 | Pending |
-| UPLOAD-03 | Phase 9 | Pending |
-| UPLOAD-04 | Phase 9 | Pending |
+| UPLOAD-03 | Phase 9 | Complete |
+| UPLOAD-04 | Phase 9 | Complete |
 | UPLOAD-05 | Phase 9 | Pending |
 | UPLOAD-06 | Phase 9 | Pending |
 
