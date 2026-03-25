@@ -27,7 +27,14 @@ Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay f
 
 ### Active
 
-(None — next milestone not yet defined)
+- [ ] Two-factor authentication (SEC-01)
+- [ ] Rate limiting on API routes (SEC-02)
+- [ ] Weekly email digest to clients (NOTIF-10)
+- [ ] User notification preferences (NOTIF-11)
+- [ ] Admin user management — invite, role change, deactivate (ADMIN-07)
+- [ ] Admin MRR trend chart (ADMIN-08)
+- [ ] Integration tests for API routes (TEST-10)
+- [ ] Playwright visual regression tests (TEST-11)
 
 ### Out of Scope
 
@@ -35,8 +42,8 @@ Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay f
 - SEO con URLs `/es/` separadas — tradeoff aceptado en v1 (single-URL toggle)
 - Real-time chat — Slack covers async communication
 - Mobile app — responsive web sufficient at current scale
-- Admin user management UI — CLI workflow sufficient
-- Notification preferences UI — over-engineering at current scale (<50 clients)
+- Admin user management UI — promoted to v1.2 (ADMIN-07)
+- Notification preferences UI — promoted to v1.2 (NOTIF-11)
 
 ## Context
 
@@ -76,6 +83,19 @@ Tech: Next.js 15, Supabase (Postgres + Auth + Storage + Realtime), Stripe, Resen
 | react-dropzone for file uploads | Small bundle, composable, well-maintained | ✓ Good |
 | Storage RLS scoped by client_id path | Cross-tenant isolation at infrastructure level | ✓ Good |
 
+## Current Milestone: v1.2 Security & Polish
+
+**Goal:** Harden the platform with 2FA, rate limiting, notification preferences, admin user management, MRR chart, and comprehensive test coverage (integration + visual regression).
+
+**Target features:**
+- Two-factor authentication (TOTP)
+- Rate limiting on API routes
+- Weekly email digest + notification preferences
+- Admin user management (invite, role change, deactivate)
+- Admin MRR trend chart (Recharts)
+- Integration tests for API routes
+- Visual regression tests (Playwright)
+
 ## Evolution
 
 This document evolves at phase transitions and milestone boundaries.
@@ -93,4 +113,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-25 after v1.1 milestone complete*
+*Last updated: 2026-03-25 after v1.2 milestone started*

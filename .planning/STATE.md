@@ -1,9 +1,9 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.1
-milestone_name: Platform Hardening & Admin
-status: unknown
-stopped_at: Completed 09-03-PLAN.md
+milestone: v1.2
+milestone_name: Security & Polish
+status: defining-requirements
+stopped_at: Milestone v1.2 started
 last_updated: "2026-03-25T16:10:49.991Z"
 progress:
   total_phases: 5
@@ -19,12 +19,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-24)
 
 **Core value:** Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay forma fácil de reservar tiempo, todo lo demás falla.
-**Current focus:** Phase 09 — file-uploads
+**Current focus:** Defining requirements for v1.2 Security & Polish
 
 ## Current Position
 
-Phase: 09
-Plan: Not started
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-03-25 — Milestone v1.2 started
 
 ## Performance Metrics
 
