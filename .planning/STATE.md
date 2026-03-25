@@ -4,7 +4,7 @@ milestone: v1.1
 milestone_name: Platform Hardening & Admin
 status: unknown
 stopped_at: Completed 08-03-PLAN.md
-last_updated: "2026-03-25T09:59:53.972Z"
+last_updated: "2026-03-25T10:00:01.474Z"
 progress:
   total_phases: 5
   completed_phases: 4
@@ -86,6 +86,7 @@ Key architectural decisions for v1.1:
 - [Phase 08-admin-dashboard]: Seller role added to all admin RLS policies — was missing from 001_schema.sql existing admin policies
 - [Phase 08-admin-dashboard]: Admin layout uses useTranslations('admin') separate namespace — isolates admin/portal i18n keys
 - [Phase 08]: Removed Supabase join syntax from admin queries — TypeScript never inference; explicit type casts resolve cleanly
+- [Phase 08-admin-dashboard]: Cross-client queries omit .eq('client_id') — RLS grants admin/engineer/seller full SELECT via 002_admin_rls.sql
 
 ### Pending Todos
 
