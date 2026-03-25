@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import type { Task, TaskComment } from "@/lib/types";
+import CommentForm from "./CommentForm";
 
 function Badge({ text, color }: { text: string; color: string }) {
   return (
@@ -33,7 +34,6 @@ export default function TasksPage() {
   const [filter, setFilter] = useState("all");
   const [selected, setSelected] = useState<string | null>(null);
   const [comments, setComments] = useState<TaskComment[]>([]);
-  const [newComment, setNewComment] = useState("");
   const [newTask, setNewTask] = useState(false);
   const [form, setForm] = useState({
     title: "",
@@ -41,6 +41,8 @@ export default function TasksPage() {
     priority: "medium",
     type: "request",
   });
+  const [editingTitle, setEditingTitle] = useState<string | null>(null);
+  const [editTitleValue, setEditTitleValue] = useState("");
   const supabase = createClient();
   const [clientId, setClientId] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
@@ -82,13 +84,31 @@ export default function TasksPage() {
     if (data) setComments(data as TaskComment[]);
   }
 
-  async function addComment(taskId: string) {
-    if (!newComment.trim() || !userId) return;
-    await supabase
+  async function reloadComments(taskId: string) {
+    const { data } = await supabase
       .from("task_comments")
-      .insert({ task_id: taskId, user_id: userId, content: newComment });
-    setNewComment("");
-    loadComments(taskId);
+      .select("*")
+      .eq("task_id", taskId)
+      .order("created_at", { ascending: true });
+    if (data) setComments(data as TaskComment[]);
+  }
+
+  async function updateTask(
+    taskId: string,
+    updates: { title?: string; status?: string },
+  ) {
+    const res = await fetch(`/api/tasks/${taskId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updates),
+    });
+    if (!res.ok) return;
+    const { data } = await supabase
+      .from("tasks")
+      .select("*")
+      .eq("client_id", clientId!)
+      .order("created_at", { ascending: false });
+    if (data) setTasks(data as Task[]);
   }
 
   async function createTask() {
@@ -238,9 +258,51 @@ export default function TasksPage() {
           >
             <div className="flex justify-between items-start">
               <div>
-                <div className="text-[14px] font-semibold text-brand-dark mb-1.5">
-                  {tk.title}
-                </div>
+                {editingTitle === tk.id ? (
+                  <div
+                    className="flex items-center gap-2 mb-1.5"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <input
+                      value={editTitleValue}
+                      onChange={(e) => setEditTitleValue(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          updateTask(tk.id, { title: editTitleValue });
+                          setEditingTitle(null);
+                        }
+                        if (e.key === "Escape") setEditingTitle(null);
+                      }}
+                      className="text-[14px] font-semibold text-brand-dark px-2 py-1 rounded border border-brand-accent focus:outline-none"
+                      autoFocus
+                      aria-label={t("edit_title")}
+                    />
+                    <button
+                      onClick={() => {
+                        updateTask(tk.id, { title: editTitleValue });
+                        setEditingTitle(null);
+                      }}
+                      className="text-xs text-brand-accent font-semibold"
+                      type="button"
+                    >
+                      {t("save_title")}
+                    </button>
+                  </div>
+                ) : (
+                  <div
+                    className="text-[14px] font-semibold text-brand-dark mb-1.5 cursor-pointer hover:text-brand-accent transition"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setEditingTitle(tk.id);
+                      setEditTitleValue(tk.title);
+                    }}
+                    title={t("edit_title")}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    {tk.title}
+                  </div>
+                )}
                 <div className="flex gap-1.5">
                   <Badge
                     text={tk.priority.toUpperCase()}
@@ -260,7 +322,7 @@ export default function TasksPage() {
                   </div>
                 )}
                 <div className="text-[12px] text-brand-accent mt-1">
-                  💬 {t("view_comments")}
+                  {t("view_comments")}
                 </div>
               </div>
             </div>
@@ -271,8 +333,33 @@ export default function TasksPage() {
 
           {selected === tk.id && (
             <div className="px-5 py-4 bg-gray-50 border-t border-gray-100">
+              {/* Status change dropdown */}
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-xs text-gray-500 font-medium">
+                  {t("change_status")}:
+                </span>
+                <select
+                  value={tk.status}
+                  onChange={(e) =>
+                    updateTask(tk.id, { status: e.target.value })
+                  }
+                  className="px-2 py-1 rounded-lg border border-gray-200 text-xs focus:border-brand-accent focus:outline-none"
+                  aria-label={t("change_status")}
+                >
+                  <option value="open">{t("filters.open")}</option>
+                  <option value="in_progress">
+                    {t("filters.in_progress")}
+                  </option>
+                  <option value="waiting_client">Waiting Client</option>
+                  <option value="completed">{t("filters.completed")}</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+              </div>
+
               {comments.length === 0 && (
-                <p className="text-sm text-gray-400 mb-3">{t("no_comments")}</p>
+                <p className="text-sm text-gray-400 mb-3">
+                  {t("no_comments")}
+                </p>
               )}
               {comments.map((c) => (
                 <div
@@ -287,21 +374,12 @@ export default function TasksPage() {
                   <div className="text-sm text-gray-700">{c.content}</div>
                 </div>
               ))}
-              <div className="flex gap-2 mt-3">
-                <input
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                  placeholder={t("comment_placeholder")}
-                  onKeyDown={(e) => e.key === "Enter" && addComment(tk.id)}
-                  className="flex-1 px-3 py-2 rounded-lg border border-gray-200 text-sm focus:border-brand-accent focus:outline-none"
-                />
-                <button
-                  onClick={() => addComment(tk.id)}
-                  className="px-4 py-2 rounded-lg bg-brand-accent text-white text-sm font-semibold"
-                >
-                  {t("send")}
-                </button>
-              </div>
+              <CommentForm
+                taskId={tk.id}
+                clientId={clientId!}
+                userId={userId!}
+                onCommentAdded={() => reloadComments(tk.id)}
+              />
             </div>
           )}
         </div>
