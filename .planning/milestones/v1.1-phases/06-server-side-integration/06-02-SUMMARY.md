@@ -147,3 +147,16 @@ None — task notification pipeline reuses the existing `RESEND_API_KEY` and `SL
 ---
 *Phase: 06-server-side-integration*
 *Completed: 2026-03-25*
+
+## Self-Check: PASSED
+
+- FOUND: platform/src/lib/emails/TaskStatusEmail.tsx
+- FOUND: platform/src/lib/notifications.ts
+- FOUND: platform/src/lib/slack.ts
+- FOUND: platform/src/app/api/tasks/route.ts
+- FOUND: platform/src/app/api/tasks/[id]/status/route.ts
+- FOUND: platform/__tests__/notifications.test.ts
+- FOUND: .planning/phases/06-server-side-integration/06-02-SUMMARY.md
+- FOUND commit: 5b07af9 (Task 1)
+- FOUND commit: ff95552 (Task 2)
+- FOUND commit: 62aeb36 (docs/metadata)
