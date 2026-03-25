@@ -110,7 +110,7 @@ Plans:
 Plans:
 - [x] 09-01-PLAN.md — Comment form with file upload, drag-and-drop, validation, progress, comment API route, i18n
 - [x] 09-02-PLAN.md — Attachment display in comments (image thumbnails + lightbox + non-image file cards + signed URLs)
-- [ ] 09-03-PLAN.md — E2E tests: login flow (TEST-06), task CRUD with attachment (TEST-07), cross-tenant storage isolation
+- [x] 09-03-PLAN.md — E2E tests: login flow (TEST-06), task CRUD with attachment (TEST-07), cross-tenant storage isolation
 
 ## Progress
 

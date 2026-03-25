@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Platform Hardening & Admin
 status: unknown
-stopped_at: Completed 09-02-PLAN.md
-last_updated: "2026-03-25T15:35:32.762Z"
+stopped_at: Completed 09-03-PLAN.md
+last_updated: "2026-03-25T15:40:40.957Z"
 progress:
   total_phases: 5
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 13
-  completed_plans: 12
+  completed_plans: 13
 ---
 
 # Project State
@@ -52,6 +52,7 @@ Plan: 3 of 3
 | Phase 08-admin-dashboard P03 | 2min | 3 tasks | 3 files |
 | Phase 09 P01 | 5min | 2 tasks | 8 files |
 | Phase 09 P02 | 3min | 2 tasks | 3 files |
+| Phase 09 P03 | 3min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -93,6 +94,7 @@ Key architectural decisions for v1.1:
 - [Phase 09]: Simulated progress ticker for Supabase Storage uploads (SDK lacks native progress events)
 - [Phase 09]: Image signed URLs eagerly on mount; non-image lazily on click (Pitfall 6)
 - [Phase 09]: File sizes fetched from Supabase Storage list() metadata — no schema changes (D-07)
+- [Phase 09]: Storage isolation E2E test uses REST API fetch with credentials:include in page.evaluate instead of @supabase/ssr dynamic import
 
 ### Pending Todos
 
@@ -108,6 +110,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-25T15:35:32.754Z
-Stopped at: Completed 09-02-PLAN.md
+Last session: 2026-03-25T15:40:40.951Z
+Stopped at: Completed 09-03-PLAN.md
 Resume file: None

@@ -14,8 +14,8 @@ Requirements for Platform Hardening & Admin milestone. Each maps to roadmap phas
 - [x] **TEST-03**: Unit tests for slack.ts (channel creation, message posting)
 - [x] **TEST-04**: Unit tests for onboard.ts (orchestration flow)
 - [x] **TEST-05**: Playwright configured against local dev server with auth helpers
-- [ ] **TEST-06**: E2E test: login flow (email/password → portal redirect)
-- [ ] **TEST-07**: E2E test: task CRUD (create, edit, status change)
+- [x] **TEST-06**: E2E test: login flow (email/password → portal redirect)
+- [x] **TEST-07**: E2E test: task CRUD (create, edit, status change)
 - [x] **TEST-08**: E2E test: admin route redirects client-role users to portal
 - [x] **TEST-09**: CI check: i18n key parity between EN and ES JSON files
 
@@ -94,8 +94,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TEST-03 | Phase 5 | Complete |
 | TEST-04 | Phase 5 | Complete |
 | TEST-05 | Phase 5 | Complete |
-| TEST-06 | Phase 9 | Pending |
-| TEST-07 | Phase 9 | Pending |
+| TEST-06 | Phase 9 | Complete |
+| TEST-07 | Phase 9 | Complete |
 | TEST-08 | Phase 8 | Complete |
 | TEST-09 | Phase 5 | Complete |
 | ADMIN-01 | Phase 8 | Complete |
