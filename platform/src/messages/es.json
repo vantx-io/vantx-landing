@@ -201,5 +201,71 @@
       "capacity_planning": "Capacity Planning",
       "getting_started": "Primeros Pasos"
     }
+  },
+  "admin": {
+    "title": "Admin",
+    "nav": {
+      "overview": "Overview",
+      "clients": "Clients",
+      "tasks": "Tasks",
+      "billing": "Billing"
+    },
+    "sidebar": {
+      "admin_badge": "ADMIN",
+      "back_to_portal": "Back to Portal"
+    },
+    "overview": {
+      "title": "Admin Overview",
+      "active_clients": "Active Clients",
+      "current_mrr": "Current MRR",
+      "open_tasks": "Open Tasks",
+      "pending_payments": "Pending Payments",
+      "recent_activity": "Recent Activity",
+      "event_new_client": "New client: {name}",
+      "event_payment": "Payment {status}: ${amount} from {client}",
+      "event_task": "Task \"{title}\" — {status}"
+    },
+    "clients": {
+      "title": "All Clients",
+      "search_placeholder": "Search by name...",
+      "col_name": "Name",
+      "col_status": "Status",
+      "col_plan": "Plan",
+      "col_monthly": "Monthly",
+      "col_tasks": "Active Tasks",
+      "no_results": "No clients found"
+    },
+    "tasks": {
+      "title": "All Tasks",
+      "filter_client": "All Clients",
+      "filter_priority": "All Priorities",
+      "filter_status": "All Statuses",
+      "col_title": "Title",
+      "col_client": "Client",
+      "col_priority": "Priority",
+      "col_status": "Status",
+      "col_assigned": "Assigned To",
+      "col_created": "Created",
+      "no_results": "No tasks found"
+    },
+    "billing": {
+      "title": "Billing Overview",
+      "total_mrr": "Total MRR",
+      "active_subscriptions": "Active Subscriptions",
+      "pending_payments": "Pending Payments",
+      "failed_payments": "Failed Payments",
+      "recent_payments": "Recent Payments",
+      "active_subs_table": "Active Subscriptions",
+      "col_client": "Client",
+      "col_amount": "Amount",
+      "col_currency": "Currency",
+      "col_status": "Status",
+      "col_date": "Date",
+      "col_plan": "Plan",
+      "col_monthly": "Monthly",
+      "col_period_end": "Period End",
+      "no_payments": "No payments found",
+      "no_subscriptions": "No active subscriptions"
+    }
   }
 }
