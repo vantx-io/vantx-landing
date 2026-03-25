@@ -2,8 +2,8 @@
 phase: 08
 slug: admin-dashboard
 status: draft
-nyquist_compliant: false
-wave_0_complete: false
+nyquist_compliant: true
+wave_0_complete: true
 created: 2026-03-25
 ---
 
@@ -44,7 +44,7 @@ created: 2026-03-25
 | 08-02-02 | 02 | 2 | ADMIN-04 | typecheck | `npx tsc --noEmit` | ❌ W0 | ⬜ pending |
 | 08-03-01 | 03 | 2 | ADMIN-05 | typecheck | `npx tsc --noEmit` | ❌ W0 | ⬜ pending |
 | 08-03-02 | 03 | 2 | ADMIN-06 | typecheck | `npx tsc --noEmit` | ❌ W0 | ⬜ pending |
-| 08-04-01 | 04 | 3 | TEST-08 | E2E | `npx playwright test --project=admin-redirect` | ❌ W0 | ⬜ pending |
+| 08-03-03 | 03 | 2 | TEST-08 | E2E | `npx playwright test e2e/admin-redirect.spec.ts --project=chromium` | ❌ W0 | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
