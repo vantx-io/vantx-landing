@@ -1,113 +1,107 @@
 # Stack Research
 
-**Domain:** Platform v1.1 — Testing, Admin Dashboard, Notifications, File Uploads
-**Researched:** 2026-03-24
-**Confidence:** HIGH (testing stack from Next.js official docs; email/upload recommendations from ecosystem knowledge at training cutoff + official docs; versions need `npm install` to resolve latest — no pinned versions from research tools available)
+**Domain:** SaaS platform — Security & Polish milestone (v1.2)
+**Researched:** 2026-03-25
+**Confidence:** HIGH (Supabase MFA, Vercel Cron, Playwright built-in visual regression) / MEDIUM (Upstash free-tier specifics, NTARH Next.js 15 exact compatibility)
 
 ---
 
-## Context: What Already Exists (Do NOT Re-research)
+## Context: What Already Exists
 
-The platform is Next.js 14.2.18 + TypeScript 5.7 + Tailwind 3.4 running on Supabase (`@supabase/supabase-js` ^2.47, `@supabase/ssr` ^0.9). Authentication, RLS, Stripe v17.4 webhooks, Grafana Cloud, Slack API, next-intl 4.8, Recharts, Lucide icons — all in place.
+These are installed and working in `platform/package.json`. Do NOT re-add or research them for v1.2.
 
-Everything below is **additions only**.
+| Already Installed | Notes |
+|-------------------|-------|
+| `@supabase/supabase-js ^2.47.0` | MFA API (`auth.mfa.*`) lives on this client |
+| `@supabase/ssr ^0.9.0` | Server client for Route Handlers and middleware |
+| `recharts ^2.13.3` | Already present — use for MRR chart as-is |
+| `@playwright/test ^1.58.2` | Visual regression built in via `toHaveScreenshot()` |
+| `vitest ^4.1.1` | Integration test runner |
+| `resend ^6.9.4` | Email delivery for weekly digest |
+| `@react-email/components ^1.0.10` | Email templates for digest |
+| `@react-email/render ^2.0.4` | Renders React Email to HTML string |
+| `date-fns ^4.1.0` | Date formatting for digest content |
+| `next 14.2.18` | App Router — NTARH v4 requires next >= 14.0.4, satisfied |
 
 ---
 
-## Recommended Stack
+## New Dependencies Required
 
-### 1. Testing Framework
-
-| Technology | Version | Purpose | Why Recommended |
-|------------|---------|---------|-----------------|
-| `vitest` | latest (^3.x as of March 2026) | Unit + component test runner | Next.js official recommendation over Jest for new projects. Native ESM, faster than Jest, Vite-compatible config, TypeScript-first. Next.js 14 docs explicitly guide Vitest setup. |
-| `@vitejs/plugin-react` | latest | JSX transform for Vitest | Required by the official Next.js + Vitest setup to handle React JSX. |
-| `@testing-library/react` | latest (^16.x) | Render components in jsdom | The standard React testing utility — works identically in Vitest and Jest. Paired with Vitest it requires no extra transform. |
-| `@testing-library/user-event` | latest (^14.x) | Simulate real user interactions | Replaces `fireEvent` for click, type, keyboard events. Produces more realistic interaction tests than `fireEvent`. |
-| `@testing-library/dom` | latest | DOM queries (implicit dep) | Pulled in by `@testing-library/react`; list explicitly for transparency. |
-| `jsdom` | latest | Browser DOM simulation | The test environment for component rendering in Node. Standard choice; `happy-dom` is faster but less compatible. |
-| `vite-tsconfig-paths` | latest | Resolve `@/` path aliases | The platform uses `@/lib/...` path aliases in `tsconfig.json`. Without this Vitest throws module-not-found errors. |
-| `@playwright/test` | latest (^1.49+ as of March 2026) | E2E testing: auth flows, billing, admin routes | Playwright is the Next.js-recommended E2E tool. Tests against real browser (Chromium/Firefox/WebKit). Critical for testing async Server Components, which Vitest cannot render. |
-
-**Why Vitest over Jest:** Jest requires `jest-environment-jsdom` + `@types/jest` + `ts-node` + `babel-jest` or `@swc/jest`. Vitest uses Vite's transformer — same TSConfig, same path aliases, zero extra config for TypeScript. The official Next.js docs updated the Vitest guide more recently than Jest.
-
-**Why Playwright over Cypress for E2E:** Playwright has better TypeScript support, runs tests in parallel across browsers by default, and the Next.js docs maintain an active `with-playwright` example. Cypress is an alternative but heavier on CI resources.
-
-### 2. Admin Dashboard UI
-
-No new UI framework needed. The existing stack (Tailwind + Lucide + Recharts) covers everything. The only potential addition is Radix UI primitives for accessible dialogs/dropdowns in the admin flow.
+### Core Additions
 
 | Technology | Version | Purpose | Why Recommended |
 |------------|---------|---------|-----------------|
-| `@radix-ui/react-dialog` | latest (^1.x) | Accessible modal dialogs for admin actions (suspend client, edit subscription) | Headless, unstyled, WCAG 2.1 AA out of the box. Tailwind-compatible. Avoids building accessible focus-trap logic from scratch. The platform already uses a similar pattern. |
-| `@radix-ui/react-dropdown-menu` | latest (^2.x) | Context menus on admin tables (edit, suspend, cancel actions) | Same rationale as Dialog. Keyboard-navigable by default. |
-| `@radix-ui/react-select` | latest (^2.x) | Styled select for role/status filters in admin | The native `<select>` is hard to style consistently. Radix Select is the standard fix. |
+| `@upstash/ratelimit` | `^2.0.8` | Sliding-window / fixed-window rate limits on API routes | Only connectionless (HTTP-based) rate limiter designed for Vercel serverless. State lives in external Redis — survives cold starts and is shared across all function instances. `lru-cache` resets per-instance and is not shared, making it trivially bypassable under concurrent load. |
+| `@upstash/redis` | `^1.34.x` (latest) | HTTP Redis client — required peer dep for `@upstash/ratelimit` | HTTP-based, no persistent TCP connection. Works identically in Edge runtime and Node.js serverless. Cannot substitute `ioredis` (different interface). |
+| `next-test-api-route-handler` | `^4.x` (latest) | Integration-test App Router route handlers in isolation with Vitest | Purpose-built for Next.js App Router. Runs actual route handler code in a Next.js-like environment without a full dev server. Supports App Router since v4 (requires next >= 14.0.4 — satisfied). Pairs with existing Vitest. |
+| `msw` | `^2.x` (latest) | Mock external HTTP calls during integration tests | Intercepts `fetch` at the network boundary in Node.js via `setupServer` from `msw/node`. Allows stubbing Supabase REST, Stripe, Resend without changing production code. Pairs with `next-test-api-route-handler`. |
 
-**Alternative considered:** shadcn/ui — a collection of copy-paste components built on Radix. Better for greenfield apps. For an existing codebase already styled with custom Tailwind classes, adding shadcn would introduce style conflicts and require migration work. Use raw `@radix-ui` primitives instead and style them in-place.
+### No Additional Install Required
 
-### 3. In-App Notifications
+| Feature | Why No New Package Needed |
+|---------|--------------------------|
+| **TOTP / 2FA enrollment** | `supabase.auth.mfa.enroll()` returns a QR code as an SVG string directly. Render as `<img src={\`data:image/svg+xml;utf8,${encodeURIComponent(qr)}\`}>`. No qrcode library needed. |
+| **TOTP challenge + verify** | `supabase.auth.mfa.challenge()` + `supabase.auth.mfa.verify()` — all on existing `@supabase/supabase-js`. |
+| **AAL2 enforcement in middleware** | `supabase.auth.mfa.getAuthenticatorAssuranceLevel()` in `middleware.ts`. Redirect to `/mfa-verify` if `nextLevel === 'aal2'` and current is `aal1`. |
+| **Weekly email digest** | Vercel Cron (`vercel.json`) issues a GET to `/api/cron/digest`. Route handler uses existing Resend + React Email. No worker process or job queue. |
+| **Notification preferences** | Supabase Postgres column (JSONB or per-type boolean columns) on `users` or separate `notification_preferences` table. Read/write via existing Supabase service client. |
+| **Admin user management** | `supabase.auth.admin.inviteUserByEmail()`, `supabase.auth.admin.updateUserById()`, `supabase.auth.admin.deleteUser()` — all on `createServiceClient()` which already uses the service role key. |
+| **MRR trend chart** | `recharts ^2.13.3` already installed. Use `<AreaChart>` or `<LineChart>` with `"use client"` directive. Query Stripe `subscriptions` or existing `subscriptions` table. |
+| **Playwright visual regression** | `toHaveScreenshot()` is built into `@playwright/test` since v1.26. No snapshot plugin needed. Baselines stored in `__snapshots__` beside test files. |
 
-No new packages required. `@supabase/supabase-js` ^2.47 includes the full Realtime API.
+---
 
-| Technology | Version | Purpose | Why Recommended |
-|------------|---------|---------|-----------------|
-| Supabase Realtime (built-in) | via `@supabase/supabase-js` ^2.47 | Push in-app notifications to connected clients | Already in `package.json`. The client exposes `supabase.channel().on('postgres_changes', ...)`. Subscribe to an `INSERT` on a new `notifications` table — no polling, no websocket library needed. |
+## Supporting Libraries
 
-**Implementation pattern:** Add a `notifications` table to Supabase (user_id, type, title, body, read, created_at). In the portal layout (`src/app/[locale]/portal/layout.tsx`), subscribe on mount using `supabase.channel('notifications').on('postgres_changes', {event: 'INSERT', schema: 'public', table: 'notifications', filter: 'user_id=eq.' + userId}, ...)`. No new package.
+| Library | Version | Purpose | When to Use |
+|---------|---------|---------|-------------|
+| `@upstash/ratelimit` | `^2.0.8` | API rate limiting | Wrap any route handler accepting unauthenticated or auth-sensitive input: login, invite, password reset, checkout. Skip on webhook routes (Stripe/Supabase verify signatures). |
+| `@upstash/redis` | `^1.34.x` | HTTP Redis client | Peer dep for `@upstash/ratelimit`. Provision one free-tier Upstash database (10k req/day, 256 MB). |
+| `next-test-api-route-handler` | `^4.x` | Integration test route handlers | Target: `/api/checkout`, `/api/billing-portal`, `/api/tasks`, `/api/cron/digest`. |
+| `msw` | `^2.x` | Mock HTTP in tests | Stub Supabase REST, Stripe API, Resend in integration tests. Use `http` namespace (v2 breaking change from v1's `rest`). |
 
-**Why not a separate notification service (Pusher, Ably):** The app is already on Supabase. Realtime Postgres Changes is a first-class feature. Adding a second WebSocket provider doubles infrastructure surface and billing.
+---
 
-### 4. Transactional Email
+## Development Tools
 
-| Technology | Version | Purpose | Why Recommended |
-|------------|---------|---------|-----------------|
-| `resend` | latest (^4.x as of March 2026) | Send transactional emails (payment confirmation, new task assigned, subscription status change) | Resend is the de-facto standard for TypeScript/Next.js transactional email in 2025-2026. Built by the React Email team. Clean Node.js SDK. Free tier covers 3,000 emails/month — sufficient for Vantix's scale. |
-| `@react-email/components` | latest (^0.0.x) | Build email templates with React JSX | Produces cross-client HTML email (Outlook, Gmail, Apple Mail compatible). Co-maintained by Resend. Templates are `.tsx` files that look like React — no MJML, no raw HTML table layouts. |
-| `react-email` | latest (^3.x) | Local email preview server (`react-email dev`) | Lets the team preview and iterate on email templates at `localhost:3000` without sending real emails. Dev dependency only. |
-
-**Why Resend over SendGrid/Mailgun/SES:** SendGrid and Mailgun have verbose SDKs with poor TypeScript types. SES requires AWS setup and more config. Resend has a dead-simple API (`resend.emails.send({from, to, subject, react: <YourTemplate />})`), first-class React support, and is built specifically for the Next.js/Vercel ecosystem. At Vantix's 5-50 client scale, it's the fastest path from zero to working transactional email.
-
-**Why React Email over raw HTML strings or Handlebars:** The platform is already TypeScript/React throughout. React Email means email templates get the same type safety, component reuse, and tooling as the rest of the app. No context switch to a templating language.
-
-### 5. File Uploads (Task Attachments)
-
-| Technology | Version | Purpose | Why Recommended |
-|------------|---------|---------|-----------------|
-| Supabase Storage (built-in) | via `@supabase/supabase-js` ^2.47 | Store files uploaded to task comments | Already available — no new backend or S3 bucket needed. `supabase.storage.from('attachments').upload(path, file)`. Supports private buckets with RLS policies matching the existing `tasks`/`task_comments` RLS pattern. |
-| `react-dropzone` | latest (^14.x) | Drag-and-drop + file-picker UI in comment inputs | The lightest-weight, headless file-drop UI library for React. Handles MIME type validation, multiple files, disabled state, drag-over styling. No opinionated styling — fits the existing Tailwind component style. ~7KB gzipped. |
-
-**Why Supabase Storage over Cloudinary/S3 direct:** The platform already uses Supabase for auth + DB. Supabase Storage uses the same JWT for authorization — the same `createClient()` call in `src/lib/supabase/client.ts` accesses storage. Adding S3 or Cloudinary would require a separate API route, separate credentials, and a separate auth check. Supabase Storage eliminates all of that.
-
-**Why react-dropzone over `<input type="file">`:** A bare file input works for simple cases but gives no drag-and-drop, no multi-file progress feedback, and no MIME filtering. `react-dropzone` adds all of that with a minimal API (`useDropzone` hook). Alternative: `filepond` — more opinionated styling, harder to match the existing UI. Not needed here.
-
-**File size limits:** Supabase Storage free tier allows up to 50MB per file and 1GB total. Task attachments (screenshots, logs, CSV exports) will stay well under 10MB. Standard upload (not resumable) is correct for this use case.
+| Tool | Purpose | Notes |
+|------|---------|-------|
+| `vercel.json` (project config) | Declare cron schedule for weekly digest | `"crons": [{"path": "/api/cron/digest", "schedule": "0 9 * * 1"}]` — Mondays 9am UTC. Hobby plan: once/day max. Pro plan: any frequency. |
+| Upstash Console (upstash.com) | Provision serverless Redis | Free tier: 10k req/day, 256 MB. Sufficient for rate limiting a small-scale SaaS. No credit card required. |
 
 ---
 
 ## Installation
 
 ```bash
-# Testing — dev dependencies only
-npm install -D vitest @vitejs/plugin-react jsdom @testing-library/react @testing-library/dom @testing-library/user-event vite-tsconfig-paths
+# Rate limiting (2 packages — always install together)
+npm install @upstash/ratelimit @upstash/redis
 
-# E2E testing
-npm install -D @playwright/test
-npx playwright install --with-deps chromium  # CI: add firefox webkit if needed
-
-# Admin UI primitives (only if admin dialogs/dropdowns are built)
-npm install @radix-ui/react-dialog @radix-ui/react-dropdown-menu @radix-ui/react-select
-
-# Transactional email
-npm install resend @react-email/components
-npm install -D react-email
-
-# File upload UI
-npm install react-dropzone
+# Integration test tooling (dev only)
+npm install -D next-test-api-route-handler msw
 ```
 
-No new backend services, Docker containers, or environment variables required except:
-- `RESEND_API_KEY` — get from resend.com dashboard (free tier is sufficient)
-- Supabase Storage bucket `attachments` — created via `supabase/migrations` or dashboard, no new env vars
+Environment variables to add to `.env.local` and Vercel dashboard:
+
+```bash
+# Upstash Redis — get from console.upstash.com after creating a database
+UPSTASH_REDIS_REST_URL=https://xxx.upstash.io
+UPSTASH_REDIS_REST_TOKEN=xxxx
+
+# Vercel Cron auth — generate with: openssl rand -base64 32
+CRON_SECRET=your-random-secret-here
+```
+
+The weekly digest route handler must check:
+
+```typescript
+const authHeader = request.headers.get('authorization');
+if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  return new Response('Unauthorized', { status: 401 });
+}
+```
+
+Vercel automatically sends this header when invoking cron jobs.
 
 ---
 
@@ -115,13 +109,13 @@ No new backend services, Docker containers, or environment variables required ex
 
 | Recommended | Alternative | When to Use Alternative |
 |-------------|-------------|-------------------------|
-| Vitest | Jest | If the team has existing Jest expertise and many existing Jest tests to preserve. Not the case here — zero tests currently. |
-| Playwright | Cypress | If component testing (not just E2E) is needed at the visual level. Cypress has a component test runner; Playwright does not. |
-| Resend + React Email | SendGrid | If the organization has a corporate SendGrid contract or requires enterprise SLA email delivery with IP warming. |
-| Resend + React Email | Nodemailer + SMTP | If self-hosting email via SMTP relay (e.g., company mail server). Not relevant for a SaaS at this stage. |
-| Supabase Storage | Cloudinary | If rich media transformation (auto-resize, format convert, CDN optimization) is needed for images. Task attachments are documents/screenshots — no transformation needed. |
-| react-dropzone | FilePond | If a fully-styled out-of-the-box upload widget with progress indicators is acceptable. FilePond's styling overrides conflict with the existing Tailwind dark/custom design. |
-| @radix-ui primitives | shadcn/ui | For a greenfield project. shadcn is excellent but assumes you build components from scratch; adapting it to an existing styled codebase is effort-heavy. |
+| `@upstash/ratelimit` + Upstash Redis | `lru-cache` in-process rate limiter | Only viable if self-hosting with a persistent Node.js process. On Vercel, multiple serverless instances run simultaneously with isolated memory — `lru-cache` limits are not globally enforced. Abuse bypasses limits by hitting different cold instances. |
+| `@upstash/ratelimit` + Upstash Redis | `ioredis` + Vercel KV | Vercel KV is backed by Upstash under the hood. Using `@upstash/ratelimit` directly gives a purpose-built API (`ratelimit.limit(identifier)`) vs. writing raw Redis commands. Choose Vercel KV only if the team prefers managing keys via the Vercel dashboard. |
+| `next-test-api-route-handler` | Supertest + custom HTTP server | NTARH is purpose-built for Next.js App Router route handlers. Supertest requires spinning up a real HTTP server and doesn't understand route handler conventions, dynamic segments, or middleware. More setup, less accurate to production. |
+| `msw` v2 | `vi.mock()` module mocking | Module mocking couples test assertions to implementation details (which internal function was called). MSW mocks at the network boundary — production code runs unchanged. Correct choice for integration tests. `vi.mock()` remains correct for unit tests of individual functions. |
+| Vercel Cron (`vercel.json`) | `node-cron`, `agenda`, `bull` | External job queues add infrastructure (Redis worker process, queue UI) incompatible with Vercel's stateless serverless model. Vercel Cron is zero-infrastructure — a GET request to an existing route handler. Sufficient for a weekly digest. |
+| Supabase built-in MFA API | `speakeasy` + `otplib` + `qrcode` | Supabase handles TOTP secret generation, QR code SVG, challenge/verify lifecycle, and AAL session upgrade entirely. Rolling your own means duplicating what Supabase already provides — and diverging from its session model introduces security risk. |
+| Playwright `toHaveScreenshot()` | `pixelmatch` + custom diffing | `toHaveScreenshot()` is fully integrated: generates baseline on first run, diffs on subsequent runs, produces expected/actual/diff images in `test-results/` on failure. No configuration needed. A standalone `pixelmatch` setup requires custom tooling around the same capability. |
 
 ---
 
@@ -129,72 +123,71 @@ No new backend services, Docker containers, or environment variables required ex
 
 | Avoid | Why | Use Instead |
 |-------|-----|-------------|
-| Jest (for new tests) | Requires `babel-jest` or `@swc/jest` transformer + `jest-environment-jsdom` + `ts-node` — 5+ packages vs Vitest's 3. Slower watch mode. Next.js docs are steering toward Vitest for new projects. | Vitest |
-| Cypress for E2E | Heavier CI footprint (Electron), slower startup, requires separate `cypress run` process. Playwright runs headless Chromium natively with better TypeScript support. | Playwright |
-| Pusher / Ably | Adds a paid third-party WebSocket service when Supabase Realtime is already included in the existing subscription. | Supabase Realtime (built-in) |
-| Nodemailer | Requires SMTP credentials, has no React template support, produces raw HTML strings that break in Outlook. A 2010-era solution for a 2026 TypeScript app. | Resend + React Email |
-| AWS S3 direct upload | Requires new IAM user, new env vars, pre-signed URL logic, and separate auth. Zero benefit vs Supabase Storage for an app already on Supabase. | Supabase Storage |
-| Uploadthing | Popular in the Next.js content creator ecosystem but adds another service + secret key. Unnecessary when Supabase Storage is already available and colocated with the DB. | Supabase Storage |
-| MSW (Mock Service Worker) for unit tests | Useful for API mocking in browser-based integration tests. At this stage, mocking Supabase with `vi.mock('@/lib/supabase/client')` in Vitest is simpler and sufficient. Revisit if API surface grows significantly. | `vi.mock()` in Vitest |
+| `speakeasy` or `otplib` for TOTP | Supabase Auth manages the full MFA lifecycle. Adding a separate TOTP library creates duplication and risks diverging from Supabase's session/AAL model — a security vulnerability surface. | `supabase.auth.mfa.*` APIs on existing client |
+| `qrcode` or `qrcode.react` | Supabase `mfa.enroll()` returns an SVG QR code string. No generation library needed. | Render `totp.qr_code` as `<img src={\`data:image/svg+xml;utf8,${encodeURIComponent(qr)}\`}>` |
+| `lru-cache` for API rate limiting | State is per-process instance. On Vercel serverless, multiple function instances run simultaneously with isolated memory. Limits are not globally enforced — abuse bypasses them by hitting different instances. | `@upstash/ratelimit` + Upstash Redis |
+| `node-cron` / `agenda` / `bull` | Require persistent worker processes incompatible with Vercel's stateless serverless model. | Vercel Cron (`vercel.json`) calling existing route handlers |
+| `playwright-visual-regression` (any 3rd-party) | Redundant — `@playwright/test` has `toHaveScreenshot()` built in since v1.26. The platform is on v1.58.2. | `expect(page).toHaveScreenshot()` — no install needed |
+| Upgrading `recharts` to v3 mid-milestone | If recharts v3 exists it would be a major version with breaking API changes. The platform has v2.13.3 locked and working. | Use existing `recharts ^2.13.3` for MRR chart |
+| `msw` v1 | MSW v1 uses the `rest` import namespace. MSW v2 (current) uses `http`. If you pin v1 and the team adds v2 tooling later, there's a namespace conflict. Install v2 from the start. | `msw ^2.x` |
 
 ---
 
 ## Stack Patterns by Variant
 
-**For async Server Components (e.g., admin dashboard pages that fetch data server-side):**
-- Use Playwright E2E tests — Vitest cannot render async RSC
-- Test the rendered HTML in Playwright, not the component directly
+**If on Vercel Hobby plan:**
+- Cron jobs limited to once per day maximum
+- Weekly digest: `"schedule": "0 9 * * 1"` (Monday 9am UTC) — once/day and within limit
+- Daily digest frequency requires Pro plan upgrade
 
-**For Client Components (e.g., TasksPage, portal layout):**
-- Use Vitest + React Testing Library
-- Mock `createClient()` with `vi.mock('@/lib/supabase/client')` to avoid real Supabase calls in unit tests
+**If on Vercel Pro plan:**
+- Any cron frequency supported (down to per-minute)
+- Consider separate schedules: weekly summary digest + daily activity digest
 
-**For Supabase Storage uploads in task comments:**
-- Upload directly from browser using `supabase.storage.from('attachments').upload()`
-- No Next.js API route needed — the browser client handles auth via the existing JWT
-- Use a `private` bucket with a storage policy: `storage.foldername[0] = auth.uid()` to scope files per user
+**Rate limiting — choose algorithm by route type:**
+- Login / invite / password reset: `slidingWindow(5, '15 m')` per IP — prevents credential stuffing
+- General authenticated API routes: `fixedWindow(60, '1 m')` per user ID — prevents runaway automation
+- Webhook routes (`/api/webhooks/stripe`): skip rate limiting — Stripe signature verification is the auth mechanism
 
-**For email triggers (Stripe webhooks, task assignments):**
-- Send emails from existing API routes: `src/app/api/webhooks/stripe/route.ts` already handles payment events
-- Add a `resend.emails.send()` call inside the webhook handler after updating the DB
-- New task assignment emails: trigger from the admin route that creates/updates tasks
+**2FA AAL2 enforcement — scope by route sensitivity:**
+- Admin routes (user management, role changes, billing actions): enforce AAL2
+- Client portal routes (view tasks, reports, tutorials): AAL1 (email/password) is sufficient
+- Pattern: in `middleware.ts`, check `getAuthenticatorAssuranceLevel()`, redirect to `/mfa-verify` if `nextLevel === 'aal2'` and current is `aal1`
 
-**For admin dashboard role gating:**
-- The `User` type already has `role: 'admin' | 'engineer' | 'seller' | 'client'`
-- Gate admin routes in middleware (`src/middleware.ts`) by checking `user.role === 'admin'` after the existing auth check
-- No new auth library needed
+**MSW setup pattern for integration tests (Node.js):**
+- Import `setupServer` from `msw/node` (not `msw/browser`)
+- Call `server.listen()` in `beforeAll`, `server.resetHandlers()` in `afterEach`, `server.close()` in `afterAll`
+- Register as `setupFiles` in `vitest.config.ts`
 
 ---
 
 ## Version Compatibility
 
-| Package | Compatible With | Notes |
-|---------|-----------------|-------|
-| `vitest` latest | `next` 14.2.18, `typescript` 5.7 | HIGH confidence — Next.js official docs confirm this pairing. Async Server Components cannot be unit-tested with Vitest (use Playwright instead). |
-| `@playwright/test` latest | `next` 14.2.18 | HIGH confidence — Next.js official docs include active `with-playwright` example maintained at Next.js canary. |
-| `@testing-library/react` ^16 | React 18.3 | HIGH confidence — RTL v16 targets React 18. The project uses React 18.3.1. |
-| `resend` latest | Next.js 14 Route Handlers | MEDIUM confidence — training data + official Resend Node.js SDK docs. No known breaking changes with Next.js 14 App Router. |
-| `@react-email/components` latest | `resend` latest | MEDIUM confidence — both are maintained by the same team; designed to work together. |
-| `react-dropzone` ^14 | React 18.3 | MEDIUM confidence — training data. react-dropzone is a stable, low-churn library. Check npm for exact current version at install time. |
-| `@radix-ui/*` latest | Tailwind 3.4, React 18.3 | HIGH confidence — Radix UI is headless and framework-agnostic. No known Tailwind conflicts. |
-| Supabase Storage | `@supabase/supabase-js` ^2.47 | HIGH confidence — Storage is part of the official JS client. Same `createClient()` instance used for DB access also handles storage. |
-| Supabase Realtime | `@supabase/supabase-js` ^2.47 | HIGH confidence — Realtime is in the same client. `supabase.channel()` API is stable since v2.0. |
+| Package A | Compatible With | Notes |
+|-----------|-----------------|-------|
+| `@upstash/ratelimit ^2.0.8` | `@upstash/redis ^1.x` | v2 ratelimit requires `@upstash/redis` v1 client — not `ioredis`. |
+| `next-test-api-route-handler ^4.x` | `next ^14.0.4+`, `vitest ^4.x` | NTARH v4 supports App Router. In Next.js 15, route handler `params` is a Promise — use `await params` inside tests. |
+| `msw ^2.x` | `vitest ^4.x` | MSW v2 uses `http` import (not `rest`). Use `setupServer` from `msw/node` for Vitest Node.js environment. Incompatible with `bun test` — use `npm test`. |
+| `recharts ^2.13.3` | `react ^18.3.1` | Already installed. No upgrade needed for MRR chart. Requires `"use client"` directive on any component using Recharts primitives. |
+| `@playwright/test ^1.58.2` | `toHaveScreenshot()` | Built-in since v1.26. Baselines stored in `__snapshots__/` beside test files. First run generates baseline; subsequent runs diff. |
+| `@supabase/supabase-js ^2.47.0` | MFA API (`auth.mfa.*`) | Free and enabled by default on all Supabase projects. Must be enabled in Supabase Dashboard > Authentication > MFA before enrollment API calls work. |
 
 ---
 
 ## Sources
 
-- [Next.js Testing Guide — Vitest](https://nextjs.org/docs/app/guides/testing/vitest) — official, verified 2026-03-20, HIGH confidence
-- [Next.js Testing Guide — Playwright](https://nextjs.org/docs/app/guides/testing/playwright) — official, verified 2026-03-20, HIGH confidence
-- [Next.js Testing Guide — Jest](https://nextjs.org/docs/app/guides/testing/jest) — verified to understand Jest overhead vs Vitest, HIGH confidence
-- [Next.js Route Handlers — FormData](https://nextjs.org/docs/app/api-reference/file-conventions/route) — confirmed native FormData support, no multer needed, HIGH confidence
-- `/Users/jw.castillo/Desktop/vantix-kit/platform/package.json` — existing stack confirmed, HIGH confidence
-- `/Users/jw.castillo/Desktop/vantix-kit/platform/src/lib/types.ts` — `TaskComment.attachments: string[] | null` confirms schema is ready for storage URLs, HIGH confidence
-- `/Users/jw.castillo/Desktop/vantix-kit/platform/src/lib/supabase/client.ts` — same `createBrowserClient` instance used for storage + realtime, HIGH confidence
-- Resend + React Email ecosystem — MEDIUM confidence (WebFetch blocked to resend.com; based on training data through August 2025 + ecosystem pattern knowledge)
-- react-dropzone — MEDIUM confidence (training data; stable library at ^11-14 range; verify exact version at install time)
+- [Supabase TOTP MFA Docs](https://supabase.com/docs/guides/auth/auth-mfa/totp) — enrollment flow, QR SVG return value, AAL levels confirmed. No extra npm package needed. HIGH confidence.
+- [Supabase MFA API Reference](https://supabase.com/docs/reference/javascript/auth-mfa-api) — enroll/challenge/verify/getAuthenticatorAssuranceLevel method signatures. HIGH confidence.
+- [@upstash/ratelimit npm](https://www.npmjs.com/package/@upstash/ratelimit) — v2.0.8, published ~2 months ago, actively maintained. HIGH confidence.
+- [upstash/ratelimit-js GitHub](https://github.com/upstash/ratelimit-js) — Next.js middleware example confirmed, sliding window algorithm. HIGH confidence.
+- [Vercel Cron Jobs Docs](https://vercel.com/docs/cron-jobs) — `vercel.json` format, CRON_SECRET pattern, `vercel-cron/1.0` user agent. HIGH confidence.
+- [Vercel Cron Usage & Pricing](https://vercel.com/docs/cron-jobs/usage-and-pricing) — Hobby: once/day max; Pro: per-minute; max 100 cron jobs/project. HIGH confidence.
+- [Playwright Visual Comparisons Docs](https://playwright.dev/docs/test-snapshots) — `toHaveScreenshot()` built-in, no external library. HIGH confidence.
+- [next-test-api-route-handler GitHub](https://github.com/Xunnamius/next-test-api-route-handler) — v4 App Router support confirmed for next >= 14.0.4; Next.js 15 params-as-Promise caveat noted. MEDIUM confidence (no explicit v4 + Next.js 15 confirmation found).
+- [MSW Quick Start](https://mswjs.io/docs/quick-start/) — v2 Node.js integration, `setupServer` from `msw/node`. HIGH confidence.
+- [Upstash Ratelimit + Next.js 2026](https://noqta.tn/en/tutorials/upstash-redis-nextjs-rate-limiting-caching-2026) — Community tutorial confirming current patterns. MEDIUM confidence.
 
 ---
 
-*Stack research for: Vantix Platform v1.1 — Testing, Admin, Notifications, File Uploads*
-*Researched: 2026-03-24*
+*Stack research for: Vantix Platform v1.2 — Security & Polish (2FA, Rate Limiting, Cron Digest, Admin Mgmt, MRR Chart, Integration + Visual Regression Tests)*
+*Researched: 2026-03-25*

@@ -1,25 +1,24 @@
 # Architecture Research
 
-**Domain:** Next.js 14 App Router + Supabase platform — v1.1 feature integration
-**Researched:** 2026-03-24
-**Confidence:** HIGH (based on direct codebase analysis)
+**Domain:** Next.js 15 App Router + Supabase platform — v1.2 Security & Polish feature integration
+**Researched:** 2026-03-25
+**Confidence:** HIGH (Supabase MFA, Vercel Cron, and Playwright docs verified against official sources; in-memory rate limiter pattern and Recharts integration confirmed against codebase)
 
 ---
 
 ## Context: What Already Exists
 
-This document is integration-focused. The v1.0 platform is already running. The four new features (testing, admin dashboard, notifications, file uploads) must slot into the existing architecture without introducing new layers or rewrites.
+This document is integration-focused. The v1.1 platform is fully running. The eight new features (2FA, rate limiting, weekly digest, notification prefs, admin user management, MRR chart, integration tests, visual regression) must slot into the existing architecture without introducing new layers or rewrites.
 
-**Existing architecture in one sentence:** Every portal page is a `'use client'` component that runs its own `useEffect` against the Supabase browser client, scoped to the authenticated user's `client_id` via RLS.
+**Existing architecture constraints that drive integration decisions:**
 
-**Existing constraints that drive integration decisions:**
-
-- No server components inside `/portal` — all pages use browser-side Supabase fetch
-- No global state store — React `useState` + `useEffect` only
-- Auth is checked at two points: middleware (server) and layout `useEffect` (client)
-- Three Supabase clients: `createClient()` (browser), `createServerSupabase()` (server components), `createServiceClient()` (API routes, bypasses RLS)
-- RLS policies: `client` role sees only its own `client_id` rows; `admin`/`engineer` roles see all rows
-- The `users.role` field (`admin` | `engineer` | `seller` | `client`) is the only access differentiator
+- Three Supabase clients: `createClient()` (browser), `createServerSupabase()` (server/cookie-based), `createServiceClient()` (API routes, bypasses RLS)
+- Middleware handles: locale detection, session auth check, role guard for `/admin`, redirect to login
+- Notification pipeline: `notifyTaskEvent()` in `lib/notifications.ts` orchestrates email (Resend), in-app row insert, and Slack; called fire-and-forget from API routes
+- Auth: Supabase email/password with roles `admin | engineer | seller | client` stored in `users.role`
+- Test infra: Vitest (jsdom) + Playwright (chromium with auth state); both already configured
+- Recharts already installed (`"recharts": "^2.13.3"` in package.json)
+- `subscriptions.price_monthly` already exists — MRR data is already in the DB
 
 ---
 
@@ -27,45 +26,34 @@ This document is integration-focused. The v1.0 platform is already running. The 
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                         BROWSER                                      │
-├───────────────────────┬─────────────────────────────────────────────┤
-│   CLIENT PORTAL       │         ADMIN DASHBOARD (new)               │
-│   /[locale]/portal/*  │         /[locale]/admin/*                   │
-│   role: client        │         role: admin | engineer | seller      │
-│   ──────────────────  │         ───────────────────────────────────  │
-│   page.tsx (dash)     │         page.tsx (overview)                  │
-│   tests/page.tsx      │         clients/page.tsx                     │
-│   tasks/page.tsx      │         tasks/page.tsx (all clients)         │
-│   billing/page.tsx    │         billing/page.tsx                     │
-│   reports/page.tsx    │         users/page.tsx                       │
-│   grafana/page.tsx    │                                              │
-│   services/page.tsx   │   NotificationBell (new, shared component)   │
-│   tutorials/page.tsx  │   mounted in BOTH layout sidebars            │
-├───────────────────────┴─────────────────────────────────────────────┤
-│                    PORTAL LAYOUT (existing)                          │
-│         + ADMIN LAYOUT (new — cloned from portal layout)             │
-│         Both layouts add <NotificationBell> in sidebar               │
-├─────────────────────────────────────────────────────────────────────┤
-│                     src/lib/ LAYER                                   │
-│  supabase/client.ts   supabase/server.ts   stripe.ts                 │
-│  slack.ts   grafana-cloud.ts   onboard.ts   k6-config.ts             │
-│  types.ts (+ new: notifications table type)                          │
-├───────────────────┬─────────────────────────────────────────────────┤
-│   src/app/api/    │         NEW API ROUTES                          │
-│   webhooks/stripe │   api/notifications/[id]/read/route.ts          │
-│   checkout        │   api/upload/route.ts                           │
-│   billing-portal  │                                                 │
-├───────────────────┴─────────────────────────────────────────────────┤
-│                         SUPABASE                                     │
-│  Existing 13 tables + RLS                                            │
-│  NEW: notifications table (+ RLS)                                    │
-│  NEW: Supabase Storage bucket (task-attachments)                     │
-│  Supabase Realtime: notifications channel (new subscription)         │
-├─────────────────────────────────────────────────────────────────────┤
-│                         EXTERNAL                                     │
-│  Stripe webhooks   Grafana Cloud   Slack Bot   k6 cron               │
-│  + Resend (new email provider)                                       │
+│  Next.js 15 App Router (Vercel)                                     │
+│                                                                     │
+│  ┌──────────────┐  ┌───────────────┐  ┌────────────┐  ┌──────────┐ │
+│  │  Middleware  │  │  Admin Pages  │  │  Portal    │  │ Cron API │ │
+│  │  (existing)  │  │  (+ users pg) │  │  Pages     │  │ /digest  │ │
+│  │  + AAL2 gate │  │  (+ MRR chart)│  │  (+ notif  │  │          │ │
+│  │  + rate gate │  │               │  │   prefs)   │  │          │ │
+│  └──────┬───────┘  └──────┬────────┘  └─────┬──────┘  └────┬─────┘ │
+│         │                 │                  │              │       │
+│  ┌──────┴─────────────────┴──────────────────┴──────────────┴─────┐ │
+│  │                    API Routes Layer                             │ │
+│  │  /api/checkout  /api/billing-portal  /api/tasks/*              │ │
+│  │  /api/webhooks/stripe                                          │ │
+│  │  /api/admin/users  /api/admin/users/[id]  (NEW)                │ │
+│  │  /api/cron/digest  (NEW)                                       │ │
+│  │                                                                │ │
+│  │  Rate Limiter: lib/rate-limit.ts (in-memory Map, per-route)   │ │
+│  └────────────────────────────────────────────────────────────────┘ │
 └─────────────────────────────────────────────────────────────────────┘
+           │                           │                │
+           ▼                           ▼                ▼
+┌──────────────────┐   ┌───────────────────────────┐  ┌──────────┐
+│ Supabase Auth    │   │ Supabase Postgres          │  │  Resend  │
+│ (existing)       │   │ (existing 13 tables)       │  │ (existing│
+│ + TOTP MFA       │   │ + user_notification_prefs  │  │  + weekly│
+│   enroll/verify  │   │ + user_invitations         │  │  digest) │
+│ + AAL2 sessions  │   │                            │  └──────────┘
+└──────────────────┘   └───────────────────────────┘
 ```
 
 ---
@@ -74,531 +62,738 @@ This document is integration-focused. The v1.0 platform is already running. The 
 
 | Component | Status | Location | Notes |
 |-----------|--------|----------|-------|
-| `src/app/[locale]/admin/` | **NEW** | App Router route group | Entire admin section |
-| `src/app/[locale]/admin/layout.tsx` | **NEW** | Cloned from portal layout | Role-guard: admin/engineer/seller only |
-| `src/app/[locale]/admin/page.tsx` | **NEW** | Overview metrics for all clients | |
-| `src/app/[locale]/admin/clients/page.tsx` | **NEW** | Client list, status, edit | |
-| `src/app/[locale]/admin/tasks/page.tsx` | **NEW** | Cross-client task view | |
-| `src/app/[locale]/admin/billing/page.tsx` | **NEW** | Subscription/payment oversight | |
-| `src/components/NotificationBell.tsx` | **NEW** | Shared component | Mounted in both layouts |
-| `src/app/[locale]/portal/tasks/page.tsx` | **MODIFIED** | Add file upload to comment form | Existing page, add `<input type="file">` + storage upload |
-| `src/app/[locale]/portal/layout.tsx` | **MODIFIED** | Add `<NotificationBell>` to sidebar | Existing layout |
-| `src/app/api/notifications/[id]/read/route.ts` | **NEW** | Mark notification read | POST, updates Supabase row |
-| `src/app/api/upload/route.ts` | **NEW** | Presigned URL or server-side upload | Validates auth + file type |
-| `src/app/api/webhooks/stripe/route.ts` | **MODIFIED** | Trigger notification on payment events | Add notification insert calls |
-| `src/lib/types.ts` | **MODIFIED** | Add `Notification` type | New table, new row type |
-| `src/lib/email.ts` | **NEW** | Resend email helper | `sendTransactionalEmail(to, template, data)` |
-| `supabase/migrations/002_notifications.sql` | **NEW** | `notifications` table + RLS | New migration file |
-| `supabase/migrations/003_storage.sql` | **NEW** | Storage bucket policy | RLS for task-attachments bucket |
-| Tests: `__tests__/` or `src/**/*.test.ts` | **NEW** | Vitest unit + integration tests | |
-| `playwright/` | **NEW** | E2E test suite | |
-| `vitest.config.ts` | **NEW** | Vitest configuration | |
-| `playwright.config.ts` | **NEW** | Playwright configuration | |
+| `src/middleware.ts` | **MODIFIED** | Existing | Add AAL2 MFA check after existing role guard |
+| `src/lib/rate-limit.ts` | **NEW** | `src/lib/` | In-memory sliding window rate limiter |
+| `src/lib/mfa.ts` | **NEW** | `src/lib/` | TOTP enroll / verify / unenroll wrappers |
+| `src/lib/digest.ts` | **NEW** | `src/lib/` | Weekly digest query + send logic |
+| `src/lib/emails/WeeklyDigestEmail.tsx` | **NEW** | `src/lib/emails/` | React Email digest template |
+| `src/lib/notifications.ts` | **MODIFIED** | Existing | Add preference filter before each channel send |
+| `src/app/api/admin/users/route.ts` | **NEW** | `src/app/api/admin/users/` | GET list users, POST invite |
+| `src/app/api/admin/users/[id]/route.ts` | **NEW** | `src/app/api/admin/users/[id]/` | PATCH role/deactivate |
+| `src/app/api/cron/digest/route.ts` | **NEW** | `src/app/api/cron/digest/` | Secured by CRON_SECRET |
+| `src/app/api/checkout/route.ts` | **MODIFIED** | Existing | Add rate limiter check at top |
+| `src/app/api/billing-portal/route.ts` | **MODIFIED** | Existing | Add rate limiter check at top |
+| `src/app/api/tasks/route.ts` | **MODIFIED** | Existing | Add rate limiter check at top |
+| `src/app/[locale]/admin/users/page.tsx` | **NEW** | Admin pages | User list + invite form + role/deactivate |
+| `src/app/[locale]/admin/billing/page.tsx` | **MODIFIED** | Existing | Add MRR chart section |
+| `src/app/[locale]/portal/security/page.tsx` | **NEW** | Portal pages | 2FA enrollment UI |
+| `src/app/[locale]/portal/notifications/page.tsx` | **NEW** | Portal pages | Notification preference toggles |
+| `src/app/[locale]/mfa-verify/page.tsx` | **NEW** | Outside /portal | MFA challenge screen (shown post-login) |
+| `supabase/migrations/005_notification_prefs.sql` | **NEW** | Migrations | `user_notification_prefs` table + RLS |
+| `supabase/migrations/006_user_invitations.sql` | **NEW** | Migrations | `user_invitations` tracking table + RLS |
+| `vercel.json` | **NEW** | `platform/` root | Cron schedule definition |
+| `src/__tests__/api/*.test.ts` | **NEW** | `src/__tests__/api/` | Integration tests for API routes |
+| `e2e/visual/*.spec.ts` | **NEW** | `e2e/visual/` | Visual regression tests |
+| `playwright.config.ts` | **MODIFIED** | Existing | Add `visual` project |
 
 ---
 
 ## Feature Integration Details
 
-### 1. Testing Infrastructure
+### Feature 1: Two-Factor Authentication (TOTP) — SEC-01
 
-The platform currently has zero automated tests. Adding Vitest + Playwright does not change application code — it wraps it.
+**Integration point:** Supabase Auth TOTP MFA is enabled by default on all Supabase projects and free on all plans. No new infrastructure needed. The existing `@supabase/ssr` client already has the MFA API available.
 
-**What needs testing:**
+**Authentication Assurance Levels:**
+- `aal1` = password only (current state for all users)
+- `aal2` = password + TOTP verified (after enrollment and challenge)
 
-| Layer | Test Type | What to Cover |
-|-------|-----------|---------------|
-| `src/lib/` helpers | Unit (Vitest) | `stripe.ts` helpers, `onboard.ts` step logic, `slack.ts` channel name sanitization, `k6-config.ts` generation |
-| API routes | Integration (Vitest + mock) | `checkout/route.ts`, `billing-portal/route.ts`, `webhooks/stripe/route.ts` — verify request/response shapes and Supabase write calls |
-| Portal pages | E2E (Playwright) | Login flow, dashboard loads with data, tasks CRUD, comment submission, notification bell |
-| Admin pages | E2E (Playwright) | Admin login, client list visible, cross-client task view |
-
-**Structure:**
+**New files:**
 
 ```
-platform/
-├── __tests__/
-│   ├── lib/
-│   │   ├── stripe.test.ts          # Unit: getOrCreateCustomer, getPriceId
-│   │   ├── onboard.test.ts         # Unit: step orchestration, partial failure handling
-│   │   ├── slack.test.ts           # Unit: sanitizeChannelName, skip behavior
-│   │   └── email.test.ts           # Unit: template rendering
-│   └── api/
-│       ├── checkout.test.ts        # Integration: route handler with mocked Stripe + Supabase
-│       ├── billing-portal.test.ts  # Integration: route handler
-│       └── webhook.test.ts         # Integration: event dispatch, Supabase side effects
-├── playwright/
-│   ├── auth.spec.ts                # Login, logout, redirect unauthenticated
-│   ├── portal-dashboard.spec.ts    # Dashboard loads, metrics display
-│   ├── portal-tasks.spec.ts        # Task creation, comment, file attach
-│   ├── admin-clients.spec.ts       # Admin sees all clients
-│   └── notifications.spec.ts      # Bell badge, mark as read
-├── vitest.config.ts
-└── playwright.config.ts
+src/app/[locale]/portal/security/page.tsx   ← Enrollment UI: QR code + verify + manage
+src/app/[locale]/mfa-verify/page.tsx        ← Challenge screen post-login
+src/lib/mfa.ts                              ← enroll(), verify(), unenroll() SDK wrappers
 ```
 
-**Key integration point:** Vitest tests for API routes use `msw` (Mock Service Worker) or manual mocks for Stripe and Supabase service client. Playwright tests run against `http://localhost:3000` with local Supabase.
+**Middleware change (additive — append after existing role check):**
 
-**No changes to application code are required** to add the test layer. Vitest wraps the lib functions directly. Playwright drives the browser.
+```typescript
+// src/middleware.ts — after existing admin role check, before final return:
+const { data: aalData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+if (
+  aalData?.nextLevel === 'aal2' &&
+  aalData?.currentLevel !== 'aal2' &&
+  pathWithoutLocale !== '/mfa-verify'
+) {
+  return NextResponse.redirect(new URL(`/${locale}/mfa-verify`, request.url))
+}
+```
+
+**`getAuthenticatorAssuranceLevel()` is a local computation** — it inspects the JWT claims in the existing session cookie without a network round-trip to Supabase. Latency impact on middleware is negligible.
+
+**Enrollment data flow:**
+
+```
+User visits /portal/security
+  → client: supabase.auth.mfa.enroll({ factorType: 'totp' })
+    returns: { id: factorId, totp: { qr_code, secret } }
+  → Display QR code SVG as <img src="data:..."> + plain-text secret fallback
+  → User scans with authenticator app, enters 6-digit code
+  → client: supabase.auth.mfa.challenge({ factorId })
+    returns: { id: challengeId }
+  → client: supabase.auth.mfa.verify({ factorId, challengeId, code })
+  → on success: session upgraded to aal2; show confirmation
+```
+
+**Login challenge data flow:**
+
+```
+User submits password → aal1 session established
+  → middleware: getAuthenticatorAssuranceLevel()
+      nextLevel === 'aal2' && currentLevel !== 'aal2'?
+        YES → redirect /mfa-verify
+  → /mfa-verify: user enters TOTP code
+      → challenge() + verify() → aal2 session established
+      → redirect to /portal (or stored return URL)
+```
+
+**No DB migration needed.** Supabase stores factor data in `auth.mfa_factors` (internal, managed).
 
 ---
 
-### 2. Admin Dashboard
+### Feature 2: Rate Limiting on API Routes — SEC-02
 
-**Core principle:** The admin section is a separate route group (`/admin`) with its own layout that enforces the role check. It reuses the same Supabase browser client but queries without `client_id` filter — this works because `admin`/`engineer` RLS policies return all rows.
+**Integration point:** The three existing API routes (`/api/checkout`, `/api/billing-portal`, `/api/tasks`) have zero rate limiting. New routes (`/api/admin/*`, `/api/cron/digest`) also need protection.
 
-**Admin layout role guard pattern:**
+**Approach: per-route in-memory Map with sliding window.** No Redis or external dependency needed at current scale (Vantix has < 20 concurrent users). Vercel serverless is ephemeral — the Map resets on cold starts, which is acceptable (attackers see the limit reset too, and a cold-start attack is self-throttling).
+
+**New file: `src/lib/rate-limit.ts`**
 
 ```typescript
-// src/app/[locale]/admin/layout.tsx
-useEffect(() => {
-  async function load() {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) { router.push(`/${locale}/login`); return }
-    const { data: profile } = await supabase.from('users').select('role').eq('id', user.id).single()
-    if (!profile || !['admin', 'engineer', 'seller'].includes(profile.role)) {
-      router.push(`/${locale}/portal`)  // redirect clients who hit /admin
-      return
-    }
-    setUser(profile)
+const store = new Map<string, { count: number; resetAt: number }>()
+
+export function rateLimit(
+  ip: string,
+  limit: number = 20,
+  windowMs: number = 60_000,
+): { allowed: boolean; remaining: number } {
+  const now = Date.now()
+  const entry = store.get(ip)
+
+  if (!entry || now > entry.resetAt) {
+    store.set(ip, { count: 1, resetAt: now + windowMs })
+    return { allowed: true, remaining: limit - 1 }
   }
-  load()
-}, [])
+
+  if (entry.count >= limit) {
+    return { allowed: false, remaining: 0 }
+  }
+
+  entry.count++
+  return { allowed: true, remaining: limit - entry.count }
+}
 ```
 
-**Middleware update required:** The existing `middleware.ts` only protects `/portal`. Extend the guard to also require authentication on `/admin` paths:
+**Usage pattern (added to top of each protected route):**
 
 ```typescript
-// middleware.ts — add to protected paths check
-if (pathWithoutLocale.startsWith('/portal') && !user) { ... }
-if (pathWithoutLocale.startsWith('/admin') && !user) { ... }
+const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? '127.0.0.1'
+const { allowed } = rateLimit(ip, 20, 60_000)
+if (!allowed) {
+  return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+}
 ```
 
-Role enforcement (admin/engineer/seller only vs. any authenticated user) is handled in `layout.tsx`, not middleware. Middleware only checks that a session exists.
+**Limits per route:**
 
-**Admin data queries:** Admin pages query the same tables as portal pages but omit the `client_id` filter. RLS policies already permit `admin`/`engineer` roles to see all rows (`"Admins see all clients"`, `"Admins see all tasks"`). No new Supabase policies are needed for read-only admin views.
-
-**Write operations from admin:** Creating/updating clients, updating task status for any client, and inserting test results requires `admin`/`engineer` role. The existing RLS policies already permit this for those roles.
+| Route | Limit | Window | Rationale |
+|-------|-------|--------|-----------|
+| `/api/checkout` | 5/min | 60s | Stripe session creation is expensive |
+| `/api/billing-portal` | 10/min | 60s | Portal redirect |
+| `/api/tasks` POST | 20/min | 60s | Normal admin usage |
+| `/api/admin/users` POST | 10/min | 60s | Invite operations |
+| `/api/cron/digest` | CRON_SECRET only | — | Secret validates the caller; no IP rate limit |
 
 ---
 
-### 3. In-App Notifications
+### Feature 3: Weekly Email Digest — NOTIF-10
 
-**New table required:**
+**Integration point:** Vercel Cron Jobs trigger an HTTP GET to a new API route at `0 9 * * 1` (Monday 09:00 UTC). The route uses the existing `sendEmail()` helper and reads from existing Supabase tables.
+
+**New files:**
+
+```
+src/app/api/cron/digest/route.ts      ← GET handler, CRON_SECRET gate
+src/lib/digest.ts                     ← query logic + looping send
+src/lib/emails/WeeklyDigestEmail.tsx  ← React Email template (bilingual)
+platform/vercel.json                  ← Cron schedule config (new file)
+```
+
+**`vercel.json`:**
+
+```json
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/cron/digest",
+      "schedule": "0 9 * * 1"
+    }
+  ]
+}
+```
+
+**Security — CRON_SECRET pattern (verified Vercel docs):**
+
+```typescript
+// src/app/api/cron/digest/route.ts
+export async function GET(request: NextRequest) {
+  const authHeader = request.headers.get('authorization')
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return new Response('Unauthorized', { status: 401 })
+  }
+  const result = await sendWeeklyDigest()
+  return Response.json(result)
+}
+```
+
+Vercel automatically injects `Authorization: Bearer $CRON_SECRET` when triggering the cron. Local testing: call `GET /api/cron/digest` with the header manually.
+
+**Digest data flow:**
+
+```
+Vercel Cron (Monday 09:00 UTC)
+  → GET /api/cron/digest (Authorization: Bearer $CRON_SECRET)
+  → digest.ts: SELECT clients WHERE status = 'active'
+  → for each client:
+      SELECT users WHERE client_id = client.id
+      SELECT weekly_metrics WHERE client_id = ? ORDER BY week_start DESC LIMIT 1
+      SELECT tasks WHERE client_id = ? AND updated_at > (now - 7 days)
+      for each user:
+        SELECT user_notification_prefs WHERE user_id = user.id
+        if email_digest_weekly = true (or row is null → default true):
+          sendEmail(WeeklyDigestEmail, { locale, client, metrics, tasks })
+  → return { sent: N, skipped: M }
+```
+
+**Dependency on NOTIF-11:** The `email_digest_weekly` preference check requires the `user_notification_prefs` table. Build NOTIF-11 (migration + table) before NOTIF-10. In the interim, default to send-all (treat missing pref row as `true`).
+
+**Cron plan note:** Vercel Hobby plan allows once-per-day minimum. Weekly (`0 9 * * 1`) is once per week — allowed on all plans. Pro plan gets per-minute precision; Hobby gets ±1 hour accuracy on daily crons (weekly is coarser and within spec).
+
+---
+
+### Feature 4: Notification Preferences — NOTIF-11
+
+**Integration point:** New DB table. The existing `notifyTaskEvent` orchestrator gains a preference lookup before each channel send. Preferences default to `true` (opt-out model) to preserve current behavior for users who have not set preferences.
+
+**New migration: `005_notification_prefs.sql`**
 
 ```sql
--- supabase/migrations/002_notifications.sql
-CREATE TABLE notifications (
+CREATE TABLE user_notification_prefs (
+  user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  email_task_created BOOLEAN DEFAULT true,
+  email_task_updated BOOLEAN DEFAULT true,
+  email_digest_weekly BOOLEAN DEFAULT true,
+  inapp_task_created BOOLEAN DEFAULT true,
+  inapp_task_updated BOOLEAN DEFAULT true,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE user_notification_prefs ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users manage own prefs" ON user_notification_prefs
+  FOR ALL USING (user_id = auth.uid());
+
+CREATE POLICY "Admins read all prefs" ON user_notification_prefs
+  FOR SELECT USING (
+    (SELECT role FROM users WHERE id = auth.uid()) IN ('admin', 'engineer')
+  );
+```
+
+**New portal page:**
+
+```
+src/app/[locale]/portal/notifications/page.tsx   ← Toggle switches, one per channel
+```
+
+**Modified `lib/notifications.ts`** — add preference filter inside the per-user loop:
+
+```typescript
+// Before sending to each user, look up their prefs:
+const { data: prefs } = await supabase
+  .from('user_notification_prefs')
+  .select('email_task_created, email_task_updated, inapp_task_created, inapp_task_updated')
+  .eq('user_id', user.id)
+  .single()
+
+// null prefs row = user hasn't set preferences = all channels enabled (default)
+const emailEnabled = eventType === 'task_created'
+  ? (prefs?.email_task_created ?? true)
+  : (prefs?.email_task_updated ?? true)
+
+const inappEnabled = eventType === 'task_created'
+  ? (prefs?.inapp_task_created ?? true)
+  : (prefs?.inapp_task_updated ?? true)
+
+if (emailEnabled) { await sendEmail(...) }
+if (inappEnabled) { await createNotification(...) }
+```
+
+**Preference row creation strategy:** Use `INSERT INTO user_notification_prefs (user_id) VALUES (?) ON CONFLICT DO NOTHING` when a user first visits the notifications page. Avoids a separate onboarding step.
+
+---
+
+### Feature 5: Admin User Management — ADMIN-07
+
+**Integration point:** Uses Supabase Admin API (`supabase.auth.admin.inviteUserByEmail`) from server-side API routes using the existing `createServiceClient()` (service role key). No new auth infrastructure needed.
+
+**New migration: `006_user_invitations.sql`**
+
+```sql
+CREATE TABLE user_invitations (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  email TEXT NOT NULL,
+  role TEXT NOT NULL CHECK (role IN ('admin', 'engineer', 'seller', 'client')),
   client_id UUID REFERENCES clients(id),
-  type TEXT NOT NULL CHECK (type IN (
-    'payment_received', 'payment_failed', 'task_created',
-    'task_updated', 'task_comment', 'subscription_cancelled',
-    'subscription_activated', 'report_published'
-  )),
-  title TEXT NOT NULL,
-  body TEXT,
-  link TEXT,          -- e.g., '/portal/tasks' or '/portal/billing'
-  is_read BOOLEAN DEFAULT false,
+  invited_by UUID REFERENCES users(id),
+  accepted_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
+ALTER TABLE user_invitations ENABLE ROW LEVEL SECURITY;
 
--- Users see only their own notifications
-CREATE POLICY "Users see own notifications" ON notifications FOR SELECT
-  USING (user_id = auth.uid());
-
-CREATE POLICY "Users can mark own notifications read" ON notifications FOR UPDATE
-  USING (user_id = auth.uid());
-
--- Service role inserts notifications (webhook handler, admin actions)
--- No policy needed for INSERT — service role bypasses RLS
+CREATE POLICY "Admins manage invitations" ON user_invitations
+  FOR ALL USING (
+    (SELECT role FROM users WHERE id = auth.uid()) IN ('admin', 'engineer')
+  );
 ```
 
-**`NotificationBell` component (shared):**
-
-The bell component subscribes to Supabase Realtime on mount to get live updates. This is the only Realtime subscription in the platform.
+**New API routes:**
 
 ```
-NotificationBell
-├── On mount: fetch unread notifications count + recent list
-├── Realtime subscription: supabase.channel('notifications')
-│     .on('postgres_changes', { table: 'notifications', filter: `user_id=eq.${userId}` })
-│     .subscribe()
-├── Bell icon with badge count (red dot if count > 0)
-├── Dropdown: list of recent notifications with title, body, timestamp
-└── Mark as read: POST /api/notifications/[id]/read
+src/app/api/admin/users/route.ts       ← GET list, POST invite
+src/app/api/admin/users/[id]/route.ts  ← PATCH (role/deactivate)
 ```
 
-**Where notifications are inserted:** In the Stripe webhook handler (`api/webhooks/stripe/route.ts`) — after each event is processed, insert a notification row for the relevant user. Use `createServiceClient()` since webhook runs server-side.
+**Security pattern for all `/api/admin/*` routes** — verify caller before using service client:
 
 ```typescript
-// Inside webhook handler — after processing payment_paid event:
-const { data: clientUsers } = await supabase
-  .from('users')
-  .select('id')
-  .eq('client_id', sub.client_id)
+// Every admin API route must do this:
+const userClient = createServerSupabase()        // cookie-based, respects RLS
+const { data: { user } } = await userClient.auth.getUser()
+if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-for (const u of clientUsers || []) {
-  await supabase.from('notifications').insert({
-    user_id: u.id,
-    client_id: sub.client_id,
-    type: 'payment_received',
-    title: 'Payment received',
-    body: `$${amount} — ${description}`,
-    link: '/portal/billing',
-  })
+const { data: profile } = await userClient
+  .from('users').select('role').eq('id', user.id).single()
+if (!['admin', 'engineer'].includes(profile?.role ?? '')) {
+  return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
 }
+
+// Now safe to use service client for privileged operation:
+const admin = createServiceClient()
 ```
 
-**Admin-side notifications:** When an admin creates a task or publishes a report for a client, insert notifications for that client's users. This logic goes in the admin page's mutation handler (client-side) but uses a server API route to insert via service role (since browser client with anon key cannot insert for other users).
+**Invite flow:**
 
-New route: `POST /api/notifications` — accepts `{ user_id, type, title, body, link, client_id }`, uses `createServiceClient()` to insert.
+```
+Admin submits form: { email, role, client_id? }
+  → POST /api/admin/users
+  → verify caller is admin
+  → serviceClient.auth.admin.inviteUserByEmail(email, {
+      data: { role, client_id }  // stored in user metadata
+    })
+  → Supabase sends magic-link invite email to user
+  → INSERT user_invitations { email, role, client_id, invited_by }
+  → return 201
 
-**Mark as read:** `POST /api/notifications/[id]/read` — uses `createServerSupabase()` (cookie-based session), updates `is_read = true` where `id = $id AND user_id = auth.uid()`. RLS enforces ownership.
+User receives email, clicks link
+  → Supabase handles accept flow (sets password)
+  → Trigger or post-signup hook creates users row with role from metadata
+  → UPDATE user_invitations SET accepted_at = NOW() WHERE email = ?
+```
+
+**Known limitation:** `inviteUserByEmail` does not support PKCE (documented by Supabase — the browser sending the invite differs from the one accepting it). This is expected behavior and does not affect security for this use case.
+
+**Role change flow:**
+
+```
+Admin changes role in dropdown
+  → PATCH /api/admin/users/[id] { action: 'role', role: 'engineer' }
+  → serviceClient.from('users').update({ role }).eq('id', userId)
+  → Middleware picks up new role on user's next request (session refresh)
+```
+
+**Deactivate flow:**
+
+```
+Admin clicks Deactivate
+  → PATCH /api/admin/users/[id] { action: 'deactivate' }
+  → serviceClient.auth.admin.updateUserById(userId, { ban_duration: '87600h' })
+    (ban for 10 years = effective permanent)
+  → OR: UPDATE users SET status = 'inactive' WHERE id = ? (soft delete, no auth ban)
+```
+
+**New admin page:**
+
+```
+src/app/[locale]/admin/users/page.tsx   ← Table: name, email, role, status + actions
+                                            Invite form: email + role + client select
+                                            Pending invitations list
+```
 
 ---
 
-### 4. Email Notifications (Transactional)
+### Feature 6: Admin MRR Trend Chart — ADMIN-08
 
-**Library:** Resend. Single `src/lib/email.ts` module with a typed `sendTransactionalEmail` function.
+**Integration point:** Recharts is already installed. MRR data already exists in `subscriptions.price_monthly` + `subscriptions.started_at` + `subscriptions.cancelled_at`. No new library, no new DB migration needed.
 
-**Where email is sent:** Same places notifications are inserted — Stripe webhook handler and admin task/report creation. Email and in-app notification are sent in parallel (fire-and-forget, neither blocks the primary operation).
-
-**Template strategy:** Inline HTML strings in `email.ts` keyed by `NotificationType`. No external template engine needed at this scale.
+**Data query approach** — aggregate from existing `subscriptions` table in the route or server component. At current scale (< 20 clients), simple in-process aggregation is sufficient:
 
 ```typescript
-// src/lib/email.ts
-export async function sendTransactionalEmail(params: {
-  to: string
-  type: NotificationType
-  data: Record<string, string | number>
-}): Promise<void>
+// Pseudo-logic for 12-month MRR series:
+const months = getLast12Months()  // array of { start: Date, end: Date, label: string }
+const { data: subs } = await supabase
+  .from('subscriptions')
+  .select('price_monthly, started_at, cancelled_at, status, currency')
+
+const mrrData = months.map(({ start, end, label }) => ({
+  month: label,
+  mrr: subs
+    .filter(s =>
+      s.price_monthly > 0 &&
+      new Date(s.started_at) <= end &&
+      (!s.cancelled_at || new Date(s.cancelled_at) >= start)
+    )
+    .reduce((sum, s) => sum + Number(s.price_monthly), 0)
+}))
 ```
 
-**Avoiding double-send:** Email is only sent from server-side contexts (API routes, webhook handlers). Never from client components. The `email.ts` module checks for `RESEND_API_KEY` in the environment; missing key causes silent skip (same pattern as `slack.ts` and `grafana-cloud.ts`).
+**Integration into existing billing page:**
 
-**Event map:**
+```
+src/app/[locale]/admin/billing/page.tsx   ← Add MRR chart section above billing table
+```
 
-| Event | In-App | Email |
-|-------|--------|-------|
-| `invoice.paid` (Stripe webhook) | Yes — user | Yes — client primary contact |
-| `invoice.payment_failed` (Stripe webhook) | Yes — user | Yes — client primary contact |
-| `customer.subscription.deleted` (Stripe webhook) | Yes — user | Yes — client primary contact |
-| Task created (admin UI) | Yes — client users | Optional |
-| Task status change (admin UI) | Yes — client users | No |
-| Report published (admin UI) | Yes — client users | Yes — client primary contact |
+**Chart component (new Client Component):**
+
+```
+src/components/MRRChart.tsx   ← 'use client', wraps Recharts AreaChart
+```
+
+**Server/Client boundary:** The billing page (`page.tsx`) is a server component that fetches subscription data. It passes the aggregated `mrrData` array as props to `<MRRChart />` which is a `'use client'` component. Recharts uses browser APIs and cannot render in server context.
 
 ---
 
-### 5. File Uploads (Task Attachments)
+### Feature 7: Integration Tests for API Routes — TEST-10
 
-**Current state:** `task_comments.attachments` is `TEXT[]` in the schema. The field already exists and is `null` by default. The tasks page renders comments but does not render attachment URLs or provide upload UI.
+**Integration point:** Existing Vitest setup uses jsdom environment. API route integration tests need Node environment. Recommended library: `next-test-api-route-handler` — wraps actual route handlers in a simulated Next.js environment without running the server.
 
-**Storage:** Supabase Storage bucket `task-attachments`. No new infrastructure — Supabase Storage is part of the existing Supabase project.
+**New dev dependency:**
 
-**Bucket policy (new migration):**
-
-```sql
--- supabase/migrations/003_storage.sql
-INSERT INTO storage.buckets (id, name, public)
-VALUES ('task-attachments', 'task-attachments', false);
-
--- Allow authenticated users to upload to their client's folder
-CREATE POLICY "Users upload attachments"
-  ON storage.objects FOR INSERT
-  WITH CHECK (
-    bucket_id = 'task-attachments'
-    AND auth.uid() IS NOT NULL
-  );
-
--- Allow users to read attachments on their tasks
-CREATE POLICY "Users read own task attachments"
-  ON storage.objects FOR SELECT
-  USING (
-    bucket_id = 'task-attachments'
-    AND auth.uid() IS NOT NULL
-  );
+```bash
+npm install -D next-test-api-route-handler
 ```
 
-**Upload flow in `tasks/page.tsx`:**
+**New test files:**
 
-The comment form gains a file input. On "Send" with a file selected, the client uploads directly to Supabase Storage using the browser Supabase client, then stores the resulting public URL (or signed URL) in the `attachments` array on the comment insert.
+```
+src/__tests__/api/
+  checkout.test.ts          ← Tests POST /api/checkout: rate limit, Stripe call, response
+  billing-portal.test.ts    ← Tests POST /api/billing-portal
+  tasks.test.ts             ← Tests POST /api/tasks: field validation, notify call
+  admin-users.test.ts       ← Tests POST /api/admin/users: auth check, invite call
+  cron-digest.test.ts       ← Tests GET /api/cron/digest: CRON_SECRET, send count
+```
+
+**Per-file environment override** (Node required for route handlers):
 
 ```typescript
-// In tasks/page.tsx addComment function:
-async function addComment(taskId: string, file?: File) {
-  let attachmentUrl: string | null = null
-  if (file) {
-    const path = `${clientId}/${taskId}/${Date.now()}-${file.name}`
-    const { data } = await supabase.storage
-      .from('task-attachments')
-      .upload(path, file)
-    if (data) {
-      const { data: { publicUrl } } = supabase.storage
-        .from('task-attachments')
-        .getPublicUrl(data.path)
-      attachmentUrl = publicUrl
+// @vitest-environment node
+import { testApiHandler } from 'next-test-api-route-handler'
+import * as handler from '@/app/api/checkout/route'
+```
+
+**Extended Supabase mock** — new `src/lib/supabase/__mocks__/server.ts`:
+
+```typescript
+export const createServerSupabase = vi.fn(() => ({
+  auth: { getUser: vi.fn() },
+  from: vi.fn(() => ({ select: vi.fn(), insert: vi.fn(), update: vi.fn(), eq: vi.fn(), single: vi.fn() })),
+}))
+
+export const createServiceClient = vi.fn(() => ({
+  from: vi.fn(() => ({ select: vi.fn(), insert: vi.fn(), update: vi.fn(), eq: vi.fn(), single: vi.fn() })),
+  auth: {
+    admin: {
+      inviteUserByEmail: vi.fn(),
+      updateUserById: vi.fn(),
     }
-  }
-  await supabase.from('task_comments').insert({
-    task_id: taskId,
-    user_id: userId,
-    content: newComment,
-    attachments: attachmentUrl ? [attachmentUrl] : null,
-  })
+  },
+}))
+```
+
+**Stripe mock** — `src/lib/__mocks__/stripe.ts`:
+
+```typescript
+export const getStripe = vi.fn(() => ({
+  customers: { create: vi.fn() },
+  checkout: { sessions: { create: vi.fn(() => ({ url: 'https://checkout.stripe.com/test' })) } },
+  billingPortal: { sessions: { create: vi.fn() } },
+}))
+```
+
+**Rate limiter mock** — `src/lib/__mocks__/rate-limit.ts`:
+
+```typescript
+export const rateLimit = vi.fn(() => ({ allowed: true, remaining: 19 }))
+```
+
+---
+
+### Feature 8: Visual Regression Tests — TEST-11
+
+**Integration point:** Playwright already configured with `chromium` project and `playwright/.auth/user.json` auth state. Visual regression uses `page.toHaveScreenshot()` — no new dependencies.
+
+**New Playwright project in `playwright.config.ts`:**
+
+```typescript
+{
+  name: 'visual',
+  testMatch: /visual\/.*\.spec\.ts/,
+  use: {
+    ...devices['Desktop Chrome'],
+    storageState: 'playwright/.auth/user.json',
+  },
+  dependencies: ['setup'],
 }
 ```
 
-**No schema migration needed** — `attachments TEXT[]` already exists on `task_comments`. Only the UI and storage bucket are new.
+**New test files:**
 
-**Rendering attachments:** In the comment list, check `c.attachments?.length > 0` and render download links. For images, show inline preview. For PDFs/other, show a download icon with filename.
+```
+e2e/visual/
+  admin-overview.spec.ts        ← Admin dashboard overview
+  admin-billing.spec.ts         ← MRR chart (mask chart values)
+  portal-dashboard.spec.ts      ← Client portal home
+  portal-notifications.spec.ts  ← Notification preferences toggles
+  portal-security.spec.ts       ← 2FA enrollment page
+  login.spec.ts                 ← Login page (no auth required)
+```
+
+**Standard visual test pattern:**
+
+```typescript
+test('admin overview matches snapshot', async ({ page }) => {
+  await page.goto('/en/admin')
+  await page.waitForLoadState('networkidle')
+  await expect(page).toHaveScreenshot('admin-overview.png', {
+    mask: [
+      page.locator('[data-testid="timestamp"]'),
+      page.locator('[data-testid="live-metric"]'),
+    ],
+    maxDiffPixels: 50,
+  })
+})
+```
+
+**Baseline update:**
+
+```bash
+# Generate initial baselines (run once):
+playwright test --project=visual --update-snapshots
+
+# Review diffs after UI changes:
+playwright show-report
+```
+
+**Critical: mask dynamic content.** Timestamps, MRR chart values, notification counts, and any data that changes between runs must be masked. Chart areas should be masked entirely for the MRR chart, or seed deterministic test data via `scripts/seed-demo.js` before visual runs.
 
 ---
 
-## Data Flow: New Event Paths
+## Data Flow Diagrams
 
-### Notification Flow (Stripe Event)
-
-```
-Stripe fires invoice.paid
-    ↓
-POST /api/webhooks/stripe
-    ↓
-Validate Stripe signature
-    ↓
-Resolve client_id from stripe_customer_id
-    ↓
-Insert payments row (existing)
-    ↓  (parallel, fire-and-forget)
-    ├── sendTransactionalEmail({ to: client.email, type: 'payment_received', ... })
-    └── INSERT notifications row for each user in client
-            ↓
-            Supabase Realtime broadcasts to subscribed NotificationBell
-            ↓
-            NotificationBell badge count increments in browser
-```
-
-### File Upload Flow
+### 2FA Login Flow
 
 ```
-User types comment + selects file in tasks/page.tsx
-    ↓
-supabase.storage.from('task-attachments').upload(path, file)
-    ↓
-Get public/signed URL from Supabase Storage
-    ↓
-supabase.from('task_comments').insert({ ..., attachments: [url] })
-    ↓
-Reload comments list — attachment URL renders as link/preview
+User submits password
+  → aal1 session established
+  → middleware: getAuthenticatorAssuranceLevel()
+      nextLevel === 'aal2' && currentLevel !== 'aal2'?
+        YES → redirect /mfa-verify
+        NO  → allow to /portal
+  → /mfa-verify: user enters TOTP
+      → challenge({ factorId }) → verify({ factorId, challengeId, code })
+      → aal2 session established
+      → redirect /portal
 ```
 
-### Admin Task Creation → Notification Flow
+### Weekly Digest Flow
 
 ```
-Admin creates task in /admin/tasks/page.tsx
-    ↓
-supabase.from('tasks').insert({ ... })
-    ↓
-POST /api/notifications (new route, service role)
-    body: { client_id, type: 'task_created', title, link }
-    ↓
-API route: fetch users where client_id matches
-    ↓
-Insert notification row for each client user
-    ↓
-Supabase Realtime broadcasts to affected users
+Vercel Cron (Monday 09:00 UTC)
+  → GET /api/cron/digest
+  → validate CRON_SECRET
+  → digest.ts:
+      for each active client:
+        for each user:
+          check user_notification_prefs (email_digest_weekly)
+          if enabled:
+            query tasks + weekly_metrics for that client
+            sendEmail(WeeklyDigestEmail)
+  → return { sent: N, skipped: M }
+```
+
+### Admin Invite Flow
+
+```
+Admin: POST /api/admin/users { email, role, client_id }
+  → verify admin role (userClient)
+  → serviceClient.auth.admin.inviteUserByEmail(email, { data: { role, client_id } })
+  → INSERT user_invitations
+  → Supabase sends invite email
+
+User clicks link
+  → Supabase handles redirect + password set
+  → users row created (role from metadata)
+  → UPDATE user_invitations SET accepted_at = NOW()
+```
+
+### MRR Chart Data Flow
+
+```
+Admin visits /admin/billing
+  → Server component fetches subscriptions from Supabase
+  → Aggregates price_monthly per month (12-month window)
+  → Passes mrrData[] as props to <MRRChart /> (client component)
+  → Recharts renders AreaChart in browser
 ```
 
 ---
 
-## Recommended Project Structure (Delta)
-
-Only new folders/files shown. Existing structure is unchanged.
+## Recommended Project Structure (Delta — v1.2 additions only)
 
 ```
 platform/
+├── vercel.json                          ← NEW — cron schedule config
 ├── src/
 │   ├── app/
-│   │   ├── [locale]/
-│   │   │   ├── admin/              # NEW — admin route group
-│   │   │   │   ├── layout.tsx      # NEW — role-gated sidebar layout
-│   │   │   │   ├── page.tsx        # NEW — admin overview
-│   │   │   │   ├── clients/
-│   │   │   │   │   └── page.tsx    # NEW — client management
-│   │   │   │   ├── tasks/
-│   │   │   │   │   └── page.tsx    # NEW — cross-client tasks
-│   │   │   │   └── billing/
-│   │   │   │       └── page.tsx    # NEW — subscription overview
-│   │   │   └── portal/
-│   │   │       ├── layout.tsx      # MODIFIED — add NotificationBell
-│   │   │       └── tasks/
-│   │   │           └── page.tsx    # MODIFIED — add file upload
-│   │   └── api/
-│   │       ├── notifications/
-│   │       │   ├── route.ts        # NEW — POST create notification
-│   │       │   └── [id]/
-│   │       │       └── read/
-│   │       │           └── route.ts # NEW — POST mark read
-│   │       ├── upload/
-│   │       │   └── route.ts        # NEW — optional: presigned URL generator
-│   │       └── webhooks/
-│   │           └── stripe/
-│   │               └── route.ts    # MODIFIED — add notification + email calls
+│   │   ├── api/
+│   │   │   ├── admin/
+│   │   │   │   ├── users/
+│   │   │   │   │   ├── route.ts         ← NEW: GET list, POST invite
+│   │   │   │   │   └── [id]/
+│   │   │   │   │       └── route.ts     ← NEW: PATCH role/deactivate
+│   │   │   │   └── mrr/
+│   │   │   │       └── route.ts         ← OPTIONAL: if extracting MRR query to API
+│   │   │   └── cron/
+│   │   │       └── digest/
+│   │   │           └── route.ts         ← NEW: CRON_SECRET guarded GET
+│   │   └── [locale]/
+│   │       ├── admin/
+│   │       │   └── users/
+│   │       │       └── page.tsx         ← NEW: user management UI
+│   │       ├── portal/
+│   │       │   ├── security/
+│   │       │   │   └── page.tsx         ← NEW: 2FA enrollment
+│   │       │   └── notifications/
+│   │       │       └── page.tsx         ← NEW: notification preference toggles
+│   │       └── mfa-verify/
+│   │           └── page.tsx             ← NEW: TOTP challenge screen
 │   ├── components/
-│   │   └── NotificationBell.tsx    # NEW — shared bell icon + dropdown
-│   └── lib/
-│       ├── email.ts                # NEW — Resend transactional email helper
-│       └── types.ts                # MODIFIED — add Notification type
+│   │   └── MRRChart.tsx                 ← NEW: 'use client' Recharts wrapper
+│   ├── lib/
+│   │   ├── mfa.ts                       ← NEW: TOTP enroll/verify/unenroll
+│   │   ├── rate-limit.ts                ← NEW: in-memory sliding window
+│   │   ├── digest.ts                    ← NEW: weekly digest logic
+│   │   └── emails/
+│   │       └── WeeklyDigestEmail.tsx    ← NEW: React Email template
+│   └── __tests__/
+│       └── api/
+│           ├── checkout.test.ts         ← NEW
+│           ├── billing-portal.test.ts   ← NEW
+│           ├── tasks.test.ts            ← NEW
+│           ├── admin-users.test.ts      ← NEW
+│           └── cron-digest.test.ts      ← NEW
 ├── supabase/
 │   └── migrations/
-│       ├── 001_schema.sql          # UNCHANGED
-│       ├── 002_notifications.sql   # NEW
-│       └── 003_storage.sql         # NEW
-├── __tests__/
-│   ├── lib/
-│   │   ├── stripe.test.ts          # NEW
-│   │   ├── onboard.test.ts         # NEW
-│   │   └── email.test.ts           # NEW
-│   └── api/
-│       ├── checkout.test.ts        # NEW
-│       └── webhook.test.ts         # NEW
-├── playwright/
-│   ├── auth.spec.ts                # NEW
-│   ├── portal-tasks.spec.ts        # NEW
-│   ├── admin-clients.spec.ts       # NEW
-│   └── notifications.spec.ts       # NEW
-├── vitest.config.ts                # NEW
-└── playwright.config.ts            # NEW
+│       ├── 005_notification_prefs.sql   ← NEW
+│       └── 006_user_invitations.sql     ← NEW
+└── e2e/
+    └── visual/
+        ├── admin-overview.spec.ts        ← NEW
+        ├── admin-billing.spec.ts         ← NEW
+        ├── portal-dashboard.spec.ts      ← NEW
+        ├── portal-notifications.spec.ts  ← NEW
+        └── portal-security.spec.ts       ← NEW
 ```
 
 ---
 
 ## Architectural Patterns
 
-### Pattern 1: Role-Based Route Groups
+### Pattern 1: Additive Middleware Guard
 
-**What:** Separate App Router route groups for client-facing (`/portal`) and internal (`/admin`) with independent layouts that check `users.role` on mount.
+**What:** Append a new auth check to existing middleware by appending logic after the existing checks. Each guard returns early if its condition does not apply; otherwise falls through.
 
-**When to use:** When two user classes need fundamentally different navigation and data scope but share the same backend tables.
+**When to use:** Adding the MFA AAL2 check without restructuring the existing locale + session + role guards.
 
-**Trade-offs:** Duplicates some layout code (sidebar chrome). Acceptable at this scale — avoid premature abstraction. The two sidebars will have different nav items, so a single shared layout would need complex conditional logic anyway.
+**Trade-offs:** `getAuthenticatorAssuranceLevel()` is a local JWT inspection (no network call) when the session is cached — documented as microsecond-fast. Safe to call on every protected request.
 
-**Key constraint:** Middleware only checks authentication (session exists). Role enforcement lives in `layout.tsx` useEffect. This means a client-role user who navigates to `/admin` gets a brief flash before being redirected. Acceptable for an internal tool — add route-level role check to middleware later if needed.
+### Pattern 2: Service Client for Privileged Admin Operations
 
-### Pattern 2: Server-Side Notification Insert via Service Route
+**What:** All `/api/admin/*` route handlers follow a two-client pattern: (1) use `createServerSupabase()` (cookie-based, respects RLS) to verify the caller's role, then (2) use `createServiceClient()` (service role, bypasses RLS) for the privileged operation.
 
-**What:** Client-side admin actions that need to notify other users POST to a server API route (`/api/notifications`) which uses `createServiceClient()` to bypass RLS and insert for any `user_id`.
+**When to use:** Any time an admin needs to write data on behalf of another user, or use Supabase Admin API methods. Never use service client for reads that should be scoped to the caller.
 
-**When to use:** Any time a client component needs to write a row owned by a different user (notifications for client users, inserted by admin actions).
+**Trade-offs:** Service role bypasses all RLS. Every admin route must do its own explicit authorization check. Treat the service client as a loaded gun — verify intent before use.
 
-**Trade-offs:** Adds a network round-trip vs. direct client insert. Necessary because the browser client respects RLS — it cannot insert a notification row with `user_id` belonging to another user.
+### Pattern 3: CRON_SECRET Gate
 
-### Pattern 3: Supabase Realtime Subscription in Shared Component
+**What:** Vercel injects `Authorization: Bearer $CRON_SECRET` on cron-triggered requests. The handler validates this before executing.
 
-**What:** `NotificationBell` opens a single Supabase Realtime channel filtered to `user_id = eq.{current_user_id}` and updates local badge count in real time.
+**When to use:** All `/api/cron/*` routes. Also allows manual testing locally by providing the header.
 
-**When to use:** When users need live updates without polling. Supabase Realtime is already available in the existing Supabase project — no new infrastructure.
+**Trade-offs:** The secret must be added to Vercel's environment variables. Rotate it if it leaks. Anyone with the secret can trigger the job, so treat it with the same care as a service account key.
 
-**Trade-offs:** Each browser tab opens one WebSocket connection. Fine for a B2B platform with small concurrent user counts. Would need connection pooling if this were a consumer product with thousands of simultaneous users.
+### Pattern 4: Preference-Aware Notification Filtering
 
-**Pattern:**
-```typescript
-// In NotificationBell.tsx
-useEffect(() => {
-  if (!userId) return
-  const channel = supabase
-    .channel(`notifications:${userId}`)
-    .on(
-      'postgres_changes',
-      {
-        event: 'INSERT',
-        schema: 'public',
-        table: 'notifications',
-        filter: `user_id=eq.${userId}`,
-      },
-      (payload) => {
-        setUnreadCount(prev => prev + 1)
-        setNotifications(prev => [payload.new as Notification, ...prev])
-      }
-    )
-    .subscribe()
-  return () => { supabase.removeChannel(channel) }
-}, [userId])
+**What:** Before each channel send inside `notifyTaskEvent`, look up `user_notification_prefs` for the recipient. Treat a missing row as all-enabled (null-coalescing to `true`).
+
+**When to use:** Every new notification channel should follow this same gate. The `user_notification_prefs` table is the single source of truth for per-user, per-channel opt-outs.
+
+**Trade-offs:** One extra DB query per recipient per event. Acceptable at current scale. If the recipient list grows (fan-out to 50+ users), fetch all prefs in a single `IN` query before the loop.
+
+### Pattern 5: Server-Fetched, Client-Rendered Chart
+
+**What:** Server component fetches and aggregates raw subscription data, passes as serializable props to a `'use client'` chart component.
+
+**When to use:** Any visualization using Recharts, Chart.js, or other browser-API-dependent charting libraries inside a Next.js App Router page.
+
+**Trade-offs:** Separates data fetching (server) from rendering (client). Means the chart cannot update in real time without adding a client-side fetch or SWR hook, but for an admin billing chart that changes monthly, static render is sufficient.
+
+---
+
+## Build Order — Dependency Graph
+
+```
+[SEC-02] Rate Limiting        ← No deps. Touches only existing routes.
+     ↓ (parallel OK)
+[SEC-01] 2FA / TOTP           ← No deps. Middleware change is additive.
+     ↓
+[NOTIF-11] Notification Prefs ← Migration + UI. No deps.
+     ↓
+[NOTIF-10] Weekly Digest      ← Depends on NOTIF-11 (pref table for filter)
+     ↓ (parallel OK)
+[ADMIN-07] User Management    ← No deps. New routes + page.
+     ↓ (parallel OK)
+[ADMIN-08] MRR Chart          ← No deps. Data already in DB, Recharts already installed.
+     ↓
+[TEST-10] Integration Tests   ← Depends on all API routes being complete.
+     ↓
+[TEST-11] Visual Regression   ← Depends on all UI pages being complete.
 ```
 
-### Pattern 4: Direct Client Upload to Supabase Storage
+**Recommended phase grouping:**
 
-**What:** The tasks page uses the browser Supabase client to upload directly to Storage without routing through an API route. The URL is stored in `task_comments.attachments`.
-
-**When to use:** Small files (< 50MB), no server-side processing needed, RLS on storage bucket is sufficient.
-
-**Trade-offs:** File type and size validation must happen client-side (add `accept` and `maxSize` checks before upload). For production, add a presigned URL route that validates server-side. The direct upload pattern is fine for MVP; upgrade to server-validated uploads if security requirements tighten.
-
----
-
-## Build Order (Dependency-Driven)
-
-Dependencies flow from bottom to top. Work from the stable foundation upward.
-
-### Phase 1: Database + Testing Foundation (no UI dependencies)
-
-1. **Migration 002 (notifications table)** — unblocks all notification work
-2. **Migration 003 (storage bucket)** — unblocks file upload work
-3. **Update `src/lib/types.ts`** — add `Notification` type; unblocks TypeScript in all notification components
-4. **Vitest config + first tests** — `stripe.test.ts`, `onboard.test.ts` test existing lib functions; no new code needed, establishes test patterns
-5. **`src/lib/email.ts`** — new helper, depends only on `RESEND_API_KEY` env var; fully testable in isolation
-
-### Phase 2: Server-Side Integration (API routes + webhook updates)
-
-6. **`/api/notifications/route.ts`** — POST create; depends on types.ts Notification type and `createServiceClient()`
-7. **`/api/notifications/[id]/read/route.ts`** — POST mark read; depends on same
-8. **Stripe webhook update** — add notification inserts and `sendTransactionalEmail` calls; depends on email.ts and notifications API; modify existing `webhooks/stripe/route.ts`
-9. **Webhook integration tests** — `__tests__/api/webhook.test.ts`; depends on updated webhook handler
-
-### Phase 3: Shared Component
-
-10. **`NotificationBell.tsx`** — depends on notifications table (phase 1), read API (phase 2), and Supabase Realtime; add to portal layout after component is stable
-
-### Phase 4: Admin Dashboard
-
-11. **`/admin/layout.tsx`** — depends on `users.role` check pattern (established); add NotificationBell (phase 3)
-12. **`/admin/page.tsx`** — depends on admin layout; queries existing tables with no `client_id` filter
-13. **`/admin/clients/page.tsx`** — depends on admin layout
-14. **`/admin/tasks/page.tsx`** — depends on admin layout; add notification dispatch via `/api/notifications`
-15. **Admin Playwright tests** — `playwright/admin-clients.spec.ts`
-
-### Phase 5: File Upload
-
-16. **Upload UI in `tasks/page.tsx`** — depends on storage bucket (phase 1); modify existing page component
-17. **Attachment rendering** — depends on upload UI; display `attachments[]` URLs in comment list
-18. **Playwright test** — `playwright/portal-tasks.spec.ts` covers upload flow
-
----
-
-## Integration Points: New vs Existing
-
-### External Services
-
-| Service | Existing Integration | New Integration |
-|---------|---------------------|-----------------|
-| Stripe | Webhook, checkout, billing portal | Webhook handler triggers notifications + email after events |
-| Supabase | Auth, all DB tables, browser/server/service clients | + Realtime channel for notifications, + Storage bucket |
-| Slack | Bot token, channel provisioning, welcome message | No change |
-| Grafana Cloud | Stack provisioning, Faro config | No change |
-| Resend | Not present | New: transactional email (payment, report, task events) |
-
-### Internal Boundaries
-
-| Boundary | How They Communicate | Constraint |
-|----------|---------------------|------------|
-| Admin page → client notifications | `POST /api/notifications` (server route) | Cannot insert via browser client due to RLS; must go through service role route |
-| Webhook → notifications | Direct Supabase insert via `createServiceClient()` — already uses service role | Extend existing pattern; no new auth mechanism |
-| Webhook → email | `sendTransactionalEmail()` called fire-and-forget | Email failure must not block webhook response; wrap in try/catch |
-| `NotificationBell` → Supabase Realtime | `supabase.channel()` subscription in useEffect | Cleanup on unmount required to avoid connection leak |
-| Tasks page → Storage | `supabase.storage.from('task-attachments').upload()` | Client uploads directly; RLS on storage bucket enforces auth |
-| Admin layout ↔ Portal layout | No shared code — both are independent layouts | Both mount `NotificationBell`; component is self-contained |
+| Phase | Features | Rationale |
+|-------|----------|-----------|
+| 1 | SEC-02 rate limiting | Isolated change to existing routes, lowest risk |
+| 2 | SEC-01 2FA/TOTP | Middleware change; needs clean state from Phase 1 |
+| 3 | NOTIF-11 prefs + NOTIF-10 digest | Sequential: prefs migration before digest preference filter |
+| 4 | ADMIN-07 user mgmt + ADMIN-08 MRR chart | Independent of each other; can parallelize within phase |
+| 5 | TEST-10 integration tests + TEST-11 visual regression | Must come last; tests stable features |
 
 ---
 
@@ -606,61 +801,96 @@ Dependencies flow from bottom to top. Work from the stable foundation upward.
 
 | Scale | Architecture Adjustments |
 |-------|--------------------------|
-| Current (< 50 clients, ~10 internal users) | All features work as described. Realtime subscription per user is trivial. Storage uploads are direct. |
-| 200 clients, 50 internal users | Notification fan-out on Stripe events (insert N rows for N users) stays fast. Storage moves to signed URLs for security. Consider pagination in admin client list. |
-| 1,000+ clients | Notification inserts in webhook become a bottleneck — move to a background job or queue (Supabase Edge Functions with database triggers). Admin dashboard needs server-side rendering with pagination. |
-
-**First bottleneck:** Notification fan-out. Current pattern inserts one notification row per user when Stripe fires an event. At low client counts this is a for-loop over 1–5 users. If a client has many users, this blocks the webhook response. Mitigation: move notification insert to an async background task (or use a Supabase database trigger that fires on payment row insert).
-
-**Second bottleneck:** Admin dashboard rendering. At 50+ clients, loading all clients in a single `useEffect` query without pagination will be slow. Add `.range(0, 49)` pagination early.
+| Current (< 20 users, < 20 clients) | In-memory rate limiter is fine. Digest loops in-process. MRR aggregation in-process. |
+| 100 users / 100 clients | Replace Map-based rate limiter with `@upstash/ratelimit` + Vercel KV. Digest loop can still run in-process (< 100 emails in one cron invocation). |
+| 1,000+ users | Move digest to Trigger.dev or Inngest (background job with retries). Rate limiting at Edge middleware. MRR chart switches to a precomputed materialized view. |
 
 ---
 
 ## Anti-Patterns
 
-### Anti-Pattern 1: Inserting Notifications from Client Components
+### Anti-Pattern 1: Calling Service Client from Middleware
 
-**What people do:** Add `supabase.from('notifications').insert(...)` directly in an admin page's `onClick` handler using the browser Supabase client.
+**What people do:** Use `createServiceClient()` in `middleware.ts` to bypass RLS for role checks.
 
-**Why it's wrong:** The browser client uses the anon key and respects RLS. The RLS policy `"Users see own notifications"` restricts users to their own `user_id`. An admin trying to insert a notification for a client user would violate RLS and the insert would silently fail (or error).
+**Why it's wrong:** Middleware runs on the Vercel Edge Runtime. The service role key must remain server-only. Embedding it in middleware exposes it to the edge context and can cause configuration errors. The existing middleware uses `createServerClient` with the anon key — this is correct.
 
-**Do this instead:** Route all cross-user notification inserts through `POST /api/notifications`, which uses `createServiceClient()` (service role key) to bypass RLS.
+**Do this instead:** Keep service client usage inside `/api/*` route handlers only. The existing middleware role check (`supabase.from('users').select('role')` with the anon key) is sufficient because RLS allows authenticated users to read their own `users` row.
 
-### Anti-Pattern 2: Adding Realtime Subscriptions in Page Components
+### Anti-Pattern 2: Calling Admin API from Client Components
 
-**What people do:** Open a Supabase Realtime channel in each page that needs live data (tasks, dashboard, etc.).
+**What people do:** Call `supabase.auth.admin.inviteUserByEmail` directly in a client component using `createClient()`.
 
-**Why it's wrong:** Each subscription opens a WebSocket connection. Multiple subscriptions across multiple pages in the same tab exhaust the Supabase connection limit quickly. Pages mount/unmount as the user navigates, leaving orphaned channels if cleanup is not meticulous.
+**Why it's wrong:** Admin API methods require the service role key. The anon key returns 403. These methods must always go through an API route that uses `createServiceClient()`.
 
-**Do this instead:** Keep the Realtime subscription in `NotificationBell.tsx`, which is mounted once in the layout and persists across page navigation. For other live data needs, use polling (`setInterval` + re-fetch) rather than Realtime — the portal is an internal tool where 30-second polling is acceptable for tasks/metrics.
+**Do this instead:** POST to `/api/admin/users` from the admin page's form submit handler. The route handler verifies the caller's role, then uses `createServiceClient()` for the invite operation.
 
-### Anti-Pattern 3: Putting Role Checks Only in Middleware
+### Anti-Pattern 3: Skipping AAL Check on Protected Routes
 
-**What people do:** Add `admin`-only routes to the middleware matcher and check the role there.
+**What people do:** Only check MFA enrollment at login time; skip `getAuthenticatorAssuranceLevel()` in middleware.
 
-**Why it's wrong:** Middleware in Next.js 14 with `@supabase/ssr` can read the auth session, but reading the `users.role` from the database in middleware would require an extra database call on every request. The existing middleware only checks session existence (not role). Adding a DB query to middleware adds latency to every request.
+**Why it's wrong:** If a user's session is refreshed without completing the MFA challenge (e.g., via token refresh), they bypass 2FA on subsequent requests.
 
-**Do this instead:** Middleware checks authentication only (session exists → pass). The admin `layout.tsx` `useEffect` checks the role and redirects clients. This is consistent with how the portal layout already works.
+**Do this instead:** Call `getAuthenticatorAssuranceLevel()` in middleware on every request to `/portal` and `/admin`. It is a local JWT inspection — no latency cost.
 
-### Anti-Pattern 4: Storing File Metadata Only in `attachments TEXT[]`
+### Anti-Pattern 4: Recharts Directly in Server Components
 
-**What people do:** Store just the URL in `task_comments.attachments` and rely on the URL to imply file type, name, and size.
+**What people do:** Import `{ AreaChart }` from `'recharts'` inside a `page.tsx` or `layout.tsx` without `'use client'`.
 
-**Why it's wrong:** URLs from Supabase Storage can be opaque. Displaying a filename requires parsing the URL path. File type for preview logic requires the filename extension. File size cannot be recovered from the URL.
+**Why it's wrong:** Recharts uses `window` and DOM APIs. Server-side rendering throws: `ReferenceError: window is not defined`.
 
-**Do this instead:** Store structured JSON in the array, or add a separate `task_attachments` table with `comment_id`, `url`, `filename`, `file_type`, `file_size_bytes`. For MVP, at minimum store the filename alongside the URL as a structured object serialized in the array: `'{"url":"...","name":"report.pdf","size":104320}'`.
+**Do this instead:** Isolate all Recharts imports in a dedicated `'use client'` component (`<MRRChart />`). The server component fetches data and passes it as props. The client component handles rendering.
+
+### Anti-Pattern 5: Visual Tests Against Live Data
+
+**What people do:** Take screenshots of pages showing live DB values (task counts, timestamps, MRR numbers) and compare against a baseline.
+
+**Why it's wrong:** Tests fail on every data change, even when the UI is correct. This makes visual tests noisy and teams start ignoring failures.
+
+**Do this instead:** Use `mask: [locator]` to hide dynamic regions, or seed deterministic fixture data before running visual tests.
+
+---
+
+## Integration Points
+
+### External Services
+
+| Service | Existing Integration | v1.2 Change |
+|---------|---------------------|-------------|
+| Supabase Auth | `@supabase/ssr` session management | Add MFA API: `mfa.enroll`, `mfa.challenge`, `mfa.verify`, `mfa.getAuthenticatorAssuranceLevel` |
+| Supabase Admin API | `createServiceClient()` for RLS bypass | Add `auth.admin.inviteUserByEmail`, `auth.admin.updateUserById` |
+| Supabase Postgres | 13 existing tables + RLS | Add 2 tables: `user_notification_prefs`, `user_invitations` |
+| Resend | `sendEmail()` in `lib/email.ts` | Add `WeeklyDigestEmail` template; called from `digest.ts` |
+| Stripe | Checkout, billing portal, webhooks | No change — MRR reads from local `subscriptions` table |
+| Vercel Cron | Not present | Add `vercel.json` crons config; one job: Monday 09:00 UTC |
+| Recharts | Already installed in package.json | Add `<MRRChart />` client component using `AreaChart` |
+
+### Internal Boundaries
+
+| Boundary | Communication | Notes |
+|----------|---------------|-------|
+| `middleware.ts` ↔ Supabase Auth | SDK `getAuthenticatorAssuranceLevel()` | Add after existing role check; local JWT inspection, no network |
+| `notifyTaskEvent` ↔ `user_notification_prefs` | Supabase query per recipient | Null pref row = all channels enabled; treat as opt-out model |
+| `/api/admin/*` ↔ Supabase Admin API | `createServiceClient()` | Must verify caller role first via `createServerSupabase()` |
+| `/api/cron/digest` ↔ `digest.ts` | Function call | Logic separated from handler for unit testability |
+| `<MRRChart />` ↔ server page | Props (serialized array) | Server fetches + aggregates; client renders — no client-side fetch needed |
+| Integration tests ↔ route handlers | `next-test-api-route-handler` | Tests use mocked `@/lib/supabase/server` and `@/lib/stripe` |
 
 ---
 
 ## Sources
 
-- Direct codebase analysis: `platform/src/` (2026-03-24)
-- Supabase Realtime documentation (confirmed in training data; channel filter syntax verified against `@supabase/supabase-js` v2 API)
-- Supabase Storage RLS policy pattern: `storage.objects` table, `bucket_id` check
-- Next.js 14 App Router route groups: parenthetical folder naming not needed here since admin and portal are distinct URL paths, not co-located groups
-- `@supabase/ssr` middleware pattern: existing `middleware.ts` in this codebase
+- [Supabase TOTP MFA Documentation](https://supabase.com/docs/guides/auth/auth-mfa/totp) — HIGH confidence, official docs
+- [Supabase Auth MFA JavaScript API Reference](https://supabase.com/docs/reference/javascript/auth-mfa-api) — HIGH confidence, official docs
+- [Supabase Admin inviteUserByEmail](https://supabase.com/docs/reference/javascript/auth-admin-inviteuserbyemail) — HIGH confidence, official docs
+- [Vercel Cron Jobs](https://vercel.com/docs/cron-jobs) — HIGH confidence, official docs
+- [Vercel Managing Cron Jobs (CRON_SECRET)](https://vercel.com/docs/cron-jobs/manage-cron-jobs) — HIGH confidence, official docs; CRON_SECRET pattern confirmed with code example
+- [Playwright Visual Comparisons](https://playwright.dev/docs/test-snapshots) — HIGH confidence, official Playwright docs
+- [next-test-api-route-handler GitHub](https://github.com/Xunnamius/next-test-api-route-handler) — MEDIUM confidence; actively maintained, Next.js 15 App Router support confirmed in README
+- Recharts `package.json` — HIGH confidence; already installed at `^2.13.3`, verified in codebase
+- `subscriptions.price_monthly` + `started_at` + `cancelled_at` — HIGH confidence; confirmed in `001_schema.sql`
 
 ---
 
-*Architecture research for: Vantix Platform v1.1 — testing, admin dashboard, notifications, file uploads*
-*Researched: 2026-03-24*
+*Architecture research for: Vantix Platform v1.2 — 2FA, rate limiting, digest, notification prefs, admin user mgmt, MRR chart, integration tests, visual regression*
+*Researched: 2026-03-25*
