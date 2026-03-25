@@ -1,0 +1,205 @@
+{
+  "metadata": {
+    "title": "Vantx Portal",
+    "description": "Portal de Performance Engineering & SRE"
+  },
+  "common": {
+    "pilot": "PILOTO",
+    "logout": "Cerrar sesión",
+    "vs_previous": "vs anterior",
+    "loom": "Loom",
+    "loading": "Cargando..."
+  },
+  "login": {
+    "title": "Portal de cliente",
+    "subtitle": "Performance Engineering & SRE",
+    "email": "Email",
+    "password": "Password",
+    "email_placeholder": "tu@empresa.com",
+    "password_placeholder": "********",
+    "submit": "Ingresar",
+    "submitting": "Ingresando...",
+    "demo": "Demo: juan@novapay.com / demo2026"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "tests": "Evaluaciones",
+    "reports": "Reportes",
+    "tasks": "Tareas",
+    "grafana": "Grafana",
+    "billing": "Pagos",
+    "services": "Servicios",
+    "tutorials": "Tutoriales"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "summary": "Resumen de performance — {clientName}",
+    "charts": {
+      "peak_tps": "Peak TPS por semana",
+      "latency_p95": "Latencia p95 (ms)"
+    },
+    "recent_reports": "Reportes Recientes",
+    "active_tasks": "Tareas Activas"
+  },
+  "tests": {
+    "title": "Evaluaciones de Performance",
+    "subtitle": "Historial de pruebas de carga, web performance, y checkups",
+    "results_by_scenario": "Resultados por Escenario",
+    "table": {
+      "scenario": "Escenario",
+      "vus": "VUs",
+      "tps": "TPS",
+      "p50": "p50",
+      "p95": "p95",
+      "p99": "p99",
+      "errors": "Errors"
+    },
+    "findings": "Hallazgos",
+    "action": "Acción"
+  },
+  "reports": {
+    "title": "Reportes",
+    "filters": {
+      "all": "Todos",
+      "monthly": "Mensuales",
+      "weekly": "Semanales",
+      "checkup": "Checkup",
+      "evaluation": "Evaluación"
+    },
+    "type_labels": {
+      "checkup": "Checkup",
+      "monthly": "Mensual",
+      "weekly": "Semanal",
+      "evaluation": "Evaluación",
+      "incident_rca": "RCA",
+      "capacity_plan": "Capacity"
+    },
+    "watch_video": "Ver Video",
+    "empty": "No hay reportes para este filtro."
+  },
+  "tasks": {
+    "title": "Tareas y Solicitudes",
+    "new_request": "+ Nueva Solicitud",
+    "new_request_title": "Nueva Solicitud",
+    "form": {
+      "title_placeholder": "Título",
+      "description_placeholder": "Descripción (opcional)",
+      "priority": {
+        "low": "Baja",
+        "medium": "Media",
+        "high": "Alta",
+        "critical": "Crítica"
+      },
+      "type": {
+        "request": "Solicitud",
+        "incident": "Incidente",
+        "optimization": "Optimización",
+        "investigation": "Investigación"
+      },
+      "create": "Crear",
+      "cancel": "Cancelar"
+    },
+    "filters": {
+      "all": "Todas",
+      "open": "Abiertas",
+      "in_progress": "En Progreso",
+      "completed": "Completadas"
+    },
+    "due": "Vence",
+    "view_comments": "Ver comentarios",
+    "no_comments": "Sin comentarios aún.",
+    "comment_placeholder": "Escribe un comentario...",
+    "send": "Enviar"
+  },
+  "billing": {
+    "title": "Pagos y Suscripción",
+    "current_plan": "PLAN ACTUAL",
+    "actions": "ACCIONES",
+    "pay_stripe": "Pagar con Stripe",
+    "processing": "Procesando...",
+    "download_invoice": "Descargar Factura",
+    "change_plan": "Cambiar Plan",
+    "next_charge": "Próximo cobro",
+    "per_month": "/mes",
+    "no_subscription": "Sin suscripción activa",
+    "no_invoices": "No hay facturas disponibles",
+    "payment_history": "Historial de Pagos",
+    "pending": "Pendiente",
+    "plan_labels": {
+      "retainer": "Retainer Performance Mensual",
+      "retainer_perf": "Retainer Performance Mensual",
+      "checkup": "Performance Checkup",
+      "oaas_baseline": "Observability Baseline",
+      "oaas_gestion": "Observability Gestión Continua",
+      "fractional_2d": "Fractional SRE (2 días/sem)",
+      "fractional_4d": "Fractional SRE (4 días/sem)",
+      "custom": "Plan Custom"
+    }
+  },
+  "services": {
+    "title": "Servicios Disponibles",
+    "subtitle": "Todos los servicios que ofrecemos. Precios en {market}.",
+    "categories": {
+      "core": "Servicios Core",
+      "addon": "Add-ons",
+      "training": "Training"
+    },
+    "coming_soon": "PRÓXIMAMENTE",
+    "request": "Solicitar",
+    "coming_soon_btn": "Próximamente",
+    "delivery_days": "{days} días hábiles",
+    "more_features": "+{count} más"
+  },
+  "grafana": {
+    "title": "Dashboards Grafana",
+    "subtitle": "Métricas en tiempo real de tu infraestructura.",
+    "time_ranges": {
+      "1h": "Última hora",
+      "6h": "6 horas",
+      "24h": "24 horas",
+      "7d": "7 días",
+      "30d": "30 días",
+      "custom": "Custom"
+    },
+    "date_separator": "a",
+    "test_id": "Test ID",
+    "open_in_grafana": "Abrir en Grafana",
+    "dashboards": {
+      "red": { "name": "RED Metrics", "desc": "Rate, Errors, Duration por servicio" },
+      "use": { "name": "Infrastructure USE", "desc": "CPU, Memory, Network, Disk" },
+      "pg": { "name": "PostgreSQL", "desc": "Connections, cache hit, slow queries" },
+      "k6": { "name": "k6 Load Test", "desc": "VUs, TPS, latencia, errors" },
+      "cwv": { "name": "Web Vitals", "desc": "LCP, INP, CLS, Lighthouse trending" },
+      "slo": { "name": "SLO Compliance", "desc": "Error budget, burn rate" },
+      "faro": { "name": "Frontend RUM", "desc": "CWV real por página/device/país" },
+      "incidents": { "name": "Incidents", "desc": "MTTR, on-call, timeline" }
+    }
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "markAllRead": "Marcar todo como leido",
+    "empty": "Sin notificaciones",
+    "justNow": "Ahora mismo"
+  },
+  "tutorials": {
+    "title": "Tutoriales",
+    "subtitle": "Aprende a interpretar tus resultados y sacar el máximo provecho.",
+    "back": "← Volver a tutoriales",
+    "reading_time": "{min} min lectura",
+    "reading_time_short": "{min} min",
+    "watch_video": "Ver Video Explicativo",
+    "difficulty": {
+      "beginner": "Principiante",
+      "intermediate": "Intermedio",
+      "advanced": "Avanzado"
+    },
+    "categories": {
+      "interpretar_resultados": "Interpretar Resultados",
+      "load_testing": "Load Testing",
+      "web_performance": "Web Performance",
+      "observability": "Observabilidad",
+      "capacity_planning": "Capacity Planning",
+      "getting_started": "Primeros Pasos"
+    }
+  }
+}
