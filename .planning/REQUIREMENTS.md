@@ -3,51 +3,56 @@
 **Defined:** 2026-03-24
 **Core Value:** Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay forma facil de reservar tiempo, todo lo demas falla.
 
-## v1.1 Requirements
+## v1.2 Requirements
 
-Requirements for Platform Hardening & Admin milestone. Each maps to roadmap phases.
+Requirements for Security & Polish milestone. Each maps to roadmap phases.
 
-### Testing Infrastructure
+### Security
 
-- [x] **TEST-01**: Vitest configured with Supabase manual mocks and test helpers
-- [x] **TEST-02**: Unit tests for stripe.ts (getPriceId, formatCurrency, webhook signature)
-- [x] **TEST-03**: Unit tests for slack.ts (channel creation, message posting)
-- [x] **TEST-04**: Unit tests for onboard.ts (orchestration flow)
-- [x] **TEST-05**: Playwright configured against local dev server with auth helpers
-- [x] **TEST-06**: E2E test: login flow (email/password → portal redirect)
-- [x] **TEST-07**: E2E test: task CRUD (create, edit, status change)
-- [x] **TEST-08**: E2E test: admin route redirects client-role users to portal
-- [x] **TEST-09**: CI check: i18n key parity between EN and ES JSON files
-
-### Admin Dashboard
-
-- [x] **ADMIN-01**: Middleware extended to protect /admin routes (admin/engineer/seller roles only)
-- [x] **ADMIN-02**: Admin layout with role-gated sidebar navigation
-- [x] **ADMIN-03**: Admin overview page with active clients count, MRR, recent activity
-- [x] **ADMIN-04**: Client list page with search, subscription status, plan details
-- [x] **ADMIN-05**: Cross-client task view with filtering by client, priority, status
-- [x] **ADMIN-06**: Billing overview with MRR trend, recent payments, subscription statuses
+- [ ] **SEC-01**: User can enable TOTP 2FA via enrollment page with QR code
+- [ ] **SEC-02**: User sees TOTP challenge page after login when 2FA is enrolled
+- [ ] **SEC-03**: Admin routes enforce AAL2 (2FA verified) in middleware
+- [ ] **SEC-04**: API routes are rate-limited via Upstash Redis sliding window
+- [ ] **SEC-05**: Rate-limited users receive 429 response with retry-after header
 
 ### Notifications
 
-- [x] **NOTIF-01**: Notifications DB table with user_id, type, title, body, read status
-- [x] **NOTIF-02**: In-app notification bell component with unread count badge
-- [x] **NOTIF-03**: Notification dropdown with list, mark-as-read, mark-all-read
-- [x] **NOTIF-04**: Supabase Realtime subscription filtered by user_id (cross-tenant safe)
-- [x] **NOTIF-05**: Email notification on successful payment (Resend)
-- [x] **NOTIF-06**: Email notification on failed payment (Resend)
-- [x] **NOTIF-07**: Email notification on task status change
-- [x] **NOTIF-08**: Slack message to client channel on new task created
-- [x] **NOTIF-09**: NotificationBell mounted in both portal and admin layouts
+- [ ] **NOTIF-10**: Client receives weekly Monday email digest of task activity
+- [ ] **NOTIF-11**: User can toggle notification preferences per type (email, in-app) in portal settings
+- [ ] **NOTIF-12**: Notification preferences are enforced at send time in notifyTaskEvent
+
+### Admin
+
+- [ ] **ADMIN-07**: Admin can invite new users by email with role and client assignment
+- [ ] **ADMIN-08**: Invited user's public profile row is auto-created via DB trigger on acceptance
+- [ ] **ADMIN-09**: Admin can change user role
+- [ ] **ADMIN-10**: Admin can deactivate/reactivate user accounts
+- [ ] **ADMIN-11**: Admin can view MRR trend chart on billing page (Recharts)
+
+### Testing
+
+- [ ] **TEST-10**: Integration tests cover API routes (checkout, billing-portal, webhook) using NTARH + MSW
+- [ ] **TEST-11**: Playwright visual regression baselines for portal and admin pages (CI-generated)
+
+## v1.1 Requirements (Complete)
+
+All 30 requirements shipped and verified. See `.planning/milestones/v1.1-REQUIREMENTS.md` for details.
+
+### Testing Infrastructure
+
+- [x] **TEST-01** through **TEST-09**: Vitest + Playwright + CI infrastructure (9/9 complete)
+
+### Admin Dashboard
+
+- [x] **ADMIN-01** through **ADMIN-06**: Middleware, layout, overview, clients, tasks, billing (6/6 complete)
+
+### Notifications
+
+- [x] **NOTIF-01** through **NOTIF-09**: DB table, bell, dropdown, Realtime, email, Slack (9/9 complete)
 
 ### File Uploads
 
-- [x] **UPLOAD-01**: Supabase Storage bucket 'task-attachments' with private access
-- [x] **UPLOAD-02**: Storage RLS policies scoped to client_id path structure
-- [x] **UPLOAD-03**: File upload UI in task comment form (drag-and-drop + click)
-- [x] **UPLOAD-04**: Client-side file validation (size limit, allowed types)
-- [x] **UPLOAD-05**: Image preview thumbnails for uploaded images in comments
-- [x] **UPLOAD-06**: Signed URL generation for file downloads (time-limited)
+- [x] **UPLOAD-01** through **UPLOAD-06**: Storage bucket, RLS, upload UI, validation, thumbnails, signed URLs (6/6 complete)
 
 ## v2 Requirements
 
@@ -55,23 +60,17 @@ Deferred to future release. Tracked but not in current roadmap.
 
 ### Notifications
 
-- **NOTIF-10**: Weekly email digest to clients (requires cron)
-- **NOTIF-11**: User notification preferences (per-type opt-in/out)
+- **NOTIF-13**: Per-user digest schedule (timezone-aware weekly/daily toggle)
 
 ### Admin
 
-- **ADMIN-07**: Admin user management (invite, role change, deactivate)
-- **ADMIN-08**: Admin MRR trend chart (Recharts)
-
-### Testing
-
-- **TEST-10**: Integration tests for API routes (checkout, billing-portal, webhook)
-- **TEST-11**: Playwright visual regression tests
+- **ADMIN-12**: MRR chart subscription overlay (new/cancelled markers)
+- **ADMIN-13**: Admin-assisted 2FA unenrollment UI
 
 ### Security
 
-- **SEC-01**: Two-factor authentication
-- **SEC-02**: Rate limiting on API routes
+- **SEC-06**: SMS/phone 2FA (only if enterprise client mandates)
+- **SEC-07**: Recovery codes for 2FA
 
 ## Out of Scope
 
@@ -79,9 +78,13 @@ Deferred to future release. Tracked but not in current roadmap.
 |---------|--------|
 | Real-time chat between client and team | High complexity, Slack already covers async communication |
 | Mobile app | Web-first, responsive design sufficient for current scale |
-| Drag-and-drop file upload with progress bar | Basic upload first; enhance after usage validates need |
-| Notification preferences UI | Over-engineering at current client count (<50) |
-| Admin client creation UI | CLI/script workflow sufficient; defer until painful |
+| In-memory rate limiting | Broken by design on Vercel serverless; Upstash mandatory |
+| `speakeasy`/`otplib` for TOTP | Supabase handles full MFA lifecycle natively |
+| `node-cron`/`agenda`/`bull` for scheduling | Require persistent workers incompatible with Vercel |
+| Visual regression against external iframes | Mask or skip; test first-party UI only |
+| Notification CMS (templates, scheduling) | Only if portal is white-labeled |
+| Blog | Defer to v2 |
+| SEO con URLs `/es/` separadas | Tradeoff accepted in v1 (single-URL toggle) |
 
 ## Traceability
 
@@ -89,42 +92,27 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| TEST-01 | Phase 5 | Complete |
-| TEST-02 | Phase 5 | Complete |
-| TEST-03 | Phase 5 | Complete |
-| TEST-04 | Phase 5 | Complete |
-| TEST-05 | Phase 5 | Complete |
-| TEST-06 | Phase 9 | Complete |
-| TEST-07 | Phase 9 | Complete |
-| TEST-08 | Phase 8 | Complete |
-| TEST-09 | Phase 5 | Complete |
-| ADMIN-01 | Phase 8 | Complete |
-| ADMIN-02 | Phase 8 | Complete |
-| ADMIN-03 | Phase 8 | Complete |
-| ADMIN-04 | Phase 8 | Complete |
-| ADMIN-05 | Phase 8 | Complete |
-| ADMIN-06 | Phase 8 | Complete |
-| NOTIF-01 | Phase 5 | Complete |
-| NOTIF-02 | Phase 7 | Complete |
-| NOTIF-03 | Phase 7 | Complete |
-| NOTIF-04 | Phase 7 | Complete |
-| NOTIF-05 | Phase 6 | Complete |
-| NOTIF-06 | Phase 6 | Complete |
-| NOTIF-07 | Phase 6 | Complete |
-| NOTIF-08 | Phase 6 | Complete |
-| NOTIF-09 | Phase 7 | Complete |
-| UPLOAD-01 | Phase 5 | Complete |
-| UPLOAD-02 | Phase 5 | Complete |
-| UPLOAD-03 | Phase 9 | Complete |
-| UPLOAD-04 | Phase 9 | Complete |
-| UPLOAD-05 | Phase 9 | Complete |
-| UPLOAD-06 | Phase 9 | Complete |
+| SEC-01 | TBD | Pending |
+| SEC-02 | TBD | Pending |
+| SEC-03 | TBD | Pending |
+| SEC-04 | TBD | Pending |
+| SEC-05 | TBD | Pending |
+| NOTIF-10 | TBD | Pending |
+| NOTIF-11 | TBD | Pending |
+| NOTIF-12 | TBD | Pending |
+| ADMIN-07 | TBD | Pending |
+| ADMIN-08 | TBD | Pending |
+| ADMIN-09 | TBD | Pending |
+| ADMIN-10 | TBD | Pending |
+| ADMIN-11 | TBD | Pending |
+| TEST-10 | TBD | Pending |
+| TEST-11 | TBD | Pending |
 
 **Coverage:**
-- v1.1 requirements: 30 total
-- Mapped to phases: 30
-- Unmapped: 0
+- v1.2 requirements: 15 total
+- Mapped to phases: 0
+- Unmapped: 15
 
 ---
 *Requirements defined: 2026-03-24*
-*Last updated: 2026-03-24 after roadmap creation*
+*Last updated: 2026-03-25 after v1.2 milestone requirements definition*
