@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Platform Hardening & Admin
 status: unknown
-stopped_at: Completed 05-03-PLAN.md
-last_updated: "2026-03-24T23:45:53.963Z"
+stopped_at: Completed 06-01-PLAN.md
+last_updated: "2026-03-25T02:15:30.727Z"
 progress:
   total_phases: 5
   completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
+  total_plans: 5
+  completed_plans: 4
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-24)
 
 **Core value:** Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay forma fácil de reservar tiempo, todo lo demás falla.
-**Current focus:** Phase 05 — foundation
+**Current focus:** Phase 06 — server-side-integration
 
 ## Current Position
 
-Phase: 6
-Plan: Not started
+Phase: 06 (server-side-integration) — EXECUTING
+Plan: 2 of 2
 
 ## Performance Metrics
 
@@ -43,6 +43,7 @@ Plan: Not started
 *Updated after each plan completion*
 | Phase 05 P02 | 5m | 2 tasks | 7 files |
 | Phase 05 P03 | 8m | 2 tasks | 7 files |
+| Phase 06-server-side-integration P01 | 10min | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -62,6 +63,10 @@ Key architectural decisions for v1.1:
 - [Phase 05]: vi.stubEnv + vi.unstubAllEnvs pattern for env var isolation between tests
 - [Phase 05]: Playwright setup project pattern chosen over per-test auth — runs once, reuses storageState
 - [Phase 05]: 4-job CI with lint-and-typecheck as single gate for unit-tests, e2e-tests, i18n-check
+- [Phase 06-01]: Resend instantiated per sendEmail() call (no singleton) — simpler test isolation via vi.stubEnv
+- [Phase 06-01]: Email locale from client.market field: LATAM=es, else en
+- [Phase 06-01]: vi.hoisted() required for mock variables referenced in vi.mock() factories
+- [Phase 06-01]: vitest.config.mts must exclude e2e/ to prevent Playwright spec pickup
 
 ### Pending Todos
 
@@ -77,6 +82,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-24T23:18:30.594Z
-Stopped at: Completed 05-03-PLAN.md
+Last session: 2026-03-25T02:15:30.723Z
+Stopped at: Completed 06-01-PLAN.md
 Resume file: None

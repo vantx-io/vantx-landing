@@ -57,10 +57,10 @@ Plans:
   2. A failed Stripe payment triggers a payment-failed email to the client
   3. A task status change triggers a notification email to the client assigned to that task
   4. Creating a new task dispatches a Slack message to the client's channel using the existing `slack.ts` integration
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 Plans:
-- [ ] 06-01-PLAN.md — Email infrastructure (Resend + React Email) + payment email pipeline via Stripe webhook
+- [x] 06-01-PLAN.md — Email infrastructure (Resend + React Email) + payment email pipeline via Stripe webhook
 - [ ] 06-02-PLAN.md — Task notification pipeline (API routes, notifyTaskEvent orchestrator, Slack, tasks page refactor)
 
 ### Phase 7: Notification UI
@@ -106,7 +106,7 @@ Plans:
 | 3. Detail Pages | v1.0 | 3/3 | Complete | 2026-03-21 |
 | 4. Polish & Launch Gate | v1.0 | 3/3 | Complete | 2026-03-24 |
 | 5. Foundation | v1.1 | 3/3 | Complete   | 2026-03-24 |
-| 6. Server-Side Integration | v1.1 | 0/2 | Planned | - |
+| 6. Server-Side Integration | v1.1 | 1/2 | In Progress|  |
 | 7. Notification UI | v1.1 | 0/TBD | Not started | - |
 | 8. Admin Dashboard | v1.1 | 0/TBD | Not started | - |
 | 9. File Uploads | v1.1 | 0/TBD | Not started | - |
