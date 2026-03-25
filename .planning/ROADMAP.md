@@ -25,7 +25,7 @@ See: `.planning/milestones/v1.0-ROADMAP.md` for full details.
 
 - [x] **Phase 5: Foundation** - DB migrations + Vitest/Playwright test infrastructure + i18n CI check (completed 2026-03-24)
 - [x] **Phase 6: Server-Side Integration** - Email helper (Resend) + notification API routes + Stripe webhook extension + Slack on task created (completed 2026-03-25)
-- [ ] **Phase 7: Notification UI** - NotificationBell component with Realtime subscription + cross-tenant isolation test + portal mount
+- [x] **Phase 7: Notification UI** - NotificationBell component with Realtime subscription + cross-tenant isolation test + portal mount (completed 2026-03-25)
 - [ ] **Phase 8: Admin Dashboard** - Middleware role guard + admin layout + all four admin pages + bell mount
 - [ ] **Phase 9: File Uploads** - Storage RLS + upload UI in task comments + validation + preview + signed URLs
 
@@ -72,11 +72,11 @@ Plans:
   2. Clicking the bell opens a dropdown listing recent notifications; clicking a notification marks it read and the badge count decreases
   3. "Mark all as read" clears the unread badge in a single action
   4. A user logged in as Client A cannot receive or see notifications belonging to Client B — verified by a dedicated cross-tenant Playwright or integration test
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 
 Plans:
 - [x] 07-01-PLAN.md — NotificationBell component with Realtime subscription, dropdown, mark-read, i18n
-- [ ] 07-02-PLAN.md — Portal layout mount + cross-tenant Playwright E2E test
+- [x] 07-02-PLAN.md — Portal layout mount + cross-tenant Playwright E2E test
 
 ### Phase 8: Admin Dashboard
 **Goal**: Vantix team members (admin, engineer, seller roles) can access internal operational views of all clients, subscriptions, tasks, and billing — and client-role users are blocked from these routes at the middleware layer.
@@ -111,6 +111,6 @@ Plans:
 | 4. Polish & Launch Gate | v1.0 | 3/3 | Complete | 2026-03-24 |
 | 5. Foundation | v1.1 | 3/3 | Complete   | 2026-03-24 |
 | 6. Server-Side Integration | v1.1 | 2/2 | Complete   | 2026-03-25 |
-| 7. Notification UI | v1.1 | 1/2 | In Progress|  |
+| 7. Notification UI | v1.1 | 2/2 | Complete   | 2026-03-25 |
 | 8. Admin Dashboard | v1.1 | 0/TBD | Not started | - |
 | 9. File Uploads | v1.1 | 0/TBD | Not started | - |
