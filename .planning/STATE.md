@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-24)
 
 **Core value:** Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay forma fácil de reservar tiempo, todo lo demás falla.
-**Current focus:** Phase 06 — server-side-integration
+**Current focus:** Phase 07 — notification-ui
 
 ## Current Position
 
-Phase: 06 (server-side-integration) — EXECUTING
-Plan: 2 of 2
+Phase: 7
+Plan: Not started
 
 ## Performance Metrics
 
