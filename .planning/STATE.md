@@ -2,37 +2,41 @@
 gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Security & Polish
-status: defining-requirements
-stopped_at: Milestone v1.2 started
-last_updated: "2026-03-25T16:10:49.991Z"
+status: roadmap-ready
+stopped_at: Roadmap created for v1.2 — 4 phases (10-13) defined
+last_updated: "2026-03-25T00:00:00.000Z"
 progress:
-  total_phases: 5
-  completed_phases: 5
-  total_plans: 13
-  completed_plans: 13
+  total_phases: 4
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-03-24)
+See: .planning/PROJECT.md (updated 2026-03-25)
 
 **Core value:** Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay forma fácil de reservar tiempo, todo lo demás falla.
-**Current focus:** Defining requirements for v1.2 Security & Polish
+**Current focus:** v1.2 Security & Polish — Phase 10: Security Foundation
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: 10 — Security Foundation (not started)
 Plan: —
-Status: Defining requirements
-Last activity: 2026-03-25 — Milestone v1.2 started
+Status: Roadmap ready, awaiting plan-phase
+Last activity: 2026-03-25 — Roadmap created for v1.2
+
+```
+Progress: [░░░░░░░░░░░░░░░░░░░░] 0/4 phases complete
+```
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 0 (v1.1)
+- Total plans completed: 0 (v1.2)
 - Average duration: —
 - Total execution time: —
 
@@ -43,6 +47,9 @@ Last activity: 2026-03-25 — Milestone v1.2 started
 | — | — | — | — |
 
 *Updated after each plan completion*
+
+**v1.1 reference (for calibration):**
+
 | Phase 05 P02 | 5m | 2 tasks | 7 files |
 | Phase 05 P03 | 8m | 2 tasks | 7 files |
 | Phase 06-server-side-integration P01 | 10min | 2 tasks | 9 files |
@@ -62,7 +69,7 @@ Last activity: 2026-03-25 — Milestone v1.2 started
 
 Decisions logged in PROJECT.md Key Decisions table.
 
-Key architectural decisions for v1.1:
+Key architectural decisions for v1.1 (inherited context):
 
 - Vitest replaces Jest (Next.js official recommendation, ESM-native)
 - Resend + React Email for transactional email (verify free tier at implementation)
@@ -98,20 +105,32 @@ Key architectural decisions for v1.1:
 - [Phase 09]: File sizes fetched from Supabase Storage list() metadata — no schema changes (D-07)
 - [Phase 09]: Storage isolation E2E test uses REST API fetch with credentials:include in page.evaluate instead of @supabase/ssr dynamic import
 
+Key architectural decisions for v1.2 (from research):
+
+- Rate limiting via Upstash Redis (sliding window) — in-memory Maps are broken on Vercel serverless
+- Supabase native MFA APIs (supabase.auth.mfa.*) — no speakeasy/otplib needed; QR SVG returned directly from enroll()
+- AAL2 middleware gate: compound condition (nextLevel === 'aal2' && currentLevel !== 'aal2') — prevents non-MFA user lockout
+- listFactors() + unenroll() unverified factors before enroll() — prevents 10-factor hard limit accumulation
+- Notification preferences: opt-out model (null row = all channels enabled); enforced in notifyTaskEvent at send time
+- Weekly digest via Vercel Cron (vercel.json) — no persistent worker; Promise.allSettled() for parallel sends
+- Admin invite: Supabase DB trigger auto-creates public users row on auth.users INSERT — never application code
+- MRR chart: use payments table as ground truth (not subscriptions.price_monthly); add cancel_at_period_end column first
+- Playwright visual regression baselines: generated in CI (Linux) only — macOS baselines fail CI due to font rendering diff
+
 ### Pending Todos
 
-None yet.
+- Phase 10: Validate AAL2 middleware compound condition with E2E test covering 3 states (no MFA, enrolled+unchallenged, enrolled+challenged)
+- Phase 12: Validate Supabase post-signup trigger syntax against existing schema before migration is written
+- Phase 13: Write first NTARH test before building full suite — validate Next.js 15 `await params` behavior (MEDIUM confidence gap)
 
 ### Blockers/Concerns
 
-- **Resend free tier**: Verify 3,000 emails/month limit before Phase 6 — WebFetch was blocked during research
-- **react-dropzone version**: Confirm `^14.x` resolves at npm install time in Phase 9
-- **Supabase Realtime REPLICA IDENTITY FULL**: Must be enabled in Supabase Dashboard before Phase 7
-- **Storage RLS `storage.foldername` syntax**: Verify array indexing in current Supabase docs at migration time (Phase 5)
-- **Email i18n locale signal**: Verify `market` field exists on `clients` table before Phase 6 email templates
+- **Vercel Hobby cron timing**: Weekly frequency confirmed within spec, but ±1h accuracy applies — verify after first production deployment
+- **Upstash free tier**: 10k requests/day; monitor after launch at current scale (<20 concurrent users)
+- **Playwright CI baselines**: Must be generated from CI environment (Linux), not macOS — set maxDiffPixels: 50 or threshold: 0.05; mask dynamic elements; disable CSS animations before capture
 
 ## Session Continuity
 
-Last session: 2026-03-25T15:40:40.951Z
-Stopped at: Completed 09-03-PLAN.md
-Resume file: None
+Last session: 2026-03-25
+Stopped at: Roadmap created for v1.2 (4 phases, 15 requirements mapped)
+Resume file: None — run `/gsd:plan-phase 10` to begin

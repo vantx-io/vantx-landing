@@ -92,27 +92,27 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SEC-01 | TBD | Pending |
-| SEC-02 | TBD | Pending |
-| SEC-03 | TBD | Pending |
-| SEC-04 | TBD | Pending |
-| SEC-05 | TBD | Pending |
-| NOTIF-10 | TBD | Pending |
-| NOTIF-11 | TBD | Pending |
-| NOTIF-12 | TBD | Pending |
-| ADMIN-07 | TBD | Pending |
-| ADMIN-08 | TBD | Pending |
-| ADMIN-09 | TBD | Pending |
-| ADMIN-10 | TBD | Pending |
-| ADMIN-11 | TBD | Pending |
-| TEST-10 | TBD | Pending |
-| TEST-11 | TBD | Pending |
+| SEC-01 | Phase 10 | Pending |
+| SEC-02 | Phase 10 | Pending |
+| SEC-03 | Phase 10 | Pending |
+| SEC-04 | Phase 10 | Pending |
+| SEC-05 | Phase 10 | Pending |
+| NOTIF-10 | Phase 11 | Pending |
+| NOTIF-11 | Phase 11 | Pending |
+| NOTIF-12 | Phase 11 | Pending |
+| ADMIN-07 | Phase 12 | Pending |
+| ADMIN-08 | Phase 12 | Pending |
+| ADMIN-09 | Phase 12 | Pending |
+| ADMIN-10 | Phase 12 | Pending |
+| ADMIN-11 | Phase 12 | Pending |
+| TEST-10 | Phase 13 | Pending |
+| TEST-11 | Phase 13 | Pending |
 
 **Coverage:**
 - v1.2 requirements: 15 total
-- Mapped to phases: 0
-- Unmapped: 15
+- Mapped to phases: 15
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-24*
-*Last updated: 2026-03-25 after v1.2 milestone requirements definition*
+*Last updated: 2026-03-25 after v1.2 roadmap creation*
