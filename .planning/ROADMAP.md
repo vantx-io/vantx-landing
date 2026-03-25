@@ -72,10 +72,10 @@ Plans:
   2. Clicking the bell opens a dropdown listing recent notifications; clicking a notification marks it read and the badge count decreases
   3. "Mark all as read" clears the unread badge in a single action
   4. A user logged in as Client A cannot receive or see notifications belonging to Client B — verified by a dedicated cross-tenant Playwright or integration test
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 Plans:
-- [ ] 07-01-PLAN.md — NotificationBell component with Realtime subscription, dropdown, mark-read, i18n
+- [x] 07-01-PLAN.md — NotificationBell component with Realtime subscription, dropdown, mark-read, i18n
 - [ ] 07-02-PLAN.md — Portal layout mount + cross-tenant Playwright E2E test
 
 ### Phase 8: Admin Dashboard
@@ -111,6 +111,6 @@ Plans:
 | 4. Polish & Launch Gate | v1.0 | 3/3 | Complete | 2026-03-24 |
 | 5. Foundation | v1.1 | 3/3 | Complete   | 2026-03-24 |
 | 6. Server-Side Integration | v1.1 | 2/2 | Complete   | 2026-03-25 |
-| 7. Notification UI | v1.1 | 0/2 | Planning complete | - |
+| 7. Notification UI | v1.1 | 1/2 | In Progress|  |
 | 8. Admin Dashboard | v1.1 | 0/TBD | Not started | - |
 | 9. File Uploads | v1.1 | 0/TBD | Not started | - |

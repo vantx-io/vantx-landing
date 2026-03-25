@@ -31,9 +31,9 @@ Requirements for Platform Hardening & Admin milestone. Each maps to roadmap phas
 ### Notifications
 
 - [ ] **NOTIF-01**: Notifications DB table with user_id, type, title, body, read status
-- [ ] **NOTIF-02**: In-app notification bell component with unread count badge
-- [ ] **NOTIF-03**: Notification dropdown with list, mark-as-read, mark-all-read
-- [ ] **NOTIF-04**: Supabase Realtime subscription filtered by user_id (cross-tenant safe)
+- [x] **NOTIF-02**: In-app notification bell component with unread count badge
+- [x] **NOTIF-03**: Notification dropdown with list, mark-as-read, mark-all-read
+- [x] **NOTIF-04**: Supabase Realtime subscription filtered by user_id (cross-tenant safe)
 - [x] **NOTIF-05**: Email notification on successful payment (Resend)
 - [x] **NOTIF-06**: Email notification on failed payment (Resend)
 - [x] **NOTIF-07**: Email notification on task status change
@@ -105,9 +105,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ADMIN-05 | Phase 8 | Pending |
 | ADMIN-06 | Phase 8 | Pending |
 | NOTIF-01 | Phase 5 | Pending |
-| NOTIF-02 | Phase 7 | Pending |
-| NOTIF-03 | Phase 7 | Pending |
-| NOTIF-04 | Phase 7 | Pending |
+| NOTIF-02 | Phase 7 | Complete |
+| NOTIF-03 | Phase 7 | Complete |
+| NOTIF-04 | Phase 7 | Complete |
 | NOTIF-05 | Phase 6 | Complete |
 | NOTIF-06 | Phase 6 | Complete |
 | NOTIF-07 | Phase 6 | Complete |
