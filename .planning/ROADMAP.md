@@ -160,7 +160,7 @@ Plans:
 | 10. Rate Limiting | v1.2 | 1/1 | Complete    | 2026-03-26 |
 | 11. Notification Polish | v1.2 | 3/3 | Complete    | 2026-03-26 |
 | 12. Admin Capabilities | v1.2 | 2/2 | Complete    | 2026-03-26 |
-| 13. Auth UX | v1.2 | 2/2 | Complete   | 2026-03-26 |
+| 13. Auth UX | v1.2 | 2/2 | Complete    | 2026-03-26 |
 | 14. Polish UX | v1.2 | 0/? | Not started | - |
 | 15. Security Hardening | v1.2 | 0/? | Not started | - |
 | 16. Test Coverage | v1.2 | 0/? | Not started | - |
