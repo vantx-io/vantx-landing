@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
+import { SkeletonCard, SkeletonText } from "@/components/skeletons";
+import { SectionErrorBoundary } from "@/components/SectionErrorBoundary";
 
 function StatCard({ label, value }: { label: string; value: string | number }) {
   return (
@@ -18,7 +20,9 @@ function StatCard({ label, value }: { label: string; value: string | number }) {
 
 export default function AdminOverviewPage() {
   const t = useTranslations("admin");
+  const tc = useTranslations("common");
   const supabase = createClient();
+  const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     activeClients: 0,
     mrr: 0,
@@ -129,8 +133,20 @@ export default function AdminOverviewPage() {
 
       setActivity(events);
     }
-    load();
+    load().finally(() => setLoading(false));
   }, []);
+
+  if (loading) return (
+    <div>
+      <div className="h-8 bg-gray-200 rounded w-48 mb-6 animate-pulse" />
+      <div className="flex gap-4 mb-6 flex-wrap">
+        <SkeletonCard /><SkeletonCard /><SkeletonCard /><SkeletonCard />
+      </div>
+      <div className="bg-white rounded-xl border border-gray-100 p-6">
+        <SkeletonText lines={5} />
+      </div>
+    </div>
+  );
 
   return (
     <div>
@@ -138,52 +154,56 @@ export default function AdminOverviewPage() {
         {t("overview.title")}
       </h1>
 
-      <div className="flex gap-4 mb-6 flex-wrap">
-        <StatCard
-          label={t("overview.active_clients")}
-          value={stats.activeClients}
-        />
-        <StatCard
-          label={t("overview.current_mrr")}
-          value={`$${stats.mrr.toLocaleString()}`}
-        />
-        <StatCard label={t("overview.open_tasks")} value={stats.openTasks} />
-        <StatCard
-          label={t("overview.pending_payments")}
-          value={stats.pendingPayments}
-        />
-      </div>
+      <SectionErrorBoundary fallbackTitle={tc("error_section")} fallbackBody={tc("error_section_body")} fallbackRetry={tc("error_retry")}>
+        <div className="flex gap-4 mb-6 flex-wrap">
+          <StatCard
+            label={t("overview.active_clients")}
+            value={stats.activeClients}
+          />
+          <StatCard
+            label={t("overview.current_mrr")}
+            value={`$${stats.mrr.toLocaleString()}`}
+          />
+          <StatCard label={t("overview.open_tasks")} value={stats.openTasks} />
+          <StatCard
+            label={t("overview.pending_payments")}
+            value={stats.pendingPayments}
+          />
+        </div>
+      </SectionErrorBoundary>
 
-      <div className="bg-white rounded-xl border border-gray-100 p-6">
-        <h2 className="text-sm font-bold text-brand-dark mb-4">
-          {t("overview.recent_activity")}
-        </h2>
-        {activity.map((evt, i) => (
-          <div
-            key={i}
-            className="flex items-start gap-3 py-3 border-b border-gray-50 last:border-0"
-          >
-            <span className="text-base mt-0.5">
-              {evt.type === "client"
-                ? "👤"
-                : evt.type === "payment"
-                  ? "💰"
-                  : "📋"}
-            </span>
-            <div className="flex-1">
-              <div className="text-[13px] text-brand-dark">{evt.desc}</div>
-              <div className="text-[11px] text-gray-400 mt-0.5">
-                {new Date(evt.ts).toLocaleString("en-US")}
+      <SectionErrorBoundary fallbackTitle={tc("error_section")} fallbackBody={tc("error_section_body")} fallbackRetry={tc("error_retry")}>
+        <div className="bg-white rounded-xl border border-gray-100 p-6">
+          <h2 className="text-sm font-bold text-brand-dark mb-4">
+            {t("overview.recent_activity")}
+          </h2>
+          {activity.map((evt, i) => (
+            <div
+              key={i}
+              className="flex items-start gap-3 py-3 border-b border-gray-50 last:border-0"
+            >
+              <span className="text-base mt-0.5">
+                {evt.type === "client"
+                  ? "👤"
+                  : evt.type === "payment"
+                    ? "💰"
+                    : "📋"}
+              </span>
+              <div className="flex-1">
+                <div className="text-[13px] text-brand-dark">{evt.desc}</div>
+                <div className="text-[11px] text-gray-400 mt-0.5">
+                  {new Date(evt.ts).toLocaleString("en-US")}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-        {activity.length === 0 && (
-          <div className="text-sm text-gray-400 text-center py-6">
-            No recent activity.
-          </div>
-        )}
-      </div>
+          ))}
+          {activity.length === 0 && (
+            <div className="text-sm text-gray-400 text-center py-6">
+              No recent activity.
+            </div>
+          )}
+        </div>
+      </SectionErrorBoundary>
     </div>
   );
 }

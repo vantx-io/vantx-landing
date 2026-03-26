@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import type { Client, Subscription } from "@/lib/types";
+import { SkeletonTable } from "@/components/skeletons";
+import { SectionErrorBoundary } from "@/components/SectionErrorBoundary";
 
 function Badge({ text, color }: { text: string; color: string }) {
   return (
@@ -26,7 +28,9 @@ type EnrichedClient = Client & { subscription?: Subscription; taskCount: number 
 
 export default function AdminClientsPage() {
   const t = useTranslations("admin");
+  const tc = useTranslations("common");
   const supabase = createClient();
+  const [loading, setLoading] = useState(true);
   const [clients, setClients] = useState<EnrichedClient[]>([]);
   const [search, setSearch] = useState("");
 
@@ -53,12 +57,19 @@ export default function AdminClientsPage() {
 
       setClients(enriched);
     }
-    load();
+    load().finally(() => setLoading(false));
   }, []);
 
   const filtered = search.trim()
     ? clients.filter(c => c.name.toLowerCase().includes(search.toLowerCase()))
     : clients;
+
+  if (loading) return (
+    <div>
+      <div className="h-8 bg-gray-200 rounded w-40 mb-6 animate-pulse" />
+      <SkeletonTable rows={5} cols={5} />
+    </div>
+  );
 
   return (
     <div>
@@ -72,41 +83,43 @@ export default function AdminClientsPage() {
         className="w-full max-w-sm px-4 py-2.5 rounded-lg border border-gray-200 text-sm mb-4 focus:border-brand-accent focus:outline-none"
       />
 
-      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
-        <table className="w-full text-left">
-          <thead>
-            <tr className="border-b border-gray-100 text-xs text-gray-500 font-semibold tracking-wide">
-              <th className="px-5 py-3">{t("clients.col_name")}</th>
-              <th className="px-5 py-3">{t("clients.col_status")}</th>
-              <th className="px-5 py-3">{t("clients.col_plan")}</th>
-              <th className="px-5 py-3">{t("clients.col_monthly")}</th>
-              <th className="px-5 py-3">{t("clients.col_tasks")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map(c => (
-              <tr key={c.id} className="border-b border-gray-50 last:border-0 hover:bg-gray-50/50 transition">
-                <td className="px-5 py-3.5 text-[13px] font-semibold text-brand-dark">{c.name}</td>
-                <td className="px-5 py-3.5">
-                  <Badge text={c.status.toUpperCase()} color={clientStatusColors[c.status] || "#999"} />
-                </td>
-                <td className="px-5 py-3.5 text-[13px] text-gray-600">
-                  {c.subscription?.plan.toUpperCase() || "—"}
-                </td>
-                <td className="px-5 py-3.5 text-[13px] font-mono text-brand-dark">
-                  {c.subscription?.price_monthly != null
-                    ? `$${c.subscription.price_monthly.toLocaleString()}`
-                    : "—"}
-                </td>
-                <td className="px-5 py-3.5 text-[13px] text-gray-600">{c.taskCount}</td>
+      <SectionErrorBoundary fallbackTitle={tc("error_section")} fallbackBody={tc("error_section_body")} fallbackRetry={tc("error_retry")}>
+        <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
+          <table className="w-full text-left">
+            <thead>
+              <tr className="border-b border-gray-100 text-xs text-gray-500 font-semibold tracking-wide">
+                <th className="px-5 py-3">{t("clients.col_name")}</th>
+                <th className="px-5 py-3">{t("clients.col_status")}</th>
+                <th className="px-5 py-3">{t("clients.col_plan")}</th>
+                <th className="px-5 py-3">{t("clients.col_monthly")}</th>
+                <th className="px-5 py-3">{t("clients.col_tasks")}</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        {filtered.length === 0 && (
-          <div className="px-5 py-8 text-center text-sm text-gray-400">{t("clients.no_results")}</div>
-        )}
-      </div>
+            </thead>
+            <tbody>
+              {filtered.map(c => (
+                <tr key={c.id} className="border-b border-gray-50 last:border-0 hover:bg-gray-50/50 transition">
+                  <td className="px-5 py-3.5 text-[13px] font-semibold text-brand-dark">{c.name}</td>
+                  <td className="px-5 py-3.5">
+                    <Badge text={c.status.toUpperCase()} color={clientStatusColors[c.status] || "#999"} />
+                  </td>
+                  <td className="px-5 py-3.5 text-[13px] text-gray-600">
+                    {c.subscription?.plan.toUpperCase() || "—"}
+                  </td>
+                  <td className="px-5 py-3.5 text-[13px] font-mono text-brand-dark">
+                    {c.subscription?.price_monthly != null
+                      ? `$${c.subscription.price_monthly.toLocaleString()}`
+                      : "—"}
+                  </td>
+                  <td className="px-5 py-3.5 text-[13px] text-gray-600">{c.taskCount}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {filtered.length === 0 && (
+            <div className="px-5 py-8 text-center text-sm text-gray-400">{t("clients.no_results")}</div>
+          )}
+        </div>
+      </SectionErrorBoundary>
     </div>
   );
 }
