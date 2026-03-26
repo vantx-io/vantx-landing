@@ -19,7 +19,14 @@
     "password_placeholder": "********",
     "submit": "Ingresar",
     "submitting": "Ingresando...",
-    "demo": "Demo: juan@novapay.com / demo2026"
+    "demo": "Demo: juan@novapay.com / demo2026",
+    "forgot_password": "Olvidaste tu password?",
+    "forgot_prompt": "Ingresa tu email para recibir un enlace de recuperacion",
+    "forgot_email_sent": "Si existe una cuenta con ese email, recibiras un enlace de recuperacion.",
+    "forgot_send": "Enviar enlace",
+    "forgot_back": "Volver a iniciar sesion",
+    "forgot_sending": "Enviando...",
+    "reset_success": "Password actualizado. Inicia sesion con tu nuevo password."
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -228,6 +235,20 @@
       "capacity_planning": "Capacity Planning",
       "getting_started": "Primeros Pasos"
     }
+  },
+  "reset_password": {
+    "title": "Establecer nuevo password",
+    "new_password": "Nuevo password",
+    "confirm_password": "Confirmar password",
+    "new_password_placeholder": "Min. 8 caracteres",
+    "confirm_placeholder": "Repetir password",
+    "submit": "Actualizar password",
+    "submitting": "Actualizando...",
+    "success": "Password actualizado! Redirigiendo al login...",
+    "loading": "Verificando enlace de recuperacion...",
+    "error_min_length": "El password debe tener al menos 8 caracteres",
+    "error_mismatch": "Los passwords no coinciden",
+    "error_expired": "Este enlace es invalido o ha expirado. Solicita uno nuevo."
   },
   "admin": {
     "title": "Admin",

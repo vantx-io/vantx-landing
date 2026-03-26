@@ -19,7 +19,14 @@
     "password_placeholder": "********",
     "submit": "Sign in",
     "submitting": "Signing in...",
-    "demo": "Demo: juan@novapay.com / demo2026"
+    "demo": "Demo: juan@novapay.com / demo2026",
+    "forgot_password": "Forgot password?",
+    "forgot_prompt": "Enter your email to receive a reset link",
+    "forgot_email_sent": "If an account exists with that email, you'll receive a reset link shortly.",
+    "forgot_send": "Send reset link",
+    "forgot_back": "Back to sign in",
+    "forgot_sending": "Sending...",
+    "reset_success": "Password updated. Sign in with your new password."
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -228,6 +235,20 @@
       "capacity_planning": "Capacity Planning",
       "getting_started": "Getting Started"
     }
+  },
+  "reset_password": {
+    "title": "Set new password",
+    "new_password": "New password",
+    "confirm_password": "Confirm password",
+    "new_password_placeholder": "Min. 8 characters",
+    "confirm_placeholder": "Repeat password",
+    "submit": "Update password",
+    "submitting": "Updating...",
+    "success": "Password updated! Redirecting to login...",
+    "loading": "Verifying reset link...",
+    "error_min_length": "Password must be at least 8 characters",
+    "error_mismatch": "Passwords do not match",
+    "error_expired": "This reset link is invalid or expired. Please request a new one."
   },
   "admin": {
     "title": "Admin",
