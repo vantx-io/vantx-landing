@@ -30,8 +30,8 @@ Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay f
 - ✓ Rate limiting on API routes (SEC-04, SEC-05) — Validated in Phase 10: Rate Limiting
 - ✓ Weekly email digest to clients (NOTIF-10) — Validated in Phase 11: Notification Polish
 - ✓ User notification preferences (NOTIF-11, NOTIF-12) — Validated in Phase 11: Notification Polish
-- [ ] Admin user management — invite, role change, deactivate (ADMIN-07..10)
-- [ ] Admin MRR trend chart (ADMIN-11)
+- ✓ Admin user management — invite, role change, deactivate (ADMIN-07..10) — Validated in Phase 12: Admin Capabilities
+- ✓ Admin MRR trend chart (ADMIN-11) — Validated in Phase 12: Admin Capabilities
 - [ ] Forgot password + password change + user profile (AUTH-01..03)
 - [ ] Loading skeletons, onboarding guide, error boundaries (UX-01..03)
 - [ ] CSP headers + audit logging (SECURE-01..02)
@@ -45,7 +45,7 @@ Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay f
 - SEO con URLs `/es/` separadas — tradeoff aceptado en v1 (single-URL toggle)
 - Real-time chat — Slack covers async communication
 - Mobile app — responsive web sufficient at current scale
-- Admin user management UI — promoted to v1.2 (ADMIN-07)
+- ~~Admin user management UI — promoted to v1.2 (ADMIN-07)~~ → Delivered in Phase 12
 - ~~Notification preferences UI — promoted to v1.2 (NOTIF-11)~~ → Delivered in Phase 11
 - Two-factor authentication (TOTP) — deferred to v1.3 (SEC-01, SEC-02, SEC-03)
 
@@ -88,6 +88,8 @@ Tech: Next.js 14.2, Supabase (Postgres + Auth + Storage + Realtime), Stripe, Res
 | Storage RLS scoped by client_id path | Cross-tenant isolation at infrastructure level | ✓ Good |
 | Opt-out notification model (no row = all ON) | Zero-config onboarding, progressive preference setting | ✓ Good |
 | Vercel Cron for weekly digest (Mon 9am UTC) | Free tier covers schedule, no external scheduler needed | ✓ Good |
+| DB trigger for user profile creation on invite | Auto-creates users row on auth.users INSERT, no app code needed | ✓ Good |
+| Supabase Auth ban for deactivation (876000h) | Immediate login prevention without session invalidation | ✓ Good |
 
 ## Current Milestone: v1.2 Security & Polish
 
@@ -121,4 +123,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-26 after Phase 11 (notification-polish) completed*
+*Last updated: 2026-03-26 after Phase 12 (admin-capabilities) completed*
