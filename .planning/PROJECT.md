@@ -33,7 +33,7 @@ Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay f
 - ✓ Admin user management — invite, role change, deactivate (ADMIN-07..10) — Validated in Phase 12: Admin Capabilities
 - ✓ Admin MRR trend chart (ADMIN-11) — Validated in Phase 12: Admin Capabilities
 - ✓ Forgot password + password change + user profile (AUTH-01..03) — Validated in Phase 13: Auth UX
-- [ ] Loading skeletons, onboarding guide, error boundaries (UX-01..03)
+- ✓ Loading skeletons, onboarding guide, error boundaries (UX-01..03) — Validated in Phase 14: Polish UX
 - [ ] CSP headers + audit logging (SECURE-01..02)
 - [ ] Integration tests for API routes (TEST-10)
 - [ ] Playwright visual regression tests (TEST-11)
@@ -123,4 +123,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-26 after Phase 13 (auth-ux) completed*
+*Last updated: 2026-03-26 after Phase 14 (polish-ux) completed*
