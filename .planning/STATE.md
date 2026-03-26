@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Security & Polish
 status: unknown
-stopped_at: Completed 12-admin-capabilities-01-PLAN.md
-last_updated: "2026-03-26T05:56:56.760Z"
+stopped_at: Completed 12-admin-capabilities-02-PLAN.md
+last_updated: "2026-03-26T06:03:32.070Z"
 progress:
   total_phases: 8
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 6
-  completed_plans: 5
+  completed_plans: 6
 ---
 
 # Project State
@@ -61,6 +61,7 @@ Plan: 2 of 2
 | Phase 11 P03 | 5m | 2 tasks | 4 files |
 | Phase 11 P02 | 5min | 2 tasks | 4 files |
 | Phase 12 P01 | 2m | 2 tasks | 7 files |
+| Phase 12 P02 | 4m | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -128,6 +129,8 @@ Key architectural decisions for v1.2 (from research):
 - [Phase 12]: SECURITY DEFINER on handle_new_user trigger: authenticated role lacks INSERT policy on users table; DEFINER runs as owner and bypasses RLS
 - [Phase 12]: ban_duration=876000h for permanent-style ban; none to unban — matches Supabase Auth admin.updateUserById API
 - [Phase 12]: is_active portal check placed after unauthenticated redirect — deactivated users with valid sessions caught before reaching portal
+- [Phase 12]: AreaChart defs/linearGradient are native SVG elements inside AreaChart JSX — not recharts imports (Pitfall 5)
+- [Phase 12]: MRR query added as third item to existing Promise.all in billing page to reduce round trips
 
 ### Pending Todos
 
@@ -143,6 +146,6 @@ Key architectural decisions for v1.2 (from research):
 
 ## Session Continuity
 
-Last session: 2026-03-26T05:56:56.755Z
-Stopped at: Completed 12-admin-capabilities-01-PLAN.md
+Last session: 2026-03-26T06:03:32.061Z
+Stopped at: Completed 12-admin-capabilities-02-PLAN.md
 Resume file: None

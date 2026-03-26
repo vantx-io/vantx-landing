@@ -37,7 +37,7 @@ See: `.planning/milestones/v1.1-ROADMAP.md` for full details.
 
 - [x] **Phase 10: Rate Limiting** — Upstash Redis rate limiting on all API routes (completed 2026-03-26)
 - [x] **Phase 11: Notification Polish** — Per-type notification preferences with enforcement + weekly Monday email digest (completed 2026-03-26)
-- [ ] **Phase 12: Admin Capabilities** — User invite, role change, deactivation + MRR trend chart
+- [x] **Phase 12: Admin Capabilities** — User invite, role change, deactivation + MRR trend chart (completed 2026-03-26)
 - [ ] **Phase 13: Auth UX** — Forgot password, password change, user profile in portal settings
 - [ ] **Phase 14: Polish UX** — Loading skeletons, onboarding guide, section-level error boundaries
 - [ ] **Phase 15: Security Hardening** — CSP headers + admin audit logging
@@ -82,10 +82,10 @@ Plans:
   2. An admin can change an existing user's role from the user management page
   3. An admin can deactivate a user account; that user can no longer log in until reactivated
   4. An admin can view a Recharts line chart of MRR over time on the billing page, derived from the payments table
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 Plans:
 - [x] 12-01-PLAN.md — DB migration (is_active + auth trigger) + 3 admin API routes + middleware is_active check + deactivated page
-- [ ] 12-02-PLAN.md — Users management page + MRR AreaChart + i18n + sidebar nav
+- [x] 12-02-PLAN.md — Users management page + MRR AreaChart + i18n + sidebar nav
 
 ### Phase 13: Auth UX
 **Goal**: Users can recover and manage their accounts without admin intervention
@@ -156,7 +156,7 @@ Plans:
 | 9. File Uploads | v1.1 | 3/3 | Complete | 2026-03-25 |
 | 10. Rate Limiting | v1.2 | 1/1 | Complete    | 2026-03-26 |
 | 11. Notification Polish | v1.2 | 3/3 | Complete    | 2026-03-26 |
-| 12. Admin Capabilities | v1.2 | 1/2 | In Progress|  |
+| 12. Admin Capabilities | v1.2 | 2/2 | Complete   | 2026-03-26 |
 | 13. Auth UX | v1.2 | 0/? | Not started | - |
 | 14. Polish UX | v1.2 | 0/? | Not started | - |
 | 15. Security Hardening | v1.2 | 0/? | Not started | - |

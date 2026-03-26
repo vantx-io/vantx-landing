@@ -24,7 +24,7 @@ Requirements for Security & Polish milestone. Each maps to roadmap phases.
 - [x] **ADMIN-08**: Invited user's public profile row is auto-created via DB trigger on acceptance
 - [x] **ADMIN-09**: Admin can change user role
 - [x] **ADMIN-10**: Admin can deactivate/reactivate user accounts
-- [ ] **ADMIN-11**: Admin can view MRR trend chart on billing page (Recharts)
+- [x] **ADMIN-11**: Admin can view MRR trend chart on billing page (Recharts)
 
 ### Auth UX
 
@@ -130,7 +130,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ADMIN-08 | Phase 12 | Complete |
 | ADMIN-09 | Phase 12 | Complete |
 | ADMIN-10 | Phase 12 | Complete |
-| ADMIN-11 | Phase 12 | Pending |
+| ADMIN-11 | Phase 12 | Complete |
 | AUTH-01 | Phase 13 | Pending |
 | AUTH-02 | Phase 13 | Pending |
 | AUTH-03 | Phase 13 | Pending |
