@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { createClient } from "@/lib/supabase/client";
 
 type PrefsState = {
   email_enabled: boolean;
@@ -22,6 +23,21 @@ export default function SettingsPage() {
   const [error, setError] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
 
+  // Profile state (AUTH-03)
+  const [profileName, setProfileName] = useState("");
+  const [profileEmail, setProfileEmail] = useState("");
+  const [profileLoading, setProfileLoading] = useState(true);
+  const [profileSaving, setProfileSaving] = useState(false);
+  const [profileSaved, setProfileSaved] = useState(false);
+  const [profileError, setProfileError] = useState<string | null>(null);
+
+  // Security state (AUTH-02)
+  const [newPw, setNewPw] = useState("");
+  const [confirmPw, setConfirmPw] = useState("");
+  const [pwLoading, setPwLoading] = useState(false);
+  const [pwSuccess, setPwSuccess] = useState(false);
+  const [pwError, setPwError] = useState<string | null>(null);
+
   useEffect(() => {
     async function loadPrefs() {
       try {
@@ -40,6 +56,23 @@ export default function SettingsPage() {
       }
     }
     loadPrefs();
+  }, [t]);
+
+  useEffect(() => {
+    async function loadProfile() {
+      try {
+        const res = await fetch("/api/profile");
+        if (!res.ok) throw new Error("fetch failed");
+        const data = await res.json();
+        setProfileName(data.full_name || "");
+        setProfileEmail(data.email || "");
+      } catch {
+        setProfileError(t("error_load"));
+      } finally {
+        setProfileLoading(false);
+      }
+    }
+    loadProfile();
   }, [t]);
 
   async function handleToggle(field: keyof PrefsState) {
@@ -63,11 +96,105 @@ export default function SettingsPage() {
     }
   }
 
+  async function handleProfileSave(e: React.FormEvent) {
+    e.preventDefault();
+    setProfileSaving(true);
+    setProfileError(null);
+    setProfileSaved(false);
+    try {
+      const res = await fetch("/api/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ full_name: profileName }),
+      });
+      if (!res.ok) throw new Error("save failed");
+      setProfileSaved(true);
+      setTimeout(() => setProfileSaved(false), 4000);
+    } catch {
+      setProfileError(t("error_save"));
+      setTimeout(() => setProfileError(null), 4000);
+    } finally {
+      setProfileSaving(false);
+    }
+  }
+
+  async function handlePasswordChange(e: React.FormEvent) {
+    e.preventDefault();
+    if (newPw.length < 8) {
+      setPwError(t("error_pw_min"));
+      return;
+    }
+    if (newPw !== confirmPw) {
+      setPwError(t("error_pw_mismatch"));
+      return;
+    }
+    setPwLoading(true);
+    setPwError(null);
+    const supabase = createClient();
+    const { error } = await supabase.auth.updateUser({ password: newPw });
+    setPwLoading(false);
+    if (error) {
+      setPwError(error.message);
+      return;
+    }
+    setNewPw("");
+    setConfirmPw("");
+    setPwSuccess(true);
+    setTimeout(() => setPwSuccess(false), 4000);
+  }
+
   return (
     <div>
       <h1 className="text-xl font-semibold text-white mb-6">{t("title")}</h1>
 
-      <div className="bg-brand-surface rounded-xl border border-gray-200 p-6 max-w-xl">
+      {/* Profile section */}
+      <div className="bg-brand-surface rounded-xl border border-gray-200 p-6 max-w-xl mb-6">
+        <h2 className="text-base font-semibold text-[#1A1A17] mb-4">
+          {t("profile_heading")}
+        </h2>
+        <form onSubmit={handleProfileSave} className="space-y-4">
+          <div>
+            <label className="block text-xs font-medium text-brand-muted mb-1.5">
+              {t("name_label")}
+            </label>
+            <input
+              type="text"
+              value={profileName}
+              onChange={(e) => setProfileName(e.target.value)}
+              disabled={profileLoading}
+              className="w-full px-3.5 py-2.5 rounded-lg border border-gray-200 bg-white text-brand-dark text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent transition"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-brand-muted mb-1.5">
+              {t("email_readonly_label")}
+            </label>
+            <p className="px-3.5 py-2.5 rounded-lg border border-gray-100 bg-gray-50 text-brand-muted text-sm">
+              {profileEmail}
+            </p>
+          </div>
+          {profileError && (
+            <p className="text-[11px] text-brand-red" role="alert">
+              {profileError}
+            </p>
+          )}
+          {profileSaved && (
+            <p className="text-[11px] text-green-600" role="status">
+              {t("saved")}
+            </p>
+          )}
+          <button
+            type="submit"
+            disabled={profileSaving || profileLoading}
+            className="px-4 py-2 bg-brand-accent hover:bg-brand-accent-hover text-white text-sm font-medium rounded-lg transition disabled:opacity-50"
+          >
+            {profileSaving ? t("saving") : t("save")}
+          </button>
+        </form>
+      </div>
+
+      {/* Notifications section */}
+      <div className="bg-brand-surface rounded-xl border border-gray-200 p-6 max-w-xl mb-6">
         <h2 className="text-base font-semibold text-[#1A1A17] mb-4">
           {t("notifications_heading")}
         </h2>
@@ -168,6 +295,56 @@ export default function SettingsPage() {
             {saveError}
           </p>
         )}
+      </div>
+
+      {/* Security section */}
+      <div className="bg-brand-surface rounded-xl border border-gray-200 p-6 max-w-xl">
+        <h2 className="text-base font-semibold text-[#1A1A17] mb-4">
+          {t("security_heading")}
+        </h2>
+        <form onSubmit={handlePasswordChange} className="space-y-4">
+          <div>
+            <label className="block text-xs font-medium text-brand-muted mb-1.5">
+              {t("new_password")}
+            </label>
+            <input
+              type="password"
+              value={newPw}
+              onChange={(e) => setNewPw(e.target.value)}
+              className="w-full px-3.5 py-2.5 rounded-lg border border-gray-200 bg-white text-brand-dark text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent transition"
+              placeholder={t("new_password_placeholder")}
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-brand-muted mb-1.5">
+              {t("confirm_password")}
+            </label>
+            <input
+              type="password"
+              value={confirmPw}
+              onChange={(e) => setConfirmPw(e.target.value)}
+              className="w-full px-3.5 py-2.5 rounded-lg border border-gray-200 bg-white text-brand-dark text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent transition"
+              placeholder={t("confirm_placeholder")}
+            />
+          </div>
+          {pwError && (
+            <p className="text-[11px] text-brand-red" role="alert">
+              {pwError}
+            </p>
+          )}
+          {pwSuccess && (
+            <p className="text-[11px] text-green-600" role="status">
+              {t("pw_success")}
+            </p>
+          )}
+          <button
+            type="submit"
+            disabled={pwLoading}
+            className="px-4 py-2 bg-brand-accent hover:bg-brand-accent-hover text-white text-sm font-medium rounded-lg transition disabled:opacity-50"
+          >
+            {pwLoading ? t("pw_submitting") : t("pw_submit")}
+          </button>
+        </form>
       </div>
     </div>
   );
