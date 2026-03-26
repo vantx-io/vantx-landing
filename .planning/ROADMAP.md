@@ -152,7 +152,7 @@ Plans:
 | 8. Admin Dashboard | v1.1 | 3/3 | Complete | 2026-03-25 |
 | 9. File Uploads | v1.1 | 3/3 | Complete | 2026-03-25 |
 | 10. Rate Limiting | v1.2 | 1/1 | Complete    | 2026-03-26 |
-| 11. Notification Polish | v1.2 | 3/3 | Complete   | 2026-03-26 |
+| 11. Notification Polish | v1.2 | 3/3 | Complete    | 2026-03-26 |
 | 12. Admin Capabilities | v1.2 | 0/? | Not started | - |
 | 13. Auth UX | v1.2 | 0/? | Not started | - |
 | 14. Polish UX | v1.2 | 0/? | Not started | - |
