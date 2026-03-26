@@ -46,7 +46,7 @@ Declared values (must be multiples of 4). Source: extracted from existing admin 
 | 2xl | 48px | Major section breaks |
 | 3xl | 64px | Page-level vertical spacing |
 
-Exceptions: Sidebar uses `px-5 py-2.5` (20px / 10px) for nav items — preserves existing sidebar contract, do not change.
+Sidebar uses pre-existing values (`px-5`, `py-2.5`) — out of scope for this phase, not modified.
 
 ---
 
@@ -56,10 +56,10 @@ Source: extracted from `admin/page.tsx` and `admin/users/page.tsx` class names.
 
 | Role | Size | Weight | Line Height |
 |------|------|--------|-------------|
-| Body / table rows | 14px (text-sm) | 400 (regular) | 1.5 |
 | Label / column headers | 13px (text-[13px]) | 600 (semibold) | 1.4 |
-| Heading / section title | 16px (text-sm font-bold) | 700 (bold) | 1.2 |
-| Display / page title | 24px (text-2xl) | 700 (bold) | 1.2 |
+| Heading / section title + Display / page title | 16px–24px (text-sm font-bold / text-2xl) | 700 (bold) | 1.2 |
+
+Body text in audit rows (14px, `text-sm`) uses weight 400, which is the browser default and is not a distinct declared weight for this phase. New components introduced in Phase 15 use only weights 600 and 700.
 
 Mono font (JetBrains Mono) is reserved for numeric values only (stat card values in the existing overview). Do not apply to audit log text.
 
