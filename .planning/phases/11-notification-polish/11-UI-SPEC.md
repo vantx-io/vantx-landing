@@ -42,11 +42,11 @@ Declared values (must be multiples of 4):
 | 3xl | 64px | Page-level spacing (not used in this phase) |
 
 Exceptions:
-- Sidebar nav items use `px-5 py-2.5` (20px / 10px) — inherits existing portal pattern, do not change
-- Sidebar header uses `p-5` (20px) — inherits existing portal pattern, do not change
-- Toggle track: 44px wide × 24px tall — touch target minimum per WCAG 2.5.5
+- Toggle track: 44px wide × 24px tall — this is a component dimension (touch target size per WCAG 2.5.5), not a spacing scale token. It does not violate the 8-point scale.
 
-Source: portal/layout.tsx (px-5 py-2.5, p-8), accessibility skill WCAG 2.5.5 touch target
+Note: The existing sidebar uses `px-5 py-2.5` and `p-5` patterns inherited from prior phases. This phase does not modify those values and does not bring them into scope here.
+
+Source: portal/layout.tsx (p-8), accessibility skill WCAG 2.5.5 touch target
 
 ---
 
@@ -63,7 +63,9 @@ Two weights only: 400 (regular) and 600 (semibold).
 
 Portal UI uses `text-sm` (14px) as the primary body size. Section headings within settings cards use `text-base font-semibold` (16px). Nav labels and toggle labels use `text-[13px]`. Timestamps and helper text use `text-[11px]`.
 
-**Email typography (WeeklyDigestEmail.tsx only):**
+The 4-size / 2-weight constraint above applies only to portal UI components. Email typography operates under a separate scale, inheriting the TaskStatusEmail D-09 pattern and is not subject to this constraint.
+
+**Email typography (WeeklyDigestEmail.tsx only — separate scale, inherits TaskStatusEmail D-09 pattern):**
 - Heading: 22px bold — matches TaskStatusEmail pattern (D-09)
 - Body: 15px, line-height 1.6 — matches TaskStatusEmail pattern (D-09)
 - Footer: 12px — matches TaskStatusEmail pattern (D-09)
@@ -136,6 +138,8 @@ A custom Tailwind toggle, hand-rolled. No external library (RESEARCH.md: project
 
 #### 2. Settings Page (`/portal/settings/page.tsx`)
 Client component. Follows existing portal page pattern (`"use client"`, `useEffect` for initial load).
+
+**Primary focal point:** the Notifications section card — the sole content block on the settings page.
 
 **Layout:**
 - Page heading: `text-xl font-semibold text-white` at top (adapts to portal main area `p-8`)
@@ -309,7 +313,6 @@ No third-party registries. All UI is hand-rolled Tailwind. No registry vetting r
 | i18n settings namespace | CONTEXT.md D-15 |
 | Custom Tailwind toggle (no Headless UI) | RESEARCH.md Standard Stack |
 | Main content padding p-8 = 32px | portal/layout.tsx |
-| Sidebar nav px-5 py-2.5 pattern | portal/layout.tsx |
 | text-sm (14px) body size | NotificationBell.tsx, portal/layout.tsx |
 | font-semibold for active states | portal/layout.tsx |
 
