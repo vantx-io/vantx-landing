@@ -95,7 +95,10 @@ Plans:
   1. A user who forgot their password can click "Forgot password?" on the login page, receive a reset email, and set a new password
   2. A logged-in user can change their password from the portal settings page
   3. A logged-in user can view and edit their display name from the portal settings page
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 13-01-PLAN.md — Inline forgot-password widget on login page + reset-password page + i18n
+- [ ] 13-02-PLAN.md — Profile + Security sections on settings page + /api/profile route + RLS migration + i18n
 
 ### Phase 14: Polish UX
 **Goal**: The portal feels polished — pages load gracefully, new users are guided, and errors are contained
@@ -157,7 +160,7 @@ Plans:
 | 10. Rate Limiting | v1.2 | 1/1 | Complete    | 2026-03-26 |
 | 11. Notification Polish | v1.2 | 3/3 | Complete    | 2026-03-26 |
 | 12. Admin Capabilities | v1.2 | 2/2 | Complete    | 2026-03-26 |
-| 13. Auth UX | v1.2 | 0/? | Not started | - |
+| 13. Auth UX | v1.2 | 0/2 | Planned | - |
 | 14. Polish UX | v1.2 | 0/? | Not started | - |
 | 15. Security Hardening | v1.2 | 0/? | Not started | - |
 | 16. Test Coverage | v1.2 | 0/? | Not started | - |
