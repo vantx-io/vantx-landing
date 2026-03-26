@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Security & Polish
 status: unknown
-stopped_at: Completed 12-admin-capabilities-02-PLAN.md
-last_updated: "2026-03-26T06:42:06.703Z"
+stopped_at: Completed 13-auth-ux-02-PLAN.md
+last_updated: "2026-03-26T06:46:20.122Z"
 progress:
   total_phases: 8
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 8
-  completed_plans: 7
+  completed_plans: 8
 ---
 
 # Project State
@@ -63,6 +63,7 @@ Plan: 2 of 2
 | Phase 12 P01 | 2m | 2 tasks | 7 files |
 | Phase 12 P02 | 4m | 2 tasks | 5 files |
 | Phase 13-auth-ux P01 | 5m | 2 tasks | 4 files |
+| Phase 13-auth-ux P02 | 8m | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -132,6 +133,8 @@ Key architectural decisions for v1.2 (from research):
 - [Phase 12]: is_active portal check placed after unauthenticated redirect — deactivated users with valid sessions caught before reaching portal
 - [Phase 12]: AreaChart defs/linearGradient are native SVG elements inside AreaChart JSX — not recharts imports (Pitfall 5)
 - [Phase 12]: MRR query added as third item to existing Promise.all in billing page to reduce round trips
+- [Phase 13-auth-ux]: RLS UPDATE policy uses WITH CHECK (id = auth.uid()) — field restriction enforced at API layer only
+- [Phase 13-auth-ux]: Two separate useEffects for profile and prefs load — independent loading concerns
 
 ### Pending Todos
 
@@ -147,6 +150,6 @@ Key architectural decisions for v1.2 (from research):
 
 ## Session Continuity
 
-Last session: 2026-03-26T06:03:32.061Z
-Stopped at: Completed 12-admin-capabilities-02-PLAN.md
+Last session: 2026-03-26T06:46:20.117Z
+Stopped at: Completed 13-auth-ux-02-PLAN.md
 Resume file: None

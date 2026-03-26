@@ -38,7 +38,7 @@ See: `.planning/milestones/v1.1-ROADMAP.md` for full details.
 - [x] **Phase 10: Rate Limiting** — Upstash Redis rate limiting on all API routes (completed 2026-03-26)
 - [x] **Phase 11: Notification Polish** — Per-type notification preferences with enforcement + weekly Monday email digest (completed 2026-03-26)
 - [x] **Phase 12: Admin Capabilities** — User invite, role change, deactivation + MRR trend chart (completed 2026-03-26)
-- [ ] **Phase 13: Auth UX** — Forgot password, password change, user profile in portal settings
+- [x] **Phase 13: Auth UX** — Forgot password, password change, user profile in portal settings (completed 2026-03-26)
 - [ ] **Phase 14: Polish UX** — Loading skeletons, onboarding guide, section-level error boundaries
 - [ ] **Phase 15: Security Hardening** — CSP headers + admin audit logging
 - [ ] **Phase 16: Test Coverage** — API route integration tests + Playwright visual regression baselines
@@ -95,10 +95,10 @@ Plans:
   1. A user who forgot their password can click "Forgot password?" on the login page, receive a reset email, and set a new password
   2. A logged-in user can change their password from the portal settings page
   3. A logged-in user can view and edit their display name from the portal settings page
-**Plans:** 2 plans
+**Plans:** 2/2 plans complete
 Plans:
-- [ ] 13-01-PLAN.md — Inline forgot-password widget on login page + reset-password page + i18n
-- [ ] 13-02-PLAN.md — Profile + Security sections on settings page + /api/profile route + RLS migration + i18n
+- [x] 13-01-PLAN.md — Inline forgot-password widget on login page + reset-password page + i18n
+- [x] 13-02-PLAN.md — Profile + Security sections on settings page + /api/profile route + RLS migration + i18n
 
 ### Phase 14: Polish UX
 **Goal**: The portal feels polished — pages load gracefully, new users are guided, and errors are contained
@@ -160,7 +160,7 @@ Plans:
 | 10. Rate Limiting | v1.2 | 1/1 | Complete    | 2026-03-26 |
 | 11. Notification Polish | v1.2 | 3/3 | Complete    | 2026-03-26 |
 | 12. Admin Capabilities | v1.2 | 2/2 | Complete    | 2026-03-26 |
-| 13. Auth UX | v1.2 | 0/2 | Planned | - |
+| 13. Auth UX | v1.2 | 2/2 | Complete   | 2026-03-26 |
 | 14. Polish UX | v1.2 | 0/? | Not started | - |
 | 15. Security Hardening | v1.2 | 0/? | Not started | - |
 | 16. Test Coverage | v1.2 | 0/? | Not started | - |
