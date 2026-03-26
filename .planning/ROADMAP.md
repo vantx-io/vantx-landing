@@ -35,7 +35,7 @@ See: `.planning/milestones/v1.1-ROADMAP.md` for full details.
 
 ### v1.2 Security & Polish (Phases 10-17)
 
-- [ ] **Phase 10: Rate Limiting** — Upstash Redis rate limiting on all API routes
+- [x] **Phase 10: Rate Limiting** — Upstash Redis rate limiting on all API routes (completed 2026-03-26)
 - [ ] **Phase 11: Notification Polish** — Per-type notification preferences with enforcement + weekly Monday email digest
 - [ ] **Phase 12: Admin Capabilities** — User invite, role change, deactivation + MRR trend chart
 - [ ] **Phase 13: Auth UX** — Forgot password, password change, user profile in portal settings
@@ -54,9 +54,9 @@ See: `.planning/milestones/v1.1-ROADMAP.md` for full details.
   1. Calling any API route more than the allowed limit returns HTTP 429 with a `Retry-After` header
   2. Rate limits are enforced across concurrent Vercel serverless instances (not in-memory)
   3. Different route types have appropriate thresholds (auth stricter than general API)
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 Plans:
-- [ ] 10-01-PLAN.md — Rate limit helper library + integration into all 6 API routes
+- [x] 10-01-PLAN.md — Rate limit helper library + integration into all 6 API routes
 
 ### Phase 11: Notification Polish
 **Goal**: Users control which notification channels they receive, and enrolled clients automatically get a weekly email digest of task activity every Monday
@@ -147,7 +147,7 @@ Plans:
 | 7. Notification UI | v1.1 | 2/2 | Complete | 2026-03-25 |
 | 8. Admin Dashboard | v1.1 | 3/3 | Complete | 2026-03-25 |
 | 9. File Uploads | v1.1 | 3/3 | Complete | 2026-03-25 |
-| 10. Rate Limiting | v1.2 | 0/1 | Not started | - |
+| 10. Rate Limiting | v1.2 | 1/1 | Complete   | 2026-03-26 |
 | 11. Notification Polish | v1.2 | 0/? | Not started | - |
 | 12. Admin Capabilities | v1.2 | 0/? | Not started | - |
 | 13. Auth UX | v1.2 | 0/? | Not started | - |

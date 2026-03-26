@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Security & Polish
-status: roadmap-ready
-stopped_at: Roadmap expanded for v1.2 — 8 phases (10-17), 26 requirements
-last_updated: "2026-03-25T00:00:00.000Z"
+status: unknown
+stopped_at: Completed 10-security-foundation-01-PLAN.md
+last_updated: "2026-03-26T01:05:01.846Z"
 progress:
   total_phases: 8
-  completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  completed_phases: 1
+  total_plans: 1
+  completed_plans: 1
 ---
 
 # Project State
@@ -19,18 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-25)
 
 **Core value:** Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay forma fácil de reservar tiempo, todo lo demás falla.
-**Current focus:** v1.2 Security & Polish — Phase 10: Security Foundation
+**Current focus:** Phase 10 — security-foundation
 
 ## Current Position
 
-Phase: 10 — Security Foundation (not started)
-Plan: —
-Status: Roadmap ready, awaiting plan-phase
-Last activity: 2026-03-25 — Roadmap created for v1.2
-
-```
-Progress: [░░░░░░░░░░░░░░░░░░░░] 0/4 phases complete
-```
+Phase: 10 (security-foundation) — EXECUTING
+Plan: 1 of 1
 
 ## Performance Metrics
 
@@ -62,6 +56,7 @@ Progress: [░░░░░░░░░░░░░░░░░░░░] 0/4 pha
 | Phase 09 P01 | 5min | 2 tasks | 8 files |
 | Phase 09 P02 | 3min | 2 tasks | 3 files |
 | Phase 09 P03 | 3min | 2 tasks | 6 files |
+| Phase 10-security-foundation P01 | 7min | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -116,6 +111,9 @@ Key architectural decisions for v1.2 (from research):
 - Admin invite: Supabase DB trigger auto-creates public users row on auth.users INSERT — never application code
 - MRR chart: use payments table as ground truth (not subscriptions.price_monthly); add cancel_at_period_end column first
 - Playwright visual regression baselines: generated in CI (Linux) only — macOS baselines fail CI due to font rendering diff
+- [Phase 10-security-foundation]: Rate limit block outside try/catch ensures rl always defined for rateLimitHeaders() in error responses
+- [Phase 10-security-foundation]: window: '1 m' as const required on RL_CONFIG — Upstash Duration is branded template literal, TypeScript infers string from object literals
+- [Phase 10-security-foundation]: createServerSupabase() (not createServiceClient()) for rate limit user ID extraction — service client has empty cookies, no auth context
 
 ### Pending Todos
 
@@ -131,6 +129,6 @@ Key architectural decisions for v1.2 (from research):
 
 ## Session Continuity
 
-Last session: 2026-03-25
-Stopped at: Roadmap created for v1.2 (4 phases, 15 requirements mapped)
-Resume file: None — run `/gsd:plan-phase 10` to begin
+Last session: 2026-03-26T01:05:01.842Z
+Stopped at: Completed 10-security-foundation-01-PLAN.md
+Resume file: None

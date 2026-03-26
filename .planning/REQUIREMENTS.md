@@ -9,8 +9,8 @@ Requirements for Security & Polish milestone. Each maps to roadmap phases.
 
 ### Security
 
-- [ ] **SEC-04**: API routes are rate-limited via Upstash Redis sliding window
-- [ ] **SEC-05**: Rate-limited users receive 429 response with retry-after header
+- [x] **SEC-04**: API routes are rate-limited via Upstash Redis sliding window
+- [x] **SEC-05**: Rate-limited users receive 429 response with retry-after header
 
 ### Notifications
 
@@ -121,8 +121,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SEC-04 | Phase 10 | Pending |
-| SEC-05 | Phase 10 | Pending |
+| SEC-04 | Phase 10 | Complete |
+| SEC-05 | Phase 10 | Complete |
 | NOTIF-10 | Phase 11 | Pending |
 | NOTIF-11 | Phase 11 | Pending |
 | NOTIF-12 | Phase 11 | Pending |
