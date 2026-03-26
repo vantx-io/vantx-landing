@@ -4,12 +4,12 @@ milestone: v1.2
 milestone_name: Security & Polish
 status: unknown
 stopped_at: Completed 12-admin-capabilities-02-PLAN.md
-last_updated: "2026-03-26T06:07:28.919Z"
+last_updated: "2026-03-26T06:42:06.703Z"
 progress:
   total_phases: 8
   completed_phases: 3
-  total_plans: 6
-  completed_plans: 6
+  total_plans: 8
+  completed_plans: 7
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-25)
 
 **Core value:** Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay forma fácil de reservar tiempo, todo lo demás falla.
-**Current focus:** Phase 12 — admin-capabilities
+**Current focus:** Phase 13 — auth-ux
 
 ## Current Position
 
-Phase: 13
-Plan: Not started
+Phase: 13 (auth-ux) — EXECUTING
+Plan: 2 of 2
 
 ## Performance Metrics
 
@@ -62,6 +62,7 @@ Plan: Not started
 | Phase 11 P02 | 5min | 2 tasks | 4 files |
 | Phase 12 P01 | 2m | 2 tasks | 7 files |
 | Phase 12 P02 | 4m | 2 tasks | 5 files |
+| Phase 13-auth-ux P01 | 5m | 2 tasks | 4 files |
 
 ## Accumulated Context
 
