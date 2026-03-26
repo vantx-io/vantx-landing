@@ -1,4 +1,5 @@
 import { Ratelimit } from "@upstash/ratelimit";
+import type { Duration } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 
 // Lazy singleton for Redis (same pattern as getStripe() in stripe.ts)
@@ -18,7 +19,7 @@ const rateLimitCache = new Map();
 
 export interface RateLimitConfig {
   requests: number;
-  window: string;
+  window: Duration;
   prefix: string; // required, route-specific to prevent key collisions
 }
 
