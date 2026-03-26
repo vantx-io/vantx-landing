@@ -52,17 +52,18 @@ Exceptions:
 
 ## Typography
 
-Four sizes in use across the existing portal. Skeletons and new components must not introduce additional sizes.
+Four sizes only. New components introduced in this phase must not add a fifth size.
 
 | Role | Size | Weight | Line Height | Usage |
 |------|------|--------|-------------|-------|
-| Display | 24px (`text-2xl`) | 700 (`font-bold`) | 1.2 | Page headings (`h1`) |
-| Heading | 18px (`text-lg`) / 16px (`text-base`) | 600 (`font-semibold`) | 1.3 | Section headings (`h2`, card titles) |
-| Body | 14px (`text-sm`) | 400 (`font-normal`) | 1.5 | Body text, descriptions, input text |
-| Label | 12px (`text-xs`) | 600 (`font-semibold`) | 1.4 | Stat labels, table headers, badge text tracking-wide |
-| Caption | 11px (`text-[11px]`) | 600 (`font-semibold`) | 1.4 | Timestamps, secondary badge text, error/success inline messages |
+| Display | 24px (`text-2xl`) | 600 (`font-semibold`) | 1.2 | Page headings (`h1`) — new components only |
+| Heading | 16px (`text-base`) | 600 (`font-semibold`) | 1.3 | Section headings (`h2`), card titles, onboarding card heading |
+| Body | 14px (`text-sm`) | 400 (`font-normal`) | 1.5 | Body text, descriptions, input text, link items |
+| Label | 12px (`text-xs`) | 600 (`font-semibold`) | 1.4 | Stat labels, table headers, badge text, timestamps, secondary badge text, inline messages |
 
-Constraint: exactly 2 weights in use — 400 (regular) and 600 (semibold). Weight 700 (bold) is used only on existing page `h1` headings and stat card values; do not introduce bold in new components.
+Weight constraint: this phase introduces only 2 weights — 400 (regular) and 600 (semibold). Weight 700 (`font-bold`) exists in pre-existing `h1` and stat card markup; this phase does not modify those elements and does not introduce `font-bold` in any new component.
+
+Size constraint: `text-lg` (18px) is not used in new components. Existing elements that rendered at 18px — such as section headings or card titles — are governed by Heading at 16px (`text-base`) in new components introduced by this phase.
 
 ---
 
