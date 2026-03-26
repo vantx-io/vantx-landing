@@ -67,11 +67,11 @@ Plans:
   2. After disabling email notifications, the user does not receive email for events that would previously have triggered one
   3. Every Monday morning, clients receive an email digest listing task activity from the past week
   4. A client who has disabled email notifications does not receive the weekly digest
-**Plans:** 1/3 plans executed
+**Plans:** 2/3 plans executed
 Plans:
 - [x] 11-01-PLAN.md — Migration + types + preferences API + settings page with toggles
 - [ ] 11-02-PLAN.md — Preference enforcement in notifyTaskEvent + Stripe webhook
-- [ ] 11-03-PLAN.md — WeeklyDigestEmail template + cron handler + vercel.json
+- [x] 11-03-PLAN.md — WeeklyDigestEmail template + cron handler + vercel.json
 
 ### Phase 12: Admin Capabilities
 **Goal**: Admins can manage the full user lifecycle from within the platform and can track MRR trends over time
@@ -152,7 +152,7 @@ Plans:
 | 8. Admin Dashboard | v1.1 | 3/3 | Complete | 2026-03-25 |
 | 9. File Uploads | v1.1 | 3/3 | Complete | 2026-03-25 |
 | 10. Rate Limiting | v1.2 | 1/1 | Complete    | 2026-03-26 |
-| 11. Notification Polish | v1.2 | 1/3 | In Progress|  |
+| 11. Notification Polish | v1.2 | 2/3 | In Progress|  |
 | 12. Admin Capabilities | v1.2 | 0/? | Not started | - |
 | 13. Auth UX | v1.2 | 0/? | Not started | - |
 | 14. Polish UX | v1.2 | 0/? | Not started | - |

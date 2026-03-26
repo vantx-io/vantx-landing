@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Security & Polish
 status: unknown
-stopped_at: Completed 11-notification-polish-01-PLAN.md
-last_updated: "2026-03-26T02:46:01.734Z"
+stopped_at: Completed 11-notification-polish-03-PLAN.md
+last_updated: "2026-03-26T02:54:07.192Z"
 progress:
   total_phases: 8
   completed_phases: 1
   total_plans: 4
-  completed_plans: 2
+  completed_plans: 3
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-25)
 ## Current Position
 
 Phase: 11 (notification-polish) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 
 ## Performance Metrics
 
@@ -58,6 +58,7 @@ Plan: 2 of 3
 | Phase 09 P03 | 3min | 2 tasks | 6 files |
 | Phase 10-security-foundation P01 | 7min | 2 tasks | 10 files |
 | Phase 11 P01 | 5min | 2 tasks | 8 files |
+| Phase 11 P03 | 5m | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -118,6 +119,8 @@ Key architectural decisions for v1.2 (from research):
 - [Phase 11]: Opt-out model: null row in notification_preferences = all channels on; no INSERT on first visit
 - [Phase 11]: Supabase upsert typed via (supabase as any) cast — TypeScript never inference fix, matches existing codebase pattern
 - [Phase 11]: Settings nav item as last entry with gear icon from lucide-react — distinguishes from text-only nav items
+- [Phase 11]: Sellers receive cross-client digest via same else-branch as admin/engineer — RLS grants cross-client access, no separate handling needed
+- [Phase 11]: notification_preferences queried via (supabase as any) cast in digest handler — matches established pattern from 11-01 and existing codebase
 
 ### Pending Todos
 
@@ -133,6 +136,6 @@ Key architectural decisions for v1.2 (from research):
 
 ## Session Continuity
 
-Last session: 2026-03-26T02:46:01.730Z
-Stopped at: Completed 11-notification-polish-01-PLAN.md
+Last session: 2026-03-26T02:54:07.188Z
+Stopped at: Completed 11-notification-polish-03-PLAN.md
 Resume file: None

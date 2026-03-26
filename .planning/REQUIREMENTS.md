@@ -14,8 +14,8 @@ Requirements for Security & Polish milestone. Each maps to roadmap phases.
 
 ### Notifications
 
-- [ ] **NOTIF-10**: Client receives weekly Monday email digest of task activity
-- [ ] **NOTIF-11**: User can toggle notification preferences per type (email, in-app) in portal settings
+- [x] **NOTIF-10**: Client receives weekly Monday email digest of task activity
+- [x] **NOTIF-11**: User can toggle notification preferences per type (email, in-app) in portal settings
 - [ ] **NOTIF-12**: Notification preferences are enforced at send time in notifyTaskEvent
 
 ### Admin
@@ -123,8 +123,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 |-------------|-------|--------|
 | SEC-04 | Phase 10 | Complete |
 | SEC-05 | Phase 10 | Complete |
-| NOTIF-10 | Phase 11 | Pending |
-| NOTIF-11 | Phase 11 | Pending |
+| NOTIF-10 | Phase 11 | Complete |
+| NOTIF-11 | Phase 11 | Complete |
 | NOTIF-12 | Phase 11 | Pending |
 | ADMIN-07 | Phase 12 | Pending |
 | ADMIN-08 | Phase 12 | Pending |
