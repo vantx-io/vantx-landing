@@ -3,6 +3,15 @@ import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import type { Payment, Subscription } from "@/lib/types";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid,
+} from "recharts";
 
 function StatCard({ label, value }: { label: string; value: string | number }) {
   return (
@@ -10,7 +19,9 @@ function StatCard({ label, value }: { label: string; value: string | number }) {
       <div className="text-xs text-gray-500 font-semibold tracking-wide mb-2">
         {label}
       </div>
-      <div className="text-2xl font-bold text-brand-dark font-mono">{value}</div>
+      <div className="text-2xl font-bold text-brand-dark font-mono">
+        {value}
+      </div>
     </div>
   );
 }
@@ -49,6 +60,7 @@ export default function AdminBillingPage() {
   });
   const [payments, setPayments] = useState<PaymentWithClient[]>([]);
   const [subscriptions, setSubscriptions] = useState<SubWithClient[]>([]);
+  const [mrrData, setMrrData] = useState<{ month: string; mrr: number }[]>([]);
   const supabase = createClient();
   const t = useTranslations("admin");
 
@@ -59,7 +71,14 @@ export default function AdminBillingPage() {
       } = await supabase.auth.getUser();
       if (!user) return;
 
-      const [paymentsRes, subsRes] = await Promise.all([
+      const now = new Date();
+      const twelveMonthsAgo = new Date(
+        now.getFullYear(),
+        now.getMonth() - 11,
+        1,
+      );
+
+      const [paymentsRes, subsRes, mrrRes] = await Promise.all([
         supabase
           .from("payments")
           .select("*, clients(name)")
@@ -69,6 +88,12 @@ export default function AdminBillingPage() {
           .from("subscriptions")
           .select("*, clients(name)")
           .order("created_at", { ascending: false }),
+        supabase
+          .from("payments")
+          .select("amount, paid_at, created_at")
+          .eq("status", "paid")
+          .gte("created_at", twelveMonthsAgo.toISOString())
+          .order("created_at", { ascending: true }),
       ]);
 
       const allPayments = (paymentsRes.data || []) as PaymentWithClient[];
@@ -84,6 +109,30 @@ export default function AdminBillingPage() {
           .length,
         failedPayments: allPayments.filter((p) => p.status === "failed").length,
       });
+
+      // Compute MRR by month from paid payments
+      const paidPayments = (mrrRes.data || []) as {
+        amount: number;
+        paid_at: string | null;
+        created_at: string;
+      }[];
+      const mrrByMonth: Record<string, number> = {};
+      for (const p of paidPayments) {
+        const dateStr = p.paid_at || p.created_at;
+        const key = dateStr.slice(0, 7); // "YYYY-MM"
+        mrrByMonth[key] = (mrrByMonth[key] || 0) + (p.amount || 0);
+      }
+      const months: { month: string; mrr: number }[] = [];
+      for (let i = 11; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+        const label = d.toLocaleDateString("en-US", {
+          month: "short",
+          year: "2-digit",
+        });
+        months.push({ month: label, mrr: mrrByMonth[key] || 0 });
+      }
+      setMrrData(months);
     }
     load();
   }, []);
@@ -112,6 +161,48 @@ export default function AdminBillingPage() {
           label={t("billing.failed_payments")}
           value={stats.failedPayments}
         />
+      </div>
+
+      {/* MRR Trend Chart */}
+      <div className="bg-white rounded-xl border border-gray-100 p-5 mb-6">
+        <h2 className="text-sm font-semibold text-gray-500 tracking-wide mb-3">
+          {t("billing.mrr_trend_title")}
+        </h2>
+        {mrrData.length > 0 && mrrData.some((d) => d.mrr > 0) ? (
+          <ResponsiveContainer width="100%" height={200}>
+            <AreaChart data={mrrData}>
+              <defs>
+                <linearGradient id="mrrGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#2E75B6" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#2E75B6" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <XAxis dataKey="month" tick={{ fontSize: 11 }} />
+              <YAxis
+                tick={{ fontSize: 11 }}
+                tickFormatter={(v: number) => `$${(v / 1000).toFixed(0)}k`}
+              />
+              <Tooltip
+                formatter={(value: number) => [
+                  `$${value.toLocaleString()}`,
+                  "MRR",
+                ]}
+              />
+              <Area
+                type="monotone"
+                dataKey="mrr"
+                stroke="#2E75B6"
+                strokeWidth={2}
+                fill="url(#mrrGradient)"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="py-8 text-center text-sm text-gray-400">
+            {t("billing.mrr_no_data")}
+          </div>
+        )}
       </div>
 
       {/* Recent Payments Table */}
