@@ -122,32 +122,53 @@ export async function notifyTaskEvent(
           ? "Nueva tarea creada"
           : "New task created";
 
+    // Step 7.5: Check notification preferences (NOTIF-12, D-21, D-22)
+    let emailEnabled = true;
+    let inAppEnabled = true;
     try {
-      await sendEmail({
-        to: user.email,
-        subject,
-        react: React.createElement(TaskStatusEmail, {
-          locale,
-          taskTitle: task.title,
-          newStatus: task.status,
-          changedByName: actorName,
-          taskUrl,
-        }),
-      });
+      const { data: prefs } = await supabase
+        .from("notification_preferences")
+        .select("email_enabled, in_app_enabled")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      // Opt-out model: null row = all enabled (D-03, D-22)
+      emailEnabled = prefs?.email_enabled !== false;
+      inAppEnabled = prefs?.in_app_enabled !== false;
     } catch (err) {
-      console.error("[notify] send-email failed:", err);
+      console.error("[notify] prefs-lookup failed:", err);
+      // On error, default to sending (fail-open)
     }
 
-    try {
-      await createNotification(supabase, {
-        userId: user.id,
-        type: eventType,
-        title: subject,
-        body: `"${task.title}" — ${task.status}`,
-        actionLink: taskUrl,
-      });
-    } catch (err) {
-      console.error("[notify] create-notification failed:", err);
+    if (emailEnabled) {
+      try {
+        await sendEmail({
+          to: user.email,
+          subject,
+          react: React.createElement(TaskStatusEmail, {
+            locale,
+            taskTitle: task.title,
+            newStatus: task.status,
+            changedByName: actorName,
+            taskUrl,
+          }),
+        });
+      } catch (err) {
+        console.error("[notify] send-email failed:", err);
+      }
+    }
+
+    if (inAppEnabled) {
+      try {
+        await createNotification(supabase, {
+          userId: user.id,
+          type: eventType,
+          title: subject,
+          body: `"${task.title}" — ${task.status}`,
+          actionLink: taskUrl,
+        });
+      } catch (err) {
+        console.error("[notify] create-notification failed:", err);
+      }
     }
   }
 
