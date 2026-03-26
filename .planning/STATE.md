@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Security & Polish
 status: unknown
-stopped_at: Completed 14-polish-ux-01-PLAN.md
-last_updated: "2026-03-26T13:00:57.749Z"
+stopped_at: Completed 14-polish-ux-03-PLAN.md
+last_updated: "2026-03-26T13:08:45.831Z"
 progress:
   total_phases: 8
   completed_phases: 4
   total_plans: 11
-  completed_plans: 9
+  completed_plans: 10
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-25)
 ## Current Position
 
 Phase: 14 (polish-ux) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 
 ## Performance Metrics
 
@@ -65,6 +65,7 @@ Plan: 2 of 3
 | Phase 13-auth-ux P01 | 5m | 2 tasks | 4 files |
 | Phase 13-auth-ux P02 | 8m | 2 tasks | 5 files |
 | Phase 14-polish-ux P01 | 3min | 2 tasks | 8 files |
+| Phase 14-polish-ux P03 | 4min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -139,6 +140,8 @@ Key architectural decisions for v1.2 (from research):
 - [Phase 14-polish-ux]: SectionErrorBoundary uses 'use client' directive as first line — required for class components with error boundary behavior in Next.js App Router
 - [Phase 14-polish-ux]: has_onboarded PATCH branch placed before full_name validation — early-return pattern for orthogonal Profile API operations
 - [Phase 14-polish-ux]: Existing users backfilled to has_onboarded=true in migration 007 — prevents onboarding card appearing for established accounts after deploy
+- [Phase 14-polish-ux]: Filter dropdowns (tasks) and search inputs (clients, users) kept outside SectionErrorBoundary — preserves filter/search if table section errors
+- [Phase 14-polish-ux]: Admin billing has 3 SectionErrorBoundaries (stats, chart, tables) — payments and subscriptions tables combined in a third boundary for safety
 
 ### Pending Todos
 
@@ -154,6 +157,6 @@ Key architectural decisions for v1.2 (from research):
 
 ## Session Continuity
 
-Last session: 2026-03-26T13:00:57.743Z
-Stopped at: Completed 14-polish-ux-01-PLAN.md
+Last session: 2026-03-26T13:08:45.823Z
+Stopped at: Completed 14-polish-ux-03-PLAN.md
 Resume file: None
