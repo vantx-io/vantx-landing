@@ -108,9 +108,9 @@ Plans:
   1. Every portal page shows a skeleton placeholder while data loads (no empty flash)
   2. A brand-new user who logs in for the first time sees a welcome guide with key actions
   3. If a section of a page fails to load, the error is caught by a boundary and the rest of the page remains functional
-**Plans:** 3 plans
+**Plans:** 1/3 plans executed
 Plans:
-- [ ] 14-01-PLAN.md — Skeleton components + SectionErrorBoundary + OnboardingCard + migration + types + i18n
+- [x] 14-01-PLAN.md — Skeleton components + SectionErrorBoundary + OnboardingCard + migration + types + i18n
 - [ ] 14-02-PLAN.md — Portal pages: skeletons + error boundaries + onboarding card on dashboard
 - [ ] 14-03-PLAN.md — Admin pages: skeletons + error boundaries
 
@@ -165,7 +165,7 @@ Plans:
 | 11. Notification Polish | v1.2 | 3/3 | Complete    | 2026-03-26 |
 | 12. Admin Capabilities | v1.2 | 2/2 | Complete    | 2026-03-26 |
 | 13. Auth UX | v1.2 | 2/2 | Complete    | 2026-03-26 |
-| 14. Polish UX | v1.2 | 0/3 | Planning complete | - |
+| 14. Polish UX | v1.2 | 1/3 | In Progress|  |
 | 15. Security Hardening | v1.2 | 0/? | Not started | - |
 | 16. Test Coverage | v1.2 | 0/? | Not started | - |
 | 17. Pre-Launch | v1.2 | 0/? | Not started | - |

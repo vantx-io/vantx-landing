@@ -29,14 +29,14 @@ Requirements for Security & Polish milestone. Each maps to roadmap phases.
 ### Auth UX
 
 - [ ] **AUTH-01**: User can reset password via "forgot password" link on login page
-- [ ] **AUTH-02**: User can change password from portal settings
-- [ ] **AUTH-03**: User can view and edit their profile (name) from portal settings
+- [x] **AUTH-02**: User can change password from portal settings
+- [x] **AUTH-03**: User can view and edit their profile (name) from portal settings
 
 ### Polish UX
 
-- [ ] **UX-01**: Portal pages show loading skeletons during data fetch
-- [ ] **UX-02**: New users see onboarding guide on first login
-- [ ] **UX-03**: Section-level error boundaries catch and display errors gracefully
+- [x] **UX-01**: Portal pages show loading skeletons during data fetch
+- [x] **UX-02**: New users see onboarding guide on first login
+- [x] **UX-03**: Section-level error boundaries catch and display errors gracefully
 
 ### Security Hardening
 
@@ -132,11 +132,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ADMIN-10 | Phase 12 | Complete |
 | ADMIN-11 | Phase 12 | Complete |
 | AUTH-01 | Phase 13 | Pending |
-| AUTH-02 | Phase 13 | Pending |
-| AUTH-03 | Phase 13 | Pending |
-| UX-01 | Phase 14 | Pending |
-| UX-02 | Phase 14 | Pending |
-| UX-03 | Phase 14 | Pending |
+| AUTH-02 | Phase 13 | Complete |
+| AUTH-03 | Phase 13 | Complete |
+| UX-01 | Phase 14 | Complete |
+| UX-02 | Phase 14 | Complete |
+| UX-03 | Phase 14 | Complete |
 | SECURE-01 | Phase 15 | Pending |
 | SECURE-02 | Phase 15 | Pending |
 | TEST-10 | Phase 16 | Pending |

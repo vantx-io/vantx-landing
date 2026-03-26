@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Security & Polish
 status: unknown
-stopped_at: Completed 13-auth-ux-02-PLAN.md
-last_updated: "2026-03-26T06:49:15.138Z"
+stopped_at: Completed 14-polish-ux-01-PLAN.md
+last_updated: "2026-03-26T13:00:57.749Z"
 progress:
   total_phases: 8
   completed_phases: 4
-  total_plans: 8
-  completed_plans: 8
+  total_plans: 11
+  completed_plans: 9
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-25)
 
 **Core value:** Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay forma fácil de reservar tiempo, todo lo demás falla.
-**Current focus:** Phase 13 — auth-ux
+**Current focus:** Phase 14 — polish-ux
 
 ## Current Position
 
-Phase: 14
-Plan: Not started
+Phase: 14 (polish-ux) — EXECUTING
+Plan: 2 of 3
 
 ## Performance Metrics
 
@@ -64,6 +64,7 @@ Plan: Not started
 | Phase 12 P02 | 4m | 2 tasks | 5 files |
 | Phase 13-auth-ux P01 | 5m | 2 tasks | 4 files |
 | Phase 13-auth-ux P02 | 8m | 2 tasks | 5 files |
+| Phase 14-polish-ux P01 | 3min | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -135,6 +136,9 @@ Key architectural decisions for v1.2 (from research):
 - [Phase 12]: MRR query added as third item to existing Promise.all in billing page to reduce round trips
 - [Phase 13-auth-ux]: RLS UPDATE policy uses WITH CHECK (id = auth.uid()) — field restriction enforced at API layer only
 - [Phase 13-auth-ux]: Two separate useEffects for profile and prefs load — independent loading concerns
+- [Phase 14-polish-ux]: SectionErrorBoundary uses 'use client' directive as first line — required for class components with error boundary behavior in Next.js App Router
+- [Phase 14-polish-ux]: has_onboarded PATCH branch placed before full_name validation — early-return pattern for orthogonal Profile API operations
+- [Phase 14-polish-ux]: Existing users backfilled to has_onboarded=true in migration 007 — prevents onboarding card appearing for established accounts after deploy
 
 ### Pending Todos
 
@@ -150,6 +154,6 @@ Key architectural decisions for v1.2 (from research):
 
 ## Session Continuity
 
-Last session: 2026-03-26T06:46:20.117Z
-Stopped at: Completed 13-auth-ux-02-PLAN.md
+Last session: 2026-03-26T13:00:57.743Z
+Stopped at: Completed 14-polish-ux-01-PLAN.md
 Resume file: None
