@@ -27,7 +27,7 @@ Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay f
 
 ### Active
 
-- [ ] Rate limiting on API routes (SEC-04, SEC-05)
+- ✓ Rate limiting on API routes (SEC-04, SEC-05) — Validated in Phase 10: Rate Limiting
 - [ ] Weekly email digest to clients (NOTIF-10)
 - [ ] User notification preferences (NOTIF-11, NOTIF-12)
 - [ ] Admin user management — invite, role change, deactivate (ADMIN-07..10)
