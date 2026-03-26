@@ -185,6 +185,7 @@ export type User = {
   email: string;
   role: "admin" | "engineer" | "seller" | "client";
   avatar_url: string | null;
+  is_active: boolean;
   created_at: string;
 };
 
