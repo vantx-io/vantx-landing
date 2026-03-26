@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Security & Polish
 status: unknown
-stopped_at: Completed 10-security-foundation-01-PLAN.md
-last_updated: "2026-03-26T01:05:01.846Z"
+stopped_at: Completed 11-notification-polish-01-PLAN.md
+last_updated: "2026-03-26T02:46:01.734Z"
 progress:
   total_phases: 8
   completed_phases: 1
-  total_plans: 1
-  completed_plans: 1
+  total_plans: 4
+  completed_plans: 2
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-25)
 
 **Core value:** Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay forma fácil de reservar tiempo, todo lo demás falla.
-**Current focus:** Phase 10 — security-foundation
+**Current focus:** Phase 11 — notification-polish
 
 ## Current Position
 
-Phase: 10 (security-foundation) — EXECUTING
-Plan: 1 of 1
+Phase: 11 (notification-polish) — EXECUTING
+Plan: 2 of 3
 
 ## Performance Metrics
 
@@ -57,6 +57,7 @@ Plan: 1 of 1
 | Phase 09 P02 | 3min | 2 tasks | 3 files |
 | Phase 09 P03 | 3min | 2 tasks | 6 files |
 | Phase 10-security-foundation P01 | 7min | 2 tasks | 10 files |
+| Phase 11 P01 | 5min | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -114,6 +115,9 @@ Key architectural decisions for v1.2 (from research):
 - [Phase 10-security-foundation]: Rate limit block outside try/catch ensures rl always defined for rateLimitHeaders() in error responses
 - [Phase 10-security-foundation]: window: '1 m' as const required on RL_CONFIG — Upstash Duration is branded template literal, TypeScript infers string from object literals
 - [Phase 10-security-foundation]: createServerSupabase() (not createServiceClient()) for rate limit user ID extraction — service client has empty cookies, no auth context
+- [Phase 11]: Opt-out model: null row in notification_preferences = all channels on; no INSERT on first visit
+- [Phase 11]: Supabase upsert typed via (supabase as any) cast — TypeScript never inference fix, matches existing codebase pattern
+- [Phase 11]: Settings nav item as last entry with gear icon from lucide-react — distinguishes from text-only nav items
 
 ### Pending Todos
 
@@ -129,6 +133,6 @@ Key architectural decisions for v1.2 (from research):
 
 ## Session Continuity
 
-Last session: 2026-03-26T01:05:01.842Z
-Stopped at: Completed 10-security-foundation-01-PLAN.md
+Last session: 2026-03-26T02:46:01.730Z
+Stopped at: Completed 11-notification-polish-01-PLAN.md
 Resume file: None
