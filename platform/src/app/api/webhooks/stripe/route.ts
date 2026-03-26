@@ -89,22 +89,7 @@ export async function POST(req: Request) {
           });
           const billingUrl = invoice.hosted_invoice_url || "";
 
-          sendEmail({
-            to: client.email,
-            subject: locale === "es" ? "Pago recibido" : "Payment received",
-            react: React.createElement(PaymentSuccessEmail, {
-              locale,
-              clientName: client.name,
-              amount,
-              currency: invoice.currency?.toUpperCase() || "USD",
-              period,
-              billingPortalUrl: billingUrl,
-            }),
-          }).catch((err) =>
-            console.error("[email] invoice.paid error:", err),
-          );
-
-          // Insert notification row for client user (per D-13)
+          // Check preferences before sending (NOTIF-12, D-23)
           supabase
             .from("users")
             .select("id")
@@ -112,8 +97,38 @@ export async function POST(req: Request) {
             .eq("role", "client")
             .limit(1)
             .single()
-            .then(({ data: user }) => {
-              if (user) {
+            .then(async ({ data: user }) => {
+              if (!user) return;
+
+              // Preference lookup — opt-out model (null = send)
+              const { data: prefs } = await supabase
+                .from("notification_preferences")
+                .select("email_enabled, in_app_enabled")
+                .eq("user_id", user.id)
+                .maybeSingle();
+
+              const emailEnabled = prefs?.email_enabled !== false;
+              const inAppEnabled = prefs?.in_app_enabled !== false;
+
+              if (emailEnabled) {
+                sendEmail({
+                  to: client.email,
+                  subject:
+                    locale === "es" ? "Pago recibido" : "Payment received",
+                  react: React.createElement(PaymentSuccessEmail, {
+                    locale,
+                    clientName: client.name,
+                    amount,
+                    currency: invoice.currency?.toUpperCase() || "USD",
+                    period,
+                    billingPortalUrl: billingUrl,
+                  }),
+                }).catch((err) =>
+                  console.error("[email] invoice.paid error:", err),
+                );
+              }
+
+              if (inAppEnabled) {
                 createNotification(supabase, {
                   userId: user.id,
                   type: "payment_success",
@@ -131,9 +146,7 @@ export async function POST(req: Request) {
                 );
               }
             })
-            .catch((err) =>
-              console.error("[notify] user lookup error:", err),
-            );
+            .catch((err) => console.error("[notify] user lookup error:", err));
         }
       }
       break;
@@ -177,22 +190,7 @@ export async function POST(req: Request) {
           );
           const billingUrl = invoice.hosted_invoice_url || "";
 
-          sendEmail({
-            to: client.email,
-            subject:
-              locale === "es" ? "Problema con el pago" : "Payment issue",
-            react: React.createElement(PaymentFailedEmail, {
-              locale,
-              clientName: client.name,
-              amount,
-              currency: invoice.currency?.toUpperCase() || "USD",
-              billingPortalUrl: billingUrl,
-            }),
-          }).catch((err) =>
-            console.error("[email] invoice.payment_failed error:", err),
-          );
-
-          // Insert notification row for client user (per D-13)
+          // Check preferences before sending (NOTIF-12, D-23)
           supabase
             .from("users")
             .select("id")
@@ -200,15 +198,42 @@ export async function POST(req: Request) {
             .eq("role", "client")
             .limit(1)
             .single()
-            .then(({ data: user }) => {
-              if (user) {
+            .then(async ({ data: user }) => {
+              if (!user) return;
+
+              // Preference lookup — opt-out model (null = send)
+              const { data: prefs } = await supabase
+                .from("notification_preferences")
+                .select("email_enabled, in_app_enabled")
+                .eq("user_id", user.id)
+                .maybeSingle();
+
+              const emailEnabled = prefs?.email_enabled !== false;
+              const inAppEnabled = prefs?.in_app_enabled !== false;
+
+              if (emailEnabled) {
+                sendEmail({
+                  to: client.email,
+                  subject:
+                    locale === "es" ? "Problema con el pago" : "Payment issue",
+                  react: React.createElement(PaymentFailedEmail, {
+                    locale,
+                    clientName: client.name,
+                    amount,
+                    currency: invoice.currency?.toUpperCase() || "USD",
+                    billingPortalUrl: billingUrl,
+                  }),
+                }).catch((err) =>
+                  console.error("[email] invoice.payment_failed error:", err),
+                );
+              }
+
+              if (inAppEnabled) {
                 createNotification(supabase, {
                   userId: user.id,
                   type: "payment_failed",
                   title:
-                    locale === "es"
-                      ? "Problema con el pago"
-                      : "Payment issue",
+                    locale === "es" ? "Problema con el pago" : "Payment issue",
                   body:
                     locale === "es"
                       ? `No pudimos procesar tu pago de ${amount}`
@@ -222,9 +247,7 @@ export async function POST(req: Request) {
                 );
               }
             })
-            .catch((err) =>
-              console.error("[notify] user lookup error:", err),
-            );
+            .catch((err) => console.error("[notify] user lookup error:", err));
         }
       }
       break;

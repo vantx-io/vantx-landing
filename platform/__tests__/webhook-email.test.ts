@@ -100,12 +100,10 @@ describe("webhook invoice.paid", () => {
         return {
           select: vi.fn().mockReturnValue({
             eq: vi.fn().mockReturnValue({
-              single: vi
-                .fn()
-                .mockResolvedValue({
-                  data: { client_id: "client-123" },
-                  error: null,
-                }),
+              single: vi.fn().mockResolvedValue({
+                data: { client_id: "client-123" },
+                error: null,
+              }),
             }),
           }),
         };
@@ -135,6 +133,17 @@ describe("webhook invoice.paid", () => {
                     .mockResolvedValue({ data: mockUser, error: null }),
                 }),
               }),
+            }),
+          }),
+        };
+      }
+      if (table === "notification_preferences") {
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              maybeSingle: vi
+                .fn()
+                .mockResolvedValue({ data: null, error: null }),
             }),
           }),
         };
@@ -237,12 +246,10 @@ describe("webhook invoice.paid — LATAM client", () => {
         return {
           select: vi.fn().mockReturnValue({
             eq: vi.fn().mockReturnValue({
-              single: vi
-                .fn()
-                .mockResolvedValue({
-                  data: { client_id: "client-456" },
-                  error: null,
-                }),
+              single: vi.fn().mockResolvedValue({
+                data: { client_id: "client-456" },
+                error: null,
+              }),
             }),
           }),
         };
@@ -267,14 +274,23 @@ describe("webhook invoice.paid — LATAM client", () => {
             eq: vi.fn().mockReturnValue({
               eq: vi.fn().mockReturnValue({
                 limit: vi.fn().mockReturnValue({
-                  single: vi
-                    .fn()
-                    .mockResolvedValue({
-                      data: { id: "user-789" },
-                      error: null,
-                    }),
+                  single: vi.fn().mockResolvedValue({
+                    data: { id: "user-789" },
+                    error: null,
+                  }),
                 }),
               }),
+            }),
+          }),
+        };
+      }
+      if (table === "notification_preferences") {
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              maybeSingle: vi
+                .fn()
+                .mockResolvedValue({ data: null, error: null }),
             }),
           }),
         };
@@ -328,12 +344,10 @@ describe("webhook invoice.payment_failed", () => {
         return {
           select: vi.fn().mockReturnValue({
             eq: vi.fn().mockReturnValue({
-              single: vi
-                .fn()
-                .mockResolvedValue({
-                  data: { client_id: "client-123" },
-                  error: null,
-                }),
+              single: vi.fn().mockResolvedValue({
+                data: { client_id: "client-123" },
+                error: null,
+              }),
             }),
           }),
         };
@@ -358,14 +372,23 @@ describe("webhook invoice.payment_failed", () => {
             eq: vi.fn().mockReturnValue({
               eq: vi.fn().mockReturnValue({
                 limit: vi.fn().mockReturnValue({
-                  single: vi
-                    .fn()
-                    .mockResolvedValue({
-                      data: { id: "user-456" },
-                      error: null,
-                    }),
+                  single: vi.fn().mockResolvedValue({
+                    data: { id: "user-456" },
+                    error: null,
+                  }),
                 }),
               }),
+            }),
+          }),
+        };
+      }
+      if (table === "notification_preferences") {
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              maybeSingle: vi
+                .fn()
+                .mockResolvedValue({ data: null, error: null }),
             }),
           }),
         };
@@ -405,5 +428,194 @@ describe("webhook invoice.payment_failed", () => {
       expect.anything(),
       expect.objectContaining({ type: "payment_failed" }),
     );
+  });
+});
+
+// ─── webhook preference enforcement (NOTIF-12) ────────────────────────────
+
+/**
+ * Build a mockFrom implementation that supports notification_preferences table
+ * with the given preference data. Used for NOTIF-12 preference enforcement tests.
+ */
+function buildMockFromWithPrefs(
+  eventType: "invoice.paid" | "invoice.payment_failed",
+  prefs: { email_enabled: boolean; in_app_enabled: boolean } | null,
+) {
+  const mockInsertLocal = vi.fn().mockResolvedValue({ error: null });
+
+  return vi.fn((table: string) => {
+    if (table === "subscriptions") {
+      return {
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            single: vi.fn().mockResolvedValue({
+              data: { client_id: "client-prefs-test" },
+              error: null,
+            }),
+          }),
+        }),
+      };
+    }
+    if (table === "payments") {
+      return { insert: mockInsertLocal };
+    }
+    if (table === "clients") {
+      return {
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            single: vi.fn().mockResolvedValue({
+              data: {
+                email: "client@prefs.com",
+                name: "Prefs Client",
+                market: "US",
+              },
+              error: null,
+            }),
+          }),
+        }),
+      };
+    }
+    if (table === "users") {
+      return {
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              limit: vi.fn().mockReturnValue({
+                single: vi.fn().mockResolvedValue({
+                  data: { id: "user-prefs-001" },
+                  error: null,
+                }),
+              }),
+            }),
+          }),
+        }),
+      };
+    }
+    if (table === "notification_preferences") {
+      return {
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            maybeSingle: vi
+              .fn()
+              .mockResolvedValue({ data: prefs, error: null }),
+          }),
+        }),
+      };
+    }
+    return { select: vi.fn(), insert: vi.fn(), eq: vi.fn(), single: vi.fn() };
+  });
+}
+
+describe("webhook invoice.paid — preference enforcement (NOTIF-12)", () => {
+  const invoicePaidEvent = {
+    type: "invoice.paid",
+    data: {
+      object: {
+        id: "inv_prefs_paid",
+        customer: "cus_prefs123",
+        amount_paid: 599500,
+        currency: "usd",
+        payment_intent: "pi_prefs123",
+        period_start: 1740000000,
+        hosted_invoice_url: "https://invoice.stripe.com/prefs",
+      },
+    },
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockConstructEvent.mockReturnValue(invoicePaidEvent);
+  });
+
+  it("skips sendEmail when email_enabled = false (NOTIF-12)", async () => {
+    mockFrom.mockImplementation(
+      buildMockFromWithPrefs("invoice.paid", {
+        email_enabled: false,
+        in_app_enabled: true,
+      }),
+    );
+
+    const req = makeRequest("{}");
+    await POST(req);
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(sendEmail).not.toHaveBeenCalled();
+    expect(createNotification).toHaveBeenCalled();
+  });
+
+  it("skips createNotification when in_app_enabled = false (NOTIF-12)", async () => {
+    mockFrom.mockImplementation(
+      buildMockFromWithPrefs("invoice.paid", {
+        email_enabled: true,
+        in_app_enabled: false,
+      }),
+    );
+
+    const req = makeRequest("{}");
+    await POST(req);
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(sendEmail).toHaveBeenCalled();
+    expect(createNotification).not.toHaveBeenCalled();
+  });
+
+  it("sends both when no preferences row (opt-out model per D-03)", async () => {
+    mockFrom.mockImplementation(buildMockFromWithPrefs("invoice.paid", null));
+
+    const req = makeRequest("{}");
+    await POST(req);
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(sendEmail).toHaveBeenCalled();
+    expect(createNotification).toHaveBeenCalled();
+  });
+});
+
+describe("webhook invoice.payment_failed — preference enforcement (NOTIF-12)", () => {
+  const invoiceFailedEvent = {
+    type: "invoice.payment_failed",
+    data: {
+      object: {
+        id: "inv_prefs_failed",
+        customer: "cus_prefs456",
+        amount_due: 599500,
+        currency: "usd",
+        hosted_invoice_url: "https://invoice.stripe.com/prefs-failed",
+      },
+    },
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockConstructEvent.mockReturnValue(invoiceFailedEvent);
+  });
+
+  it("skips sendEmail when email_enabled = false (NOTIF-12)", async () => {
+    mockFrom.mockImplementation(
+      buildMockFromWithPrefs("invoice.payment_failed", {
+        email_enabled: false,
+        in_app_enabled: true,
+      }),
+    );
+
+    const req = makeRequest("{}");
+    await POST(req);
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(sendEmail).not.toHaveBeenCalled();
+    expect(createNotification).toHaveBeenCalled();
+  });
+
+  it("sends both when no preferences row (opt-out model per D-03)", async () => {
+    mockFrom.mockImplementation(
+      buildMockFromWithPrefs("invoice.payment_failed", null),
+    );
+
+    const req = makeRequest("{}");
+    await POST(req);
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(sendEmail).toHaveBeenCalled();
+    expect(createNotification).toHaveBeenCalled();
   });
 });
