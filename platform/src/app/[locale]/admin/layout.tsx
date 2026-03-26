@@ -12,9 +12,14 @@ const navItems = [
   { key: "clients", segment: "/clients" },
   { key: "tasks", segment: "/tasks" },
   { key: "billing", segment: "/billing" },
+  { key: "users", segment: "/users" },
 ];
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
   const pathname = usePathname();
@@ -25,10 +30,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     async function load() {
-      const { data: { user: authUser } } = await supabase.auth.getUser();
-      if (!authUser) { router.push(`/${locale}/login`); return; }
+      const {
+        data: { user: authUser },
+      } = await supabase.auth.getUser();
+      if (!authUser) {
+        router.push(`/${locale}/login`);
+        return;
+      }
       const { data: profile } = await supabase
-        .from("users").select("*").eq("id", authUser.id).single();
+        .from("users")
+        .select("*")
+        .eq("id", authUser.id)
+        .single();
       if (profile) setUser(profile as User);
     }
     load();

@@ -235,7 +235,8 @@
       "overview": "Overview",
       "clients": "Clients",
       "tasks": "Tasks",
-      "billing": "Billing"
+      "billing": "Billing",
+      "users": "Users"
     },
     "sidebar": {
       "admin_badge": "ADMIN",
@@ -292,7 +293,36 @@
       "col_monthly": "Monthly",
       "col_period_end": "Period End",
       "no_payments": "No payments found",
-      "no_subscriptions": "No active subscriptions"
+      "no_subscriptions": "No active subscriptions",
+      "mrr_trend_title": "MRR Trend (last 12 months)",
+      "mrr_no_data": "No payment data for selected period"
+    },
+    "users": {
+      "title": "User Management",
+      "invite_button": "Invite User",
+      "search_placeholder": "Search by name or email...",
+      "col_name": "Name",
+      "col_email": "Email",
+      "col_role": "Role",
+      "col_client": "Client",
+      "col_status": "Status",
+      "col_created": "Created",
+      "col_actions": "Actions",
+      "action_change_role": "Change Role",
+      "action_deactivate": "Deactivate",
+      "action_reactivate": "Reactivate",
+      "no_results": "No users found",
+      "invite_form_email": "Email",
+      "invite_form_role": "Role",
+      "invite_form_client": "Client",
+      "invite_form_submit": "Send Invite",
+      "invite_form_cancel": "Cancel",
+      "invite_success": "Invite sent to {email}",
+      "invite_error_duplicate": "A user with this email already exists",
+      "invite_error_failed": "Failed to send invite. Try again.",
+      "role_change_success": "Role updated",
+      "deactivate_success": "User deactivated",
+      "reactivate_success": "User reactivated"
     }
   }
 }

@@ -235,7 +235,8 @@
       "overview": "Overview",
       "clients": "Clients",
       "tasks": "Tasks",
-      "billing": "Billing"
+      "billing": "Billing",
+      "users": "Usuarios"
     },
     "sidebar": {
       "admin_badge": "ADMIN",
@@ -292,7 +293,36 @@
       "col_monthly": "Monthly",
       "col_period_end": "Period End",
       "no_payments": "No payments found",
-      "no_subscriptions": "No active subscriptions"
+      "no_subscriptions": "No active subscriptions",
+      "mrr_trend_title": "Tendencia MRR (ultimos 12 meses)",
+      "mrr_no_data": "Sin datos de pago para el periodo seleccionado"
+    },
+    "users": {
+      "title": "Gestion de Usuarios",
+      "invite_button": "Invitar Usuario",
+      "search_placeholder": "Buscar por nombre o email...",
+      "col_name": "Nombre",
+      "col_email": "Email",
+      "col_role": "Rol",
+      "col_client": "Cliente",
+      "col_status": "Estado",
+      "col_created": "Creado",
+      "col_actions": "Acciones",
+      "action_change_role": "Cambiar Rol",
+      "action_deactivate": "Desactivar",
+      "action_reactivate": "Reactivar",
+      "no_results": "No se encontraron usuarios",
+      "invite_form_email": "Email",
+      "invite_form_role": "Rol",
+      "invite_form_client": "Cliente",
+      "invite_form_submit": "Enviar Invitacion",
+      "invite_form_cancel": "Cancelar",
+      "invite_success": "Invitacion enviada a {email}",
+      "invite_error_duplicate": "Ya existe un usuario con este email",
+      "invite_error_failed": "Error al enviar invitacion. Intenta de nuevo.",
+      "role_change_success": "Rol actualizado",
+      "deactivate_success": "Usuario desactivado",
+      "reactivate_success": "Usuario reactivado"
     }
   }
 }
