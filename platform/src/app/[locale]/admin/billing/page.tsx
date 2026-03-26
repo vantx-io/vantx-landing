@@ -12,6 +12,8 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
+import { SkeletonCard, SkeletonText, SkeletonChart } from "@/components/skeletons";
+import { SectionErrorBoundary } from "@/components/SectionErrorBoundary";
 
 function StatCard({ label, value }: { label: string; value: string | number }) {
   return (
@@ -52,6 +54,7 @@ type PaymentWithClient = Payment & { clients: { name: string } | null };
 type SubWithClient = Subscription & { clients: { name: string } | null };
 
 export default function AdminBillingPage() {
+  const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     mrr: 0,
     activeSubs: 0,
@@ -63,6 +66,7 @@ export default function AdminBillingPage() {
   const [mrrData, setMrrData] = useState<{ month: string; mrr: number }[]>([]);
   const supabase = createClient();
   const t = useTranslations("admin");
+  const tc = useTranslations("common");
 
   useEffect(() => {
     async function load() {
@@ -134,8 +138,20 @@ export default function AdminBillingPage() {
       }
       setMrrData(months);
     }
-    load();
+    load().finally(() => setLoading(false));
   }, []);
+
+  if (loading) return (
+    <div>
+      <div className="h-8 bg-gray-200 rounded w-48 mb-6 animate-pulse" />
+      <div className="flex gap-4 mb-6 flex-wrap">
+        <SkeletonCard /><SkeletonCard /><SkeletonCard /><SkeletonCard />
+      </div>
+      <SkeletonChart height={200} />
+      <div className="mt-6"><SkeletonText lines={4} /></div>
+      <div className="mt-6"><SkeletonText lines={4} /></div>
+    </div>
+  );
 
   return (
     <div>
@@ -144,168 +160,175 @@ export default function AdminBillingPage() {
       </h1>
 
       {/* 4 Stat Cards */}
-      <div className="flex gap-4 mb-6 flex-wrap">
-        <StatCard
-          label={t("billing.total_mrr")}
-          value={`$${stats.mrr.toLocaleString()}`}
-        />
-        <StatCard
-          label={t("billing.active_subscriptions")}
-          value={stats.activeSubs}
-        />
-        <StatCard
-          label={t("billing.pending_payments")}
-          value={stats.pendingPayments}
-        />
-        <StatCard
-          label={t("billing.failed_payments")}
-          value={stats.failedPayments}
-        />
-      </div>
+      <SectionErrorBoundary fallbackTitle={tc("error_section")} fallbackBody={tc("error_section_body")} fallbackRetry={tc("error_retry")}>
+        <div className="flex gap-4 mb-6 flex-wrap">
+          <StatCard
+            label={t("billing.total_mrr")}
+            value={`$${stats.mrr.toLocaleString()}`}
+          />
+          <StatCard
+            label={t("billing.active_subscriptions")}
+            value={stats.activeSubs}
+          />
+          <StatCard
+            label={t("billing.pending_payments")}
+            value={stats.pendingPayments}
+          />
+          <StatCard
+            label={t("billing.failed_payments")}
+            value={stats.failedPayments}
+          />
+        </div>
+      </SectionErrorBoundary>
 
       {/* MRR Trend Chart */}
-      <div className="bg-white rounded-xl border border-gray-100 p-5 mb-6">
-        <h2 className="text-sm font-semibold text-gray-500 tracking-wide mb-3">
-          {t("billing.mrr_trend_title")}
-        </h2>
-        {mrrData.length > 0 && mrrData.some((d) => d.mrr > 0) ? (
-          <ResponsiveContainer width="100%" height={200}>
-            <AreaChart data={mrrData}>
-              <defs>
-                <linearGradient id="mrrGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#2E75B6" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#2E75B6" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="month" tick={{ fontSize: 11 }} />
-              <YAxis
-                tick={{ fontSize: 11 }}
-                tickFormatter={(v: number) => `$${(v / 1000).toFixed(0)}k`}
-              />
-              <Tooltip
-                formatter={(value: number) => [
-                  `$${value.toLocaleString()}`,
-                  "MRR",
-                ]}
-              />
-              <Area
-                type="monotone"
-                dataKey="mrr"
-                stroke="#2E75B6"
-                strokeWidth={2}
-                fill="url(#mrrGradient)"
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        ) : (
-          <div className="py-8 text-center text-sm text-gray-400">
-            {t("billing.mrr_no_data")}
-          </div>
-        )}
-      </div>
+      <SectionErrorBoundary fallbackTitle={tc("error_section")} fallbackBody={tc("error_section_body")} fallbackRetry={tc("error_retry")}>
+        <div className="bg-white rounded-xl border border-gray-100 p-5 mb-6">
+          <h2 className="text-sm font-semibold text-gray-500 tracking-wide mb-3">
+            {t("billing.mrr_trend_title")}
+          </h2>
+          {mrrData.length > 0 && mrrData.some((d) => d.mrr > 0) ? (
+            <ResponsiveContainer width="100%" height={200}>
+              <AreaChart data={mrrData}>
+                <defs>
+                  <linearGradient id="mrrGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#2E75B6" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#2E75B6" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis dataKey="month" tick={{ fontSize: 11 }} />
+                <YAxis
+                  tick={{ fontSize: 11 }}
+                  tickFormatter={(v: number) => `$${(v / 1000).toFixed(0)}k`}
+                />
+                <Tooltip
+                  formatter={(value: number) => [
+                    `$${value.toLocaleString()}`,
+                    "MRR",
+                  ]}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="mrr"
+                  stroke="#2E75B6"
+                  strokeWidth={2}
+                  fill="url(#mrrGradient)"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="py-8 text-center text-sm text-gray-400">
+              {t("billing.mrr_no_data")}
+            </div>
+          )}
+        </div>
+      </SectionErrorBoundary>
 
-      {/* Recent Payments Table */}
-      <h2 className="text-lg font-bold text-brand-dark mb-3">
-        {t("billing.recent_payments")}
-      </h2>
-      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden mb-6">
-        <table className="w-full text-left">
-          <thead>
-            <tr className="border-b border-gray-100 text-xs text-gray-500 font-semibold tracking-wide">
-              <th className="px-5 py-3">{t("billing.col_client")}</th>
-              <th className="px-5 py-3">{t("billing.col_amount")}</th>
-              <th className="px-5 py-3">{t("billing.col_currency")}</th>
-              <th className="px-5 py-3">{t("billing.col_status")}</th>
-              <th className="px-5 py-3">{t("billing.col_date")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {payments.map((p) => (
-              <tr
-                key={p.id}
-                className="border-b border-gray-50 last:border-0 hover:bg-gray-50/50 transition"
-              >
-                <td className="px-5 py-3.5 text-[13px] text-brand-dark">
-                  {p.clients?.name || "—"}
-                </td>
-                <td className="px-5 py-3.5 text-[13px] font-mono font-semibold text-brand-dark">
-                  ${p.amount.toLocaleString()}
-                </td>
-                <td className="px-5 py-3.5 text-[13px] text-gray-600">
-                  {p.currency}
-                </td>
-                <td className="px-5 py-3.5">
-                  <Badge
-                    text={p.status.toUpperCase()}
-                    color={sColors[p.status] || "#999"}
-                  />
-                </td>
-                <td className="px-5 py-3.5 text-[13px] text-gray-400">
-                  {p.created_at?.slice(0, 10)}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {payments.length === 0 && (
-          <div className="px-5 py-8 text-center text-sm text-gray-400">
-            {t("billing.no_payments")}
+      {/* Recent Payments Table + Active Subscriptions Table */}
+      <SectionErrorBoundary fallbackTitle={tc("error_section")} fallbackBody={tc("error_section_body")} fallbackRetry={tc("error_retry")}>
+        <div>
+          <h2 className="text-lg font-bold text-brand-dark mb-3">
+            {t("billing.recent_payments")}
+          </h2>
+          <div className="bg-white rounded-xl border border-gray-100 overflow-hidden mb-6">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="border-b border-gray-100 text-xs text-gray-500 font-semibold tracking-wide">
+                  <th className="px-5 py-3">{t("billing.col_client")}</th>
+                  <th className="px-5 py-3">{t("billing.col_amount")}</th>
+                  <th className="px-5 py-3">{t("billing.col_currency")}</th>
+                  <th className="px-5 py-3">{t("billing.col_status")}</th>
+                  <th className="px-5 py-3">{t("billing.col_date")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {payments.map((p) => (
+                  <tr
+                    key={p.id}
+                    className="border-b border-gray-50 last:border-0 hover:bg-gray-50/50 transition"
+                  >
+                    <td className="px-5 py-3.5 text-[13px] text-brand-dark">
+                      {p.clients?.name || "—"}
+                    </td>
+                    <td className="px-5 py-3.5 text-[13px] font-mono font-semibold text-brand-dark">
+                      ${p.amount.toLocaleString()}
+                    </td>
+                    <td className="px-5 py-3.5 text-[13px] text-gray-600">
+                      {p.currency}
+                    </td>
+                    <td className="px-5 py-3.5">
+                      <Badge
+                        text={p.status.toUpperCase()}
+                        color={sColors[p.status] || "#999"}
+                      />
+                    </td>
+                    <td className="px-5 py-3.5 text-[13px] text-gray-400">
+                      {p.created_at?.slice(0, 10)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {payments.length === 0 && (
+              <div className="px-5 py-8 text-center text-sm text-gray-400">
+                {t("billing.no_payments")}
+              </div>
+            )}
           </div>
-        )}
-      </div>
 
-      {/* Active Subscriptions Table */}
-      <h2 className="text-lg font-bold text-brand-dark mb-3">
-        {t("billing.active_subs_table")}
-      </h2>
-      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
-        <table className="w-full text-left">
-          <thead>
-            <tr className="border-b border-gray-100 text-xs text-gray-500 font-semibold tracking-wide">
-              <th className="px-5 py-3">{t("billing.col_client")}</th>
-              <th className="px-5 py-3">{t("billing.col_plan")}</th>
-              <th className="px-5 py-3">{t("billing.col_status")}</th>
-              <th className="px-5 py-3">{t("billing.col_monthly")}</th>
-              <th className="px-5 py-3">{t("billing.col_period_end")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {subscriptions.map((s) => (
-              <tr
-                key={s.id}
-                className="border-b border-gray-50 last:border-0 hover:bg-gray-50/50 transition"
-              >
-                <td className="px-5 py-3.5 text-[13px] text-brand-dark">
-                  {s.clients?.name || "—"}
-                </td>
-                <td className="px-5 py-3.5 text-[13px] text-gray-600">
-                  {s.plan.toUpperCase()}
-                </td>
-                <td className="px-5 py-3.5">
-                  <Badge
-                    text={s.status.toUpperCase()}
-                    color={sColors[s.status] || "#999"}
-                  />
-                </td>
-                <td className="px-5 py-3.5 text-[13px] font-mono font-semibold text-brand-dark">
-                  {s.price_monthly != null
-                    ? `$${s.price_monthly.toLocaleString()}`
-                    : "—"}
-                </td>
-                <td className="px-5 py-3.5 text-[13px] text-gray-400">
-                  {s.current_period_end?.slice(0, 10) || "—"}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {subscriptions.length === 0 && (
-          <div className="px-5 py-8 text-center text-sm text-gray-400">
-            {t("billing.no_subscriptions")}
+          <h2 className="text-lg font-bold text-brand-dark mb-3">
+            {t("billing.active_subs_table")}
+          </h2>
+          <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="border-b border-gray-100 text-xs text-gray-500 font-semibold tracking-wide">
+                  <th className="px-5 py-3">{t("billing.col_client")}</th>
+                  <th className="px-5 py-3">{t("billing.col_plan")}</th>
+                  <th className="px-5 py-3">{t("billing.col_status")}</th>
+                  <th className="px-5 py-3">{t("billing.col_monthly")}</th>
+                  <th className="px-5 py-3">{t("billing.col_period_end")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {subscriptions.map((s) => (
+                  <tr
+                    key={s.id}
+                    className="border-b border-gray-50 last:border-0 hover:bg-gray-50/50 transition"
+                  >
+                    <td className="px-5 py-3.5 text-[13px] text-brand-dark">
+                      {s.clients?.name || "—"}
+                    </td>
+                    <td className="px-5 py-3.5 text-[13px] text-gray-600">
+                      {s.plan.toUpperCase()}
+                    </td>
+                    <td className="px-5 py-3.5">
+                      <Badge
+                        text={s.status.toUpperCase()}
+                        color={sColors[s.status] || "#999"}
+                      />
+                    </td>
+                    <td className="px-5 py-3.5 text-[13px] font-mono font-semibold text-brand-dark">
+                      {s.price_monthly != null
+                        ? `$${s.price_monthly.toLocaleString()}`
+                        : "—"}
+                    </td>
+                    <td className="px-5 py-3.5 text-[13px] text-gray-400">
+                      {s.current_period_end?.slice(0, 10) || "—"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {subscriptions.length === 0 && (
+              <div className="px-5 py-8 text-center text-sm text-gray-400">
+                {t("billing.no_subscriptions")}
+              </div>
+            )}
           </div>
-        )}
-      </div>
+        </div>
+      </SectionErrorBoundary>
     </div>
   );
 }

@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import type { Task, Client } from "@/lib/types";
+import { SkeletonTable } from "@/components/skeletons";
+import { SectionErrorBoundary } from "@/components/SectionErrorBoundary";
 
 function Badge({ text, color }: { text: string; color: string }) {
   return (
@@ -32,6 +34,7 @@ const sColors: Record<string, string> = {
 type TaskWithClient = Task & { clients: { name: string } | null };
 
 export default function AdminTasksPage() {
+  const [loading, setLoading] = useState(true);
   const [tasks, setTasks] = useState<TaskWithClient[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [clientFilter, setClientFilter] = useState("all");
@@ -39,6 +42,7 @@ export default function AdminTasksPage() {
   const [statusFilter, setStatusFilter] = useState("all");
   const supabase = createClient();
   const t = useTranslations("admin");
+  const tc = useTranslations("common");
 
   useEffect(() => {
     async function load() {
@@ -58,13 +62,20 @@ export default function AdminTasksPage() {
       setTasks((tasksRes.data || []) as TaskWithClient[]);
       setClients((clientsRes.data || []) as Client[]);
     }
-    load();
+    load().finally(() => setLoading(false));
   }, []);
 
   const filtered = tasks
     .filter((t) => clientFilter === "all" || t.client_id === clientFilter)
     .filter((t) => priorityFilter === "all" || t.priority === priorityFilter)
     .filter((t) => statusFilter === "all" || t.status === statusFilter);
+
+  if (loading) return (
+    <div>
+      <div className="h-8 bg-gray-200 rounded w-40 mb-6 animate-pulse" />
+      <SkeletonTable rows={6} cols={6} />
+    </div>
+  );
 
   return (
     <div>
@@ -115,58 +126,60 @@ export default function AdminTasksPage() {
         </select>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
-        <table className="w-full text-left">
-          <thead>
-            <tr className="border-b border-gray-100 text-xs text-gray-500 font-semibold tracking-wide">
-              <th className="px-5 py-3">{t("tasks.col_title")}</th>
-              <th className="px-5 py-3">{t("tasks.col_client")}</th>
-              <th className="px-5 py-3">{t("tasks.col_priority")}</th>
-              <th className="px-5 py-3">{t("tasks.col_status")}</th>
-              <th className="px-5 py-3">{t("tasks.col_assigned")}</th>
-              <th className="px-5 py-3">{t("tasks.col_created")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((tk) => (
-              <tr
-                key={tk.id}
-                className="border-b border-gray-50 last:border-0 hover:bg-gray-50/50 transition"
-              >
-                <td className="px-5 py-3.5 text-[13px] font-semibold text-brand-dark">
-                  {tk.title}
-                </td>
-                <td className="px-5 py-3.5 text-[13px] text-gray-600">
-                  {tk.clients?.name || "—"}
-                </td>
-                <td className="px-5 py-3.5">
-                  <Badge
-                    text={tk.priority.toUpperCase()}
-                    color={pColors[tk.priority] || "#999"}
-                  />
-                </td>
-                <td className="px-5 py-3.5">
-                  <Badge
-                    text={tk.status.replace("_", " ").toUpperCase()}
-                    color={sColors[tk.status] || "#999"}
-                  />
-                </td>
-                <td className="px-5 py-3.5 text-[13px] text-gray-600">
-                  {tk.assigned_to || "—"}
-                </td>
-                <td className="px-5 py-3.5 text-[13px] text-gray-400">
-                  {tk.created_at?.slice(0, 10)}
-                </td>
+      <SectionErrorBoundary fallbackTitle={tc("error_section")} fallbackBody={tc("error_section_body")} fallbackRetry={tc("error_retry")}>
+        <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
+          <table className="w-full text-left">
+            <thead>
+              <tr className="border-b border-gray-100 text-xs text-gray-500 font-semibold tracking-wide">
+                <th className="px-5 py-3">{t("tasks.col_title")}</th>
+                <th className="px-5 py-3">{t("tasks.col_client")}</th>
+                <th className="px-5 py-3">{t("tasks.col_priority")}</th>
+                <th className="px-5 py-3">{t("tasks.col_status")}</th>
+                <th className="px-5 py-3">{t("tasks.col_assigned")}</th>
+                <th className="px-5 py-3">{t("tasks.col_created")}</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        {filtered.length === 0 && (
-          <div className="px-5 py-8 text-center text-sm text-gray-400">
-            {t("tasks.no_results")}
-          </div>
-        )}
-      </div>
+            </thead>
+            <tbody>
+              {filtered.map((tk) => (
+                <tr
+                  key={tk.id}
+                  className="border-b border-gray-50 last:border-0 hover:bg-gray-50/50 transition"
+                >
+                  <td className="px-5 py-3.5 text-[13px] font-semibold text-brand-dark">
+                    {tk.title}
+                  </td>
+                  <td className="px-5 py-3.5 text-[13px] text-gray-600">
+                    {tk.clients?.name || "—"}
+                  </td>
+                  <td className="px-5 py-3.5">
+                    <Badge
+                      text={tk.priority.toUpperCase()}
+                      color={pColors[tk.priority] || "#999"}
+                    />
+                  </td>
+                  <td className="px-5 py-3.5">
+                    <Badge
+                      text={tk.status.replace("_", " ").toUpperCase()}
+                      color={sColors[tk.status] || "#999"}
+                    />
+                  </td>
+                  <td className="px-5 py-3.5 text-[13px] text-gray-600">
+                    {tk.assigned_to || "—"}
+                  </td>
+                  <td className="px-5 py-3.5 text-[13px] text-gray-400">
+                    {tk.created_at?.slice(0, 10)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {filtered.length === 0 && (
+            <div className="px-5 py-8 text-center text-sm text-gray-400">
+              {t("tasks.no_results")}
+            </div>
+          )}
+        </div>
+      </SectionErrorBoundary>
     </div>
   );
 }

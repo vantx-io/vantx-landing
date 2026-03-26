@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import type { User, Client } from "@/lib/types";
+import { SkeletonTable } from "@/components/skeletons";
+import { SectionErrorBoundary } from "@/components/SectionErrorBoundary";
 
 function Badge({ text, color }: { text: string; color: string }) {
   return (
@@ -29,7 +31,9 @@ const statusColors: Record<string, string> = {
 
 export default function AdminUsersPage() {
   const t = useTranslations("admin");
+  const tc = useTranslations("common");
   const supabase = createClient();
+  const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState<User[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [search, setSearch] = useState("");
@@ -52,7 +56,7 @@ export default function AdminUsersPage() {
   }
 
   useEffect(() => {
-    loadData();
+    loadData().finally(() => setLoading(false));
   }, []);
 
   const filtered = search.trim()
@@ -138,6 +142,13 @@ export default function AdminUsersPage() {
       setTimeout(() => setFeedback(null), 3000);
     }
   }
+
+  if (loading) return (
+    <div>
+      <div className="h-8 bg-gray-200 rounded w-56 mb-6 animate-pulse" />
+      <SkeletonTable rows={5} cols={7} />
+    </div>
+  );
 
   return (
     <div>
@@ -251,97 +262,99 @@ export default function AdminUsersPage() {
         className="w-full max-w-sm px-4 py-2.5 rounded-lg border border-gray-200 text-sm mb-4 focus:border-brand-accent focus:outline-none"
       />
 
-      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
-        <table className="w-full text-left">
-          <thead>
-            <tr className="border-b border-gray-100 text-xs text-gray-500 font-semibold tracking-wide">
-              <th className="px-5 py-3">{t("users.col_name")}</th>
-              <th className="px-5 py-3">{t("users.col_email")}</th>
-              <th className="px-5 py-3">{t("users.col_role")}</th>
-              <th className="px-5 py-3">{t("users.col_client")}</th>
-              <th className="px-5 py-3">{t("users.col_status")}</th>
-              <th className="px-5 py-3">{t("users.col_created")}</th>
-              <th className="px-5 py-3">{t("users.col_actions")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((u) => {
-              const clientName =
-                clients.find((c) => c.id === u.client_id)?.name || "—";
-              const statusKey = u.is_active ? "active" : "deactivated";
-              return (
-                <tr
-                  key={u.id}
-                  className={`border-b border-gray-50 last:border-0 hover:bg-gray-50/50 transition ${
-                    !u.is_active ? "opacity-50" : ""
-                  }`}
-                >
-                  <td className="px-5 py-3.5 text-[13px] font-semibold text-brand-dark">
-                    {u.full_name}
-                  </td>
-                  <td className="px-5 py-3.5 text-[13px] text-gray-600">
-                    {u.email}
-                  </td>
-                  <td className="px-5 py-3.5">
-                    <Badge
-                      text={u.role.toUpperCase()}
-                      color={roleColors[u.role] || "#999999"}
-                    />
-                  </td>
-                  <td className="px-5 py-3.5 text-[13px] text-gray-600">
-                    {clientName}
-                  </td>
-                  <td className="px-5 py-3.5">
-                    <Badge
-                      text={statusKey.toUpperCase()}
-                      color={statusColors[statusKey]}
-                    />
-                  </td>
-                  <td className="px-5 py-3.5 text-[13px] text-gray-400">
-                    {u.created_at?.slice(0, 10)}
-                  </td>
-                  <td className="px-5 py-3.5">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      {/* Role change dropdown */}
-                      <select
-                        value={u.role}
-                        onChange={(e) =>
-                          handleRoleChange(u.id, e.target.value)
-                        }
-                        className="px-2 py-1 rounded border border-gray-200 text-[12px] text-gray-700 focus:border-brand-accent focus:outline-none"
-                        title={t("users.action_change_role")}
-                      >
-                        <option value="admin">Admin</option>
-                        <option value="engineer">Engineer</option>
-                        <option value="seller">Seller</option>
-                        <option value="client">Client</option>
-                      </select>
-                      {/* Deactivate / Reactivate */}
-                      <button
-                        onClick={() => handleToggleStatus(u.id, u.is_active)}
-                        className={`px-2.5 py-1 rounded text-[12px] font-semibold transition ${
-                          u.is_active
-                            ? "bg-red-50 text-red-600 hover:bg-red-100"
-                            : "bg-green-50 text-green-600 hover:bg-green-100"
-                        }`}
-                      >
-                        {u.is_active
-                          ? t("users.action_deactivate")
-                          : t("users.action_reactivate")}
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-        {filtered.length === 0 && (
-          <div className="px-5 py-8 text-center text-sm text-gray-400">
-            {t("users.no_results")}
-          </div>
-        )}
-      </div>
+      <SectionErrorBoundary fallbackTitle={tc("error_section")} fallbackBody={tc("error_section_body")} fallbackRetry={tc("error_retry")}>
+        <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
+          <table className="w-full text-left">
+            <thead>
+              <tr className="border-b border-gray-100 text-xs text-gray-500 font-semibold tracking-wide">
+                <th className="px-5 py-3">{t("users.col_name")}</th>
+                <th className="px-5 py-3">{t("users.col_email")}</th>
+                <th className="px-5 py-3">{t("users.col_role")}</th>
+                <th className="px-5 py-3">{t("users.col_client")}</th>
+                <th className="px-5 py-3">{t("users.col_status")}</th>
+                <th className="px-5 py-3">{t("users.col_created")}</th>
+                <th className="px-5 py-3">{t("users.col_actions")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((u) => {
+                const clientName =
+                  clients.find((c) => c.id === u.client_id)?.name || "—";
+                const statusKey = u.is_active ? "active" : "deactivated";
+                return (
+                  <tr
+                    key={u.id}
+                    className={`border-b border-gray-50 last:border-0 hover:bg-gray-50/50 transition ${
+                      !u.is_active ? "opacity-50" : ""
+                    }`}
+                  >
+                    <td className="px-5 py-3.5 text-[13px] font-semibold text-brand-dark">
+                      {u.full_name}
+                    </td>
+                    <td className="px-5 py-3.5 text-[13px] text-gray-600">
+                      {u.email}
+                    </td>
+                    <td className="px-5 py-3.5">
+                      <Badge
+                        text={u.role.toUpperCase()}
+                        color={roleColors[u.role] || "#999999"}
+                      />
+                    </td>
+                    <td className="px-5 py-3.5 text-[13px] text-gray-600">
+                      {clientName}
+                    </td>
+                    <td className="px-5 py-3.5">
+                      <Badge
+                        text={statusKey.toUpperCase()}
+                        color={statusColors[statusKey]}
+                      />
+                    </td>
+                    <td className="px-5 py-3.5 text-[13px] text-gray-400">
+                      {u.created_at?.slice(0, 10)}
+                    </td>
+                    <td className="px-5 py-3.5">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        {/* Role change dropdown */}
+                        <select
+                          value={u.role}
+                          onChange={(e) =>
+                            handleRoleChange(u.id, e.target.value)
+                          }
+                          className="px-2 py-1 rounded border border-gray-200 text-[12px] text-gray-700 focus:border-brand-accent focus:outline-none"
+                          title={t("users.action_change_role")}
+                        >
+                          <option value="admin">Admin</option>
+                          <option value="engineer">Engineer</option>
+                          <option value="seller">Seller</option>
+                          <option value="client">Client</option>
+                        </select>
+                        {/* Deactivate / Reactivate */}
+                        <button
+                          onClick={() => handleToggleStatus(u.id, u.is_active)}
+                          className={`px-2.5 py-1 rounded text-[12px] font-semibold transition ${
+                            u.is_active
+                              ? "bg-red-50 text-red-600 hover:bg-red-100"
+                              : "bg-green-50 text-green-600 hover:bg-green-100"
+                          }`}
+                        >
+                          {u.is_active
+                            ? t("users.action_deactivate")
+                            : t("users.action_reactivate")}
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          {filtered.length === 0 && (
+            <div className="px-5 py-8 text-center text-sm text-gray-400">
+              {t("users.no_results")}
+            </div>
+          )}
+        </div>
+      </SectionErrorBoundary>
     </div>
   );
 }
