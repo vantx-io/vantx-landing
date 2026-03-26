@@ -39,7 +39,7 @@ See: `.planning/milestones/v1.1-ROADMAP.md` for full details.
 - [x] **Phase 11: Notification Polish** — Per-type notification preferences with enforcement + weekly Monday email digest (completed 2026-03-26)
 - [x] **Phase 12: Admin Capabilities** — User invite, role change, deactivation + MRR trend chart (completed 2026-03-26)
 - [x] **Phase 13: Auth UX** — Forgot password, password change, user profile in portal settings (completed 2026-03-26)
-- [ ] **Phase 14: Polish UX** — Loading skeletons, onboarding guide, section-level error boundaries
+- [x] **Phase 14: Polish UX** — Loading skeletons, onboarding guide, section-level error boundaries (completed 2026-03-26)
 - [ ] **Phase 15: Security Hardening** — CSP headers + admin audit logging
 - [ ] **Phase 16: Test Coverage** — API route integration tests + Playwright visual regression baselines
 - [ ] **Phase 17: Pre-Launch** — Production deploy (Cloudflare, Vercel, Supabase, Stripe live, Calendly, GA4)
@@ -108,10 +108,10 @@ Plans:
   1. Every portal page shows a skeleton placeholder while data loads (no empty flash)
   2. A brand-new user who logs in for the first time sees a welcome guide with key actions
   3. If a section of a page fails to load, the error is caught by a boundary and the rest of the page remains functional
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans complete
 Plans:
 - [x] 14-01-PLAN.md — Skeleton components + SectionErrorBoundary + OnboardingCard + migration + types + i18n
-- [ ] 14-02-PLAN.md — Portal pages: skeletons + error boundaries + onboarding card on dashboard
+- [x] 14-02-PLAN.md — Portal pages: skeletons + error boundaries + onboarding card on dashboard
 - [x] 14-03-PLAN.md — Admin pages: skeletons + error boundaries
 
 ### Phase 15: Security Hardening
@@ -165,7 +165,7 @@ Plans:
 | 11. Notification Polish | v1.2 | 3/3 | Complete    | 2026-03-26 |
 | 12. Admin Capabilities | v1.2 | 2/2 | Complete    | 2026-03-26 |
 | 13. Auth UX | v1.2 | 2/2 | Complete    | 2026-03-26 |
-| 14. Polish UX | v1.2 | 2/3 | In Progress|  |
+| 14. Polish UX | v1.2 | 3/3 | Complete   | 2026-03-26 |
 | 15. Security Hardening | v1.2 | 0/? | Not started | - |
 | 16. Test Coverage | v1.2 | 0/? | Not started | - |
 | 17. Pre-Launch | v1.2 | 0/? | Not started | - |
