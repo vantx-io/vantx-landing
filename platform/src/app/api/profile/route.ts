@@ -25,13 +25,14 @@ export async function GET() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data } = await (supabase as any)
     .from("users")
-    .select("full_name, email")
+    .select("full_name, email, has_onboarded")
     .eq("id", user.id)
     .single();
 
   return NextResponse.json({
     full_name: data?.full_name ?? "",
     email: data?.email ?? "",
+    has_onboarded: data?.has_onboarded ?? false,
   });
 }
 
@@ -47,6 +48,19 @@ export async function PATCH(req: Request) {
   if (!rl.success) return rateLimitResponse(rl);
 
   const body = await req.json();
+
+  // Onboarding dismiss (UX-02)
+  if (body.has_onboarded === true) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase as any)
+      .from("users")
+      .update({ has_onboarded: true })
+      .eq("id", user.id);
+    if (error)
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ ok: true }, { headers: rateLimitHeaders(rl) });
+  }
+
   const full_name =
     typeof body.full_name === "string" ? body.full_name.trim() : null;
   if (!full_name || full_name.length === 0)

@@ -8,7 +8,19 @@
     "logout": "Cerrar sesión",
     "vs_previous": "vs anterior",
     "loom": "Loom",
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "error_section": "Algo salió mal en esta sección",
+    "error_section_body": "Esta sección no pudo cargar. El resto de la página sigue disponible.",
+    "error_retry": "Intentar de nuevo"
+  },
+  "portal": {
+    "onboarding_heading": "¡Bienvenido a Vantx!",
+    "onboarding_body": "Aquí hay algunas cosas para comenzar.",
+    "onboarding_tasks": "Ver tus tareas",
+    "onboarding_tests": "Ver resultados de pruebas",
+    "onboarding_billing": "Explorar facturación",
+    "onboarding_settings": "Actualizar preferencias de notificación",
+    "onboarding_dismiss": "Entendido"
   },
   "login": {
     "title": "Portal de cliente",
