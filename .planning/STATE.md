@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Security & Polish
 status: unknown
-stopped_at: Completed 11-notification-polish-02-PLAN.md
-last_updated: "2026-03-26T02:59:24.300Z"
+stopped_at: Completed 12-admin-capabilities-01-PLAN.md
+last_updated: "2026-03-26T05:56:56.760Z"
 progress:
   total_phases: 8
   completed_phases: 2
-  total_plans: 4
-  completed_plans: 4
+  total_plans: 6
+  completed_plans: 5
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-25)
 
 **Core value:** Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay forma fácil de reservar tiempo, todo lo demás falla.
-**Current focus:** Phase 11 — notification-polish
+**Current focus:** Phase 12 — admin-capabilities
 
 ## Current Position
 
-Phase: 12
-Plan: Not started
+Phase: 12 (admin-capabilities) — EXECUTING
+Plan: 2 of 2
 
 ## Performance Metrics
 
@@ -60,6 +60,7 @@ Plan: Not started
 | Phase 11 P01 | 5min | 2 tasks | 8 files |
 | Phase 11 P03 | 5m | 2 tasks | 4 files |
 | Phase 11 P02 | 5min | 2 tasks | 4 files |
+| Phase 12 P01 | 2m | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -124,6 +125,9 @@ Key architectural decisions for v1.2 (from research):
 - [Phase 11]: notification_preferences queried via (supabase as any) cast in digest handler — matches established pattern from 11-01 and existing codebase
 - [Phase 11]: Preference check placed inside per-recipient loop in notifyTaskEvent — each recipient has independent preferences
 - [Phase 11]: Stripe webhook user lookup restructured to async to allow await on prefs lookup while preserving fire-and-forget pattern
+- [Phase 12]: SECURITY DEFINER on handle_new_user trigger: authenticated role lacks INSERT policy on users table; DEFINER runs as owner and bypasses RLS
+- [Phase 12]: ban_duration=876000h for permanent-style ban; none to unban — matches Supabase Auth admin.updateUserById API
+- [Phase 12]: is_active portal check placed after unauthenticated redirect — deactivated users with valid sessions caught before reaching portal
 
 ### Pending Todos
 
@@ -139,6 +143,6 @@ Key architectural decisions for v1.2 (from research):
 
 ## Session Continuity
 
-Last session: 2026-03-26T02:55:02.000Z
-Stopped at: Completed 11-notification-polish-02-PLAN.md
+Last session: 2026-03-26T05:56:56.755Z
+Stopped at: Completed 12-admin-capabilities-01-PLAN.md
 Resume file: None

@@ -16,14 +16,14 @@ Requirements for Security & Polish milestone. Each maps to roadmap phases.
 
 - [x] **NOTIF-10**: Client receives weekly Monday email digest of task activity
 - [x] **NOTIF-11**: User can toggle notification preferences per type (email, in-app) in portal settings
-- [ ] **NOTIF-12**: Notification preferences are enforced at send time in notifyTaskEvent
+- [x] **NOTIF-12**: Notification preferences are enforced at send time in notifyTaskEvent
 
 ### Admin
 
-- [ ] **ADMIN-07**: Admin can invite new users by email with role and client assignment
-- [ ] **ADMIN-08**: Invited user's public profile row is auto-created via DB trigger on acceptance
-- [ ] **ADMIN-09**: Admin can change user role
-- [ ] **ADMIN-10**: Admin can deactivate/reactivate user accounts
+- [x] **ADMIN-07**: Admin can invite new users by email with role and client assignment
+- [x] **ADMIN-08**: Invited user's public profile row is auto-created via DB trigger on acceptance
+- [x] **ADMIN-09**: Admin can change user role
+- [x] **ADMIN-10**: Admin can deactivate/reactivate user accounts
 - [ ] **ADMIN-11**: Admin can view MRR trend chart on billing page (Recharts)
 
 ### Auth UX
@@ -125,11 +125,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SEC-05 | Phase 10 | Complete |
 | NOTIF-10 | Phase 11 | Complete |
 | NOTIF-11 | Phase 11 | Complete |
-| NOTIF-12 | Phase 11 | Pending |
-| ADMIN-07 | Phase 12 | Pending |
-| ADMIN-08 | Phase 12 | Pending |
-| ADMIN-09 | Phase 12 | Pending |
-| ADMIN-10 | Phase 12 | Pending |
+| NOTIF-12 | Phase 11 | Complete |
+| ADMIN-07 | Phase 12 | Complete |
+| ADMIN-08 | Phase 12 | Complete |
+| ADMIN-09 | Phase 12 | Complete |
+| ADMIN-10 | Phase 12 | Complete |
 | ADMIN-11 | Phase 12 | Pending |
 | AUTH-01 | Phase 13 | Pending |
 | AUTH-02 | Phase 13 | Pending |
