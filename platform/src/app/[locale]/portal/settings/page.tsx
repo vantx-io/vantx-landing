@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
+import { SectionErrorBoundary } from "@/components/SectionErrorBoundary";
 
 type PrefsState = {
   email_enabled: boolean;
@@ -18,6 +19,7 @@ const DEFAULT_PREFS: PrefsState = {
 
 export default function SettingsPage() {
   const t = useTranslations("settings");
+  const tc = useTranslations("common");
   const [prefs, setPrefs] = useState<PrefsState>(DEFAULT_PREFS);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -148,154 +150,166 @@ export default function SettingsPage() {
       <h1 className="text-xl font-semibold text-white mb-6">{t("title")}</h1>
 
       {/* Profile section */}
-      <div className="bg-brand-surface rounded-xl border border-gray-200 p-6 max-w-xl mb-6">
-        <h2 className="text-base font-semibold text-[#1A1A17] mb-4">
-          {t("profile_heading")}
-        </h2>
-        <form onSubmit={handleProfileSave} className="space-y-4">
-          <div>
-            <label className="block text-xs font-medium text-brand-muted mb-1.5">
-              {t("name_label")}
-            </label>
-            <input
-              type="text"
-              value={profileName}
-              onChange={(e) => setProfileName(e.target.value)}
-              disabled={profileLoading}
-              className="w-full px-3.5 py-2.5 rounded-lg border border-gray-200 bg-white text-brand-dark text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent transition"
-            />
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-brand-muted mb-1.5">
-              {t("email_readonly_label")}
-            </label>
-            <p className="px-3.5 py-2.5 rounded-lg border border-gray-100 bg-gray-50 text-brand-muted text-sm">
-              {profileEmail}
-            </p>
-          </div>
-          {profileError && (
-            <p className="text-[11px] text-brand-red" role="alert">
-              {profileError}
-            </p>
-          )}
-          {profileSaved && (
-            <p className="text-[11px] text-green-600" role="status">
-              {t("saved")}
-            </p>
-          )}
-          <button
-            type="submit"
-            disabled={profileSaving || profileLoading}
-            className="px-4 py-2 bg-brand-accent hover:bg-brand-accent-hover text-white text-sm font-medium rounded-lg transition disabled:opacity-50"
-          >
-            {profileSaving ? t("saving") : t("save")}
-          </button>
-        </form>
-      </div>
+      <SectionErrorBoundary
+        fallbackTitle={tc("error_section")}
+        fallbackBody={tc("error_section_body")}
+        fallbackRetry={tc("error_retry")}
+      >
+        <div className="bg-brand-surface rounded-xl border border-gray-200 p-6 max-w-xl mb-6">
+          <h2 className="text-base font-semibold text-[#1A1A17] mb-4">
+            {t("profile_heading")}
+          </h2>
+          <form onSubmit={handleProfileSave} className="space-y-4">
+            <div>
+              <label className="block text-xs font-medium text-brand-muted mb-1.5">
+                {t("name_label")}
+              </label>
+              <input
+                type="text"
+                value={profileName}
+                onChange={(e) => setProfileName(e.target.value)}
+                disabled={profileLoading}
+                className="w-full px-3.5 py-2.5 rounded-lg border border-gray-200 bg-white text-brand-dark text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent transition"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-brand-muted mb-1.5">
+                {t("email_readonly_label")}
+              </label>
+              <p className="px-3.5 py-2.5 rounded-lg border border-gray-100 bg-gray-50 text-brand-muted text-sm">
+                {profileEmail}
+              </p>
+            </div>
+            {profileError && (
+              <p className="text-[11px] text-brand-red" role="alert">
+                {profileError}
+              </p>
+            )}
+            {profileSaved && (
+              <p className="text-[11px] text-green-600" role="status">
+                {t("saved")}
+              </p>
+            )}
+            <button
+              type="submit"
+              disabled={profileSaving || profileLoading}
+              className="px-4 py-2 bg-brand-accent hover:bg-brand-accent-hover text-white text-sm font-medium rounded-lg transition disabled:opacity-50"
+            >
+              {profileSaving ? t("saving") : t("save")}
+            </button>
+          </form>
+        </div>
+      </SectionErrorBoundary>
 
       {/* Notifications section */}
-      <div className="bg-brand-surface rounded-xl border border-gray-200 p-6 max-w-xl mb-6">
-        <h2 className="text-base font-semibold text-[#1A1A17] mb-4">
-          {t("notifications_heading")}
-        </h2>
+      <SectionErrorBoundary
+        fallbackTitle={tc("error_section")}
+        fallbackBody={tc("error_section_body")}
+        fallbackRetry={tc("error_retry")}
+      >
+        <div className="bg-brand-surface rounded-xl border border-gray-200 p-6 max-w-xl mb-6">
+          <h2 className="text-base font-semibold text-[#1A1A17] mb-4">
+            {t("notifications_heading")}
+          </h2>
 
-        {error && (
-          <p className="text-sm text-brand-red mb-4" role="alert">
-            {error}
-          </p>
-        )}
+          {error && (
+            <p className="text-sm text-brand-red mb-4" role="alert">
+              {error}
+            </p>
+          )}
 
-        {/* Email notifications */}
-        <div className="flex items-center justify-between py-3 border-b border-gray-100">
-          <div className="flex flex-col">
-            <span className="text-sm text-[#1A1A17]">{t("email_label")}</span>
-            <span className="text-[11px] text-brand-muted mt-0.5">
-              {t("email_description")}
-            </span>
+          {/* Email notifications */}
+          <div className="flex items-center justify-between py-3 border-b border-gray-100">
+            <div className="flex flex-col">
+              <span className="text-sm text-[#1A1A17]">{t("email_label")}</span>
+              <span className="text-[11px] text-brand-muted mt-0.5">
+                {t("email_description")}
+              </span>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={prefs.email_enabled}
+              aria-label={t("email_label")}
+              onClick={() => handleToggle("email_enabled")}
+              disabled={loading}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 ${
+                prefs.email_enabled ? "bg-brand-accent" : "bg-[#D1D5DB]"
+              } ${loading ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
+            >
+              <span
+                className={`inline-block h-5 w-5 rounded-full bg-white shadow transform transition-transform duration-200 ${
+                  prefs.email_enabled ? "translate-x-5" : "translate-x-0.5"
+                }`}
+              />
+            </button>
           </div>
-          <button
-            type="button"
-            role="switch"
-            aria-checked={prefs.email_enabled}
-            aria-label={t("email_label")}
-            onClick={() => handleToggle("email_enabled")}
-            disabled={loading}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 ${
-              prefs.email_enabled ? "bg-brand-accent" : "bg-[#D1D5DB]"
-            } ${loading ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
-          >
-            <span
-              className={`inline-block h-5 w-5 rounded-full bg-white shadow transform transition-transform duration-200 ${
-                prefs.email_enabled ? "translate-x-5" : "translate-x-0.5"
-              }`}
-            />
-          </button>
-        </div>
 
-        {/* In-app notifications */}
-        <div className="flex items-center justify-between py-3 border-b border-gray-100">
-          <div className="flex flex-col">
-            <span className="text-sm text-[#1A1A17]">
-              {t("in_app_label")}
-            </span>
-            <span className="text-[11px] text-brand-muted mt-0.5">
-              {t("in_app_description")}
-            </span>
+          {/* In-app notifications */}
+          <div className="flex items-center justify-between py-3 border-b border-gray-100">
+            <div className="flex flex-col">
+              <span className="text-sm text-[#1A1A17]">
+                {t("in_app_label")}
+              </span>
+              <span className="text-[11px] text-brand-muted mt-0.5">
+                {t("in_app_description")}
+              </span>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={prefs.in_app_enabled}
+              aria-label={t("in_app_label")}
+              onClick={() => handleToggle("in_app_enabled")}
+              disabled={loading}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 ${
+                prefs.in_app_enabled ? "bg-brand-accent" : "bg-[#D1D5DB]"
+              } ${loading ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
+            >
+              <span
+                className={`inline-block h-5 w-5 rounded-full bg-white shadow transform transition-transform duration-200 ${
+                  prefs.in_app_enabled ? "translate-x-5" : "translate-x-0.5"
+                }`}
+              />
+            </button>
           </div>
-          <button
-            type="button"
-            role="switch"
-            aria-checked={prefs.in_app_enabled}
-            aria-label={t("in_app_label")}
-            onClick={() => handleToggle("in_app_enabled")}
-            disabled={loading}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 ${
-              prefs.in_app_enabled ? "bg-brand-accent" : "bg-[#D1D5DB]"
-            } ${loading ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
-          >
-            <span
-              className={`inline-block h-5 w-5 rounded-full bg-white shadow transform transition-transform duration-200 ${
-                prefs.in_app_enabled ? "translate-x-5" : "translate-x-0.5"
-              }`}
-            />
-          </button>
-        </div>
 
-        {/* Weekly digest */}
-        <div className="flex items-center justify-between py-3">
-          <div className="flex flex-col">
-            <span className="text-sm text-[#1A1A17]">
-              {t("digest_label")}
-            </span>
-            <span className="text-[11px] text-brand-muted mt-0.5">
-              {t("digest_description")}
-            </span>
+          {/* Weekly digest */}
+          <div className="flex items-center justify-between py-3">
+            <div className="flex flex-col">
+              <span className="text-sm text-[#1A1A17]">
+                {t("digest_label")}
+              </span>
+              <span className="text-[11px] text-brand-muted mt-0.5">
+                {t("digest_description")}
+              </span>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={prefs.digest_enabled}
+              aria-label={t("digest_label")}
+              onClick={() => handleToggle("digest_enabled")}
+              disabled={loading}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 ${
+                prefs.digest_enabled ? "bg-brand-accent" : "bg-[#D1D5DB]"
+              } ${loading ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
+            >
+              <span
+                className={`inline-block h-5 w-5 rounded-full bg-white shadow transform transition-transform duration-200 ${
+                  prefs.digest_enabled ? "translate-x-5" : "translate-x-0.5"
+                }`}
+              />
+            </button>
           </div>
-          <button
-            type="button"
-            role="switch"
-            aria-checked={prefs.digest_enabled}
-            aria-label={t("digest_label")}
-            onClick={() => handleToggle("digest_enabled")}
-            disabled={loading}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 ${
-              prefs.digest_enabled ? "bg-brand-accent" : "bg-[#D1D5DB]"
-            } ${loading ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
-          >
-            <span
-              className={`inline-block h-5 w-5 rounded-full bg-white shadow transform transition-transform duration-200 ${
-                prefs.digest_enabled ? "translate-x-5" : "translate-x-0.5"
-              }`}
-            />
-          </button>
-        </div>
 
-        {saveError && (
-          <p className="text-[11px] text-brand-red mt-1" role="alert">
-            {saveError}
-          </p>
-        )}
-      </div>
+          {saveError && (
+            <p className="text-[11px] text-brand-red mt-1" role="alert">
+              {saveError}
+            </p>
+          )}
+        </div>
+      </SectionErrorBoundary>
 
       {/* Security section */}
       <div className="bg-brand-surface rounded-xl border border-gray-200 p-6 max-w-xl">
