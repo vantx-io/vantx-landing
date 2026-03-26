@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import Image from "next/image";
 import type { Client, Subscription, User } from "@/lib/types";
 import { NotificationBell } from "@/components/NotificationBell";
+import { Settings } from "lucide-react";
 
 const navKeys = [
   { id: "portal", key: "dashboard", segment: "" },
@@ -16,6 +17,7 @@ const navKeys = [
   { id: "billing", key: "billing", segment: "/billing" },
   { id: "services", key: "services", segment: "/services" },
   { id: "tutorials", key: "tutorials", segment: "/tutorials" },
+  { id: "settings", key: "settings", segment: "/settings" },
 ];
 
 export default function PortalLayout({
@@ -137,6 +139,7 @@ export default function PortalLayout({
                     : "border-transparent hover:bg-white/5 hover:text-white/80"
                 }`}
               >
+                {n.id === "settings" && <Settings className="w-4 h-4" />}
                 {t(n.key)}
               </button>
             );
