@@ -57,6 +57,20 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
   }
 
+  // Check is_active for authenticated portal users
+  if (pathWithoutLocale.startsWith("/portal") && user) {
+    const { data: profile } = await supabase
+      .from("users")
+      .select("is_active")
+      .eq("id", user.id)
+      .single();
+    if (profile && profile.is_active === false) {
+      return NextResponse.redirect(
+        new URL(`/${locale}/deactivated`, request.url),
+      );
+    }
+  }
+
   // Redirect logged-in users from login to portal
   if (pathWithoutLocale === "/login" && user) {
     return NextResponse.redirect(new URL(`/${locale}/portal`, request.url));
@@ -69,11 +83,11 @@ export async function middleware(request: NextRequest) {
     }
     const { data: profile } = await supabase
       .from("users")
-      .select("role")
+      .select("role, is_active")
       .eq("id", user.id)
       .single();
     const adminRoles: string[] = ["admin", "engineer", "seller"];
-    if (!profile || !adminRoles.includes(profile.role)) {
+    if (!profile || !adminRoles.includes(profile.role) || !profile.is_active) {
       return NextResponse.redirect(new URL(`/${locale}/portal`, request.url));
     }
   }
