@@ -28,8 +28,8 @@ Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay f
 ### Active
 
 - ✓ Rate limiting on API routes (SEC-04, SEC-05) — Validated in Phase 10: Rate Limiting
-- [ ] Weekly email digest to clients (NOTIF-10)
-- [ ] User notification preferences (NOTIF-11, NOTIF-12)
+- ✓ Weekly email digest to clients (NOTIF-10) — Validated in Phase 11: Notification Polish
+- ✓ User notification preferences (NOTIF-11, NOTIF-12) — Validated in Phase 11: Notification Polish
 - [ ] Admin user management — invite, role change, deactivate (ADMIN-07..10)
 - [ ] Admin MRR trend chart (ADMIN-11)
 - [ ] Forgot password + password change + user profile (AUTH-01..03)
@@ -46,7 +46,7 @@ Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay f
 - Real-time chat — Slack covers async communication
 - Mobile app — responsive web sufficient at current scale
 - Admin user management UI — promoted to v1.2 (ADMIN-07)
-- Notification preferences UI — promoted to v1.2 (NOTIF-11)
+- ~~Notification preferences UI — promoted to v1.2 (NOTIF-11)~~ → Delivered in Phase 11
 - Two-factor authentication (TOTP) — deferred to v1.3 (SEC-01, SEC-02, SEC-03)
 
 ## Context
@@ -86,6 +86,8 @@ Tech: Next.js 14.2, Supabase (Postgres + Auth + Storage + Realtime), Stripe, Res
 | Signed URLs for file downloads (1hr expiry) | No permanent public URLs, security by default | ✓ Good |
 | react-dropzone for file uploads | Small bundle, composable, well-maintained | ✓ Good |
 | Storage RLS scoped by client_id path | Cross-tenant isolation at infrastructure level | ✓ Good |
+| Opt-out notification model (no row = all ON) | Zero-config onboarding, progressive preference setting | ✓ Good |
+| Vercel Cron for weekly digest (Mon 9am UTC) | Free tier covers schedule, no external scheduler needed | ✓ Good |
 
 ## Current Milestone: v1.2 Security & Polish
 
@@ -119,4 +121,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-25 after v1.2 milestone started*
+*Last updated: 2026-03-26 after Phase 11 (notification-polish) completed*
