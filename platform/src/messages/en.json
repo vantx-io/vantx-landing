@@ -29,7 +29,8 @@
     "grafana": "Grafana",
     "billing": "Billing",
     "services": "Services",
-    "tutorials": "Tutorials"
+    "tutorials": "Tutorials",
+    "settings": "Settings"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -194,6 +195,18 @@
     "markAllRead": "Mark all as read",
     "empty": "No notifications",
     "justNow": "Just now"
+  },
+  "settings": {
+    "title": "Settings",
+    "notifications_heading": "Notifications",
+    "email_label": "Email notifications",
+    "email_description": "Receive task and payment updates by email",
+    "in_app_label": "In-app notifications",
+    "in_app_description": "Receive notifications in the portal bell",
+    "digest_label": "Weekly digest email",
+    "digest_description": "Get a Monday summary of task activity",
+    "error_load": "Could not load preferences. Try refreshing the page.",
+    "error_save": "Could not save change. Try again."
   },
   "tutorials": {
     "title": "Tutorials",

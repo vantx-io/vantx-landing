@@ -22,6 +22,15 @@ export interface AppNotification {
 // Alias for backward compatibility — prefer AppNotification in new code
 export type Notification = AppNotification;
 
+export type NotificationPreferences = {
+  id: string;
+  user_id: string;
+  email_enabled: boolean;
+  in_app_enabled: boolean;
+  digest_enabled: boolean;
+  updated_at: string;
+};
+
 export type Database = {
   public: {
     Tables: {
@@ -135,6 +144,13 @@ export type Database = {
         Insert: Partial<Omit<AppNotification, "id" | "created_at">> &
           Pick<AppNotification, "user_id" | "type" | "title" | "body">;
         Update: Partial<AppNotification>;
+        Relationships: [];
+      };
+      notification_preferences: {
+        Row: NotificationPreferences;
+        Insert: Partial<Omit<NotificationPreferences, "id" | "updated_at">> &
+          Pick<NotificationPreferences, "user_id">;
+        Update: Partial<NotificationPreferences>;
         Relationships: [];
       };
     };

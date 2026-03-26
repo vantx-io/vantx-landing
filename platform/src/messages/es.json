@@ -29,7 +29,8 @@
     "grafana": "Grafana",
     "billing": "Pagos",
     "services": "Servicios",
-    "tutorials": "Tutoriales"
+    "tutorials": "Tutoriales",
+    "settings": "Configuraci\u00f3n"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -194,6 +195,18 @@
     "markAllRead": "Marcar todo como leido",
     "empty": "Sin notificaciones",
     "justNow": "Ahora mismo"
+  },
+  "settings": {
+    "title": "Configuraci\u00f3n",
+    "notifications_heading": "Notificaciones",
+    "email_label": "Notificaciones por email",
+    "email_description": "Recibe actualizaciones de tareas y pagos por email",
+    "in_app_label": "Notificaciones en la app",
+    "in_app_description": "Recibe notificaciones en el portal",
+    "digest_label": "Resumen semanal por email",
+    "digest_description": "Recibe un resumen los lunes de la actividad",
+    "error_load": "No se pudieron cargar las preferencias. Intenta recargar la p\u00e1gina.",
+    "error_save": "No se pudo guardar el cambio. Intenta de nuevo."
   },
   "tutorials": {
     "title": "Tutoriales",
