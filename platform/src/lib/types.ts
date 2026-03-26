@@ -186,6 +186,7 @@ export type User = {
   role: "admin" | "engineer" | "seller" | "client";
   avatar_url: string | null;
   is_active: boolean;
+  has_onboarded: boolean;
   created_at: string;
 };
 
