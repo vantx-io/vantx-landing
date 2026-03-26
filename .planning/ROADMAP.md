@@ -36,7 +36,7 @@ See: `.planning/milestones/v1.1-ROADMAP.md` for full details.
 ### v1.2 Security & Polish (Phases 10-17)
 
 - [x] **Phase 10: Rate Limiting** — Upstash Redis rate limiting on all API routes (completed 2026-03-26)
-- [ ] **Phase 11: Notification Polish** — Per-type notification preferences with enforcement + weekly Monday email digest
+- [x] **Phase 11: Notification Polish** — Per-type notification preferences with enforcement + weekly Monday email digest (completed 2026-03-26)
 - [ ] **Phase 12: Admin Capabilities** — User invite, role change, deactivation + MRR trend chart
 - [ ] **Phase 13: Auth UX** — Forgot password, password change, user profile in portal settings
 - [ ] **Phase 14: Polish UX** — Loading skeletons, onboarding guide, section-level error boundaries
@@ -67,10 +67,10 @@ Plans:
   2. After disabling email notifications, the user does not receive email for events that would previously have triggered one
   3. Every Monday morning, clients receive an email digest listing task activity from the past week
   4. A client who has disabled email notifications does not receive the weekly digest
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans complete
 Plans:
 - [x] 11-01-PLAN.md — Migration + types + preferences API + settings page with toggles
-- [ ] 11-02-PLAN.md — Preference enforcement in notifyTaskEvent + Stripe webhook
+- [x] 11-02-PLAN.md — Preference enforcement in notifyTaskEvent + Stripe webhook
 - [x] 11-03-PLAN.md — WeeklyDigestEmail template + cron handler + vercel.json
 
 ### Phase 12: Admin Capabilities
@@ -152,7 +152,7 @@ Plans:
 | 8. Admin Dashboard | v1.1 | 3/3 | Complete | 2026-03-25 |
 | 9. File Uploads | v1.1 | 3/3 | Complete | 2026-03-25 |
 | 10. Rate Limiting | v1.2 | 1/1 | Complete    | 2026-03-26 |
-| 11. Notification Polish | v1.2 | 2/3 | In Progress|  |
+| 11. Notification Polish | v1.2 | 3/3 | Complete   | 2026-03-26 |
 | 12. Admin Capabilities | v1.2 | 0/? | Not started | - |
 | 13. Auth UX | v1.2 | 0/? | Not started | - |
 | 14. Polish UX | v1.2 | 0/? | Not started | - |

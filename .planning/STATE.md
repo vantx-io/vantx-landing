@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Security & Polish
 status: unknown
-stopped_at: Completed 11-notification-polish-03-PLAN.md
-last_updated: "2026-03-26T02:54:07.192Z"
+stopped_at: Completed 11-notification-polish-02-PLAN.md
+last_updated: "2026-03-26T02:55:02.005Z"
 progress:
   total_phases: 8
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 4
-  completed_plans: 3
+  completed_plans: 4
 ---
 
 # Project State
@@ -59,6 +59,7 @@ Plan: 3 of 3
 | Phase 10-security-foundation P01 | 7min | 2 tasks | 10 files |
 | Phase 11 P01 | 5min | 2 tasks | 8 files |
 | Phase 11 P03 | 5m | 2 tasks | 4 files |
+| Phase 11 P02 | 5min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -121,6 +122,8 @@ Key architectural decisions for v1.2 (from research):
 - [Phase 11]: Settings nav item as last entry with gear icon from lucide-react — distinguishes from text-only nav items
 - [Phase 11]: Sellers receive cross-client digest via same else-branch as admin/engineer — RLS grants cross-client access, no separate handling needed
 - [Phase 11]: notification_preferences queried via (supabase as any) cast in digest handler — matches established pattern from 11-01 and existing codebase
+- [Phase 11]: Preference check placed inside per-recipient loop in notifyTaskEvent — each recipient has independent preferences
+- [Phase 11]: Stripe webhook user lookup restructured to async to allow await on prefs lookup while preserving fire-and-forget pattern
 
 ### Pending Todos
 
@@ -136,6 +139,6 @@ Key architectural decisions for v1.2 (from research):
 
 ## Session Continuity
 
-Last session: 2026-03-26T02:54:07.188Z
-Stopped at: Completed 11-notification-polish-03-PLAN.md
+Last session: 2026-03-26T02:55:02.000Z
+Stopped at: Completed 11-notification-polish-02-PLAN.md
 Resume file: None
