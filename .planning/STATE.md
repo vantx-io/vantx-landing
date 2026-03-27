@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Security & Polish
 status: unknown
-stopped_at: Completed 14-polish-ux-02-PLAN.md
-last_updated: "2026-03-26T13:15:31.544Z"
+stopped_at: Completed 15-security-hardening-01-PLAN.md
+last_updated: "2026-03-27T11:15:58.276Z"
 progress:
   total_phases: 8
   completed_phases: 5
-  total_plans: 11
-  completed_plans: 11
+  total_plans: 13
+  completed_plans: 12
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-25)
 
 **Core value:** Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay forma fácil de reservar tiempo, todo lo demás falla.
-**Current focus:** Phase 14 — polish-ux
+**Current focus:** Phase 15 — security-hardening
 
 ## Current Position
 
-Phase: 15
-Plan: Not started
+Phase: 15 (security-hardening) — EXECUTING
+Plan: 2 of 2
 
 ## Performance Metrics
 
@@ -67,6 +67,7 @@ Plan: Not started
 | Phase 14-polish-ux P01 | 3min | 2 tasks | 8 files |
 | Phase 14-polish-ux P03 | 4min | 2 tasks | 5 files |
 | Phase 14 P02 | 386s | 2 tasks | 7 files |
+| Phase 15-security-hardening P01 | 256s | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -145,6 +146,10 @@ Key architectural decisions for v1.2 (from research):
 - [Phase 14-polish-ux]: Admin billing has 3 SectionErrorBoundaries (stats, chart, tables) — payments and subscriptions tables combined in a third boundary for safety
 - [Phase 14]: dataLoading vs loading disambiguation for billing page (checkout-loading dual concern)
 - [Phase 14]: Dashboard uses 2 SectionErrorBoundary wrappers: metrics+charts and reports+tasks bottom grid
+- [Phase 15-security-hardening]: audit_logs.target_id has no FK: avoids violation on invite events (user row not yet created at invite time)
+- [Phase 15-security-hardening]: audit_logs excluded from Database type: use (supabase as any).from('audit_logs') per established codebase pattern
+- [Phase 15-security-hardening]: logAuditEvent() catches all errors silently: audit failures must never block admin operations (mirrors rate-limit pattern)
+- [Phase 15-security-hardening]: CSP script-src includes unsafe-inline + unsafe-eval: required for Next.js 14 inline scripts and dev fast-refresh
 
 ### Pending Todos
 
@@ -160,6 +165,6 @@ Key architectural decisions for v1.2 (from research):
 
 ## Session Continuity
 
-Last session: 2026-03-26T13:10:39.775Z
-Stopped at: Completed 14-polish-ux-02-PLAN.md
+Last session: 2026-03-27T11:15:58.267Z
+Stopped at: Completed 15-security-hardening-01-PLAN.md
 Resume file: None

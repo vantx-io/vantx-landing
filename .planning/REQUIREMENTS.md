@@ -40,8 +40,8 @@ Requirements for Security & Polish milestone. Each maps to roadmap phases.
 
 ### Security Hardening
 
-- [ ] **SECURE-01**: CSP headers configured for all platform routes
-- [ ] **SECURE-02**: Admin actions are audit-logged (who, what, when)
+- [x] **SECURE-01**: CSP headers configured for all platform routes
+- [x] **SECURE-02**: Admin actions are audit-logged (who, what, when)
 
 ### Testing
 
@@ -137,8 +137,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | UX-01 | Phase 14 | Complete |
 | UX-02 | Phase 14 | Complete |
 | UX-03 | Phase 14 | Complete |
-| SECURE-01 | Phase 15 | Pending |
-| SECURE-02 | Phase 15 | Pending |
+| SECURE-01 | Phase 15 | Complete |
+| SECURE-02 | Phase 15 | Complete |
 | TEST-10 | Phase 16 | Pending |
 | TEST-11 | Phase 16 | Pending |
 | LAUNCH-01 | Phase 17 | Pending |

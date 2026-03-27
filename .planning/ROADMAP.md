@@ -122,9 +122,9 @@ Plans:
   1. All platform responses include Content-Security-Policy headers that block inline scripts and restrict sources
   2. Every admin action (invite, role change, deactivation) creates an audit log entry with actor, action, target, and timestamp
   3. Audit log is queryable from the admin dashboard or database
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 Plans:
-- [ ] 15-01-PLAN.md — CSP + security headers + audit_logs migration + audit helper + endpoint instrumentation
+- [x] 15-01-PLAN.md — CSP + security headers + audit_logs migration + audit helper + endpoint instrumentation
 - [ ] 15-02-PLAN.md — Audit log UI section on admin overview + i18n keys
 
 ### Phase 16: Test Coverage
@@ -169,6 +169,6 @@ Plans:
 | 12. Admin Capabilities | v1.2 | 2/2 | Complete    | 2026-03-26 |
 | 13. Auth UX | v1.2 | 2/2 | Complete    | 2026-03-26 |
 | 14. Polish UX | v1.2 | 3/3 | Complete    | 2026-03-26 |
-| 15. Security Hardening | v1.2 | 0/2 | Planning complete | - |
+| 15. Security Hardening | v1.2 | 1/2 | In Progress|  |
 | 16. Test Coverage | v1.2 | 0/? | Not started | - |
 | 17. Pre-Launch | v1.2 | 0/? | Not started | - |
