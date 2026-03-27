@@ -3,6 +3,7 @@ import { defineConfig, devices } from "@playwright/test";
 export default defineConfig({
   testDir: "./e2e",
   baseURL: "http://localhost:3000",
+  snapshotPathTemplate: "e2e/screenshots/{arg}{ext}",
   use: { trace: "on-first-retry" },
   projects: [
     { name: "setup", testMatch: /.*\.setup\.ts/ },
@@ -29,6 +30,16 @@ export default defineConfig({
       testMatch: /storage-isolation\.spec\.ts/,
       dependencies: ["setup", "setup-b"],
       use: { ...devices["Desktop Chrome"] },
+    },
+    {
+      name: "visual",
+      testMatch: /visual-regression\.spec\.ts/,
+      use: {
+        ...devices["Desktop Chrome"],
+        viewport: { width: 1280, height: 720 },
+        storageState: "playwright/.auth/user.json",
+      },
+      dependencies: ["setup"],
     },
   ],
   webServer: {
