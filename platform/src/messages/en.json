@@ -302,6 +302,14 @@
       "event_payment": "Payment {status}: ${amount} from {client}",
       "event_task": "Task \"{title}\" — {status}"
     },
+    "audit_log": {
+      "title": "Audit Log",
+      "empty": "No admin actions recorded yet.",
+      "action_invite": "{actor} invited {target} as {role}",
+      "action_role_change": "{actor} changed {target}'s role to {role}",
+      "action_deactivate": "{actor} deactivated {target}",
+      "action_reactivate": "{actor} reactivated {target}"
+    },
     "clients": {
       "title": "All Clients",
       "search_placeholder": "Search by name...",
