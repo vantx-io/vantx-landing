@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Security & Polish
 status: unknown
-stopped_at: Completed 15-security-hardening-02-PLAN.md
-last_updated: "2026-03-27T11:27:37.020Z"
+stopped_at: Completed 16-test-coverage-02-PLAN.md
+last_updated: "2026-03-27T14:16:18.720Z"
 progress:
   total_phases: 8
   completed_phases: 6
-  total_plans: 13
-  completed_plans: 13
+  total_plans: 16
+  completed_plans: 15
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-25)
 
 **Core value:** Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay forma fácil de reservar tiempo, todo lo demás falla.
-**Current focus:** Phase 15 — security-hardening
+**Current focus:** Phase 16 — test-coverage
 
 ## Current Position
 
-Phase: 16
-Plan: Not started
+Phase: 16 (test-coverage) — EXECUTING
+Plan: 3 of 3
 
 ## Performance Metrics
 
@@ -69,6 +69,8 @@ Plan: Not started
 | Phase 14 P02 | 386s | 2 tasks | 7 files |
 | Phase 15-security-hardening P01 | 256s | 2 tasks | 7 files |
 | Phase 15 P02 | 257 | 2 tasks | 3 files |
+| Phase 16-test-coverage P01 | 6min | 2 tasks | 3 files |
+| Phase 16-test-coverage P02 | 148 | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -152,6 +154,10 @@ Key architectural decisions for v1.2 (from research):
 - [Phase 15-security-hardening]: logAuditEvent() catches all errors silently: audit failures must never block admin operations (mirrors rate-limit pattern)
 - [Phase 15-security-hardening]: CSP script-src includes unsafe-inline + unsafe-eval: required for Next.js 14 inline scripts and dev fast-refresh
 - [Phase 15]: Name enrichment uses secondary users query after audit fetch; avoids schema JOIN complexity
+- [Phase 16-test-coverage]: NTARH v5 testApiHandler appHandler pattern for Next.js App Router integration tests without real HTTP or network calls
+- [Phase 16-test-coverage]: next/headers not re-mocked in test files — NTARH provides the environment; createServerSupabase already mocked so cookies() never reached
+- [Phase 16-test-coverage]: Fire-and-forget branches (email/notification .then() chains) not asserted in webhook tests — only synchronous DB mutations (upsert/insert/update) are verifiable
+- [Phase 16-test-coverage]: mockUpdate returns { eq: spy } to assert both update payload and stripe_subscription_id filter in subscription.deleted branch
 
 ### Pending Todos
 
@@ -167,6 +173,6 @@ Key architectural decisions for v1.2 (from research):
 
 ## Session Continuity
 
-Last session: 2026-03-27T11:23:07.758Z
-Stopped at: Completed 15-security-hardening-02-PLAN.md
+Last session: 2026-03-27T14:16:18.708Z
+Stopped at: Completed 16-test-coverage-02-PLAN.md
 Resume file: None
