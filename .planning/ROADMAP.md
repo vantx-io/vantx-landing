@@ -136,7 +136,11 @@ Plans:
   2. Stripe webhook tests cover all 4 event branches (payment succeeded, payment failed, subscription updated, subscription deleted)
   3. Running Playwright in CI captures and stores screenshot baselines for portal dashboard, task list, settings, admin overview, admin billing, and admin users pages
   4. A deliberate CSS change to a portal page causes the visual regression test to fail with a diff image
-**Plans**: TBD
+**Plans:** 3 plans
+Plans:
+- [ ] 16-01-PLAN.md — Install NTARH + MSW, checkout + billing-portal integration tests
+- [ ] 16-02-PLAN.md — Stripe webhook integration tests (all 4 event branches)
+- [ ] 16-03-PLAN.md — Playwright visual regression spec + config + CI workflow
 
 ### Phase 17: Pre-Launch
 **Goal**: Production infrastructure is provisioned and all placeholder values are replaced with real credentials
@@ -170,5 +174,5 @@ Plans:
 | 13. Auth UX | v1.2 | 2/2 | Complete    | 2026-03-26 |
 | 14. Polish UX | v1.2 | 3/3 | Complete    | 2026-03-26 |
 | 15. Security Hardening | v1.2 | 2/2 | Complete    | 2026-03-27 |
-| 16. Test Coverage | v1.2 | 0/? | Not started | - |
+| 16. Test Coverage | v1.2 | 0/3 | Not started | - |
 | 17. Pre-Launch | v1.2 | 0/? | Not started | - |
