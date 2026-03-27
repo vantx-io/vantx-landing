@@ -41,7 +41,7 @@ See: `.planning/milestones/v1.1-ROADMAP.md` for full details.
 - [x] **Phase 13: Auth UX** — Forgot password, password change, user profile in portal settings (completed 2026-03-26)
 - [x] **Phase 14: Polish UX** — Loading skeletons, onboarding guide, section-level error boundaries (completed 2026-03-26)
 - [x] **Phase 15: Security Hardening** — CSP headers + admin audit logging (completed 2026-03-27)
-- [ ] **Phase 16: Test Coverage** — API route integration tests + Playwright visual regression baselines (gap closure in progress)
+- [x] **Phase 16: Test Coverage** — API route integration tests + Playwright visual regression baselines (gap closure in progress) (completed 2026-03-27)
 - [ ] **Phase 17: Pre-Launch** — Production deploy (Cloudflare, Vercel, Supabase, Stripe live, Calendly, GA4)
 
 ## Phase Details
@@ -136,12 +136,12 @@ Plans:
   2. Stripe webhook tests cover all 4 event branches (payment succeeded, payment failed, subscription updated, subscription deleted)
   3. Running Playwright in CI captures and stores screenshot baselines for portal dashboard, task list, settings, admin overview, admin billing, and admin users pages
   4. A deliberate CSS change to a portal page causes the visual regression test to fail with a diff image
-**Plans:** 4 plans (3 complete, 1 gap closure)
+**Plans:** 4/4 plans complete
 Plans:
 - [x] 16-01-PLAN.md — Install NTARH + MSW, checkout + billing-portal integration tests
 - [x] 16-02-PLAN.md — Stripe webhook integration tests (all 4 event branches)
 - [x] 16-03-PLAN.md — Playwright visual regression spec + config + CI workflow
-- [ ] 16-04-PLAN.md — Gap closure: generate and commit visual regression baseline PNGs from CI
+- [x] 16-04-PLAN.md — Gap closure: generate and commit visual regression baseline PNGs from CI
 
 ### Phase 17: Pre-Launch
 **Goal**: Production infrastructure is provisioned and all placeholder values are replaced with real credentials
@@ -175,5 +175,5 @@ Plans:
 | 13. Auth UX | v1.2 | 2/2 | Complete    | 2026-03-26 |
 | 14. Polish UX | v1.2 | 3/3 | Complete    | 2026-03-26 |
 | 15. Security Hardening | v1.2 | 2/2 | Complete    | 2026-03-27 |
-| 16. Test Coverage | v1.2 | 3/4 | Gap closure | - |
+| 16. Test Coverage | v1.2 | 4/4 | Complete   | 2026-03-27 |
 | 17. Pre-Launch | v1.2 | 0/? | Not started | - |

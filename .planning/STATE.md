@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Security & Polish
 status: unknown
-stopped_at: Completed 16-test-coverage-03-PLAN.md
-last_updated: "2026-03-27T15:57:05.910Z"
+stopped_at: "Checkpoint: 16-04 Task 2 — human-action required (trigger CI, download baselines, commit PNGs, revert workflow)"
+last_updated: "2026-03-27T16:34:21.842Z"
 progress:
   total_phases: 8
   completed_phases: 7
-  total_plans: 16
-  completed_plans: 16
+  total_plans: 17
+  completed_plans: 17
 ---
 
 # Project State
@@ -162,6 +162,7 @@ Key architectural decisions for v1.2 (from research):
 - [Phase 16]: Visual baselines generated in CI (Linux) only — macOS font rendering diffs cause false failures; --update-snapshots runs in CI on first deploy
 - [Phase 16]: integration and visual-regression CI jobs parallel (no needs:) per D-17; integration uses no secrets (mocked), visual-regression uses full Supabase secrets
 - [Phase 16]: maxDiffPixelRatio: 0.01 on all toHaveScreenshot calls; maskDynamicContent() freezes time elements before capture to prevent timestamp-driven flakiness
+- [Phase 16]: Visual baselines generated in CI (Linux) only with --update-snapshots; workflow reverted to comparison mode after PNGs committed
 
 ### Pending Todos
 
@@ -177,6 +178,6 @@ Key architectural decisions for v1.2 (from research):
 
 ## Session Continuity
 
-Last session: 2026-03-27T15:57:05.902Z
-Stopped at: Completed 16-test-coverage-03-PLAN.md
+Last session: 2026-03-27T16:34:10.752Z
+Stopped at: Checkpoint: 16-04 Task 2 — human-action required (trigger CI, download baselines, commit PNGs, revert workflow)
 Resume file: None
