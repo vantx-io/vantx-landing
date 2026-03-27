@@ -40,7 +40,7 @@ See: `.planning/milestones/v1.1-ROADMAP.md` for full details.
 - [x] **Phase 12: Admin Capabilities** — User invite, role change, deactivation + MRR trend chart (completed 2026-03-26)
 - [x] **Phase 13: Auth UX** — Forgot password, password change, user profile in portal settings (completed 2026-03-26)
 - [x] **Phase 14: Polish UX** — Loading skeletons, onboarding guide, section-level error boundaries (completed 2026-03-26)
-- [ ] **Phase 15: Security Hardening** — CSP headers + admin audit logging
+- [x] **Phase 15: Security Hardening** — CSP headers + admin audit logging (completed 2026-03-27)
 - [ ] **Phase 16: Test Coverage** — API route integration tests + Playwright visual regression baselines
 - [ ] **Phase 17: Pre-Launch** — Production deploy (Cloudflare, Vercel, Supabase, Stripe live, Calendly, GA4)
 
@@ -122,10 +122,10 @@ Plans:
   1. All platform responses include Content-Security-Policy headers that block inline scripts and restrict sources
   2. Every admin action (invite, role change, deactivation) creates an audit log entry with actor, action, target, and timestamp
   3. Audit log is queryable from the admin dashboard or database
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 Plans:
 - [x] 15-01-PLAN.md — CSP + security headers + audit_logs migration + audit helper + endpoint instrumentation
-- [ ] 15-02-PLAN.md — Audit log UI section on admin overview + i18n keys
+- [x] 15-02-PLAN.md — Audit log UI section on admin overview + i18n keys
 
 ### Phase 16: Test Coverage
 **Goal**: All API routes have integration tests that run in CI, and Playwright visual regression baselines exist for all portal and admin pages
@@ -169,6 +169,6 @@ Plans:
 | 12. Admin Capabilities | v1.2 | 2/2 | Complete    | 2026-03-26 |
 | 13. Auth UX | v1.2 | 2/2 | Complete    | 2026-03-26 |
 | 14. Polish UX | v1.2 | 3/3 | Complete    | 2026-03-26 |
-| 15. Security Hardening | v1.2 | 1/2 | In Progress|  |
+| 15. Security Hardening | v1.2 | 2/2 | Complete   | 2026-03-27 |
 | 16. Test Coverage | v1.2 | 0/? | Not started | - |
 | 17. Pre-Launch | v1.2 | 0/? | Not started | - |

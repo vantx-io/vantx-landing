@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Security & Polish
 status: unknown
-stopped_at: Completed 15-security-hardening-01-PLAN.md
-last_updated: "2026-03-27T11:15:58.276Z"
+stopped_at: Completed 15-security-hardening-02-PLAN.md
+last_updated: "2026-03-27T11:23:07.764Z"
 progress:
   total_phases: 8
-  completed_phases: 5
+  completed_phases: 6
   total_plans: 13
-  completed_plans: 12
+  completed_plans: 13
 ---
 
 # Project State
@@ -68,6 +68,7 @@ Plan: 2 of 2
 | Phase 14-polish-ux P03 | 4min | 2 tasks | 5 files |
 | Phase 14 P02 | 386s | 2 tasks | 7 files |
 | Phase 15-security-hardening P01 | 256s | 2 tasks | 7 files |
+| Phase 15 P02 | 257 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -150,6 +151,7 @@ Key architectural decisions for v1.2 (from research):
 - [Phase 15-security-hardening]: audit_logs excluded from Database type: use (supabase as any).from('audit_logs') per established codebase pattern
 - [Phase 15-security-hardening]: logAuditEvent() catches all errors silently: audit failures must never block admin operations (mirrors rate-limit pattern)
 - [Phase 15-security-hardening]: CSP script-src includes unsafe-inline + unsafe-eval: required for Next.js 14 inline scripts and dev fast-refresh
+- [Phase 15]: Name enrichment uses secondary users query after audit fetch; avoids schema JOIN complexity
 
 ### Pending Todos
 
@@ -165,6 +167,6 @@ Key architectural decisions for v1.2 (from research):
 
 ## Session Continuity
 
-Last session: 2026-03-27T11:15:58.267Z
-Stopped at: Completed 15-security-hardening-01-PLAN.md
+Last session: 2026-03-27T11:23:07.758Z
+Stopped at: Completed 15-security-hardening-02-PLAN.md
 Resume file: None
