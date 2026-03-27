@@ -34,7 +34,7 @@ Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay f
 - ✓ Admin MRR trend chart (ADMIN-11) — Validated in Phase 12: Admin Capabilities
 - ✓ Forgot password + password change + user profile (AUTH-01..03) — Validated in Phase 13: Auth UX
 - ✓ Loading skeletons, onboarding guide, error boundaries (UX-01..03) — Validated in Phase 14: Polish UX
-- [ ] CSP headers + audit logging (SECURE-01..02)
+- ✓ CSP headers + audit logging (SECURE-01..02) — Validated in Phase 15: Security Hardening
 - [ ] Integration tests for API routes (TEST-10)
 - [ ] Playwright visual regression tests (TEST-11)
 - [ ] Production deploy — Cloudflare, Vercel, Supabase, Stripe, Calendly, GA4 (LAUNCH-01..06)
@@ -86,6 +86,8 @@ Tech: Next.js 14.2, Supabase (Postgres + Auth + Storage + Realtime), Stripe, Res
 | Signed URLs for file downloads (1hr expiry) | No permanent public URLs, security by default | ✓ Good |
 | react-dropzone for file uploads | Small bundle, composable, well-maintained | ✓ Good |
 | Storage RLS scoped by client_id path | Cross-tenant isolation at infrastructure level | ✓ Good |
+| CSP via next.config.js headers() (not middleware) | Static policy, middleware already complex (auth+i18n) | ✓ Good |
+| Audit log with silent failure semantics | Admin actions never blocked by logging failures | ✓ Good |
 | Opt-out notification model (no row = all ON) | Zero-config onboarding, progressive preference setting | ✓ Good |
 | Vercel Cron for weekly digest (Mon 9am UTC) | Free tier covers schedule, no external scheduler needed | ✓ Good |
 | DB trigger for user profile creation on invite | Auto-creates users row on auth.users INSERT, no app code needed | ✓ Good |
@@ -123,4 +125,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-26 after Phase 14 (polish-ux) completed*
+*Last updated: 2026-03-27 after Phase 15 (security-hardening) completed*
