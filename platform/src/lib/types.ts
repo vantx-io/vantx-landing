@@ -31,6 +31,16 @@ export type NotificationPreferences = {
   updated_at: string;
 };
 
+export type AuditLog = {
+  id: string;
+  actor_id: string;
+  action: string;
+  target_id: string | null;
+  metadata: Record<string, unknown> | null;
+  ip_address: string | null;
+  created_at: string;
+};
+
 export type Database = {
   public: {
     Tables: {
