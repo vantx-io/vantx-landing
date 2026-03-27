@@ -9,8 +9,13 @@ import {
   rateLimitResponse,
   rateLimitHeaders,
 } from "@/lib/rate-limit";
+import { logAuditEvent } from "@/lib/audit";
 
-const RL_CONFIG = { requests: 20, window: "1 m" as const, prefix: "rl:admin-status" };
+const RL_CONFIG = {
+  requests: 20,
+  window: "1 m" as const,
+  prefix: "rl:admin-status",
+};
 
 export async function PATCH(
   req: Request,
@@ -81,5 +86,21 @@ export async function PATCH(
     ban_duration: newIsActive ? "none" : "876000h",
   });
 
-  return NextResponse.json({ user: updated }, { headers: rateLimitHeaders(rl) });
+  const ip =
+    req.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
+    req.headers.get("x-real-ip") ??
+    undefined;
+
+  await logAuditEvent({
+    actor_id: user.id,
+    action: newIsActive ? "user.reactivate" : "user.deactivate",
+    target_id: params.id,
+    metadata: { new_is_active: newIsActive },
+    ip_address: ip,
+  });
+
+  return NextResponse.json(
+    { user: updated },
+    { headers: rateLimitHeaders(rl) },
+  );
 }

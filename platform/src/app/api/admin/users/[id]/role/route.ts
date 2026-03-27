@@ -9,8 +9,13 @@ import {
   rateLimitResponse,
   rateLimitHeaders,
 } from "@/lib/rate-limit";
+import { logAuditEvent } from "@/lib/audit";
 
-const RL_CONFIG = { requests: 20, window: "1 m" as const, prefix: "rl:admin-role" };
+const RL_CONFIG = {
+  requests: 20,
+  window: "1 m" as const,
+  prefix: "rl:admin-role",
+};
 
 export async function PATCH(
   req: Request,
@@ -79,5 +84,21 @@ export async function PATCH(
     );
   }
 
-  return NextResponse.json({ user: updated }, { headers: rateLimitHeaders(rl) });
+  const ip =
+    req.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
+    req.headers.get("x-real-ip") ??
+    undefined;
+
+  await logAuditEvent({
+    actor_id: user.id,
+    action: "user.role_change",
+    target_id: params.id,
+    metadata: { new_role: role, client_id: client_id || null },
+    ip_address: ip,
+  });
+
+  return NextResponse.json(
+    { user: updated },
+    { headers: rateLimitHeaders(rl) },
+  );
 }

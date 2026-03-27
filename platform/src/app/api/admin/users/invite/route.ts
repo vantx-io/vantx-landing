@@ -9,8 +9,13 @@ import {
   rateLimitResponse,
   rateLimitHeaders,
 } from "@/lib/rate-limit";
+import { logAuditEvent } from "@/lib/audit";
 
-const RL_CONFIG = { requests: 5, window: "1 m" as const, prefix: "rl:admin-invite" };
+const RL_CONFIG = {
+  requests: 5,
+  window: "1 m" as const,
+  prefix: "rl:admin-invite",
+};
 
 export async function POST(req: Request) {
   // Rate limit (5/min — auth-adjacent per D-04)
@@ -79,9 +84,10 @@ export async function POST(req: Request) {
   }
 
   // Send invite with metadata (per D-02, D-03)
-  const { error } = await supabase.auth.admin.inviteUserByEmail(email, {
-    data: { role, client_id: client_id || null },
-  });
+  const { data: inviteData, error } =
+    await supabase.auth.admin.inviteUserByEmail(email, {
+      data: { role, client_id: client_id || null },
+    });
 
   if (error) {
     return NextResponse.json(
@@ -89,6 +95,19 @@ export async function POST(req: Request) {
       { status: 500, headers: rateLimitHeaders(rl) },
     );
   }
+
+  const ip =
+    req.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
+    req.headers.get("x-real-ip") ??
+    undefined;
+
+  await logAuditEvent({
+    actor_id: user.id,
+    action: "user.invite",
+    target_id: inviteData?.user?.id ?? null,
+    metadata: { email, role, client_id: client_id || null },
+    ip_address: ip,
+  });
 
   return NextResponse.json(
     { success: true, email },
