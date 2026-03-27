@@ -46,7 +46,7 @@ Requirements for Security & Polish milestone. Each maps to roadmap phases.
 ### Testing
 
 - [x] **TEST-10**: Integration tests cover API routes (checkout, billing-portal, webhook) using NTARH + MSW
-- [ ] **TEST-11**: Playwright visual regression baselines for portal and admin pages (CI-generated)
+- [x] **TEST-11**: Playwright visual regression baselines for portal and admin pages (CI-generated)
 
 ### Pre-Launch
 
@@ -140,7 +140,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SECURE-01 | Phase 15 | Complete |
 | SECURE-02 | Phase 15 | Complete |
 | TEST-10 | Phase 16 | Complete |
-| TEST-11 | Phase 16 | Pending |
+| TEST-11 | Phase 16 | Complete |
 | LAUNCH-01 | Phase 17 | Pending |
 | LAUNCH-02 | Phase 17 | Pending |
 | LAUNCH-03 | Phase 17 | Pending |

@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Security & Polish
 status: unknown
-stopped_at: Completed 16-test-coverage-02-PLAN.md
-last_updated: "2026-03-27T14:16:18.720Z"
+stopped_at: Completed 16-test-coverage-03-PLAN.md
+last_updated: "2026-03-27T15:57:05.910Z"
 progress:
   total_phases: 8
-  completed_phases: 6
+  completed_phases: 7
   total_plans: 16
-  completed_plans: 15
+  completed_plans: 16
 ---
 
 # Project State
@@ -71,6 +71,7 @@ Plan: 3 of 3
 | Phase 15 P02 | 257 | 2 tasks | 3 files |
 | Phase 16-test-coverage P01 | 6min | 2 tasks | 3 files |
 | Phase 16-test-coverage P02 | 148 | 2 tasks | 1 files |
+| Phase 16 P03 | 33min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -158,6 +159,9 @@ Key architectural decisions for v1.2 (from research):
 - [Phase 16-test-coverage]: next/headers not re-mocked in test files — NTARH provides the environment; createServerSupabase already mocked so cookies() never reached
 - [Phase 16-test-coverage]: Fire-and-forget branches (email/notification .then() chains) not asserted in webhook tests — only synchronous DB mutations (upsert/insert/update) are verifiable
 - [Phase 16-test-coverage]: mockUpdate returns { eq: spy } to assert both update payload and stripe_subscription_id filter in subscription.deleted branch
+- [Phase 16]: Visual baselines generated in CI (Linux) only — macOS font rendering diffs cause false failures; --update-snapshots runs in CI on first deploy
+- [Phase 16]: integration and visual-regression CI jobs parallel (no needs:) per D-17; integration uses no secrets (mocked), visual-regression uses full Supabase secrets
+- [Phase 16]: maxDiffPixelRatio: 0.01 on all toHaveScreenshot calls; maskDynamicContent() freezes time elements before capture to prevent timestamp-driven flakiness
 
 ### Pending Todos
 
@@ -173,6 +177,6 @@ Key architectural decisions for v1.2 (from research):
 
 ## Session Continuity
 
-Last session: 2026-03-27T14:16:18.708Z
-Stopped at: Completed 16-test-coverage-02-PLAN.md
+Last session: 2026-03-27T15:57:05.902Z
+Stopped at: Completed 16-test-coverage-03-PLAN.md
 Resume file: None
