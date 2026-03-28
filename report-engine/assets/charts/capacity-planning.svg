@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 240" font-family="'DM Sans', sans-serif">
+  <!-- Background -->
+  <rect width="560" height="240" fill="#FFFFFF" rx="8"/>
+
+  <!-- Title -->
+  <text x="40" y="28" font-size="12" font-weight="700" fill="#1A1A17">Capacity Planning</text>
+  <text x="40" y="44" font-size="9" fill="#6B6B64">Current max: 488 TPS · Required TPS by growth scenario</text>
+
+  <!-- Capacity line (488 TPS) -->
+  <line x1="208" y1="65" x2="208" y2="205" stroke="#1B6B4A" stroke-width="2" stroke-dasharray="6 3"/>
+  <text x="212" y="62" font-size="8" font-weight="700" fill="#1B6B4A">488 TPS (current max)</text>
+
+  <!-- Bars -->
+  <!-- Current: 180 TPS → width = 180/1800 * 400 = 40 -->
+  <rect x="120" y="75" width="40" height="24" fill="#1B6B4A" rx="3"/>
+  <text x="110" y="91" font-size="9" fill="#3A3A35" text-anchor="end">Current</text>
+  <text x="165" y="91" font-size="8" font-weight="700" fill="#FFFFFF">180</text>
+  <text x="165" y="71" font-size="7" fill="#1B6B4A">✓ 171% headroom</text>
+
+  <!-- 2x: 360 TPS → width = 360/1800 * 400 = 80 -->
+  <rect x="120" y="108" width="80" height="24" fill="#1B6B4A" rx="3"/>
+  <text x="110" y="124" font-size="9" fill="#3A3A35" text-anchor="end">2x</text>
+  <text x="205" y="124" font-size="8" font-weight="700" fill="#FFFFFF">360</text>
+  <text x="205" y="104" font-size="7" fill="#1B6B4A">✓ 36% headroom</text>
+
+  <!-- 5x: 900 TPS → width = 900/1800 * 400 = 200 -->
+  <rect x="120" y="141" width="200" height="24" fill="#C0392B" rx="3"/>
+  <text x="110" y="157" font-size="9" fill="#3A3A35" text-anchor="end">5x</text>
+  <text x="325" y="157" font-size="8" font-weight="700" fill="#C0392B">900</text>
+  <text x="325" y="137" font-size="7" fill="#C0392B">✗ needs PgBouncer + read replicas</text>
+
+  <!-- 10x: 1800 TPS → width = 1800/1800 * 400 = 400 -->
+  <rect x="120" y="174" width="400" height="24" fill="#C0392B" rx="3"/>
+  <text x="110" y="190" font-size="9" fill="#3A3A35" text-anchor="end">10x</text>
+  <text x="525" y="190" font-size="8" font-weight="700" fill="#C0392B">1800</text>
+  <text x="400" y="170" font-size="7" fill="#C0392B">✗ architecture review required</text>
+
+  <!-- Footer -->
+  <text x="40" y="225" font-size="7" fill="#B0AFA8">TPS · transactions per second</text>
+</svg>

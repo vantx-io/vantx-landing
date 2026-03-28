@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 300" font-family="'DM Sans', sans-serif">
+  <!-- Background -->
+  <rect width="560" height="300" fill="#FFFFFF" rx="8"/>
+
+  <!-- Title -->
+  <text x="40" y="28" font-size="12" font-weight="700" fill="#1A1A17">Load Test: February vs March</text>
+  <text x="40" y="44" font-size="9" fill="#6B6B64">Impact of P0 fixes (HikariCP + index)</text>
+
+  <!-- Grid -->
+  <line x1="90" y1="60" x2="90" y2="240" stroke="#E2E1DC" stroke-width="1"/>
+  <line x1="90" y1="240" x2="520" y2="240" stroke="#E2E1DC" stroke-width="1"/>
+  <line x1="90" y1="204" x2="520" y2="204" stroke="#F0EFEB" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="90" y1="168" x2="520" y2="168" stroke="#F0EFEB" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="90" y1="132" x2="520" y2="132" stroke="#F0EFEB" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="90" y1="96" x2="520" y2="96" stroke="#F0EFEB" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="90" y1="60" x2="520" y2="60" stroke="#F0EFEB" stroke-width="1" stroke-dasharray="4"/>
+
+  <!-- Y-axis labels -->
+  <text x="80" y="244" font-size="8" fill="#6B6B64" text-anchor="end">0</text>
+  <text x="80" y="208" font-size="8" fill="#6B6B64" text-anchor="end">100</text>
+  <text x="80" y="172" font-size="8" fill="#6B6B64" text-anchor="end">200</text>
+  <text x="80" y="136" font-size="8" fill="#6B6B64" text-anchor="end">300</text>
+  <text x="80" y="100" font-size="8" fill="#6B6B64" text-anchor="end">400</text>
+  <text x="80" y="64" font-size="8" fill="#6B6B64" text-anchor="end">500+</text>
+
+  <!-- X-axis labels -->
+  <text x="185" y="258" font-size="9" fill="#6B6B64" text-anchor="middle">Max TPS</text>
+  <text x="340" y="258" font-size="9" fill="#6B6B64" text-anchor="middle">Breakpoint TPS</text>
+  <text x="480" y="258" font-size="9" fill="#6B6B64" text-anchor="middle">p95 Stress (ms)</text>
+
+  <!-- Bars: Max TPS -->
+  <!-- Feb: 320 TPS → height = 320/500 * 180 = 115.2 -->
+  <rect x="150" y="124.8" width="35" height="115.2" fill="#B0AFA8" rx="3"/>
+  <text x="167" y="120" font-size="8" font-weight="700" fill="#6B6B64" text-anchor="middle">320</text>
+  <!-- Mar: 488 TPS → height = 488/500 * 180 = 175.7 -->
+  <rect x="190" y="64.3" width="35" height="175.7" fill="#1B6B4A" rx="3"/>
+  <text x="207" y="60" font-size="8" font-weight="700" fill="#1B6B4A" text-anchor="middle">488</text>
+
+  <!-- Bars: Breakpoint TPS -->
+  <!-- Feb: 380 → height = 380/500 * 180 = 136.8 -->
+  <rect x="305" y="103.2" width="35" height="136.8" fill="#B0AFA8" rx="3"/>
+  <text x="322" y="99" font-size="8" font-weight="700" fill="#6B6B64" text-anchor="middle">380</text>
+  <!-- Mar: 560 → capped to 500 visually, height = 180 -->
+  <rect x="345" y="60" width="35" height="180" fill="#1B6B4A" rx="3"/>
+  <text x="362" y="56" font-size="8" font-weight="700" fill="#1B6B4A" text-anchor="middle">560</text>
+
+  <!-- Bars: p95 Stress (inverted — lower is better) -->
+  <!-- Feb: 890ms → scaled: 890/1000 * 180 = 160.2 -->
+  <rect x="445" y="79.8" width="35" height="160.2" fill="#B0AFA8" rx="3"/>
+  <text x="462" y="75" font-size="8" font-weight="700" fill="#6B6B64" text-anchor="middle">890ms</text>
+  <!-- Mar: 420ms → scaled: 420/1000 * 180 = 75.6 -->
+  <rect x="485" y="164.4" width="35" height="75.6" fill="#1B6B4A" rx="3"/>
+  <text x="502" y="160" font-size="8" font-weight="700" fill="#1B6B4A" text-anchor="middle">420ms</text>
+
+  <!-- Improvement annotations -->
+  <text x="207" y="280" font-size="9" font-weight="700" fill="#1B6B4A" text-anchor="middle">+52%</text>
+  <text x="362" y="280" font-size="9" font-weight="700" fill="#1B6B4A" text-anchor="middle">+47%</text>
+  <text x="502" y="280" font-size="9" font-weight="700" fill="#1B6B4A" text-anchor="middle">-53%</text>
+
+  <!-- Legend -->
+  <rect x="360" y="22" width="10" height="10" fill="#B0AFA8" rx="2"/>
+  <text x="374" y="31" font-size="8" fill="#6B6B64">February (pre-fix)</text>
+  <rect x="460" y="22" width="10" height="10" fill="#1B6B4A" rx="2"/>
+  <text x="474" y="31" font-size="8" fill="#1B6B4A">March (post-fix)</text>
+</svg>

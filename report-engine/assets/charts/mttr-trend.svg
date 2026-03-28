@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 260" font-family="'DM Sans', sans-serif">
+  <!-- Background -->
+  <rect width="560" height="260" fill="#FFFFFF" rx="8"/>
+
+  <!-- Title -->
+  <text x="40" y="28" font-size="12" font-weight="700" fill="#1A1A17">MTTR Trend — Impact of Observability</text>
+  <text x="40" y="44" font-size="9" fill="#6B6B64">Mean time to resolve incidents (minutes)</text>
+
+  <!-- Grid -->
+  <line x1="90" y1="60" x2="90" y2="210" stroke="#E2E1DC" stroke-width="1"/>
+  <line x1="90" y1="210" x2="480" y2="210" stroke="#E2E1DC" stroke-width="1"/>
+  <line x1="90" y1="180" x2="480" y2="180" stroke="#F0EFEB" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="90" y1="150" x2="480" y2="150" stroke="#F0EFEB" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="90" y1="120" x2="480" y2="120" stroke="#F0EFEB" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="90" y1="90" x2="480" y2="90" stroke="#F0EFEB" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="90" y1="60" x2="480" y2="60" stroke="#F0EFEB" stroke-width="1" stroke-dasharray="4"/>
+
+  <!-- Y-axis -->
+  <text x="80" y="214" font-size="8" fill="#6B6B64" text-anchor="end">0</text>
+  <text x="80" y="184" font-size="8" fill="#6B6B64" text-anchor="end">10</text>
+  <text x="80" y="154" font-size="8" fill="#6B6B64" text-anchor="end">20</text>
+  <text x="80" y="124" font-size="8" fill="#6B6B64" text-anchor="end">30</text>
+  <text x="80" y="94" font-size="8" fill="#6B6B64" text-anchor="end">40</text>
+  <text x="80" y="64" font-size="8" fill="#6B6B64" text-anchor="end">50</text>
+
+  <!-- Target line -->
+  <line x1="90" y1="120" x2="480" y2="120" stroke="#1B6B4A" stroke-width="1" stroke-dasharray="6 3" opacity="0.5"/>
+  <text x="484" y="118" font-size="7" fill="#1B6B4A">Target: 30 min</text>
+
+  <!-- Bars -->
+  <!-- January: 45 min → height = 45/50 * 150 = 135 -->
+  <rect x="140" y="75" width="60" height="135" fill="#C0392B" rx="4"/>
+  <text x="170" y="69" font-size="10" font-weight="700" fill="#C0392B" text-anchor="middle">45 min</text>
+  <text x="170" y="228" font-size="9" fill="#3A3A35" text-anchor="middle">January</text>
+  <text x="170" y="240" font-size="7" fill="#6B6B64" text-anchor="middle">pre-OTel</text>
+
+  <!-- February: 28 min → height = 28/50 * 150 = 84 -->
+  <rect x="260" y="126" width="60" height="84" fill="#D4A017" rx="4"/>
+  <text x="290" y="120" font-size="10" font-weight="700" fill="#D4A017" text-anchor="middle">28 min</text>
+  <text x="290" y="228" font-size="9" fill="#3A3A35" text-anchor="middle">February</text>
+  <text x="290" y="240" font-size="7" fill="#6B6B64" text-anchor="middle">partial OTel</text>
+
+  <!-- March: 11 min → height = 11/50 * 150 = 33 -->
+  <rect x="380" y="177" width="60" height="33" fill="#1B6B4A" rx="4"/>
+  <text x="410" y="171" font-size="10" font-weight="700" fill="#1B6B4A" text-anchor="middle">11 min</text>
+  <text x="410" y="228" font-size="9" fill="#3A3A35" text-anchor="middle">March</text>
+  <text x="410" y="240" font-size="7" fill="#1B6B4A" font-weight="700" text-anchor="middle">full OTel</text>
+
+  <!-- Improvement arrow annotation -->
+  <text x="500" y="100" font-size="11" font-weight="700" fill="#1B6B4A">-76%</text>
+  <text x="500" y="114" font-size="8" fill="#6B6B64">improvement</text>
+</svg>

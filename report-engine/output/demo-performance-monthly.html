@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monthly Performance Report — Vantx</title>
+    <style>
+    /* ═══════════════════════════════════════════════════
+       Vantx Docs — PDF Style (weasyprint)
+       Matches brand style guide: DM Sans, forest green,
+       parchment tones, warm grays
+       ═══════════════════════════════════════════════════ */
+
+    /* Fonts — use the self-hosted woff2 from the landing dir */
+    @font-face {
+      font-family: 'DM Sans';
+      src: url('../landing/fonts/dm-sans-latin.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'DM Sans';
+      src: url('../landing/fonts/dm-sans-latin.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'JetBrains Mono';
+      src: url('../landing/fonts/jb-mono-latin.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'JetBrains Mono';
+      src: url('../landing/fonts/jb-mono-latin.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    /* ── Page setup ── */
+    @page {
+      size: letter;
+      margin: 2.2cm 2.5cm 2.5cm 2.5cm;
+
+      @bottom-center {
+        content: counter(page);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9px;
+        color: #6B6B64;
+      }
+      @top-right {
+        content: "VANTX";
+        font-family: 'DM Sans', sans-serif;
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        color: #B0AFA8;
+      }
+    }
+
+    @page :first {
+      @bottom-center { content: none; }
+      @top-right { content: none; }
+    }
+
+    /* ── Base ── */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.6;
+      color: #1A1A17;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Cover page (YAML metadata handled by pandoc template) ── */
+
+    /* ── Headings ── */
+    h1 {
+      font-size: 22pt;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: #1B6B4A;
+      margin-top: 1.8em;
+      margin-bottom: 0.6em;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #1B6B4A;
+      page-break-after: avoid;
+    }
+
+    h2 {
+      font-size: 16pt;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      color: #1A1A17;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 12pt;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #1A1A17;
+      margin-top: 1.2em;
+      margin-bottom: 0.4em;
+      page-break-after: avoid;
+    }
+
+    h4, h5, h6 {
+      font-size: 10.5pt;
+      font-weight: 700;
+      color: #1A1A17;
+      margin-top: 1em;
+      margin-bottom: 0.3em;
+    }
+
+    /* ── Paragraphs ── */
+    p {
+      margin-top: 0;
+      margin-bottom: 0.6em;
+      color: #3A3A35;
+    }
+
+    /* ── Lists ── */
+    ul, ol {
+      margin-top: 0.3em;
+      margin-bottom: 0.8em;
+      padding-left: 1.5em;
+    }
+
+    li {
+      margin-bottom: 0.25em;
+      color: #3A3A35;
+    }
+
+    li::marker {
+      color: #1B6B4A;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.6em;
+      margin-bottom: 1em;
+      font-size: 9.5pt;
+      line-height: 1.45;
+      page-break-inside: auto;
+    }
+
+    thead {
+      background: #1B6B4A;
+    }
+
+    thead th {
+      color: #FFFFFF;
+      font-weight: 600;
+      font-size: 8.5pt;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      text-align: left;
+      padding: 7px 10px;
+      border: 1px solid #15593D;
+    }
+
+    tbody td {
+      padding: 6px 10px;
+      border: 1px solid #E2E1DC;
+      vertical-align: top;
+      color: #3A3A35;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #F8F7F4;
+    }
+
+    tbody tr:nth-child(odd) {
+      background: #FFFFFF;
+    }
+
+    /* Bold first column for definition-style tables */
+    tbody td:first-child {
+      font-weight: 600;
+      color: #1A1A17;
+    }
+
+    /* ── Blockquotes (callout boxes) ── */
+    blockquote {
+      margin: 1em 0;
+      padding: 12px 16px;
+      border-left: 3px solid #1B6B4A;
+      background: #F8F7F4;
+      border-radius: 0 6px 6px 0;
+      font-size: 10pt;
+      color: #3A3A35;
+    }
+
+    blockquote p {
+      margin: 0;
+    }
+
+    blockquote p + p {
+      margin-top: 0.4em;
+    }
+
+    /* ── Code ── */
+    code {
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 8.5pt;
+      background: #F0EFEB;
+      padding: 1px 5px;
+      border-radius: 3px;
+      color: #1A1A17;
+    }
+
+    pre {
+      margin: 0.8em 0;
+      padding: 14px 16px;
+      background: #1A1917;
+      border-radius: 8px;
+      overflow: hidden;
+      page-break-inside: avoid;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      color: #EDECE7;
+      font-size: 8pt;
+      line-height: 1.5;
+    }
+
+    /* ── Horizontal rules / page breaks ── */
+    hr {
+      border: none;
+      border-top: 1px solid #E2E1DC;
+      margin: 1.5em 0;
+    }
+
+    /* ── Strong / Bold ── */
+    strong {
+      font-weight: 700;
+      color: #1A1A17;
+    }
+
+    /* ── Links ── */
+    a {
+      color: #1B6B4A;
+      text-decoration: none;
+    }
+
+    /* ── Images (logo) ── */
+    img {
+      max-width: 30%;
+      height: auto;
+    }
+
+    /* ── Monospace data styling ── */
+    .price, .metric {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+    }
+
+    /* ── Emoji status indicators ── */
+    /* These render natively in weasyprint */
+
+    /* ── Page break utility ── */
+    .newpage {
+      page-break-before: always;
+    }
+
+    /* Cover page */
+    .cover {
+      page-break-after: always;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 700px;
+    }
+    .cover__logo { width: 140px; margin-bottom: 48px; }
+    .cover__bar { width: 60px; height: 3px; background: #1B6B4A; margin-bottom: 32px; }
+    .cover__title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 32pt; font-weight: 700;
+      letter-spacing: -0.03em; line-height: 1.1;
+      color: #1A1A17; margin: 0 0 12px 0;
+      border: none; padding: 0;
+    }
+    .cover__subtitle {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14pt; font-weight: 400;
+      color: #5C5C56; margin: 0 0 40px 0;
+    }
+    .cover__meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9pt; color: #6B6B64; line-height: 1.8;
+    }
+    .cover__meta span { display: block; }
+    .cover__footer {
+      margin-top: auto; padding-top: 32px;
+      border-top: 1px solid #E2E1DC;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8pt; color: #B0AFA8;
+    }
+
+    /* Report-specific: status badges */
+    .status-pass { color: #1B6B4A; font-weight: 700; }
+    .status-fail { color: #C0392B; font-weight: 700; }
+    .status-warn { color: #D4A017; font-weight: 700; }
+
+    /* Report-specific: metric highlight */
+    .metric-hero {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 24pt; font-weight: 700;
+      color: #1B6B4A; display: block;
+      margin: 8px 0;
+    }
+    </style>
+  </head>
+<body>
+
+<div class="cover">
+  <img class="cover__logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAABbCAMAAABqOSM9AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAMAUExURRtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrSowIbgAAAAD/dFJOUwAQTa6Aka9OEQUsdMPyi57zwXIqBBpcquiKAealUhUNQZDV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" alt="Vantx">
+  <div class="cover__bar"></div>
+  <h1 class="cover__title">Monthly Performance Report</h1>
+    <p class="cover__subtitle">NovaPay SpA — March 2026</p>
+    <div class="cover__meta">
+    <span>Version 1.0</span>
+    <span>March 2026</span>
+    <span>vantx.io &middot; hello@vantx.io</span>
+  </div>
+  <div class="cover__footer">
+    Confidential &mdash; Vantx
+  </div>
+</div>
+
+<h1 id="monthly-performance-report">MONTHLY PERFORMANCE REPORT</h1>
+<p><strong>NovaPay SpA</strong> · March 2026</p>
+<p>VANTX · hello@vantx.io</p>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="executive-summary">Executive Summary</h1>
+<p>March was a strong month for NovaPay’s performance posture. The P0
+fixes from the February Checkup (HikariCP pool + missing index) were
+deployed in week 1, resulting in a 52% TPS improvement confirmed by the
+March load test. Uptime exceeded target at 99.96%. Web performance
+improved significantly — checkout LCP dropped from 4.2s to 2.8s. Two new
+P2 findings identified, both non-urgent.</p>
+<h3 id="month-at-a-glance">Month at a Glance</h3>
+<table>
+<thead>
+<tr>
+<th>Indicator</th>
+<th>Value</th>
+<th>Target</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Uptime</td>
+<td>99.96%</td>
+<td>≥99.9%</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>p50 Response Time</td>
+<td>85ms</td>
+<td>&lt;200ms</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>p95 Response Time</td>
+<td>220ms</td>
+<td>&lt;500ms</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>Error Rate</td>
+<td>0.018%</td>
+<td>&lt;1%</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>Load Test: Max TPS</td>
+<td>488</td>
+<td>≥400</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>Lighthouse Score (avg)</td>
+<td>65/100</td>
+<td>≥70</td>
+<td>⚠️ Close</td>
+</tr>
+<tr>
+<td>RUM LCP (p75)</td>
+<td>2.3s</td>
+<td>&lt;2.5s</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>JS Errors (total)</td>
+<td>580</td>
+<td>&lt;800</td>
+<td>✅ Pass</td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="uptime-availability">1. Uptime &amp; Availability</h1>
+<h3 id="monthly-uptime-summary">Monthly Uptime Summary</h3>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Uptime</th>
+<th>Avg Response</th>
+<th>Max Response</th>
+<th>Incidents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/api/payments</td>
+<td>99.98%</td>
+<td>75ms</td>
+<td>890ms</td>
+<td>0</td>
+</tr>
+<tr>
+<td>/api/settlements</td>
+<td>99.95%</td>
+<td>88ms</td>
+<td>1,200ms</td>
+<td>1</td>
+</tr>
+<tr>
+<td>/api/merchants</td>
+<td>99.99%</td>
+<td>42ms</td>
+<td>320ms</td>
+<td>0</td>
+</tr>
+<tr>
+<td>/checkout</td>
+<td>99.93%</td>
+<td>105ms</td>
+<td>1,800ms</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<h3 id="incident-log">Incident Log</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr>
+<th>Date</th>
+<th>Duration</th>
+<th>Endpoint</th>
+<th>Impact</th>
+<th>Root Cause</th>
+<th>Resolution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mar 5</td>
+<td>8 min</td>
+<td>/checkout</td>
+<td>Slow checkouts</td>
+<td>CDN cache invalidation during deploy</td>
+<td>Rolling deploy policy updated</td>
+</tr>
+<tr>
+<td>Mar 12</td>
+<td>12 min</td>
+<td>/api/settlements</td>
+<td>Export timeouts</td>
+<td>Large merchant batch settlement (120K rows)</td>
+<td>Added query limit + pagination</td>
+</tr>
+<tr>
+<td>Mar 19</td>
+<td>3 min</td>
+<td>/checkout</td>
+<td>Brief unavailability</td>
+<td>Planned deploy v2.14.3</td>
+<td>Expected (rolling restart)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="uptime-trend-3-months">Uptime Trend (3 months)</h3>
+<table>
+<thead>
+<tr>
+<th>Month</th>
+<th>Uptime</th>
+<th>Incidents</th>
+<th>MTTR</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>January</td>
+<td>99.91%</td>
+<td>4</td>
+<td>18 min</td>
+</tr>
+<tr>
+<td>February</td>
+<td>99.92%</td>
+<td>3</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>March</td>
+<td>99.96%</td>
+<td>3</td>
+<td>8 min</td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="synthetic-monitoring">2. Synthetic Monitoring</h1>
+<h3 id="critical-flows-monthly-summary">Critical Flows — Monthly
+Summary</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr>
+<th>Flow</th>
+<th>p50</th>
+<th>p95</th>
+<th>p99</th>
+<th>Error Rate</th>
+<th>Checks</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Login → Dashboard</td>
+<td>410ms</td>
+<td>670ms</td>
+<td>890ms</td>
+<td>0.01%</td>
+<td>8,640</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>Create Payment</td>
+<td>305ms</td>
+<td>510ms</td>
+<td>720ms</td>
+<td>0.02%</td>
+<td>8,640</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>Settlement Export</td>
+<td>850ms</td>
+<td>1,350ms</td>
+<td>1,800ms</td>
+<td>0.05%</td>
+<td>8,640</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>Checkout (guest)</td>
+<td>640ms</td>
+<td>960ms</td>
+<td>1,300ms</td>
+<td>0.03%</td>
+<td>8,640</td>
+<td>✅ Pass</td>
+</tr>
+</tbody>
+</table>
+<h3 id="latency-trend-3-months">Latency Trend (3 months)</h3>
+<figure>
+<img src="assets/charts/latency-trend-3m.svg"
+alt="p95 Latency Trend — 3 Months" />
+<figcaption aria-hidden="true">p95 Latency Trend — 3 Months</figcaption>
+</figure>
+<table>
+<thead>
+<tr>
+<th>Flow</th>
+<th>January p95</th>
+<th>February p95</th>
+<th>March p95</th>
+<th>Trend</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Login → Dashboard</td>
+<td>720ms</td>
+<td>690ms</td>
+<td>670ms</td>
+<td>Improving</td>
+</tr>
+<tr>
+<td>Create Payment</td>
+<td>580ms</td>
+<td>540ms</td>
+<td>510ms</td>
+<td>Improving</td>
+</tr>
+<tr>
+<td>Settlement Export</td>
+<td>1,600ms</td>
+<td>1,500ms</td>
+<td>1,350ms</td>
+<td>Improving</td>
+</tr>
+<tr>
+<td>Checkout (guest)</td>
+<td>1,100ms</td>
+<td>1,020ms</td>
+<td>960ms</td>
+<td>Improving</td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="load-test-results">3. Load Test Results</h1>
+<p><strong>Test date:</strong> March 15, 2026 <strong>Target:</strong>
+Validate P0 fix impact, confirm 400+ TPS capacity
+<strong>Stack:</strong> k6 + Grafana Cloud</p>
+<h3 id="baseline-normal-traffic">Baseline (normal traffic)</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+<th>Threshold</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Virtual Users</td>
+<td>50</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Avg TPS</td>
+<td>245</td>
+<td>≥150</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>p50 latency</td>
+<td>68ms</td>
+<td>&lt;200ms</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>p95 latency</td>
+<td>180ms</td>
+<td>&lt;500ms</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>p99 latency</td>
+<td>380ms</td>
+<td>&lt;1000ms</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>Error rate</td>
+<td>0.01%</td>
+<td>&lt;1%</td>
+<td>✅ Pass</td>
+</tr>
+</tbody>
+</table>
+<h3 id="stress-2x-traffic">Stress (2x traffic)</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+<th>Threshold</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Virtual Users</td>
+<td>100</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Max TPS</td>
+<td>488</td>
+<td>≥300</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>p95 latency</td>
+<td>420ms</td>
+<td>&lt;1000ms</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>Error rate</td>
+<td>0.3%</td>
+<td>&lt;2%</td>
+<td>✅ Pass</td>
+</tr>
+</tbody>
+</table>
+<h3 id="spike-5x-burst">Spike (5x burst)</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+<th>Threshold</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Virtual Users</td>
+<td>250 (ramp 30s)</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Max TPS</td>
+<td>520 (then degradation)</td>
+<td>≥400</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>p95 latency</td>
+<td>1,800ms</td>
+<td>&lt;2000ms</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>Recovery</td>
+<td>18 seconds</td>
+<td>&lt;30s</td>
+<td>✅ Pass</td>
+</tr>
+</tbody>
+</table>
+<h3 id="load-test-trend-3-months">Load Test Trend (3 months)</h3>
+<figure>
+<img src="assets/charts/load-test-comparison.svg"
+alt="Load Test: February vs March" />
+<figcaption aria-hidden="true">Load Test: February vs March</figcaption>
+</figure>
+<table>
+<thead>
+<tr>
+<th>Month</th>
+<th>Max TPS</th>
+<th>Breakpoint</th>
+<th>p95 (stress)</th>
+<th>Trend</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>January</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>—</td>
+</tr>
+<tr>
+<td>February (Checkup)</td>
+<td>320</td>
+<td>380</td>
+<td>890ms</td>
+<td>Baseline</td>
+</tr>
+<tr>
+<td>March</td>
+<td>488</td>
+<td>560</td>
+<td>420ms</td>
+<td>+52% TPS</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Impact of P0 fixes confirmed:</strong> Max TPS improved from
+320 → 488 (+52%). Breakpoint moved from 380 → 560 TPS. The system now
+handles 5x spike without exceeding thresholds.</p>
+</blockquote>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="web-performance">4. Web Performance</h1>
+<h3 id="lighthouse-ci-weekly-runs">Lighthouse CI (weekly runs)</h3>
+<table>
+<thead>
+<tr>
+<th>Page</th>
+<th>LCP</th>
+<th>INP</th>
+<th>CLS</th>
+<th>Score</th>
+<th>vs Last Month</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Homepage</td>
+<td>1.9s</td>
+<td>78ms</td>
+<td>0.04</td>
+<td>74/100</td>
+<td>+6</td>
+</tr>
+<tr>
+<td>Checkout</td>
+<td>2.8s</td>
+<td>110ms</td>
+<td>0.08</td>
+<td>58/100</td>
+<td>+16</td>
+</tr>
+<tr>
+<td>Dashboard</td>
+<td>2.6s</td>
+<td>88ms</td>
+<td>0.06</td>
+<td>62/100</td>
+<td>+7</td>
+</tr>
+<tr>
+<td>API Docs</td>
+<td>1.3s</td>
+<td>42ms</td>
+<td>0.02</td>
+<td>91/100</td>
+<td>+2</td>
+</tr>
+</tbody>
+</table>
+<h3 id="rum-real-user-monitoring">RUM — Real User Monitoring</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+<th>Target</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Total Sessions</td>
+<td>152,800</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>LCP (p75)</td>
+<td>2.3s</td>
+<td>&lt;2.5s</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>INP (p75)</td>
+<td>165ms</td>
+<td>&lt;200ms</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>CLS (p75)</td>
+<td>0.07</td>
+<td>&lt;0.1</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>JS Errors (unique)</td>
+<td>12</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>JS Errors (total)</td>
+<td>580</td>
+<td>&lt;800</td>
+<td>✅ Pass</td>
+</tr>
+</tbody>
+</table>
+<h3 id="top-js-errors">Top JS Errors</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Error</th>
+<th>Count</th>
+<th>Page</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TypeError: Cannot read property 'id' of null</code></td>
+<td>210</td>
+<td>/dashboard</td>
+<td>Low — edge case with expired sessions</td>
+</tr>
+<tr>
+<td><code>ResizeObserver loop limit exceeded</code></td>
+<td>185</td>
+<td>/checkout</td>
+<td>None — browser noise, can be silenced</td>
+</tr>
+<tr>
+<td><code>NetworkError: Failed to fetch</code></td>
+<td>95</td>
+<td>/api/*</td>
+<td>Low — transient, correlates with poor mobile connections</td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="capacity-planning">5. Capacity Planning</h1>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Required TPS</th>
+<th>Current Max</th>
+<th>Headroom</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Current traffic (180 TPS avg)</td>
+<td>180</td>
+<td>488</td>
+<td>171%</td>
+<td>✅ Comfortable</td>
+</tr>
+<tr>
+<td>2x growth</td>
+<td>360</td>
+<td>488</td>
+<td>36%</td>
+<td>✅ OK</td>
+</tr>
+<tr>
+<td>5x growth</td>
+<td>900</td>
+<td>488</td>
+<td>-46%</td>
+<td>❌ Not ready</td>
+</tr>
+<tr>
+<td>10x growth</td>
+<td>1,800</td>
+<td>488</td>
+<td>-73%</td>
+<td>❌ Not ready</td>
+</tr>
+</tbody>
+</table>
+<figure>
+<img src="assets/charts/capacity-planning.svg"
+alt="Capacity Planning" />
+<figcaption aria-hidden="true">Capacity Planning</figcaption>
+</figure>
+<h3 id="recommendation">Recommendation</h3>
+<p>NovaPay is comfortable for current traffic and 2x growth. For 5x+
+growth (projected Q4 if partnership deals close), the main bottleneck
+will be the PostgreSQL connection layer. Recommendations: (1) introduce
+read replicas for settlement queries, (2) add Redis caching for merchant
+config (F-03, already planned), (3) consider connection pooler
+(PgBouncer) for &gt;800 TPS target.</p>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="findings-remediation">6. Findings &amp; Remediation</h1>
+<h3 id="new-findings">New Findings</h3>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>ID</th>
+<th>Severity</th>
+<th>Finding</th>
+<th>Recommended Action</th>
+<th>Estimated Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F-07</td>
+<td>P2</td>
+<td>Settlement export p95 approaching 1.5s for large merchants</td>
+<td>Add pagination to batch query (LIMIT 10K per page)</td>
+<td>Export latency -60%</td>
+</tr>
+<tr>
+<td>F-08</td>
+<td>P2</td>
+<td>3 noisy JS errors account for 84% of error volume</td>
+<td>Silence ResizeObserver, fix null check, add retry for fetch</td>
+<td>Cleaner error signal</td>
+</tr>
+</tbody>
+</table>
+<h3 id="previously-reported-status-update">Previously Reported — Status
+Update</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>ID</th>
+<th>Finding</th>
+<th>Status</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F-01</td>
+<td>HikariCP pool at default (10)</td>
+<td>✅ Resolved</td>
+<td>Deployed Mar 3 — pool set to 30</td>
+</tr>
+<tr>
+<td>F-02</td>
+<td>Missing index on settlements</td>
+<td>✅ Resolved</td>
+<td>Deployed Mar 3 — query from 200ms to 12ms</td>
+</tr>
+<tr>
+<td>F-03</td>
+<td>No cache on merchant config</td>
+<td>In progress</td>
+<td>Redis cache PR in review, expected next week</td>
+</tr>
+<tr>
+<td>F-04</td>
+<td>LCP 4.2s on checkout</td>
+<td>In progress</td>
+<td>Now 2.8s. JS deferral done, image optimization WIP</td>
+</tr>
+<tr>
+<td>F-05</td>
+<td>No Redis connection pooling</td>
+<td>Open</td>
+<td>Scheduled for April sprint</td>
+</tr>
+<tr>
+<td>F-06</td>
+<td>Health endpoint queries DB</td>
+<td>✅ Resolved</td>
+<td>Fixed Mar 10 — static 200 response</td>
+</tr>
+</tbody>
+</table>
+<h3 id="remediation-summary">Remediation Summary</h3>
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Open</th>
+<th>Resolved This Month</th>
+<th>Total Resolved</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P0 Critical</td>
+<td>0</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td>P1 High</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>P2 Medium</td>
+<td>3</td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Grafana Dashboard:</strong>
+https://novapay.grafana.net/d/perf-monthly</p>
+<p><strong>Loom video walkthrough:</strong>
+https://loom.com/share/novapay-march-2026</p>
+<p><strong>XLSX data:</strong> attached</p>
+<p>Next report: April 2026 · hello@vantx.io · vantx.io</p>
+</blockquote>
+
+</body>
+</html>

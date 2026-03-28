@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "skills": {
+    "accessibility": {
+      "source": "addyosmani/web-quality-skills",
+      "sourceType": "github",
+      "computedHash": "6462f04969f59f771150e6410e6a11fa397f2934be0b51e8650f495feed1e28d"
+    },
+    "best-practices": {
+      "source": "addyosmani/web-quality-skills",
+      "sourceType": "github",
+      "computedHash": "98dafea60ec1a7f5f70f6febcdd4b4fa3fe15723ad9c0b991c0818615bff7ba6"
+    },
+    "core-web-vitals": {
+      "source": "addyosmani/web-quality-skills",
+      "sourceType": "github",
+      "computedHash": "fa437acc2249cea2cb28f190ba7faf8fdfac829d1c1aafa9ce938c6dd9338721"
+    },
+    "performance": {
+      "source": "addyosmani/web-quality-skills",
+      "sourceType": "github",
+      "computedHash": "acbafe2fcbfc3a1a67db47c2f6299d5c0e16f543c4e683e38e74a8ccb54888fb"
+    },
+    "seo": {
+      "source": "addyosmani/web-quality-skills",
+      "sourceType": "github",
+      "computedHash": "f1fed683b76913d26fbf1aa1e008e6932f7771701fc3a79925b042236aa4681a"
+    },
+    "web-quality-audit": {
+      "source": "addyosmani/web-quality-skills",
+      "sourceType": "github",
+      "computedHash": "1168be21aa9fe7bdc6e6e053ca05b6ca5a45675a527c103cdf77bc56ce8159af"
+    },
+    "webperf": {
+      "source": "nucliweb/webperf-snippets",
+      "sourceType": "github",
+      "computedHash": "f3c3e94fb66e943111ff038404c0097fad48f610acf98ff31d09f2a4bb537972"
+    },
+    "webperf-core-web-vitals": {
+      "source": "nucliweb/webperf-snippets",
+      "sourceType": "github",
+      "computedHash": "872042d50a5640a7e2291338e47a019a38e7d0df918fde0e877aa9b477dd426a"
+    },
+    "webperf-interaction": {
+      "source": "nucliweb/webperf-snippets",
+      "sourceType": "github",
+      "computedHash": "17bbde4b5a3544c4c558186f9e5b4a9d81fea06e44b931666a7825873a5ffc52"
+    },
+    "webperf-loading": {
+      "source": "nucliweb/webperf-snippets",
+      "sourceType": "github",
+      "computedHash": "404ef039c3415f2cc5c8384291523cf14ade68005e1ace49dba0b93949fbd5a4"
+    },
+    "webperf-media": {
+      "source": "nucliweb/webperf-snippets",
+      "sourceType": "github",
+      "computedHash": "f3e8fd31f05367ed2ac289a5d2ccebcbed9c9b9b95f62585f03f7c3bb2e6678a"
+    },
+    "webperf-resources": {
+      "source": "nucliweb/webperf-snippets",
+      "sourceType": "github",
+      "computedHash": "f75293c26d557c74397fd35cfe01e84ba6a800426ffa2d7eee0c5e3b8d6b85ee"
+    }
+  }
+}

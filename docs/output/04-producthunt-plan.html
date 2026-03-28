@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <style>
+    /* ═══════════════════════════════════════════════════
+       Vantx Docs — PDF Style (weasyprint)
+       Matches brand style guide: DM Sans, forest green,
+       parchment tones, warm grays
+       ═══════════════════════════════════════════════════ */
+
+    /* Fonts — use the self-hosted woff2 from the landing dir */
+    @font-face {
+      font-family: 'DM Sans';
+      src: url('../landing/fonts/dm-sans-latin.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'DM Sans';
+      src: url('../landing/fonts/dm-sans-latin.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'JetBrains Mono';
+      src: url('../landing/fonts/jb-mono-latin.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'JetBrains Mono';
+      src: url('../landing/fonts/jb-mono-latin.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    /* ── Page setup ── */
+    @page {
+      size: letter;
+      margin: 2.2cm 2.5cm 2.5cm 2.5cm;
+
+      @bottom-center {
+        content: counter(page);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9px;
+        color: #6B6B64;
+      }
+      @top-right {
+        content: "VANTX";
+        font-family: 'DM Sans', sans-serif;
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        color: #B0AFA8;
+      }
+    }
+
+    @page :first {
+      @bottom-center { content: none; }
+      @top-right { content: none; }
+    }
+
+    /* ── Base ── */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.6;
+      color: #1A1A17;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Cover page (YAML metadata handled by pandoc template) ── */
+
+    /* ── Headings ── */
+    h1 {
+      font-size: 22pt;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: #1B6B4A;
+      margin-top: 1.8em;
+      margin-bottom: 0.6em;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #1B6B4A;
+      page-break-after: avoid;
+    }
+
+    h2 {
+      font-size: 16pt;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      color: #1A1A17;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 12pt;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #1A1A17;
+      margin-top: 1.2em;
+      margin-bottom: 0.4em;
+      page-break-after: avoid;
+    }
+
+    h4, h5, h6 {
+      font-size: 10.5pt;
+      font-weight: 700;
+      color: #1A1A17;
+      margin-top: 1em;
+      margin-bottom: 0.3em;
+    }
+
+    /* ── Paragraphs ── */
+    p {
+      margin-top: 0;
+      margin-bottom: 0.6em;
+      color: #3A3A35;
+    }
+
+    /* ── Lists ── */
+    ul, ol {
+      margin-top: 0.3em;
+      margin-bottom: 0.8em;
+      padding-left: 1.5em;
+    }
+
+    li {
+      margin-bottom: 0.25em;
+      color: #3A3A35;
+    }
+
+    li::marker {
+      color: #1B6B4A;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.6em;
+      margin-bottom: 1em;
+      font-size: 9.5pt;
+      line-height: 1.45;
+      page-break-inside: auto;
+    }
+
+    thead {
+      background: #1B6B4A;
+    }
+
+    thead th {
+      color: #FFFFFF;
+      font-weight: 600;
+      font-size: 8.5pt;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      text-align: left;
+      padding: 7px 10px;
+      border: 1px solid #15593D;
+    }
+
+    tbody td {
+      padding: 6px 10px;
+      border: 1px solid #E2E1DC;
+      vertical-align: top;
+      color: #3A3A35;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #F8F7F4;
+    }
+
+    tbody tr:nth-child(odd) {
+      background: #FFFFFF;
+    }
+
+    /* Bold first column for definition-style tables */
+    tbody td:first-child {
+      font-weight: 600;
+      color: #1A1A17;
+    }
+
+    /* ── Blockquotes (callout boxes) ── */
+    blockquote {
+      margin: 1em 0;
+      padding: 12px 16px;
+      border-left: 3px solid #1B6B4A;
+      background: #F8F7F4;
+      border-radius: 0 6px 6px 0;
+      font-size: 10pt;
+      color: #3A3A35;
+    }
+
+    blockquote p {
+      margin: 0;
+    }
+
+    blockquote p + p {
+      margin-top: 0.4em;
+    }
+
+    /* ── Code ── */
+    code {
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 8.5pt;
+      background: #F0EFEB;
+      padding: 1px 5px;
+      border-radius: 3px;
+      color: #1A1A17;
+    }
+
+    pre {
+      margin: 0.8em 0;
+      padding: 14px 16px;
+      background: #1A1917;
+      border-radius: 8px;
+      overflow: hidden;
+      page-break-inside: avoid;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      color: #EDECE7;
+      font-size: 8pt;
+      line-height: 1.5;
+    }
+
+    /* ── Horizontal rules / page breaks ── */
+    hr {
+      border: none;
+      border-top: 1px solid #E2E1DC;
+      margin: 1.5em 0;
+    }
+
+    /* ── Strong / Bold ── */
+    strong {
+      font-weight: 700;
+      color: #1A1A17;
+    }
+
+    /* ── Links ── */
+    a {
+      color: #1B6B4A;
+      text-decoration: none;
+    }
+
+    /* ── Images (logo) ── */
+    img {
+      max-width: 30%;
+      height: auto;
+    }
+
+    /* ── Monospace data styling ── */
+    .price, .metric {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+    }
+
+    /* ── Emoji status indicators ── */
+    /* These render natively in weasyprint */
+
+    /* ── Page break utility ── */
+    .newpage {
+      page-break-before: always;
+    }
+
+    /* Cover page */
+    .cover {
+      page-break-after: always;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 700px;
+    }
+    .cover__logo { width: 140px; margin-bottom: 48px; }
+    .cover__bar { width: 60px; height: 3px; background: #1B6B4A; margin-bottom: 32px; }
+    .cover__title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 32pt; font-weight: 700;
+      letter-spacing: -0.03em; line-height: 1.1;
+      color: #1A1A17; margin: 0 0 12px 0;
+      border: none; padding: 0;
+    }
+    .cover__subtitle {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14pt; font-weight: 400;
+      color: #5C5C56; margin: 0 0 40px 0;
+    }
+    .cover__meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9pt; color: #6B6B64; line-height: 1.8;
+    }
+    .cover__meta span { display: block; }
+    .cover__footer {
+      margin-top: auto; padding-top: 32px;
+      border-top: 1px solid #E2E1DC;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8pt; color: #B0AFA8;
+    }
+    </style>
+  </head>
+<body>
+
+
+<h1 id="vantx-producthunt-launch-plan">Vantx — ProductHunt Launch
+Plan</h1>
+<h2 id="what-were-launching">What We’re Launching</h2>
+<p><strong>Performance as a Service</strong> — Managed performance
+engineering for tech teams. k6-based monitoring running 24/7, monthly
+load testing, web performance tracking, and prioritized findings
+delivered async.</p>
+<p><strong>Tagline</strong>: “Your performance team, without the
+headcount. k6 monitoring 24/7, monthly load tests, and a roadmap of
+exactly what to fix.”</p>
+<p><strong>One-liner</strong>: We run performance monitoring and testing
+against your system 24/7 and tell you what’s broken, what to fix, and in
+what order — 100% async.</p>
+<h2 id="producthunt-strategy">ProductHunt Strategy</h2>
+<h3 id="product-to-launch">Product to Launch</h3>
+<p>Launch the <strong>Performance Checkup</strong> as the hero product —
+it’s the lowest barrier to entry ($2,995), has a concrete deliverable,
+and converts to MRR.</p>
+<p><strong>Do NOT launch the retainer</strong> — PH audience wants to
+try before committing to monthly.</p>
+<h3 id="ph-specific-offer">PH-Specific Offer</h3>
+<ul>
+<li><strong>PH exclusive: 30% off first Performance Checkup</strong>
+($2,095 instead of $2,995)</li>
+<li>Limited to first 10 companies that sign up from PH</li>
+<li>Includes everything: load test, web perf audit, bottleneck heat map,
+prioritized roadmap, PDF report + video Loom</li>
+<li>Time-limited: 48 hours post-launch</li>
+</ul>
+<h3 id="positioning-for-ph-audience">Positioning for PH Audience</h3>
+<p>PH users are startup founders, CTOs, and engineers. They care about:
+- Speed of getting value (5 days from sign-up to deliverable) - No
+vendor lock-in (we use k6, Grafana, OpenTelemetry — all open-source) -
+Async-first (no mandatory meetings, no sales calls, no demos required) -
+Transparent pricing (pricing on the page, no “contact us” BS)</p>
+<h3 id="assets-already-built">Assets Already Built</h3>
+<p>The website is live at <strong>vantx.io</strong> with everything
+needed for the PH launch:</p>
+<ul>
+<li><strong>Landing page:</strong> Hero + pain points + services +
+comparison + FAQ + CTA</li>
+<li><strong>Performance detail page:</strong> Full feature list,
+pricing, Stripe checkout link
+(<code>vantx.io/services/performance.html</code>)</li>
+<li><strong>Demo deliverable:</strong> NovaPay Performance Checkup
+report (EN + ES) in
+<code>docs/content/07-demo-checkup-novapay-*.md</code></li>
+<li><strong>Brand Style Guide:</strong> Visual reference for all
+marketing materials (<code>vantx.io/brand/style-guide.html</code>)</li>
+<li><strong>Stripe payment links:</strong> Already live for Performance
+subscription + Checkup one-time</li>
+<li><strong>Calendly integration:</strong> Popup booking built into all
+pages</li>
+<li><strong>LATAM geo-banner:</strong> Auto-detected via Cloudflare for
+visitors from LATAM/Spain</li>
+<li><strong>Analytics:</strong> GA4 (G-VMTZXQG4HX) tracking all pages +
+custom events</li>
+<li><strong>SEO:</strong> Structured data (Organization + Services +
+FAQ), sitemap, robots.txt, OG tags</li>
+<li><strong>i18n:</strong> Full EN + ES translations across all
+pages</li>
+</ul>
+<h3 id="content-still-needed">Content Still Needed</h3>
+<p><strong>Hero image (1270x760)</strong>: - Split screen: left = messy
+Grafana dashboard with red alerts; right = clean Vantx report with
+prioritized findings - Headline overlay: “From chaos to clarity in 5
+days”</p>
+<p><strong>Gallery images (5 images)</strong>: 1. Dashboard view —
+metric cards showing real data (uptime 99.97%, p95 195ms, etc.) 2. Load
+test results table — scenarios with TPS/latency/errors 3. Heat map of
+bottlenecks — severity coded, prioritized 4. Before/after metrics —
+delta showing improvement 5. Slack weekly report — what async delivery
+looks like</p>
+<p><strong>Demo video (2-3 min)</strong>: - Problem: “Most teams don’t
+know their real capacity until production breaks” - Show: Real NovaPay
+checkup flow (anonymized) — the 5 steps, the deliverables - Result: “320
+TPS → 510 TPS with 2 fixes we identified in the checkup” - CTA: “Get
+your checkup for 30% off — PH exclusive, 10 slots”</p>
+<p><strong>Maker comment (first comment)</strong>:</p>
+<pre><code>Hey PH! I&#39;m José, and I&#39;ve spent 15 years doing performance engineering for companies like LATAM Airlines, British Airways, and Mercado Libre.
+
+Here&#39;s what I learned: most teams don&#39;t lack tools. They lack someone to actually run the testing and monitoring consistently, interpret the results, and tell them exactly what to fix.
+
+That&#39;s what Vantx does. We monitor your system 24/7 with k6 and Grafana, run monthly load tests, and deliver weekly/monthly reports with prioritized findings.
+
+No meetings. No sales calls. 100% async. Slack + Loom + dashboards.
+
+For the PH launch, we&#39;re offering 30% off our Performance Checkup (5-day evaluation) to the first 10 teams.
+
+Happy to answer any questions about performance testing, SRE, or observability! 🚀</code></pre>
+<h3 id="launch-day-timeline">Launch Day Timeline</h3>
+<p><strong>2 weeks before:</strong> - [ ] Finalize PH listing (tagline,
+description, images, video) - [x] Landing page live at vantx.io with
+Stripe checkout + Calendly booking - [x] Service detail pages live
+(Performance, Observability, SRE, QA) - [ ] Prepare social posts
+(LinkedIn, Twitter/X) scheduled for launch day - [ ] DM 20-30 people who
+upvoted similar products (performance tools, SRE tools) - [ ] Ask 10
+friends/network to be ready to upvote + comment at launch</p>
+<p><strong>1 week before:</strong> - [ ] Submit PH listing as “upcoming”
+to collect followers - [ ] Post teaser on LinkedIn: “Something we’ve
+been building for months goes live next week” - [ ] Send email to
+existing contacts: “We’re launching on PH — would love your support”</p>
+<p><strong>Launch day (Tuesday or Wednesday, 12:01 AM PT):</strong> - [
+] Go live at 12:01 AM Pacific Time (best window for PH) - [ ] Post maker
+comment immediately - [ ] Share on LinkedIn, Twitter/X, relevant Slack
+communities - [ ] Respond to every comment within 30 minutes - [ ] Post
+updates throughout the day (new sign-ups, interesting questions,
+etc.)</p>
+<p><strong>Day 2-3:</strong> - [ ] Follow up with everyone who signed up
+- [ ] Thank upvoters individually - [ ] Write a recap post on LinkedIn:
+“We launched on PH — here’s what happened”</p>
+<h3 id="success-metrics">Success Metrics</h3>
+<ul>
+<li><strong>Top 5</strong> of the day → good visibility, generates
+50-100 visits/day for weeks</li>
+<li><strong>#1 of the day</strong> → 500+ upvotes, 2,000+ visits, likely
+10-20 qualified leads</li>
+<li><strong>10 PH checkup sign-ups</strong> → $24,500 revenue from
+launch alone</li>
+<li><strong>3 of those convert to retainer</strong> → $8,400-$13,500 MRR
+added</li>
+</ul>
+<h3 id="where-else-to-launch">Where Else to Launch</h3>
+<p>After PH, cross-post to: - <strong>HackerNews</strong> (“Show HN: We
+built Performance as a Service — k6 monitoring 24/7 for $2,800/mo”) -
+<strong>Dev.to</strong> (technical article: “How we run 24/7 synthetic
+monitoring with k6 for our clients”) - <strong>Indie Hackers</strong>
+(story: “From enterprise performance engineer to consulting business
+doing $X/mo”) - <strong>LinkedIn</strong> (José’s network: “Why I quit
+big company consulting to build VANTX”) - <strong>Reddit</strong>
+(r/devops, r/sre, r/webdev — share value, not promotion)</p>
+<h3 id="tools">Tools</h3>
+<ul>
+<li><strong>ProductHunt listing</strong>:
+https://www.producthunt.com/posts/new</li>
+<li><strong>PH Ship</strong>: Collect “upcoming” followers →
+https://www.producthunt.com/ship</li>
+<li><strong>PH API</strong>: Track upvotes/comments programmatically if
+needed</li>
+<li><strong>Social scheduling</strong>: Buffer or Typefully for
+coordinated posts</li>
+</ul>
+<h2 id="budget">Budget</h2>
+<ul>
+<li>Hero image design: $0 (generate with existing demo data +
+Canva/Figma)</li>
+<li>Video: $0 (Loom recording, edited in CapCut)</li>
+<li>PH listing: Free</li>
+<li>Total: $0</li>
+</ul>
+<h2 id="expected-roi">Expected ROI</h2>
+<ul>
+<li>Cost: $0 + 2-3 days of José’s time</li>
+<li>Best case: #1 Product of the Day → 10 checkup sign-ups ($24,500) + 3
+retainers ($8,400/mo MRR)</li>
+<li>Worst case: 50 upvotes, 5 sign-ups → still $12,250 in checkups</li>
+<li>Either way: permanent PH page as social proof + SEO backlink</li>
+</ul>
+
+</body>
+</html>

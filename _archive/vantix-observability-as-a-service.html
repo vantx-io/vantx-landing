@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vantix — Observability as a Service</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;color:#1B2A4A;line-height:1.7;background:#fff}
+.container{max-width:800px;margin:0 auto;padding:0 24px}
+.wide{max-width:1100px;margin:0 auto;padding:0 24px}
+.hero{background:#1B2A4A;color:#fff;padding:80px 0 60px}
+.hero .tag{display:inline-block;background:rgba(39,174,96,.15);border:1px solid rgba(39,174,96,.3);border-radius:100px;padding:6px 16px;font-size:12px;color:#5BCC8E;margin-bottom:20px;font-weight:500;letter-spacing:.5px}
+.hero h1{font-size:44px;font-weight:700;line-height:1.15;margin-bottom:16px}
+.hero h1 span{color:#27AE60}
+.hero .sub{font-size:18px;color:#8A9BC0;max-width:650px;margin-bottom:32px;line-height:1.7}
+.problem{padding:60px 0;border-bottom:1px solid #E8ECF2}
+.problem p{font-size:17px;color:#444;line-height:1.8;margin-bottom:16px}
+.problem .pain{color:#C0392B;font-weight:600}
+.deliverables{padding:60px 0}
+.deliverables h2{font-size:32px;font-weight:700;margin-bottom:8px}
+.deliverables .intro{font-size:16px;color:#5A6B8A;margin-bottom:40px;max-width:650px}
+.deliverable{margin-bottom:48px;display:grid;grid-template-columns:56px 1fr;gap:20px;align-items:start}
+.deliverable .num{width:48px;height:48px;border-radius:12px;background:#E8F5E9;color:#27AE60;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.deliverable h3{font-size:22px;font-weight:700;color:#1B2A4A;margin-bottom:6px}
+.deliverable .what{font-size:15px;color:#444;line-height:1.8;margin-bottom:12px}
+.deliverable .how{display:flex;gap:12px;flex-wrap:wrap}
+.deliverable .how span{display:inline-block;padding:4px 12px;border-radius:6px;font-size:12px;font-weight:500;background:#F5F5F5;color:#5A6B8A}
+.deliverable .how span.freq{background:#E8F5E9;color:#27AE60}
+.deliverable .how span.tool{background:#E8F0FE;color:#2E75B6}
+.outcome{padding:60px 0;background:#FAFBFD}
+.outcome h2{font-size:28px;font-weight:700;margin-bottom:24px}
+.outcomes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.outcome-card{padding:24px;border-radius:12px;border:1px solid #E8ECF2;background:#fff}
+.outcome-card h4{font-size:15px;font-weight:700;margin-bottom:6px}
+.outcome-card p{font-size:13px;color:#5A6B8A;line-height:1.6}
+.how-work{padding:60px 0;border-top:1px solid #E8ECF2}
+.how-work h2{font-size:28px;font-weight:700;margin-bottom:32px}
+.timeline{position:relative;padding-left:32px}
+.timeline::before{content:'';position:absolute;left:11px;top:4px;bottom:4px;width:2px;background:#E8ECF2}
+.tl-item{position:relative;margin-bottom:32px}
+.tl-item::before{content:'';position:absolute;left:-32px;top:4px;width:24px;height:24px;border-radius:50%;background:#27AE60;border:3px solid #fff;box-shadow:0 0 0 2px #E8ECF2}
+.tl-item h4{font-size:16px;font-weight:700;color:#1B2A4A;margin-bottom:4px}
+.tl-item p{font-size:14px;color:#5A6B8A;line-height:1.6}
+.tl-item .badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;background:#E8F5E9;color:#27AE60;margin-left:8px}
+.pricing{padding:60px 0;background:#1B2A4A;color:#fff}
+.pricing h2{font-size:28px;font-weight:700;margin-bottom:32px}
+.price-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:32px}
+.price-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:32px}
+.price-card h3{font-size:18px;font-weight:700;margin-bottom:4px}
+.price-card .desc{font-size:13px;color:#8A9BC0;margin-bottom:20px}
+.price-card .amount{font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:700;color:#27AE60;margin-bottom:4px}
+.price-card .per{font-size:14px;color:#556B8E}
+.price-card .pilot{display:inline-block;margin-top:12px;padding:4px 12px;border-radius:100px;font-size:12px;font-weight:600;background:rgba(230,126,34,.15);color:#E67E22}
+.price-card ul{list-style:none;margin-top:16px}
+.price-card li{font-size:13px;color:#8A9BC0;padding:4px 0;padding-left:20px;position:relative}
+.price-card li::before{content:'✓';position:absolute;left:0;color:#27AE60;font-weight:700}
+.cta{padding:60px 0;text-align:center;border-top:1px solid rgba(255,255,255,.1)}
+.cta h2{font-size:28px;font-weight:700;margin-bottom:12px}
+.cta p{font-size:15px;color:#8A9BC0;margin-bottom:24px;max-width:500px;margin-left:auto;margin-right:auto}
+.btn{display:inline-block;padding:14px 28px;border-radius:10px;font-size:15px;font-weight:600;text-decoration:none;transition:all .2s;border:none;cursor:pointer}
+.btn-primary{background:#27AE60;color:#fff}.btn-primary:hover{background:#1E8E4E}
+.btn-ghost{background:transparent;color:#8A9BC0;border:1px solid rgba(255,255,255,.15);margin-left:8px}.btn-ghost:hover{background:rgba(255,255,255,.05)}
+footer{padding:24px 0;text-align:center;font-size:12px;color:#556B8E;background:#1B2A4A}
+@media(max-width:768px){.hero h1{font-size:28px}.outcomes-grid,.price-grid{grid-template-columns:1fr}.deliverable{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<section class="hero">
+<div class="container">
+  <div class="tag">OBSERVABILITY AS A SERVICE</div>
+  <h1>Tu equipo no carece de <span>observabilidad</span>.<br>Carece de una forma de <span>ejecutarla bien</span>.</h1>
+  <p class="sub">Alertas que se ignoran. Dashboards que no responden las preguntas que tienes en un incidente. Factura de telemetría creciendo sin control. Eso no se resuelve con más herramientas. Se resuelve con alguien que las opere correctamente.</p>
+</div>
+</section>
+
+<section class="problem">
+<div class="container">
+  <p>Si tu stack de monitoreo se siente "implementado" pero caótico, probablemente es la misma historia: <span class="pain">alertas que nadie confía</span>, así que se ignoran. <span class="pain">Dashboards que no responden las preguntas</span> que tienes durante un incidente. <span class="pain">Volúmenes de telemetría creciendo</span> — y con ellos, la factura. Instrumentación inconsistente entre equipos. Y todos asumiendo que "el equipo de plataforma lo va a arreglar"… entre emergencias.</p>
+  <p>Eso es exactamente lo que resolvemos. <strong>Esto no es un tool. No es un proyecto one-off. Es una capacidad gestionada</strong> — diseñada para mantener tus señales útiles, tus costos controlados, y tu equipo confiado cuando algo se rompe.</p>
+</div>
+</section>
+
+<section class="deliverables">
+<div class="container">
+  <h2>Qué reciben nuestros clientes</h2>
+  <p class="intro">Cinco deliverables concretos que transforman tu monitoreo de "implementado pero caótico" a "confiable y útil".</p>
+
+  <div class="deliverable">
+    <div class="num">1</div>
+    <div>
+      <h3>Un baseline de observabilidad — qué recolectar, qué descartar, y por qué</h3>
+      <p class="what">Auditamos tu stack actual y definimos una estrategia de telemetría opinionada: qué métricas importan, qué logs son ruido, qué traces necesitas, y qué datos estás pagando por recolectar sin que nadie mire jamás. Instrumentamos con OpenTelemetry hasta 5 servicios.</p>
+      <div class="how">
+        <span class="tool">Auditoría de stack actual</span>
+        <span class="tool">OpenTelemetry instrumentation</span>
+        <span class="tool">Telemetry strategy document</span>
+        <span class="freq">Semana 1-3</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="deliverable">
+    <div class="num">2</div>
+    <div>
+      <h3>SLOs y alertas prácticas — alineadas a cómo el negocio experimenta downtime</h3>
+      <p class="what">No definimos SLOs genéricos de "99.9% uptime". Definimos SLOs que el negocio entiende: "si p95 del checkout pasa de 2 segundos, estamos perdiendo ventas". Error budget tracking con burn rate alerting para que el equipo sepa cuándo priorizar reliability sobre features.</p>
+      <div class="how">
+        <span class="tool">SLOs alineados al negocio</span>
+        <span class="tool">Error budget + burn rate</span>
+        <span class="tool">Alert rules tiered + runbooks</span>
+        <span class="freq">Semana 3-4</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="deliverable">
+    <div class="num">3</div>
+    <div>
+      <h3>Dashboards lean, consistentes, opinionados — construidos alrededor de las preguntas que tu equipo realmente hace</h3>
+      <p class="what">No 40 dashboards donde nadie encuentra nada. 10-15 dashboards Grafana diseñados para responder las preguntas específicas de un incidente: ¿qué servicio está fallando? ¿desde cuándo? ¿qué cambió? ¿cuál es el impacto? RED metrics, USE metrics, PostgreSQL, y SLO compliance — cada uno con un propósito claro.</p>
+      <div class="how">
+        <span class="tool">10-15 dashboards Grafana</span>
+        <span class="tool">RED + USE methodology</span>
+        <span class="tool">Provisioning as code</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="deliverable">
+    <div class="num">4</div>
+    <div>
+      <h3>Mejora continua de instrumentación — no fire drills trimestrales</h3>
+      <p class="what">Cada mes revisamos las alertas (false positives, gaps, thresholds), onboardeamos nuevos servicios, ajustamos dashboards al feedback del equipo, y actualizamos los SLOs si el negocio cambió. Es una mejora iterativa, no un proyecto que se termina y se olvida.</p>
+      <div class="how">
+        <span class="freq">Review mensual de alertas</span>
+        <span class="freq">Onboarding de nuevos servicios</span>
+        <span class="freq">Workshop trimestral para el equipo (2h)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="deliverable">
+    <div class="num">5</div>
+    <div>
+      <h3>Telemetría optimizada y costos controlados — reducción de cardinalidad y volumen</h3>
+      <p class="what">Si tu factura de Datadog o New Relic crece cada mes sin que nadie sepa por qué, esto es para ti. Identificamos métricas de alta cardinalidad, logs verbosos que nadie lee, y traces redundantes. Reducimos volumen sin perder visibilidad. Algunos clientes reducen 30-50% su factura de telemetría solo con esta optimización.</p>
+      <div class="how">
+        <span class="tool">Cardinality analysis</span>
+        <span class="tool">Log sampling strategy</span>
+        <span class="tool">Cost reduction roadmap</span>
+        <span class="freq">Mensual</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="deliverable">
+    <div class="num">6</div>
+    <div>
+      <h3>Comunicación async-first — con calls cuando realmente importa</h3>
+      <p class="what">Slack para preguntas del día a día. Loom para explicaciones de hallazgos. PDF para reportes formales. Pero incluimos <strong>call de kick-off de 15 min</strong> para alinear, <strong>calls opcionales ante incidentes/hallazgos</strong>, y <strong>video meet opcional del informe mensual</strong> si quieres presentar los resultados a tu equipo o management.</p>
+      <div class="how">
+        <span class="freq">Kick-off: 15 min video call</span>
+        <span class="freq">Incidentes: call 15 min opcional</span>
+        <span class="freq">Informe mensual: video meet opcional</span>
+        <span class="tool">Slack async siempre</span>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="outcome">
+<div class="wide">
+  <h2>El resultado</h2>
+  <div class="outcomes-grid">
+    <div class="outcome-card"><h4>Menos sorpresas</h4><p>Alertas que la gente confía. Incidentes detectados antes de que los usuarios se quejen. Error budget como herramienta de priorización.</p></div>
+    <div class="outcome-card"><h4>Diagnóstico más rápido</h4><p>Dashboards que responden las preguntas del incidente en 30 segundos, no 30 minutos. Correlación e2e con traces.</p></div>
+    <div class="outcome-card"><h4>Una plataforma que mejora cada mes</h4><p>No es un proyecto que se entrega y se olvida. Es una capacidad que se afina continuamente. Cada mes más precisa, más útil, más eficiente.</p></div>
+  </div>
+</div>
+</section>
+
+<section class="how-work">
+<div class="container">
+  <h2>Cómo funciona</h2>
+  <div class="timeline">
+    <div class="tl-item"><h4>Kick-off <span class="badge">15 min video call</span></h4><p>Entendemos tu stack actual, tus dolores, tus herramientas. Si prefieres async, mandas un doc y arrancamos.</p></div>
+    <div class="tl-item"><h4>Semana 1-3: Baseline</h4><p>Auditoría + instrumentación OTel + dashboards + alertas. Al final de la semana 3 tienes un stack de observabilidad funcional y opinionado.</p></div>
+    <div class="tl-item"><h4>Semana 3-4: SLOs + Governance</h4><p>SLOs formales, error budget tracking, burn rate alerting. Tu equipo sabe cuándo priorizar reliability.</p></div>
+    <div class="tl-item"><h4>Mes 2+: Gestión continua</h4><p>Review mensual de alertas, onboarding de servicios, optimización de costos, mejora de instrumentación.</p></div>
+    <div class="tl-item"><h4>Cada trimestre: Workshop <span class="badge">2h grabado</span></h4><p>Training para tu equipo sobre cómo usar los dashboards, interpretar SLOs, y diagnosticar incidentes.</p></div>
+    <div class="tl-item"><h4>Opcional: Video meet mensual <span class="badge">15-30 min</span></h4><p>Walkthrough del estado de la observabilidad, métricas de mejora, y próximos pasos.</p></div>
+  </div>
+</div>
+</section>
+
+<section class="pricing">
+<div class="wide">
+  <h2>Pricing</h2>
+  <div class="price-grid">
+    <div class="price-card">
+      <h3>Observability Baseline</h3>
+      <p class="desc">Implementación one-shot. De "caótico" a "funcional" en 3-4 semanas.</p>
+      <div class="amount">$9,500</div>
+      <div class="per">LATAM · $15,000 US · one-shot</div>
+      <ul>
+        <li>Auditoría de stack actual</li>
+        <li>Instrumentación OTel (hasta 5 servicios)</li>
+        <li>10-15 dashboards Grafana</li>
+        <li>Alert rules tiered + runbooks</li>
+        <li>SLOs + error budget + burn rate</li>
+        <li>Telemetry strategy document</li>
+        <li>Call kick-off 15 min + call entrega 15 min</li>
+      </ul>
+      <span class="pilot">Piloto: $7,125 LATAM</span>
+    </div>
+    <div class="price-card">
+      <h3>Gestión Continua</h3>
+      <p class="desc">Managed capability. Tu observabilidad mejora cada mes sin que pienses en ella.</p>
+      <div class="amount">$3,500<span style="font-size:16px;color:#556B8E">/mes</span></div>
+      <div class="per">LATAM · $5,500/mes US · compromiso 3 meses</div>
+      <ul>
+        <li>Review y tuning mensual de alertas</li>
+        <li>Onboarding de nuevos servicios</li>
+        <li>Optimización de costos de telemetría</li>
+        <li>Mejora continua de instrumentación</li>
+        <li>Workshop trimestral 2h (grabado)</li>
+        <li>Video meet mensual opcional</li>
+        <li>Soporte por Slack</li>
+      </ul>
+      <span class="pilot">Piloto: $2,625/mes LATAM</span>
+    </div>
+  </div>
+  <p style="font-size:13px;color:#556B8E;text-align:center">Stack: OpenTelemetry + Prometheus + Grafana + Loki. Vendor-neutral, sin lock-in. Compatible con Datadog, New Relic, etc.</p>
+</div>
+<div class="cta">
+  <h2>¿Qué es lo que más te frustra de tu observabilidad?</h2>
+  <p>Cuéntanos qué desearías poder arreglar permanentemente.</p>
+  <a href="/cdn-cgi/l/email-protection#d2b1bdbca6b3b1a692a4b3bca6bbaafcb1be" class="btn btn-primary">Hablemos → <span class="__cf_email__" data-cfemail="c8aba7a6bca9abbc88bea9a6bca1b0e6aba4">[email&#160;protected]</span></a>
+  <a href="https://calendly.com/vantix/15min" class="btn btn-ghost">Agenda

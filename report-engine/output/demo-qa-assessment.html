@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QA Strategy Assessment — Vantx</title>
+    <style>
+    /* ═══════════════════════════════════════════════════
+       Vantx Docs — PDF Style (weasyprint)
+       Matches brand style guide: DM Sans, forest green,
+       parchment tones, warm grays
+       ═══════════════════════════════════════════════════ */
+
+    /* Fonts — use the self-hosted woff2 from the landing dir */
+    @font-face {
+      font-family: 'DM Sans';
+      src: url('../landing/fonts/dm-sans-latin.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'DM Sans';
+      src: url('../landing/fonts/dm-sans-latin.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'JetBrains Mono';
+      src: url('../landing/fonts/jb-mono-latin.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'JetBrains Mono';
+      src: url('../landing/fonts/jb-mono-latin.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    /* ── Page setup ── */
+    @page {
+      size: letter;
+      margin: 2.2cm 2.5cm 2.5cm 2.5cm;
+
+      @bottom-center {
+        content: counter(page);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9px;
+        color: #6B6B64;
+      }
+      @top-right {
+        content: "VANTX";
+        font-family: 'DM Sans', sans-serif;
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        color: #B0AFA8;
+      }
+    }
+
+    @page :first {
+      @bottom-center { content: none; }
+      @top-right { content: none; }
+    }
+
+    /* ── Base ── */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.6;
+      color: #1A1A17;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Cover page (YAML metadata handled by pandoc template) ── */
+
+    /* ── Headings ── */
+    h1 {
+      font-size: 22pt;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: #1B6B4A;
+      margin-top: 1.8em;
+      margin-bottom: 0.6em;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #1B6B4A;
+      page-break-after: avoid;
+    }
+
+    h2 {
+      font-size: 16pt;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      color: #1A1A17;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 12pt;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #1A1A17;
+      margin-top: 1.2em;
+      margin-bottom: 0.4em;
+      page-break-after: avoid;
+    }
+
+    h4, h5, h6 {
+      font-size: 10.5pt;
+      font-weight: 700;
+      color: #1A1A17;
+      margin-top: 1em;
+      margin-bottom: 0.3em;
+    }
+
+    /* ── Paragraphs ── */
+    p {
+      margin-top: 0;
+      margin-bottom: 0.6em;
+      color: #3A3A35;
+    }
+
+    /* ── Lists ── */
+    ul, ol {
+      margin-top: 0.3em;
+      margin-bottom: 0.8em;
+      padding-left: 1.5em;
+    }
+
+    li {
+      margin-bottom: 0.25em;
+      color: #3A3A35;
+    }
+
+    li::marker {
+      color: #1B6B4A;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.6em;
+      margin-bottom: 1em;
+      font-size: 9.5pt;
+      line-height: 1.45;
+      page-break-inside: auto;
+    }
+
+    thead {
+      background: #1B6B4A;
+    }
+
+    thead th {
+      color: #FFFFFF;
+      font-weight: 600;
+      font-size: 8.5pt;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      text-align: left;
+      padding: 7px 10px;
+      border: 1px solid #15593D;
+    }
+
+    tbody td {
+      padding: 6px 10px;
+      border: 1px solid #E2E1DC;
+      vertical-align: top;
+      color: #3A3A35;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #F8F7F4;
+    }
+
+    tbody tr:nth-child(odd) {
+      background: #FFFFFF;
+    }
+
+    /* Bold first column for definition-style tables */
+    tbody td:first-child {
+      font-weight: 600;
+      color: #1A1A17;
+    }
+
+    /* ── Blockquotes (callout boxes) ── */
+    blockquote {
+      margin: 1em 0;
+      padding: 12px 16px;
+      border-left: 3px solid #1B6B4A;
+      background: #F8F7F4;
+      border-radius: 0 6px 6px 0;
+      font-size: 10pt;
+      color: #3A3A35;
+    }
+
+    blockquote p {
+      margin: 0;
+    }
+
+    blockquote p + p {
+      margin-top: 0.4em;
+    }
+
+    /* ── Code ── */
+    code {
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 8.5pt;
+      background: #F0EFEB;
+      padding: 1px 5px;
+      border-radius: 3px;
+      color: #1A1A17;
+    }
+
+    pre {
+      margin: 0.8em 0;
+      padding: 14px 16px;
+      background: #1A1917;
+      border-radius: 8px;
+      overflow: hidden;
+      page-break-inside: avoid;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      color: #EDECE7;
+      font-size: 8pt;
+      line-height: 1.5;
+    }
+
+    /* ── Horizontal rules / page breaks ── */
+    hr {
+      border: none;
+      border-top: 1px solid #E2E1DC;
+      margin: 1.5em 0;
+    }
+
+    /* ── Strong / Bold ── */
+    strong {
+      font-weight: 700;
+      color: #1A1A17;
+    }
+
+    /* ── Links ── */
+    a {
+      color: #1B6B4A;
+      text-decoration: none;
+    }
+
+    /* ── Images (logo) ── */
+    img {
+      max-width: 30%;
+      height: auto;
+    }
+
+    /* ── Monospace data styling ── */
+    .price, .metric {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+    }
+
+    /* ── Emoji status indicators ── */
+    /* These render natively in weasyprint */
+
+    /* ── Page break utility ── */
+    .newpage {
+      page-break-before: always;
+    }
+
+    /* Cover page */
+    .cover {
+      page-break-after: always;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 700px;
+    }
+    .cover__logo { width: 140px; margin-bottom: 48px; }
+    .cover__bar { width: 60px; height: 3px; background: #1B6B4A; margin-bottom: 32px; }
+    .cover__title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 32pt; font-weight: 700;
+      letter-spacing: -0.03em; line-height: 1.1;
+      color: #1A1A17; margin: 0 0 12px 0;
+      border: none; padding: 0;
+    }
+    .cover__subtitle {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14pt; font-weight: 400;
+      color: #5C5C56; margin: 0 0 40px 0;
+    }
+    .cover__meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9pt; color: #6B6B64; line-height: 1.8;
+    }
+    .cover__meta span { display: block; }
+    .cover__footer {
+      margin-top: auto; padding-top: 32px;
+      border-top: 1px solid #E2E1DC;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8pt; color: #B0AFA8;
+    }
+
+    /* Report-specific: status badges */
+    .status-pass { color: #1B6B4A; font-weight: 700; }
+    .status-fail { color: #C0392B; font-weight: 700; }
+    .status-warn { color: #D4A017; font-weight: 700; }
+
+    /* Report-specific: metric highlight */
+    .metric-hero {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 24pt; font-weight: 700;
+      color: #1B6B4A; display: block;
+      margin: 8px 0;
+    }
+    </style>
+  </head>
+<body>
+
+<div class="cover">
+  <img class="cover__logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAABbCAMAAABqOSM9AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAMAUExURRtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrSowIbgAAAAD/dFJOUwAQTa6Aka9OEQUsdMPyi57zwXIqBBpcquiKAealUhUNQZDV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" alt="Vantx">
+  <div class="cover__bar"></div>
+  <h1 class="cover__title">QA Strategy Assessment</h1>
+    <p class="cover__subtitle">NovaPay SpA — Initial Assessment</p>
+    <div class="cover__meta">
+    <span>Version 1.0</span>
+    <span>March 2026</span>
+    <span>vantx.io &middot; hello@vantx.io</span>
+  </div>
+  <div class="cover__footer">
+    Confidential &mdash; Vantx
+  </div>
+</div>
+
+<h1 id="qa-strategy-assessment">QA STRATEGY ASSESSMENT</h1>
+<p><strong>NovaPay SpA — Payment Processing Platform</strong></p>
+<p>March 2026 · VANTX · hello@vantx.io</p>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="executive-summary">Executive Summary</h1>
+<p>NovaPay’s QA practices were assessed over 5 business days. The
+platform has a small engineering team (8 devs, 0 dedicated QA) shipping
+weekly to production. Testing is developer-driven but inconsistent —
+unit test coverage varies from 12% to 45% across services, there are no
+E2E tests, and the CI pipeline runs linting only. An average of 6
+production bugs per month are reported by customers before internal
+detection.</p>
+<p>The team is technically strong but lacks QA leadership to define
+strategy, build frameworks, and create testing habits. The biggest risk
+is the checkout flow — the most critical path has zero automated
+tests.</p>
+<h3 id="qa-maturity-assessment">QA Maturity Assessment</h3>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Current Level</th>
+<th>Target Level</th>
+<th>Gap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Test strategy</td>
+<td>0 None</td>
+<td>3 Standardized</td>
+<td>3 levels</td>
+</tr>
+<tr>
+<td>Unit testing</td>
+<td>2 Basic</td>
+<td>3 Standardized</td>
+<td>1 level</td>
+</tr>
+<tr>
+<td>Integration testing</td>
+<td>1 Ad-hoc</td>
+<td>3 Standardized</td>
+<td>2 levels</td>
+</tr>
+<tr>
+<td>E2E / UI testing</td>
+<td>0 None</td>
+<td>3 Standardized</td>
+<td>3 levels</td>
+</tr>
+<tr>
+<td>Performance testing</td>
+<td>1 Ad-hoc</td>
+<td>2 Basic</td>
+<td>1 level</td>
+</tr>
+<tr>
+<td>CI/CD integration</td>
+<td>1 Ad-hoc</td>
+<td>3 Standardized</td>
+<td>2 levels</td>
+</tr>
+<tr>
+<td>Test data management</td>
+<td>0 None</td>
+<td>2 Basic</td>
+<td>2 levels</td>
+</tr>
+<tr>
+<td>Bug triage process</td>
+<td>1 Ad-hoc</td>
+<td>2 Basic</td>
+<td>1 level</td>
+</tr>
+<tr>
+<td>QA documentation</td>
+<td>0 None</td>
+<td>2 Basic</td>
+<td>2 levels</td>
+</tr>
+</tbody>
+</table>
+<p>Levels: <strong>0</strong> None · <strong>1</strong> Ad-hoc ·
+<strong>2</strong> Basic · <strong>3</strong> Standardized ·
+<strong>4</strong> Optimized</p>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="current-state">1. Current State</h1>
+<h3 id="team-process">Team &amp; Process</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Current State</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>QA team size</td>
+<td>0 (devs test their own code)</td>
+</tr>
+<tr>
+<td>QA-to-dev ratio</td>
+<td>0:8 (no dedicated QA)</td>
+</tr>
+<tr>
+<td>Test strategy doc</td>
+<td>None</td>
+</tr>
+<tr>
+<td>Definition of Done</td>
+<td>Informal — “code review + it works on staging”</td>
+</tr>
+<tr>
+<td>Release process</td>
+<td>Weekly deploy, manual smoke test by on-call dev</td>
+</tr>
+<tr>
+<td>Bug tracking</td>
+<td>Linear (labels: bug + severity)</td>
+</tr>
+<tr>
+<td>Avg bugs in production (monthly)</td>
+<td>6 (3 P2, 2 P1, 1 P0 in last quarter)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test-coverage">Test Coverage</h3>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Framework</th>
+<th>Coverage</th>
+<th>Quality</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unit tests</td>
+<td>JUnit 5 (Java), Jest (Node)</td>
+<td>12-45%</td>
+<td>Mixed</td>
+<td>Payment Service 45%, Settlement 28%, Notification 12%</td>
+</tr>
+<tr>
+<td>Integration tests</td>
+<td>None</td>
+<td>0%</td>
+<td>N/A</td>
+<td>Some devs write ad-hoc tests that hit the DB</td>
+</tr>
+<tr>
+<td>E2E tests</td>
+<td>None</td>
+<td>0%</td>
+<td>N/A</td>
+<td>Critical gap — checkout flow untested</td>
+</tr>
+<tr>
+<td>API tests</td>
+<td>Postman (manual)</td>
+<td>~30% of endpoints</td>
+<td>Low</td>
+<td>Collections exist but not in CI, not maintained</td>
+</tr>
+<tr>
+<td>Performance tests</td>
+<td>k6 (via VANTX checkup)</td>
+<td>One-time</td>
+<td>Good</td>
+<td>Not yet integrated in CI</td>
+</tr>
+<tr>
+<td>Visual regression</td>
+<td>None</td>
+<td>0%</td>
+<td>N/A</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cicd-pipeline">CI/CD Pipeline</h3>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Tests</th>
+<th>Avg Duration</th>
+<th>Pass Rate</th>
+<th>Blocking?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PR checks</td>
+<td>ESLint + Checkstyle only</td>
+<td>45s</td>
+<td>98%</td>
+<td>Yes (lint)</td>
+</tr>
+<tr>
+<td>Build</td>
+<td>Compile + package</td>
+<td>2 min</td>
+<td>99%</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Staging deploy</td>
+<td>Manual smoke test</td>
+<td>~15 min (human)</td>
+<td>~95%</td>
+<td>No (honor system)</td>
+</tr>
+<tr>
+<td>Production deploy</td>
+<td>None</td>
+<td>—</td>
+<td>—</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="key-problems">2. Key Problems</h1>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>ID</th>
+<th>Category</th>
+<th>Problem</th>
+<th>Business Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q-01</td>
+<td>Coverage</td>
+<td>Checkout flow (most critical path) has zero automated tests</td>
+<td>Highest-revenue feature is tested manually or not at all</td>
+</tr>
+<tr>
+<td>Q-02</td>
+<td>Process</td>
+<td>No definition of done that includes testing requirements</td>
+<td>Quality varies by developer discipline</td>
+</tr>
+<tr>
+<td>Q-03</td>
+<td>CI/CD</td>
+<td>No tests gate production deploys — bugs ship without automated
+safety net</td>
+<td>6 bugs/month reaching production</td>
+</tr>
+<tr>
+<td>Q-04</td>
+<td>Data</td>
+<td>No test data management — devs test against shared staging DB</td>
+<td>Flaky tests, data corruption, unreliable results</td>
+</tr>
+<tr>
+<td>Q-05</td>
+<td>Regression</td>
+<td>No regression test suite — changes to shared code break other
+services silently</td>
+<td>Settlement bug in Feb caused by Payment Service refactor</td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="proposed-test-strategy">3. Proposed Test Strategy</h1>
+<h3 id="testing-pyramid">Testing Pyramid</h3>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Tools</th>
+<th>Scope</th>
+<th>Ownership</th>
+<th>Target Coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unit</td>
+<td>JUnit 5 + Mockito (Java), Jest (Node)</td>
+<td>Business logic, validators, mappers</td>
+<td>Devs</td>
+<td>70% line coverage</td>
+</tr>
+<tr>
+<td>Integration</td>
+<td>Testcontainers (Postgres + Redis)</td>
+<td>Repository layer, service layer with real DB</td>
+<td>Devs + QA</td>
+<td>Critical queries 100%</td>
+</tr>
+<tr>
+<td>Contract</td>
+<td>Pact</td>
+<td>API contracts between services</td>
+<td>API owners</td>
+<td>All inter-service APIs</td>
+</tr>
+<tr>
+<td>E2E</td>
+<td>Playwright</td>
+<td>Critical user flows (checkout, settlement, onboarding)</td>
+<td>QA (VANTX)</td>
+<td>Top 10 flows</td>
+</tr>
+<tr>
+<td>Performance</td>
+<td>k6</td>
+<td>Load, stress, spike</td>
+<td>QA + SRE (VANTX)</td>
+<td>Monthly + pre-release</td>
+</tr>
+<tr>
+<td>Visual</td>
+<td>Playwright screenshots</td>
+<td>Checkout page, dashboard</td>
+<td>QA</td>
+<td>Key pages</td>
+</tr>
+</tbody>
+</table>
+<h3 id="automation-framework-recommendation">Automation Framework
+Recommendation</h3>
+<p><strong>Recommended stack:</strong> Playwright (E2E) + Testcontainers
+(integration) + Pact (contract)</p>
+<p><strong>Rationale:</strong> Playwright handles both API and browser
+testing with a single framework, reducing maintenance overhead.
+Testcontainers provides ephemeral databases per test run — eliminates
+shared staging DB issues. Pact catches breaking API changes before
+deployment.</p>
+<h3 id="cicd-integration-plan">CI/CD Integration Plan</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Gate</th>
+<th>Tests</th>
+<th>Max Duration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pre-commit</td>
+<td>Lint + unit</td>
+<td>All unit tests</td>
+<td>&lt;2 min</td>
+</tr>
+<tr>
+<td>PR</td>
+<td>Unit + integration</td>
+<td>Full unit + Testcontainers integration</td>
+<td>&lt;5 min</td>
+</tr>
+<tr>
+<td>Staging</td>
+<td>E2E + contract</td>
+<td>Playwright critical flows + Pact verification</td>
+<td>&lt;15 min</td>
+</tr>
+<tr>
+<td>Pre-production</td>
+<td>Full regression + perf</td>
+<td>All E2E + k6 baseline</td>
+<td>&lt;30 min</td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="implementation-roadmap">4. Implementation Roadmap</h1>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Month</th>
+<th>Focus</th>
+<th>Deliverables</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Foundation</td>
+<td>Test strategy doc, Playwright framework scaffolded, first 3 E2E
+tests (login, checkout, settlement export), CI pipeline gating PRs with
+unit tests</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Core automation</td>
+<td>10 E2E tests covering top flows, Testcontainers for all
+repositories, Pact contracts for Payment↔︎Settlement API, test data
+factories</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Advanced + handoff</td>
+<td>Visual regression for checkout, k6 in CI (baseline on every deploy),
+team training (3h workshop), QA process documentation, handoff</td>
+</tr>
+</tbody>
+</table>
+<h3 id="success-criteria">Success Criteria</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Current</th>
+<th>3-Month Target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unit test coverage</td>
+<td>12-45%</td>
+<td>&gt;65% all services</td>
+</tr>
+<tr>
+<td>E2E test count</td>
+<td>0</td>
+<td>10+ critical flows</td>
+</tr>
+<tr>
+<td>CI pass rate</td>
+<td>98% (lint only)</td>
+<td>&gt;95% (full test suite)</td>
+</tr>
+<tr>
+<td>Bugs in production (monthly)</td>
+<td>6</td>
+<td>&lt;2</td>
+</tr>
+<tr>
+<td>Deploy confidence</td>
+<td>Low (manual smoke)</td>
+<td>High (automated gates)</td>
+</tr>
+<tr>
+<td>Release cycle time</td>
+<td>Weekly (fear-driven)</td>
+<td>On-demand (confidence-driven)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Next steps:</strong> Approve assessment → Week 1 kickoff →
+First Playwright tests running in CI within 5 days.</p>
+<p>The goal is your team learning — a successful engagement ends when
+you no longer need us.</p>
+<p>hello@vantx.io · vantx.io</p>
+</blockquote>
+
+</body>
+</html>
