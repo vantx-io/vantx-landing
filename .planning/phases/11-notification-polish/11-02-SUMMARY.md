@@ -123,6 +123,17 @@ None - no external service configuration required.
 - Plan 03 (weekly digest) can now also apply the same opt-out model pattern for the digest send site
 - No blockers
 
+## Self-Check: PASSED
+
+- FOUND: platform/src/lib/notifications.ts
+- FOUND: platform/src/app/api/webhooks/stripe/route.ts
+- FOUND: platform/__tests__/notifications.test.ts
+- FOUND: platform/__tests__/webhook-email.test.ts
+- FOUND: .planning/phases/11-notification-polish/11-02-SUMMARY.md
+- FOUND: commit eab610c (Task 1)
+- FOUND: commit 0031388 (Task 2)
+- FOUND: commit 1c2b5eb (docs/metadata)
+
 ---
 *Phase: 11-notification-polish*
 *Completed: 2026-03-26*

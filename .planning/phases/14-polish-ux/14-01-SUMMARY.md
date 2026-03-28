@@ -122,6 +122,17 @@ None - no external service configuration required. The database migration must b
 - Profile API ready for portal dashboard to load has_onboarded on mount
 - i18n keys in both languages ready for component use
 
+## Self-Check: PASSED
+
+- FOUND: platform/src/components/skeletons.tsx
+- FOUND: platform/src/components/SectionErrorBoundary.tsx
+- FOUND: platform/src/components/OnboardingCard.tsx
+- FOUND: platform/supabase/migrations/007_onboarding.sql
+- FOUND: .planning/phases/14-polish-ux/14-01-SUMMARY.md
+- FOUND commit: c989bf0 (Task 1)
+- FOUND commit: 1fd41ce (Task 2)
+- FOUND commit: 5ef0460 (metadata)
+
 ---
 *Phase: 14-polish-ux*
 *Completed: 2026-03-26*

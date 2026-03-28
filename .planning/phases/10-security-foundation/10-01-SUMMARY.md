@@ -81,7 +81,7 @@ Each task was committed atomically:
 1. **Task 1: Create rate-limit helper library with unit tests (TDD)** - `3521853` (feat)
 2. **Task 2: Integrate rate limiting into all API routes** - `9af6be7` (feat)
 
-**Plan metadata:** _(docs commit — see below)_
+**Plan metadata:** `1224e6a` (docs: complete security-foundation rate-limiting plan)
 
 _Note: Task 1 used TDD (test RED then implementation GREEN)._
 
@@ -144,6 +144,15 @@ _Note: Task 1 used TDD (test RED then implementation GREEN)._
 - Rate limiting foundation complete — all API routes protected, ready for v1.2 remaining phases
 - No blockers for next phases (notification preferences, admin user management, etc.)
 - Upstash free tier (10k requests/day) sufficient for current scale (<20 concurrent users)
+
+## Self-Check: PASSED
+
+- `platform/src/lib/rate-limit.ts` — FOUND
+- `platform/__tests__/rate-limit.test.ts` — FOUND
+- `.planning/phases/10-security-foundation/10-01-SUMMARY.md` — FOUND
+- Commit `3521853` — FOUND (feat: rate-limit helper library)
+- Commit `9af6be7` — FOUND (feat: integrate rate limiting)
+- Commit `1224e6a` — FOUND (docs: complete plan metadata)
 
 ---
 *Phase: 10-security-foundation*
