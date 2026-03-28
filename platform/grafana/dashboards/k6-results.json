@@ -1,0 +1,76 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "title": "Virtual Users",
+      "type": "timeseries",
+      "gridPos": { "h": 6, "w": 8, "x": 0, "y": 0 },
+      "targets": [{ "expr": "k6_vus", "legendFormat": "VUs" }],
+      "fieldConfig": { "defaults": { "color": { "mode": "fixed", "fixedColor": "#2E75B6" }, "custom": { "fillOpacity": 20 } } }
+    },
+    {
+      "title": "Throughput (req/s)",
+      "type": "timeseries",
+      "gridPos": { "h": 6, "w": 8, "x": 8, "y": 0 },
+      "targets": [{ "expr": "rate(k6_http_reqs_total[10s])", "legendFormat": "req/s" }],
+      "fieldConfig": { "defaults": { "color": { "mode": "fixed", "fixedColor": "#27AE60" }, "custom": { "fillOpacity": 15 } } }
+    },
+    {
+      "title": "Error Rate (%)",
+      "type": "timeseries",
+      "gridPos": { "h": 6, "w": 8, "x": 16, "y": 0 },
+      "targets": [{ "expr": "rate(k6_http_req_failed_total[10s]) / rate(k6_http_reqs_total[10s]) * 100", "legendFormat": "errors %" }],
+      "fieldConfig": { "defaults": { "color": { "mode": "fixed", "fixedColor": "#C0392B" }, "custom": { "fillOpacity": 30 }, "thresholds": { "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 0.1 }, { "color": "red", "value": 1 }] } } }
+    },
+    {
+      "title": "Response Time Distribution",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 16, "x": 0, "y": 6 },
+      "targets": [
+        { "expr": "k6_http_req_duration{quantile=\"0.5\"}", "legendFormat": "p50" },
+        { "expr": "k6_http_req_duration{quantile=\"0.90\"}", "legendFormat": "p90" },
+        { "expr": "k6_http_req_duration{quantile=\"0.95\"}", "legendFormat": "p95" },
+        { "expr": "k6_http_req_duration{quantile=\"0.99\"}", "legendFormat": "p99" }
+      ],
+      "fieldConfig": { "defaults": { "unit": "ms" } }
+    },
+    {
+      "title": "Current TPS",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 6 },
+      "targets": [{ "expr": "rate(k6_iterations_total[10s])", "legendFormat": "" }],
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "steps": [{ "color": "red", "value": null }, { "color": "orange", "value": 100 }, { "color": "green", "value": 300 }] }, "unit": "reqps" } }
+    },
+    {
+      "title": "Checks Pass Rate",
+      "type": "gauge",
+      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 6 },
+      "targets": [{ "expr": "k6_checks{result=\"pass\"} / k6_checks * 100", "legendFormat": "" }],
+      "fieldConfig": { "defaults": { "min": 0, "max": 100, "unit": "percent", "thresholds": { "steps": [{ "color": "red", "value": null }, { "color": "orange", "value": 95 }, { "color": "green", "value": 99 }] } } }
+    },
+    {
+      "title": "Data Transfer",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 10 },
+      "targets": [{ "expr": "k6_data_received", "legendFormat": "Received" }],
+      "fieldConfig": { "defaults": { "unit": "bytes" } }
+    },
+    {
+      "title": "Active Requests",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 10 },
+      "targets": [{ "expr": "k6_http_reqs - k6_http_reqs_completed", "legendFormat": "" }]
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": ["vantix", "k6", "performance"],
+  "templating": { "list": [] },
+  "time": { "from": "now-1h", "to": "now" },
+  "title": "k6 Load Test Results — Vantix",
+  "uid": "vantix-k6"
+}
