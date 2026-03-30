@@ -19,7 +19,7 @@ const RL_CONFIG = {
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { id: string } },
+  { params }: { params: { taskId: string } },
 ) {
   // Rate limit (20/min for task mutation routes)
   const sbSession = createServerSupabase();
@@ -65,7 +65,7 @@ export async function PATCH(
   const { data: task, error } = await supabase
     .from("tasks")
     .update(updatePayload)
-    .eq("id", params.id)
+    .eq("id", params.taskId)
     .select()
     .single();
 
