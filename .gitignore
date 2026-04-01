@@ -22,6 +22,9 @@ platform/supabase/.temp/
 node_modules/
 .next/
 
+# Separate repos (submodules managed independently)
+contracts/
+
 # Environment
 .env
 .env.local
