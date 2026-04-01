@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Website &amp; Design System — Vantx</title>
+    <style>
+    /* ═══════════════════════════════════════════════════
+       Vantx Docs — PDF Style (weasyprint)
+       Matches brand style guide: DM Sans, forest green,
+       parchment tones, warm grays
+       ═══════════════════════════════════════════════════ */
+
+    /* Fonts — use the self-hosted woff2 from the landing dir */
+    @font-face {
+      font-family: 'DM Sans';
+      src: url('../landing/fonts/dm-sans-latin.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'DM Sans';
+      src: url('../landing/fonts/dm-sans-latin.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'JetBrains Mono';
+      src: url('../landing/fonts/jb-mono-latin.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'JetBrains Mono';
+      src: url('../landing/fonts/jb-mono-latin.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    /* ── Page setup ── */
+    @page {
+      size: letter;
+      margin: 2.2cm 2.5cm 2.5cm 2.5cm;
+
+      @bottom-center {
+        content: counter(page);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9px;
+        color: #6B6B64;
+      }
+      @top-right {
+        content: "VANTX";
+        font-family: 'DM Sans', sans-serif;
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        color: #B0AFA8;
+      }
+    }
+
+    @page :first {
+      @bottom-center { content: none; }
+      @top-right { content: none; }
+    }
+
+    /* ── Base ── */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.6;
+      color: #1A1A17;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Cover page (YAML metadata handled by pandoc template) ── */
+
+    /* ── Headings ── */
+    h1 {
+      font-size: 22pt;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: #1B6B4A;
+      margin-top: 1.8em;
+      margin-bottom: 0.6em;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #1B6B4A;
+      page-break-after: avoid;
+    }
+
+    h2 {
+      font-size: 16pt;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      color: #1A1A17;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 12pt;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #1A1A17;
+      margin-top: 1.2em;
+      margin-bottom: 0.4em;
+      page-break-after: avoid;
+    }
+
+    h4, h5, h6 {
+      font-size: 10.5pt;
+      font-weight: 700;
+      color: #1A1A17;
+      margin-top: 1em;
+      margin-bottom: 0.3em;
+    }
+
+    /* ── Paragraphs ── */
+    p {
+      margin-top: 0;
+      margin-bottom: 0.6em;
+      color: #3A3A35;
+    }
+
+    /* ── Lists ── */
+    ul, ol {
+      margin-top: 0.3em;
+      margin-bottom: 0.8em;
+      padding-left: 1.5em;
+    }
+
+    li {
+      margin-bottom: 0.25em;
+      color: #3A3A35;
+    }
+
+    li::marker {
+      color: #1B6B4A;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.6em;
+      margin-bottom: 1em;
+      font-size: 9.5pt;
+      line-height: 1.45;
+      page-break-inside: auto;
+    }
+
+    thead {
+      background: #1B6B4A;
+    }
+
+    thead th {
+      color: #FFFFFF;
+      font-weight: 600;
+      font-size: 8.5pt;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      text-align: left;
+      padding: 7px 10px;
+      border: 1px solid #15593D;
+    }
+
+    tbody td {
+      padding: 6px 10px;
+      border: 1px solid #E2E1DC;
+      vertical-align: top;
+      color: #3A3A35;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #F8F7F4;
+    }
+
+    tbody tr:nth-child(odd) {
+      background: #FFFFFF;
+    }
+
+    /* Bold first column for definition-style tables */
+    tbody td:first-child {
+      font-weight: 600;
+      color: #1A1A17;
+    }
+
+    /* ── Blockquotes (callout boxes) ── */
+    blockquote {
+      margin: 1em 0;
+      padding: 12px 16px;
+      border-left: 3px solid #1B6B4A;
+      background: #F8F7F4;
+      border-radius: 0 6px 6px 0;
+      font-size: 10pt;
+      color: #3A3A35;
+    }
+
+    blockquote p {
+      margin: 0;
+    }
+
+    blockquote p + p {
+      margin-top: 0.4em;
+    }
+
+    /* ── Code ── */
+    code {
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 8.5pt;
+      background: #F0EFEB;
+      padding: 1px 5px;
+      border-radius: 3px;
+      color: #1A1A17;
+    }
+
+    pre {
+      margin: 0.8em 0;
+      padding: 14px 16px;
+      background: #1A1917;
+      border-radius: 8px;
+      overflow: hidden;
+      page-break-inside: avoid;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      color: #EDECE7;
+      font-size: 8pt;
+      line-height: 1.5;
+    }
+
+    /* ── Horizontal rules / page breaks ── */
+    hr {
+      border: none;
+      border-top: 1px solid #E2E1DC;
+      margin: 1.5em 0;
+    }
+
+    /* ── Strong / Bold ── */
+    strong {
+      font-weight: 700;
+      color: #1A1A17;
+    }
+
+    /* ── Links ── */
+    a {
+      color: #1B6B4A;
+      text-decoration: none;
+    }
+
+    /* ── Images (logo) ── */
+    img {
+      max-width: 30%;
+      height: auto;
+    }
+
+    /* ── Monospace data styling ── */
+    .price, .metric {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+    }
+
+    /* ── Emoji status indicators ── */
+    /* These render natively in weasyprint */
+
+    /* ── Page break utility ── */
+    .newpage {
+      page-break-before: always;
+    }
+
+    /* Cover page */
+    .cover {
+      page-break-after: always;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 700px;
+    }
+    .cover__logo { width: 140px; margin-bottom: 48px; }
+    .cover__bar { width: 60px; height: 3px; background: #1B6B4A; margin-bottom: 32px; }
+    .cover__title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 32pt; font-weight: 700;
+      letter-spacing: -0.03em; line-height: 1.1;
+      color: #1A1A17; margin: 0 0 12px 0;
+      border: none; padding: 0;
+    }
+    .cover__subtitle {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14pt; font-weight: 400;
+      color: #5C5C56; margin: 0 0 40px 0;
+    }
+    .cover__meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9pt; color: #6B6B64; line-height: 1.8;
+    }
+    .cover__meta span { display: block; }
+    .cover__footer {
+      margin-top: auto; padding-top: 32px;
+      border-top: 1px solid #E2E1DC;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8pt; color: #B0AFA8;
+    }
+    </style>
+  </head>
+<body>
+
+<div class="cover">
+  <img class="cover__logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAABbCAMAAABqOSM9AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAMAUExURRtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrSowIbgAAAAD/dFJOUwAQTa6Aka9OEQUsdMPyi57zwXIqBBpcquiKAealUhUNQZDV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" alt="Vantx">
+  <div class="cover__bar"></div>
+  <h1 class="cover__title">Website &amp; Design System</h1>
+    <p class="cover__subtitle">Architecture, Pages, and Technical
+Reference</p>
+    <div class="cover__meta">
+    <span>Version 1.0</span>
+    <span>March 2026</span>
+    <span>vantx.io &middot; hello@vantx.io</span>
+  </div>
+  <div class="cover__footer">
+    Confidential &mdash; Vantx
+  </div>
+</div>
+
+<h1 id="website-design-system">WEBSITE &amp; DESIGN SYSTEM</h1>
+<p><strong>vantx.io — Architecture &amp; Technical
+Reference</strong></p>
+<p>Version 1.0 — March 2026 · Internal</p>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="site-architecture">1. Site Architecture</h1>
+<p>The website lives in the <code>landing/</code> directory of the
+repository. Static HTML + CSS + JS, no build step, deployed via
+Cloudflare Pages.</p>
+<h3 id="page-inventory">Page inventory</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Page</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Landing / Home</td>
+<td><code>index.html</code></td>
+<td>Main conversion page — hero, pain points, services, comparison, FAQ,
+CTA</td>
+</tr>
+<tr>
+<td>Performance as a Service</td>
+<td><code>services/performance.html</code></td>
+<td>Full detail page — features, deliverables, pricing, Stripe
+checkout</td>
+</tr>
+<tr>
+<td>Observability as a Service</td>
+<td><code>services/observability.html</code></td>
+<td>Full detail page — features, deliverables, Calendly booking</td>
+</tr>
+<tr>
+<td>Fractional SRE</td>
+<td><code>services/fractional-sre.html</code></td>
+<td>Full detail page — features, deliverables, Calendly booking</td>
+</tr>
+<tr>
+<td>Fractional QA Tech Lead</td>
+<td><code>services/qa-tech-lead.html</code></td>
+<td>Full detail page — features, deliverables, Calendly booking</td>
+</tr>
+<tr>
+<td>Mission &amp; Values</td>
+<td><code>about/mission.html</code></td>
+<td>Mission, vision, purpose, 6 values, manifesto</td>
+</tr>
+<tr>
+<td>Brand Style Guide</td>
+<td><code>brand/style-guide.html</code></td>
+<td>Visual reference for documents, presentations, branded
+materials</td>
+</tr>
+<tr>
+<td>Welcome</td>
+<td><code>welcome.html</code></td>
+<td>Post-purchase onboarding</td>
+</tr>
+<tr>
+<td>Privacy Policy</td>
+<td><code>legal/privacy.html</code></td>
+<td>GDPR/CCPA compliant</td>
+</tr>
+<tr>
+<td>Terms of Service</td>
+<td><code>legal/terms.html</code></td>
+<td>Service terms</td>
+</tr>
+</tbody>
+</table>
+<h3 id="supporting-files">Supporting files</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>llms.txt</code></td>
+<td>AI-readable company info (services, model, contact)</td>
+</tr>
+<tr>
+<td><code>sitemap.xml</code></td>
+<td>SEO sitemap for all pages</td>
+</tr>
+<tr>
+<td><code>robots.txt</code></td>
+<td>Crawl directives</td>
+</tr>
+<tr>
+<td><code>partials/nav.html</code></td>
+<td>Shared navigation bar</td>
+</tr>
+<tr>
+<td><code>partials/footer.html</code></td>
+<td>Shared footer</td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="design-system">2. Design System</h1>
+<p>The visual system is documented in full at
+<code>brand/style-guide.html</code>. This is the source of truth for all
+brand materials.</p>
+<h3 id="css-architecture">CSS Architecture</h3>
+<pre><code>css/
+├── fonts.css       ← @font-face declarations (self-hosted woff2)
+├── tokens.css      ← Design tokens (colors, spacing, typography as CSS variables)
+├── base.css        ← Reset, global styles, shared components (buttons, nav, footer)
+├── landing.css     ← Landing page-specific styles
+└── detail.css      ← Service detail + about page styles</code></pre>
+<h3 id="color-palette">Color Palette</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Token</th>
+<th>Light mode</th>
+<th>Dark mode</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--color-primary</code></td>
+<td><code>#1B6B4A</code></td>
+<td><code>#259B6E</code></td>
+<td>CTAs, links, accents</td>
+</tr>
+<tr>
+<td><code>--color-primary-hover</code></td>
+<td><code>#155A3E</code></td>
+<td><code>#2EB07E</code></td>
+<td>Button hover</td>
+</tr>
+<tr>
+<td><code>--color-bg</code></td>
+<td><code>#F8F7F4</code></td>
+<td><code>#1A1917</code></td>
+<td>Page background</td>
+</tr>
+<tr>
+<td><code>--color-surface</code></td>
+<td><code>#FDFCFA</code></td>
+<td><code>#242320</code></td>
+<td>Cards, panels</td>
+</tr>
+<tr>
+<td><code>--color-text</code></td>
+<td><code>#1A1A17</code></td>
+<td><code>#EDECE7</code></td>
+<td>Headings, primary text</td>
+</tr>
+<tr>
+<td><code>--color-text-muted</code></td>
+<td><code>#5C5C56</code></td>
+<td><code>#A8A89F</code></td>
+<td>Body text, descriptions</td>
+</tr>
+</tbody>
+</table>
+<p>The palette is warm throughout. Never use cool grays, blue-grays, or
+pure black/white.</p>
+<h3 id="typography">Typography</h3>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Font</th>
+<th>Weight</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Primary</td>
+<td>DM Sans</td>
+<td>400, 500, 600, 700</td>
+<td>All text, headings, UI</td>
+</tr>
+<tr>
+<td>Mono</td>
+<td>JetBrains Mono</td>
+<td>400, 700</td>
+<td>Prices, metrics, code, badges</td>
+</tr>
+</tbody>
+</table>
+<p>Fonts are <strong>self-hosted</strong> in <code>fonts/</code>
+(woff2). No Google Fonts CDN dependency. Preloaded with
+<code>fetchpriority="high"</code>.</p>
+<h3 id="service-colors">Service Colors</h3>
+<p>Each service line has a dedicated accent for differentiation:</p>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Light</th>
+<th>Dark</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Performance</td>
+<td><code>#2563EB</code> (blue)</td>
+<td><code>#60A5FA</code></td>
+</tr>
+<tr>
+<td>Observability</td>
+<td><code>#0D9488</code> (teal)</td>
+<td><code>#14B8A6</code></td>
+</tr>
+<tr>
+<td>Fractional SRE</td>
+<td><code>#D97706</code> (amber)</td>
+<td><code>#F59E0B</code></td>
+</tr>
+<tr>
+<td>QA Tech Lead</td>
+<td><code>#7C3AED</code> (purple)</td>
+<td><code>#A78BFA</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="spacing">Spacing</h3>
+<p>4px base grid. All spacing uses multiples of 4: 4, 8, 12, 16, 24, 32,
+48, 64, 96px.</p>
+<h3 id="dark-mode">Dark Mode</h3>
+<p>Automatic via <code>prefers-color-scheme: dark</code>. All tokens
+adapt. Implemented at the CSS variable level — no JS theme toggle.</p>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="integrations">3. Integrations</h1>
+<h3 id="stripe-payments">Stripe (payments)</h3>
+<p>Two payment links are live:</p>
+<ul>
+<li><strong>Performance subscription:</strong>
+<code>buy.stripe.com/test_00wfZi8Pu4th2AFcqpgEg00</code>
+($5,995/mo)</li>
+<li><strong>Performance Checkup:</strong>
+<code>buy.stripe.com/test_7sY14o3va5xl6QV765gEg01</code> ($2,995
+one-time)</li>
+</ul>
+<p>The “Start Today” CTA links directly to Stripe checkout. No
+intermediary form.</p>
+<h3 id="calendly-booking">Calendly (booking)</h3>
+<p>Popup modal integrated via <code>js/calendly.js</code>. Any element
+with <code>.js-calendly-trigger</code> opens the Calendly popup for
+<code>calendly.com/hello-vantx/15min</code>.</p>
+<p>Used as CTA for services that require a call (Observability, SRE,
+QA).</p>
+<h3 id="google-analytics-4">Google Analytics 4</h3>
+<p>Measurement ID: <code>G-VMTZXQG4HX</code>. Loaded on all pages.
+Custom event tracking via <code>js/analytics.js</code>.</p>
+<h3 id="cloudflare-geo-detection">Cloudflare Geo-Detection</h3>
+<p>On the landing page, a script fetches <code>/cdn-cgi/trace</code> to
+detect the visitor’s country. If they’re in LATAM or Spain (AR, BO, BR,
+CL, CO, CR, CU, DO, EC, ES, SV, GT, HN, MX, NI, PA, PY, PE, PR, UY, VE),
+the LATAM discount banner is shown.</p>
+<h3 id="seo-structured-data">SEO Structured Data</h3>
+<p>JSON-LD on all pages:</p>
+<ul>
+<li><strong>Landing:</strong> <code>ProfessionalService</code> (org info
++ OfferCatalog) + <code>FAQPage</code> (5 items)</li>
+<li><strong>Service pages:</strong> <code>Service</code> schema with
+pricing + service-specific <code>FAQPage</code></li>
+<li><strong>Mission:</strong> No structured data (informational
+page)</li>
+</ul>
+<h3 id="i18n">i18n</h3>
+<p>Translations in <code>i18n/en.json</code> and
+<code>i18n/es.json</code>. Runtime swap via <code>js/i18n.js</code>.
+Translations cached in <code>sessionStorage</code>. Language detection:
+browser locale → manual toggle (nav flag button).</p>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="performance-optimizations">4. Performance Optimizations</h1>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Optimization</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Self-hosted fonts (woff2)</td>
+<td>Eliminates 2 cross-origin roundtrips to Google Fonts</td>
+</tr>
+<tr>
+<td>Font preload with <code>fetchpriority="high"</code></td>
+<td>Reduces CLS and FOIT</td>
+</tr>
+<tr>
+<td>Logo optimized (2.1 MB → 5 KB webp)</td>
+<td>Eliminates LCP bottleneck</td>
+</tr>
+<tr>
+<td>Scripts deferred (<code>defer</code> attribute)</td>
+<td>Non-blocking DOM parse</td>
+</tr>
+<tr>
+<td>Calendly CSS loaded lazily</td>
+<td>Only loads when popup is triggered</td>
+</tr>
+<tr>
+<td>i18n cached in sessionStorage</td>
+<td>Avoids re-fetching translations on page navigation</td>
+</tr>
+<tr>
+<td>No framework / JS bundle</td>
+<td>Zero JS build step, minimal payload</td>
+</tr>
+</tbody>
+</table>
+<h3 id="image-assets">Image assets</h3>
+<ul>
+<li>Logo: <code>img/vantx-logo-horizontal-white.webp</code> (5 KB) + PNG
+fallbacks</li>
+<li>Favicons: <code>img/favicon.ico</code>, <code>favicon-32.png</code>,
+<code>favicon-16.png</code>, <code>apple-touch-icon.png</code></li>
+<li>OG image: <code>img/og-image.png</code> (for social sharing)</li>
+</ul>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="content-sections-landing-page">5. Content Sections (Landing
+Page)</h1>
+<p>The landing page follows a conversion-oriented structure:</p>
+<ol type="1">
+<li><strong>Hero</strong> — Headline (“Your systems are slow. Your team
+doesn’t know why. We do.”), pill badge, primary CTA (Stripe) + secondary
+CTA (Calendly)</li>
+<li><strong>Credibility bar</strong> — One-line summary: “10+ years in
+performance engineering and SRE. 100% open-source stack.”</li>
+<li><strong>Pain points</strong> — 4 cards: Alerts at 3 AM, Load tests
+that don’t exist, No SRE/no budget, Every release is a guess</li>
+<li><strong>Services</strong> — Performance card (full, with Stripe CTA
++ Checkup upsell) + 3 “Also available” compact rows (Observability, SRE,
+QA)</li>
+<li><strong>Comparison table</strong> — Vantx vs. hiring full-time
+(cost, time, expertise, risk)</li>
+<li><strong>FAQ</strong> — 5 questions (subscription, contracts, speed,
+team, communication)</li>
+<li><strong>CTA section</strong> — Closing push with LATAM discount
+banner (geo-detected)</li>
+</ol>
+<h3 id="voice-tone">Voice &amp; Tone</h3>
+<p>Vantx sounds like a senior engineer who happens to be good at
+explaining things. Technical, direct, specific — never condescending.
+Key rules:</p>
+<ul>
+<li>Be specific: the SQL, the config, the exact change</li>
+<li>Use data: “p95 dropped from 1.2s to 340ms”</li>
+<li>Never use hourly language — flat monthly subscription model</li>
+<li>Never use corporate filler: “leverage”, “synergy”,
+“best-in-class”</li>
+<li>Every claim needs a number, an example, or a deliverable</li>
+</ul>
+<p>Full voice guidelines in the Brand Style Guide
+(<code>brand/style-guide.html</code>).</p>
+<blockquote>
+<p>vantx.io · hello@vantx.io · 2026</p>
+</blockquote>
+
+</body>
+</html>

@@ -1,17 +1,17 @@
 # Project Research Summary
 
-**Project:** Vantix Kit — B2B landing page system
-**Domain:** Static multi-page B2B SaaS marketing site — bilingual EN/ES, dark techy design, Calendly conversion
-**Researched:** 2026-03-20
+**Project:** Vantix Platform v1.2 — Security & Polish
+**Domain:** B2B SRE/performance client portal (Next.js 15 + Supabase)
+**Researched:** 2026-03-25
 **Confidence:** HIGH
 
 ## Executive Summary
 
-Vantix is a static, no-build B2B landing page system for a performance/SRE consultancy targeting mid-market LATAM and US engineering leaders. The research is unambiguous: vanilla HTML/CSS/JS is the correct and constrained approach — no framework, no bundler, no SSR. The architecture pattern is a fetch-inject partial system (nav/footer loaded once per page) with a data-i18n DOM-walking i18n module backed by JSON translation files. The entire stack is browser-native, CDN-delivered (Calendly, Google Fonts), and collocated with an existing 4-page site that already defines the color palette and typography.
+Vantix v1.2 is an incremental hardening milestone layered on top of a fully-operational v1.1 platform. The platform already ships email/password auth, a 4-role system, task CRUD, file uploads, in-app and email notifications, Stripe billing, and both Vitest and Playwright test infrastructure. The 8 new features — TOTP 2FA, API rate limiting, weekly email digest, notification preferences, admin user management, an MRR trend chart, API integration tests, and Playwright visual regression — must slot into the existing architecture without new infrastructure layers or rewrites. The recommended approach is additive integration: each feature modifies or extends existing files at precise integration points rather than introducing new patterns.
 
-The recommended build order is design tokens first, then shared CSS, then i18n infrastructure, then the main conversion page, then service detail pages. This sequence is non-negotiable: the i18n system depends on the DOM being fully assembled (partials injected) before translations are applied, and the CSS token layer must exist before components are built or color/spacing values scatter across files. The highest-value conversions happen on `index.html` via Calendly popup — the detail pages exist to satisfy deep-evaluation buyers, not as primary conversion surfaces.
+The critical sequencing insight from cross-research synthesis is that features have hard dependencies that determine safe build order. Notification preferences (NOTIF-11) must be built before the weekly digest (NOTIF-10) or the digest will send emails to users who later opt out. The TOTP 2FA feature (SEC-01) must ship before admin user management (ADMIN-07) so newly invited users encounter the enrollment flow on first login. Rate limiting (SEC-02) is dependency-free and should ship first as an immediate protective layer on existing routes. Visual regression tests (TEST-11) require the MRR chart (ADMIN-08) to exist before baselines can be captured, placing them last.
 
-The top risk is the cluster of Calendly-related pitfalls: performance blocking, conversion tracking failures, and FOUC from the language system are each independently capable of making the launch embarrassing for a performance consultancy. All three must be addressed at integration time, not post-launch. A secondary risk is the SEO tradeoff of a single-URL bilingual toggle — this sacrifices Spanish organic search and must be explicitly accepted as a v1 tradeoff rather than discovered after launch.
+The principal risks are architectural, not implementation complexity. Rate limiting with an in-memory Map provides zero protection on Vercel serverless — Upstash Redis is mandatory. MFA middleware that only checks whether a user is authenticated (not their AAL level) leaves enrolled users permanently bypassed. Playwright baselines committed from a macOS machine will fail CI on every PR due to font rendering differences. All three of these failure modes look correct during local development and only surface in production or CI — making early prevention critical.
 
 ---
 
@@ -19,154 +19,144 @@ The top risk is the cluster of Calendly-related pitfalls: performance blocking, 
 
 ### Recommended Stack
 
-The stack is entirely zero-build: HTML5 with `data-i18n` attributes for translation targets, CSS3 Custom Properties for the dark theme design token system, and Vanilla JavaScript (ES2022 modules) for i18n logic and partial injection. The Calendly Embed Widget is loaded async from CDN and triggered via `Calendly.initPopupWidget()` on CTA buttons. Typography is DM Sans + JetBrains Mono, already established across the codebase — self-host woff2 files before production launch to eliminate the two-server round-trip that would be especially ironic for a performance consultancy.
+The v1.2 stack requires only 4 new packages on top of what is already installed. `@upstash/ratelimit` and `@upstash/redis` are the only viable rate-limiting pair for Vercel serverless — in-memory alternatives are explicitly disqualified by the serverless execution model. `next-test-api-route-handler` v4 (NTARH) is the purpose-built integration test tool for Next.js App Router route handlers and pairs with the existing Vitest setup. `msw` v2 provides network-layer mocking for external HTTP calls (Supabase REST, Stripe, Resend) without coupling tests to implementation details.
 
-The key architectural constraint is that no build tooling is introduced. Any solution that requires npm, a compiler, or a bundler is ruled out. This means CSS preprocessors, Tailwind, React, Astro, and separate-HTML-per-language patterns are all off the table. All existing 4 pages confirm the pattern: CSS inline `<style>` blocks will be extracted to a shared `css/` folder as part of the rebuild.
+Everything else — TOTP 2FA, visual regression, weekly digest, notification preferences, admin operations, and the MRR chart — is delivered entirely by packages already installed: `@supabase/supabase-js`, `@playwright/test`, `resend`, `@react-email/components`, and `recharts`.
 
 **Core technologies:**
-- HTML5 with `data-i18n` attributes: Document structure + i18n markup — project-constrained, zero runtime cost, consistent with existing pages
-- CSS Custom Properties (`tokens.css`): Dark theme design tokens — browser-native, no preprocessor, single source of truth for all color/spacing
-- Vanilla JS ES2022 modules: i18n detection/toggle + partial injection — ~50 lines covers the full requirement, no library overhead
-- Calendly Embed Widget (CDN async): Primary conversion mechanism — popup pattern preferred for performance; pass `background_color`/`text_color`/`primary_color` URL params for dark theme alignment
-- DM Sans + JetBrains Mono: Typography — already in brand system; self-host woff2 for production
+- `@upstash/ratelimit ^2.0.8` + `@upstash/redis ^1.34.x`: shared serverless-safe rate limiting — the only architecture that enforces limits across concurrent Vercel function instances
+- `next-test-api-route-handler ^4.x`: integration test App Router route handlers with real request/response objects — must be first import in every test file
+- `msw ^2.x`: network-boundary mocking in Node.js; use `http` namespace (v2 breaking change from v1's `rest`); `setupServer` from `msw/node`
+- `supabase.auth.mfa.*` APIs (existing `@supabase/supabase-js`): full TOTP lifecycle — enroll (returns QR SVG), challenge, verify, AAL level check; no TOTP library needed
+- `toHaveScreenshot()` (existing `@playwright/test ^1.58.2`): built-in visual regression since v1.26; no snapshot plugin needed
+- Vercel Cron via `vercel.json`: zero-infrastructure weekly digest trigger; compatible with Hobby plan at weekly frequency
+
+**Critical version notes:**
+- `@upstash/ratelimit ^2.x` requires `@upstash/redis ^1.x` — incompatible with `ioredis`
+- NTARH v4 requires `next >= 14.0.4` (satisfied); in Next.js 15, `params` is a Promise — use `await params` in tests
+- MSW v2: always use `msw/node` for Vitest; incompatible with `bun test`
 
 ### Expected Features
 
-The 10 P1 features that must ship at launch form a tight, interdependent set. The bilingual toggle depends on complete copy in both languages — partial translations look broken, so EN-only is preferable to shipping incomplete ES. Calendly is the single conversion mechanism; every CTA on every page should point to it. Transparent pricing is a differentiator for Vantix specifically (competitor gap: "Contact us for quote"), so the existing JetBrains Mono price display format must be preserved.
+**Must have (table stakes for v1.2):**
+- SEC-02: Rate limiting on auth and API routes — absent rate limiting is a red flag on security reviews
+- NOTIF-11: Notification preferences per type — now that multiple channels exist, users expect noise control
+- SEC-01: TOTP two-factor authentication — B2B enterprise clients mandate 2FA; trust gap without it
+- ADMIN-07: Admin user management (invite, role change, deactivate) — ops cannot rely on the Supabase dashboard
+- NOTIF-10: Weekly email digest — proactive async communication differentiates Vantix from typical consulting firms
+- ADMIN-08: Admin MRR trend chart — trend visibility over the existing point-in-time stat card
+- TEST-10: API integration tests — unit tests mock everything; integration tests verify real route handler behavior
+- TEST-11: Playwright visual regression — catches layout regressions unit and integration tests cannot detect
 
-**Must have (table stakes):**
-- Hero with outcome-first headline + single above-the-fold CTA — first 5 seconds decide everything
-- Service cards (3) with deliverables and transparent pricing — B2B buyers evaluate before committing
-- Problem/pain section (6 cards) — qualification filter; confirms ICP recognition
-- How it works (4-step process) — reduces friction for async-model skeptics
-- Social proof: client logos (LATAM Airlines, Mercado Libre, etc.) + stats — reduces purchase anxiety
-- Final CTA section with Calendly inline or popup — the conversion moment
-- Mobile-responsive layout — non-negotiable for any 2026 page
-- Navigation linking all pages — users must reach detail pages without friction
-- Service detail pages (3: performance, observability, fractional SRE) — deep-evaluation buyers need this
+**Defer to v1.3+:**
+- MRR chart subscription overlay (new/cancelled markers) — add complexity after the core chart proves useful
+- Admin-assisted 2FA unenrollment UI — promote when first support request occurs; Supabase dashboard is sufficient now
+- Per-user digest schedule (timezone-aware) — revisit when client count exceeds 50
 
-**Should have (competitive differentiators):**
-- Bilingual EN/ES with `navigator.language` auto-detect + `localStorage` toggle — LATAM market access; 76% of B2B buyers prefer native-language content
-- Calendly inline embed (not just popup link) — eliminates click-away friction
-- Problem-first narrative leading into services — resonates with ICP who already feel the pain
-- "Alternative to $150K+ SRE hire" positioning near pricing — comparative value frame
-- Add-on / one-shot services section — lowers entry commitment for prospects not ready for retainer
-- Dark/techy visual design consistently applied — "built by engineers for engineers" signal
+**Defer to v2+:**
+- SMS/phone 2FA — only if an enterprise client explicitly mandates it; TOTP covers the use case free
+- Notification CMS (templates, scheduling) — only if Vantix white-labels the portal
+- Recovery codes for 2FA — admin-assisted unenroll via Supabase dashboard is sufficient at current team size
 
-**Defer (v2+):**
-- Blog / resources section — requires content production workflow, CMS
-- Case studies with metrics — requires completed engagements and client approval
-- Named testimonial quotes — add when 2-3 clients are available
-- SEO optimization with separate `/en/` and `/es/` URL routes — meaningful only after domain and content are stable
-- Analytics (Plausible or similar) — ship v1, then add tracking to optimize
+**Anti-features (explicitly excluded):**
+- In-memory rate limiting — broken by design on Vercel serverless; never acceptable in production
+- `speakeasy`/`otplib` for TOTP — Supabase handles the full MFA lifecycle; adding separate libraries creates divergence from the session/AAL model, a security vulnerability surface
+- `qrcode` or `qrcode.react` — Supabase `mfa.enroll()` returns an SVG QR code string directly; no generation library needed
+- `node-cron` / `agenda` / `bull` — require persistent worker processes incompatible with Vercel's stateless model
+- Visual regression against external services (Grafana embed, Stripe portal) — mask or skip iframes; test first-party UI only
 
 ### Architecture Approach
 
-The system is a fetch-inject partial architecture: every HTML page is a self-contained file that, on `DOMContentLoaded`, fetches `partials/nav.html` and `partials/footer.html` via `main.js`, injects them via `innerHTML`, and then (and only then) initializes `i18n.js`. The critical dependency rule is that i18n runs after partial injection — the nav contains `data-i18n` nodes that must exist in the DOM before `applyTranslations()` walks it. CSS is split into 4 files: `tokens.css` (custom properties, loaded first), `base.css`, `layout.css`, `components.css`. Translation strings live in `translations/en.json` and `translations/es.json` with flat dot-notation keys.
+The v1.2 architecture follows a strict additive integration pattern. All 8 features extend existing files at well-defined integration points: the middleware gains an AAL2 gate appended after its existing role guard; `lib/notifications.ts` gains a preference lookup before each channel send; existing API routes each gain a rate limiter call at their top. No new architectural layers are introduced. New files are either isolated library modules (`lib/mfa.ts`, `lib/digest.ts`, `lib/rate-limit.ts`) or new pages/routes in the established App Router structure.
 
 **Major components:**
-1. `css/tokens.css` — all color/spacing/type design tokens; everything else depends on these being defined first
-2. `js/i18n.js` — language detection (`localStorage` first, `navigator.languages` fallback), JSON fetch, DOM walking, toggle handler
-3. `js/main.js` — orchestrator: fetches partials, injects them, then calls `i18n.init()`; also owns scroll behavior
-4. `partials/nav.html` + `partials/footer.html` — shared fragments (no `<html>` shell); fetched once per page load
-5. `index.html` — primary conversion page: hero, pain, services, how-it-works, pricing, Calendly CTA
-6. `services/performance.html`, `services/observability.html`, `services/fractional-sre.html` — detail pages for deep-evaluation buyers
-7. `translations/en.json` + `translations/es.json` — flat-keyed copy files; single source of truth for all visible text
+1. `src/middleware.ts` (MODIFIED) — AAL2 MFA check appended after existing role guard; `getAuthenticatorAssuranceLevel()` reads JWT claims locally with zero network round-trips
+2. `src/lib/rate-limit.ts` (NEW) — Upstash sliding-window rate limiter; `Ratelimit` instance declared at module level for warm-invocation cache reuse; called at top of each protected route
+3. `src/lib/notifications.ts` (MODIFIED) — preference lookup via `user_notification_prefs` LEFT JOIN before each channel send; null row defaults to all-enabled (opt-out model)
+4. `src/lib/mfa.ts` (NEW) — TOTP enroll/challenge/verify wrappers; enrollment page calls `listFactors()` + `unenroll()` any unverified factors before `enroll()`
+5. `src/app/api/cron/digest/route.ts` (NEW) — CRON_SECRET-gated GET handler; digest logic in `lib/digest.ts`; parallel sends via `Promise.allSettled()`
+6. `src/app/api/admin/users/` routes (NEW) — all routes verify caller role server-side via `createServerSupabase()` before using `createServiceClient()` for privileged operations
+7. Two new DB migrations — `005_notification_prefs.sql` (one row per user with boolean columns, not one row per user+type) and `006_user_invitations.sql` (invite tracking)
+8. `vercel.json` (NEW) — cron schedule `0 9 * * 1` (Monday 09:00 UTC); Vercel injects CRON_SECRET header automatically on trigger
 
 ### Critical Pitfalls
 
-1. **Language Toggle FOUC** — The language initialization script must run as a blocking `<script>` in `<head>` before any content renders. Do NOT defer or async it. Read `localStorage` synchronously and set `document.documentElement.lang` before first paint. Testing only in English Chrome will miss this.
+1. **2FA middleware bypass** — Adding TOTP enrollment without updating `middleware.ts` to check AAL level leaves all enrolled users permanently at `aal1`; MFA exists in DB but is never enforced. Prevention: middleware must call `getAuthenticatorAssuranceLevel()` and redirect to `/mfa-verify` when `nextLevel === 'aal2' && currentLevel !== 'aal2'`.
 
-2. **Calendly Blocks Core Web Vitals** — Calendly's widget adds 1-2s on desktop, 2-3s on mobile, plus ~1s CPU for bot-protection fingerprinting. Load the `<script>` with `async`; prefer the popup pattern over inline embed so the widget script doesn't block initial render; add `<link rel="preconnect" href="https://assets.calendly.com">` in `<head>`. A slow page from a performance consultancy is a brand-credibility failure.
+2. **Non-MFA user login loop** — Incorrect middleware condition (`currentLevel !== 'aal2'` without also checking `nextLevel === 'aal2'`) redirects users with no enrolled factor to the MFA challenge page, locking them out. Prevention: the correct compound condition is required; E2E tests must cover three states — no MFA enrolled, MFA enrolled but not challenged, MFA enrolled and challenged.
 
-3. **Calendly Conversion Tracking Broken by Default** — Native GA4 integration fires events on `calendly.com`, not on the Vantix site. Add `window.addEventListener('message', ...)` to capture the `calendly.event_scheduled` postMessage and fire a GA4 custom event from the parent page. Verify with a test booking in GA4 Realtime before launch.
+3. **In-memory rate limiting on Vercel** — Module-level `Map`/`LRU` for rate limit state works locally (single process) but provides zero protection on Vercel (each serverless invocation has isolated memory). Prevention: Upstash Redis is mandatory; declare `Ratelimit` instance at module level for cache reuse across warm invocations.
 
-4. **Dark Theme Color Contrast Failures** — `#8A9BC0` on `#1B2A4A` fails WCAG 2.1 AA. Use `#E2E8F0` for body text, `#94A3B8` minimum for secondary/muted text. Run axe DevTools and the impeccable.style audit on the full page (not just the hero) before calling the design done. Lock tokens before building components — fixing contrast after the fact ripples through everything.
+4. **Unverified TOTP factors accumulate** — Abandoned enrollment flows leave unverified factors in `auth.mfa_factors`; hard limit of 10 per user; after 10 abandonments, MFA enrollment is permanently broken for that user. Prevention: always call `listFactors()` and `unenroll()` any factors with `status === 'unverified'` before `enroll()`; never use user email as `friendlyName` (uniqueness constraint causes 500 on re-enrollment).
 
-5. **SEO Invisibility for Spanish Content** — A single-URL JS toggle means Googlebot indexes only English. This is a known, accepted tradeoff for v1 but must be explicitly documented rather than discovered post-launch. If Spanish SEO becomes a requirement in v2, it means creating separate `/es/` pages, adding `hreflang` annotations, and resubmitting to Search Console — weeks of recovery if not planned for.
+5. **Digest sequential send timeout** — `for...await` loop over all recipients times out on Vercel (60s Pro, 10s Hobby) for any non-trivial user list; partial sends with no retry or visibility. Prevention: use `Promise.allSettled()` to parallelize all sends; log failed sends individually.
+
+6. **Notification preferences not enforced at send time** — Building the preferences UI without updating `notifyTaskEvent()` in `lib/notifications.ts` means opt-outs save to the DB but emails still fire. Prevention: modify the orchestrator in the same task as building the UI, never defer.
+
+7. **Orphaned auth accounts from invite** — `inviteUserByEmail()` creates `auth.users` row; if public profile creation fails, the user accepts the invite and the portal breaks. Prevention: use a Supabase database trigger on `auth.users` INSERT to auto-create the public profile row; never rely on application code for this.
+
+8. **Playwright CI baseline mismatch** — Baselines generated on macOS fail on CI Linux due to font rendering differences; CI fails every PR. Prevention: generate and commit baselines from the CI environment only; set `maxDiffPixels: 50` or `threshold: 0.05`; mask dynamic elements; disable CSS animations before capture.
+
+9. **MRR chart overstating revenue** — Querying `subscriptions.price_monthly WHERE status = 'active'` counts `cancel_at_period_end = true` subscriptions as active MRR. Prevention: add `cancel_at_period_end` column via migration before writing chart code; use `payments` table as ground truth for historical MRR.
+
+10. **Integration tests polluting the DB** — Route handlers using `createServiceClient()` hit real Supabase in tests; DB fills with test data; CI fails non-deterministically. Prevention: `vi.mock('@/lib/supabase/server')` for all integration tests; guard `NEXT_PUBLIC_SUPABASE_URL` against production when `TEST_INTEGRATION=true`.
 
 ---
 
 ## Implications for Roadmap
 
-Based on the dependency chain from ARCHITECTURE.md and the phase warnings in PITFALLS.md, the build must follow a strict foundation-first order. The CSS token layer gates everything visual. The i18n system gates all copy. The partial system gates all shared UI. Only after those three foundations are solid should page content be added.
+The dependency graph from feature research directly dictates a 4-phase build order. Features are grouped by their dependency requirements, not arbitrarily.
 
-### Phase 1: Foundation — File Structure, CSS Tokens, and Language System
+### Phase 1: Security Foundation
+**Rationale:** Rate limiting (SEC-02) is dependency-free and protects existing routes immediately — best early win at low risk. TOTP 2FA (SEC-01) must come before admin user management; both share the middleware change and should ship together in the same milestone phase.
+**Delivers:** Production-safe auth layer — brute-force protection on all routes, TOTP enrollment and challenge flows, AAL2 enforcement in middleware for `/admin` routes
+**Addresses:** SEC-01, SEC-02
+**Avoids:** In-memory rate limit pitfall, AAL middleware bypass pitfall, non-MFA login loop pitfall, unverified factor accumulation pitfall
+**Migrations needed:** None (Supabase manages `auth.mfa_factors` internally)
+**Research flag:** Standard — Supabase TOTP and Upstash patterns documented at HIGH confidence; no additional research needed
 
-**Rationale:** The fetch-inject sequence (main.js → inject partials → i18n.init()) and the CSS token layer are the two technical decisions everything else depends on. Getting the language system wrong here (FOUC, incorrect initialization order, overwriting stored preferences) affects every page and every element — it is far cheaper to get right first than to fix after content is authored. The SEO/URL architecture decision must also be made and documented here before any URLs are committed.
+### Phase 2: Notification System Polish
+**Rationale:** Notification preferences (NOTIF-11) must ship before the weekly digest (NOTIF-10) — the digest checks opt-outs at send time. Building the digest first creates a window of non-compliance with user intent.
+**Delivers:** Per-type notification preference toggles (email + in-app), `notifications.ts` updated to enforce at send time, `user_notification_prefs` migration; then weekly Monday digest on top
+**Addresses:** NOTIF-11, NOTIF-10
+**Uses:** Vercel Cron, existing Resend + React Email, new migration
+**Avoids:** Preference-not-enforced pitfall, digest timeout pitfall
+**Research flag:** Standard — Vercel Cron and notification pattern at HIGH confidence; `Promise.allSettled` is deterministic
 
-**Delivers:** Project directory structure, `css/tokens.css` with full dark palette and typography, `js/i18n.js` with auto-detect and toggle, `js/main.js` with partial orchestration, `translations/en.json` + `translations/es.json` skeleton, `partials/nav.html` + `partials/footer.html` skeleton, documented SEO language tradeoff decision.
+### Phase 3: Admin Capabilities
+**Rationale:** Admin user management (ADMIN-07) depends on SEC-01 (Phase 1) being live so invite recipients encounter a complete auth flow. MRR chart (ADMIN-08) belongs here logically and must precede visual regression baselines for the billing page.
+**Delivers:** User invite/role-change/deactivate flows on `/admin/users`; MRR trend chart on `/admin/billing` using historical `payments` data
+**Addresses:** ADMIN-07, ADMIN-08
+**Uses:** Existing `createServiceClient()`, existing Recharts (dynamic import with `ssr: false`), new `006_user_invitations.sql` migration; `cancel_at_period_end` column added to `subscriptions` before chart code
+**Avoids:** Orphaned auth account pitfall (trigger in migration, not app code), MRR data accuracy pitfall
+**Research flag:** Standard — Supabase admin API documented at HIGH confidence; Recharts `dynamic(..., { ssr: false })` is a known requirement
 
-**Addresses:** Bilingual EN/ES toggle (P1 feature dependency foundation), navigation shared across all pages
-
-**Avoids:** FOUC pitfall (Pitfall 1), CSS duplication/drift anti-pattern (Architecture anti-pattern 1), separate HTML per language anti-pattern, i18n-before-partials sequencing bug (Pitfall notes + Architecture anti-pattern 4)
-
----
-
-### Phase 2: Design System and Shared Components
-
-**Rationale:** Once tokens exist, build the full CSS component library (`base.css`, `layout.css`, `components.css`) and wire the real nav/footer partials. This phase is a multiplier — every page benefits from it. Contrast and accessibility checks belong here, before any page uses the components. Running the impeccable.style audit here catches design failures before they are baked into 4 pages.
-
-**Delivers:** Complete CSS component library (hero section, service cards, CTA buttons, nav, footer, how-it-works, pricing display), real `partials/nav.html` with language toggle, `partials/footer.html`, WCAG contrast verified across all token combinations.
-
-**Uses:** CSS Custom Properties token system, DM Sans + JetBrains Mono (self-hosting decision made in Phase 1, woff2 files added here if self-hosting)
-
-**Avoids:** Dark theme contrast failures (Pitfall 4 — fix tokens here, not after pages are built), Google Fonts render-blocking (Performance trap — add `display=swap`, `preconnect`, or switch to self-hosted)
-
----
-
-### Phase 3: Main Conversion Page (`index.html`)
-
-**Rationale:** `index.html` is the primary conversion surface and the full-stack integration test. Building it before the detail pages validates that partials, i18n, Calendly, and CSS all work end-to-end on the page that matters most. The Calendly integration (async loading, popup pattern, postMessage tracking) is implemented and verified here — performance tested with PageSpeed Insights before moving on.
-
-**Delivers:** Complete `index.html` with hero, pain section, services overview, how-it-works, social proof (client logos + stats), transparent pricing, and Calendly popup CTA. Calendly conversion tracking verified. PageSpeed score > 80 with Calendly active.
-
-**Implements:** `index.html` main page, Calendly popup integration, postMessage conversion tracking
-
-**Avoids:** Calendly blocking Core Web Vitals (Pitfall 2 — lazy-load, async, preconnect), Calendly conversion tracking broken by default (Pitfall 3 — postMessage listener before launch), multiple competing CTAs (Pitfall 6 — one visible primary CTA per viewport)
-
----
-
-### Phase 4: Service Detail Pages
-
-**Rationale:** The three detail pages (`services/performance.html`, `services/observability.html`, `services/fractional-sre.html`) reuse everything built in Phases 1-3. They are structurally similar and primarily additive HTML. The Calendly integration on detail pages uses `initInlineWidget()` (full booking experience visible without a click) vs. the popup pattern on the main page. Content is migrated from existing `06-landing-pages/*.html` files.
-
-**Delivers:** Three service detail pages with consistent nav/footer, shared CSS, i18n support, and Calendly inline embeds. All cross-linking between index and detail pages verified.
-
-**Implements:** `services/performance.html`, `services/observability.html`, `services/fractional-sre.html`, Calendly inline widget on each, content migrated from existing HTML files
-
-**Avoids:** Service detail pages drifting visually from main page (Feature dependency note — shared CSS prevents this), missing mobile tap targets (Pitfall UX section — all buttons min 44x44px)
-
----
-
-### Phase 5: Polish, Audit, and Cross-Device Verification
-
-**Rationale:** The "looks done but isn't" checklist from PITFALLS.md identifies a class of failures that only appear in production-like conditions: language preference persistence on reload, Calendly tracking on a real booking, mobile rendering on iOS Safari (not DevTools), fonts on slow 3G in Incognito. This phase is the systematic verification sweep before launch.
-
-**Delivers:** Confirmed language persistence (localStorage tested on reload), confirmed Calendly booking event in GA4 Realtime, impeccable.style audit passed on all pages (not just hero), iOS Safari tested on real device, Lighthouse/PageSpeed > 80 on production URL, Spanish SEO tradeoff documented.
-
-**Avoids:** All "looks done but isn't" pitfalls simultaneously — this phase exists specifically to catch them
-
----
+### Phase 4: Test Coverage
+**Rationale:** Integration tests (TEST-10) and visual regression tests (TEST-11) validate the completed feature set. Visual regression must follow Phase 3 — baselines captured before ADMIN-08 exists become stale on day 1.
+**Delivers:** NTARH integration tests for all API routes (tasks, checkout, billing-portal, all 4 Stripe webhook branches); Playwright visual regression baselines for portal dashboard, tasks, admin overview, admin billing
+**Addresses:** TEST-10, TEST-11
+**Uses:** Existing Vitest + Playwright; adds `next-test-api-route-handler` and `msw`
+**Avoids:** DB pollution pitfall (vi.mock strategy established before any test is written), CI baseline mismatch pitfall (baselines generated in CI only)
+**Research flag:** Validate NTARH + Next.js 15 `await params` behavior in the first integration test before building the full suite (MEDIUM confidence gap)
 
 ### Phase Ordering Rationale
 
-- **Tokens before components, components before pages:** A color token change ripples through everything. Lock the system before building on top of it.
-- **i18n foundation before copy:** Writing content into HTML before the `data-i18n` system is wired produces untranslatable markup. Wire the system first with placeholder keys; add real copy later.
-- **Main page before detail pages:** Index.html is the full integration test. Catching a partial-injection/i18n sequencing bug on the main page is far cheaper than finding it on the third detail page.
-- **Calendly performance and tracking in Phase 3, not Phase 5:** These cannot be post-launch fixes. A slow page or a broken conversion funnel must be caught during the phase that introduces Calendly.
-- **Audit phase last but mandatory:** The impeccable.style audit, WCAG contrast check, and iOS Safari test are never "done" incrementally — they require a complete page to audit meaningfully.
+- SEC-02 opens Phase 1 because it is risk-free and delivers immediate value with no dependencies — the first feature any production SaaS should have
+- SEC-01 must precede ADMIN-07; they are separated by one phase rather than grouped because SEC-01 needs to be confirmed working in production before the invite flow exposes new users to it
+- NOTIF-11 strictly precedes NOTIF-10 — building the digest without preferences in place sends emails to users who later opt out, a trust-damaging default
+- ADMIN-08 must precede TEST-11 — visual baselines for the admin billing page captured without the MRR chart are immediately stale
+- TEST-10 is independent of TEST-11 and both can progress in parallel within Phase 4; route handler integration tests do not depend on visual baselines
 
 ### Research Flags
 
-Phases likely needing deeper research during planning:
-- **Phase 1 (Language System):** The FOUC prevention technique (blocking `<script>` in `<head>` vs. `visibility: hidden` CSS approach) has implementation nuance. The postMessage sequencing with partial injection may need a spike to verify the exact callback order.
-- **Phase 3 (Calendly Integration):** Calendly's widget API behavior (dark theme param coverage, `hideEventTypeDetails`, UTM passthrough, `calendly.event_scheduled` postMessage format) should be verified against a live Calendly account during planning — the CDN script is unversioned and can change without notice.
+Phases needing validation during implementation:
+- **Phase 4 (TEST-10):** Validate NTARH v4 + Next.js App Router `params` as Promise (`await params`) in the first test written before building the suite — this is the only MEDIUM confidence gap across all research
+- **Phase 3 (ADMIN-07 invite trigger):** The Supabase post-signup trigger creating the public `users` row must be written and tested before invite UI is built; verify trigger syntax against existing schema constraints and RLS policies; fallback: two-step API call with error compensation
 
-Phases with standard patterns (skip research-phase):
-- **Phase 2 (Design System):** CSS Custom Properties theming is a well-documented, stable pattern. Implementing dark tokens is mechanical given the palette is already defined.
-- **Phase 4 (Service Detail Pages):** These are structural replicas of the main page. No novel patterns; content migration from existing HTML files is mechanical.
-- **Phase 5 (Polish/Audit):** The checklist is already written in PITFALLS.md. Execution, not research, is needed.
+Phases with standard, well-documented patterns (no additional research needed):
+- **Phase 1 (SEC-01, SEC-02):** Supabase TOTP and Upstash docs are comprehensive and HIGH confidence; implementation patterns are directly applicable to the codebase
+- **Phase 2 (NOTIF-10, NOTIF-11):** Vercel Cron and React Email patterns at HIGH confidence; `Promise.allSettled` is standard Node.js
+- **Phase 4 (TEST-11 visual regression):** CI-first baseline generation and Playwright config patterns at HIGH confidence from official docs
 
 ---
 
@@ -174,44 +164,40 @@ Phases with standard patterns (skip research-phase):
 
 | Area | Confidence | Notes |
 |------|------------|-------|
-| Stack | HIGH | All decisions verifiable from existing codebase + official Calendly docs + browser standards. Zero ambiguity: no framework, no build step. |
-| Features | HIGH | Multiple corroborated sources (B2B conversion research, existing page content, competitor analysis). P1 feature set is clear. |
-| Architecture | HIGH | Well-documented patterns (fetch-inject, data-i18n, CSS custom properties). The partial-injection/i18n sequencing dependency is the main non-obvious detail — fully documented. |
-| Pitfalls | HIGH (technical) / MEDIUM (SEO) | Calendly performance, FOUC, contrast failures are verified from specific audits and official sources. SEO single-URL limitation is medium confidence — Googlebot JS execution behavior is partially documented. |
+| Stack | HIGH | All 4 new packages verified against official docs; existing packages confirmed installed from `package.json`; one MEDIUM gap on NTARH + Next.js 15 `params` behavior |
+| Features | HIGH | All 8 features reviewed against the live codebase (`001_schema.sql`, API routes, `notifications.ts`, Playwright config); feature dependencies confirmed by code inspection |
+| Architecture | HIGH | Integration points are precise and additive; research grounded in existing codebase structure, not hypothetical greenfield design |
+| Pitfalls | HIGH | 10 critical pitfalls with concrete failure modes, root causes, and prevention strategies; all verified against official Supabase, Vercel, and Playwright docs |
 
 **Overall confidence:** HIGH
 
 ### Gaps to Address
 
-- **Calendly account configuration:** Research confirms the embed API but cannot verify Vantix's specific Calendly scheduling link URL, timezone settings, or ES locale support. Verify against the live account before Phase 3.
-- **Copy completeness in both languages:** The bilingual system depends on complete EN and ES translations. The existing pages have validated Spanish copy, but the restructured sections (new service card formats, how-it-works rewrite) will need new strings authored in both languages simultaneously — this is a content production dependency, not a technical one.
-- **Google Fonts vs. self-hosted decision:** Research recommends self-hosting woff2 for production Core Web Vitals, but the decision timing (Phase 1 setup vs. Phase 5 polish) should be made explicit in roadmap planning. Self-hosting has no technical complexity but requires the woff2 files to be downloaded and committed before the CSS is written.
-- **Calendly dark theme parameter coverage:** The `background_color`/`text_color`/`primary_color` URL params have a known limitation (some internal Calendly UI elements may override them). Whether this is visually acceptable requires a live test.
+- **NTARH + Next.js 15 `params` as Promise:** The `await params` requirement in App Router route handlers under Next.js 15 was documented but not confirmed with a live test. Write one test first to validate the behavior before building the full suite (Phase 4).
+- **Supabase post-signup trigger for profile row (ADMIN-07):** Trigger syntax for auto-creating the `users` row from `auth.users` INSERT must be validated against existing schema constraints and RLS before the migration is written. Plan the fallback if the trigger conflicts.
+- **Vercel cron timing on Hobby plan:** Weekly frequency is within spec, but ±1 hour accuracy applies. Confirm the cron fires within an acceptable window during first production deployment.
+- **Upstash free tier budget:** 10k requests/day; rate limiting across protected routes at current scale (<20 concurrent users) should stay within budget. Monitor usage after launch.
 
 ---
 
 ## Sources
 
 ### Primary (HIGH confidence)
-- Existing codebase `06-landing-pages/vantix-landing-v3.html` — palette, typography, structure confirmed
-- `.planning/PROJECT.md` — explicit stack constraint: vanilla HTML/CSS/JS, no frameworks
-- [Calendly developer embed docs](https://developer.calendly.com/how-to-display-the-scheduling-page-for-users-of-your-app) — `initInlineWidget` / `initPopupWidget` API
-- [MDN: Navigator.language](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/language) — language detection
-- [Calendly Web Performance Audit — DebugBear](https://www.debugbear.com/blog/calendly-web-performance-audit) — specific performance metrics (4.5s LCP, 464 KB CSS, 1s CPU bot-protection)
-- [Track Calendly with GTM and GA4 — Analytics Mania](https://www.analyticsmania.com/post/how-to-track-calendly-with-google-tag-manager-and-google-analytics-4/) — postMessage tracking approach
+- [Supabase TOTP MFA Docs](https://supabase.com/docs/guides/auth/auth-mfa/totp) — enrollment flow, QR SVG return value, AAL levels, `getAuthenticatorAssuranceLevel()` as local JWT inspection
+- [Supabase MFA API Reference](https://supabase.com/docs/reference/javascript/auth-mfa-api) — enroll/challenge/verify/listFactors method signatures
+- [Supabase Auth Admin API](https://supabase.com/docs/reference/javascript/auth-admin-inviteuserbyemail) — `inviteUserByEmail`, `deleteUser`, `updateUserById` (ban_duration), PKCE limitation confirmed
+- [@upstash/ratelimit GitHub](https://github.com/upstash/ratelimit-js) — v2.0.8, sliding window algorithm, Vercel middleware example
+- [Vercel Cron Jobs Docs](https://vercel.com/docs/cron-jobs) — `vercel.json` format, CRON_SECRET header injection, plan limits (Hobby: daily max; Pro: per-minute)
+- [Playwright Visual Comparisons Docs](https://playwright.dev/docs/test-snapshots) — `toHaveScreenshot()` built-in, `maxDiffPixels`, mask option, CI baseline generation workflow
+- [MSW Quick Start](https://mswjs.io/docs/quick-start/) — v2 Node.js integration, `setupServer` from `msw/node`, `http` namespace
+- Existing codebase reviewed: `platform/supabase/migrations/001_schema.sql`, `platform/src/lib/notifications.ts`, `platform/src/app/api/**`, `platform/src/lib/supabase/server.ts`, `platform/playwright.config.ts`, `platform/__tests__/`
 
 ### Secondary (MEDIUM confidence)
-- [9 B2B Landing Page Lessons — Instapage](https://instapage.com/blog/b2b-landing-page-best-practices) — single CTA, social proof placement
-- [We studied 100 devtool landing pages — Evil Martians](https://evilmartians.com/chronicles/we-studied-100-devtool-landing-pages-here-is-what-actually-works-in-2025) — dark techy design trust signals
-- [Inclusive Dark Mode — Smashing Magazine](https://www.smashingmagazine.com/2025/04/inclusive-dark-mode-designing-accessible-dark-themes/) — contrast failure patterns
-- [Managing Multi-Regional Sites — Google Search Central](https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites) — single-URL toggle SEO limitations
-- [Localization for B2B SaaS Landing Pages — OCNJ Daily](https://ocnjdaily.com/news/2026/feb/18/localization-for-b2b-saas-landing-pages-messaging-adaptation-that-improves-conversions/) — bilingual conversion lift
-
-### Tertiary (LOW confidence / needs live validation)
-- Calendly `?locale=es` parameter for Spanish embed — confirmed mentioned in community sources; requires live account test
-- `#8A9BC0` on `#1B2A4A` contrast failure — inferred from WCAG math; verify with axe DevTools
+- [next-test-api-route-handler GitHub](https://github.com/Xunnamius/next-test-api-route-handler) — v4 App Router support confirmed for `next >= 14.0.4`; Next.js 15 `params` as Promise noted but not live-tested
+- [Upstash Ratelimit + Next.js 2026 community tutorial](https://noqta.tn/en/tutorials/upstash-redis-nextjs-rate-limiting-caching-2026) — confirms current patterns
+- SaaS notification UX patterns (Smashing Magazine, Userpilot) — opt-out model as expected default behavior
 
 ---
 
-*Research completed: 2026-03-20*
+*Research completed: 2026-03-25*
 *Ready for roadmap: yes*

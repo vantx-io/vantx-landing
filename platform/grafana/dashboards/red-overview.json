@@ -1,0 +1,78 @@
+{
+  "title": "RED Metrics Overview — Vantix",
+  "uid": "vantix-red",
+  "tags": ["vantix", "red", "performance"],
+  "editable": true,
+  "schemaVersion": 39,
+  "time": { "from": "now-6h", "to": "now" },
+  "templating": {
+    "list": [
+      { "name": "service", "type": "query", "query": "label_values(http_requests_total, service)", "current": { "text": "All", "value": "$__all" }, "includeAll": true, "multi": true }
+    ]
+  },
+  "panels": [
+    {
+      "title": "Request Rate (req/s)", "type": "timeseries",
+      "gridPos": { "h": 7, "w": 8, "x": 0, "y": 0 },
+      "targets": [{ "expr": "sum(rate(http_requests_total{service=~\"$service\"}[5m])) by (service)", "legendFormat": "{{service}}" }],
+      "fieldConfig": { "defaults": { "unit": "reqps", "custom": { "fillOpacity": 15 } } }
+    },
+    {
+      "title": "Error Rate (%)", "type": "timeseries",
+      "gridPos": { "h": 7, "w": 8, "x": 8, "y": 0 },
+      "targets": [{ "expr": "sum(rate(http_requests_total{service=~\"$service\",status=~\"5..\"}[5m])) by (service) / sum(rate(http_requests_total{service=~\"$service\"}[5m])) by (service) * 100", "legendFormat": "{{service}} errors" }],
+      "fieldConfig": { "defaults": { "unit": "percent", "color": { "mode": "fixed", "fixedColor": "#C0392B" }, "custom": { "fillOpacity": 20 }, "thresholds": { "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 0.1 }, { "color": "red", "value": 1 }] } } }
+    },
+    {
+      "title": "Latency p50 / p95 / p99 (ms)", "type": "timeseries",
+      "gridPos": { "h": 7, "w": 8, "x": 16, "y": 0 },
+      "targets": [
+        { "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket{service=~\"$service\"}[5m])) by (le)) * 1000", "legendFormat": "p50" },
+        { "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{service=~\"$service\"}[5m])) by (le)) * 1000", "legendFormat": "p95" },
+        { "expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{service=~\"$service\"}[5m])) by (le)) * 1000", "legendFormat": "p99" }
+      ],
+      "fieldConfig": { "defaults": { "unit": "ms" } }
+    },
+    {
+      "title": "Total Requests", "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 7 },
+      "targets": [{ "expr": "sum(increase(http_requests_total{service=~\"$service\"}[24h]))", "legendFormat": "" }],
+      "fieldConfig": { "defaults": { "unit": "short", "color": { "mode": "fixed", "fixedColor": "#2E75B6" } } }
+    },
+    {
+      "title": "Current Error Rate", "type": "gauge",
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 7 },
+      "targets": [{ "expr": "sum(rate(http_requests_total{service=~\"$service\",status=~\"5..\"}[5m])) / sum(rate(http_requests_total{service=~\"$service\"}[5m])) * 100" }],
+      "fieldConfig": { "defaults": { "min": 0, "max": 5, "unit": "percent", "thresholds": { "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 0.1 }, { "color": "red", "value": 1 }] } } }
+    },
+    {
+      "title": "Active Requests", "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 7 },
+      "targets": [{ "expr": "sum(http_requests_in_flight{service=~\"$service\"})" }],
+      "fieldConfig": { "defaults": { "color": { "mode": "fixed", "fixedColor": "#E67E22" } } }
+    },
+    {
+      "title": "Error Budget Remaining", "type": "gauge",
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 7 },
+      "targets": [{ "expr": "(1 - (1 - avg_over_time(up{service=~\"$service\"}[30d])) / (1 - 0.999)) * 100" }],
+      "fieldConfig": { "defaults": { "min": 0, "max": 100, "unit": "percent", "thresholds": { "steps": [{ "color": "red", "value": null }, { "color": "orange", "value": 20 }, { "color": "green", "value": 50 }] } } }
+    },
+    {
+      "title": "Top 10 Slowest Endpoints (p95)", "type": "table",
+      "gridPos": { "h": 7, "w": 8, "x": 16, "y": 7 },
+      "targets": [{ "expr": "topk(10, histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{service=~\"$service\"}[5m])) by (le, handler)) * 1000)", "format": "table", "legendFormat": "" }],
+      "fieldConfig": { "defaults": { "unit": "ms" } }
+    },
+    {
+      "title": "Request Rate by Status Code", "type": "timeseries",
+      "gridPos": { "h": 7, "w": 12, "x": 0, "y": 11 },
+      "targets": [{ "expr": "sum(rate(http_requests_total{service=~\"$service\"}[5m])) by (status)", "legendFormat": "{{status}}" }],
+      "fieldConfig": { "defaults": { "unit": "reqps" } }
+    },
+    {
+      "title": "Latency Heatmap", "type": "heatmap",
+      "gridPos": { "h": 7, "w": 12, "x": 12, "y": 11 },
+      "targets": [{ "expr": "sum(increase(http_request_duration_seconds_bucket{service=~\"$service\"}[5m])) by (le)", "format": "heatmap" }]
+    }
+  ]
+}

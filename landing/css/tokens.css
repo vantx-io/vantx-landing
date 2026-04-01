@@ -23,10 +23,10 @@
   /* -------------------------------------------------------------------------
      Color Palette — Text
      ------------------------------------------------------------------------- */
-  --color-text:            #1A1A17; /* near-black — primary text */
-  --color-text-muted:      #5C5C56; /* warm gray — secondary text */
-  --color-text-subtle:     #6B6B64; /* warm gray — placeholder, meta (5.0:1 on bg) */
-  --color-text-on-accent:  #FFFFFF; /* text on accent backgrounds */
+  --color-text:            #1A1A17; /* near-black — primary text — 16.3:1 on bg */
+  --color-text-muted:      #5C5C56; /* warm gray — secondary text — 6.28:1 on bg, 6.56:1 on surface */
+  --color-text-subtle:     #6B6B64; /* warm gray — placeholder, meta — 5.01:1 on bg, 5.24:1 on surface */
+  --color-text-on-accent:  #FFFFFF; /* text on accent backgrounds — 6.30:1 on light-mode accent #1B6B4A */
 
   /* -------------------------------------------------------------------------
      Color Palette — Brand Accent (deep forest green)
@@ -196,63 +196,6 @@
    All component CSS references tokens, so overriding here is sufficient.
    ========================================================================== */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Backgrounds — warm dark tones, not cold/blue */
-    --color-bg:              #1A1917;
-    --color-surface:         #242320;
-    --color-surface-elevated:#2E2D28;
-    --color-surface-overlay: rgba(26, 25, 23, 0.85);
-
-    /* Borders */
-    --color-border:          rgba(255, 255, 255, 0.08);
-    --color-border-strong:   rgba(255, 255, 255, 0.15);
-    --color-border-focus:    rgba(37, 155, 110, 0.7);
-
-    /* Text — warm off-white, not blue-white */
-    --color-text:            #EDECE7;
-    --color-text-muted:      #9C9B93; /* 6.2:1 on bg */
-    --color-text-subtle:     #8C8B83; /* 5.0:1 on bg, 4.5:1 on surface */
-    --color-text-on-accent:  #FFFFFF;
-
-    /* Accent — brighter green for dark backgrounds (5:1 on bg) */
-    --color-accent:          #259B6E;
-    --color-accent-hover:    #2DAE7C;
-    --color-accent-active:   #1F8A60;
-    --color-accent-subtle:   rgba(37, 155, 110, 0.10);
-    --color-accent-border:   rgba(37, 155, 110, 0.25);
-    --color-accent-glow:     rgba(37, 155, 110, 0.12);
-
-    /* Semantic — brighter variants for dark bg contrast */
-    --color-success:         #22C55E;
-    --color-success-subtle:  rgba(34, 197, 94, 0.10);
-    --color-success-border:  rgba(34, 197, 94, 0.25);
-    --color-warning:         #F59E0B;
-    --color-warning-subtle:  rgba(245, 158, 11, 0.10);
-    --color-warning-border:  rgba(245, 158, 11, 0.25);
-    --color-danger:          #EF4444;
-    --color-danger-subtle:   rgba(239, 68, 68, 0.08);
-    --color-danger-border:   rgba(239, 68, 68, 0.25);
-
-    /* Services — brighter variants */
-    --color-obs:             #14B8A6;
-    --color-obs-subtle:      rgba(20, 184, 166, 0.10);
-    --color-obs-border:      rgba(20, 184, 166, 0.25);
-
-    --color-perf:            #60A5FA;
-    --color-perf-subtle:     rgba(96, 165, 250, 0.10);
-    --color-perf-border:     rgba(96, 165, 250, 0.25);
-
-    --color-qa:              #A78BFA;
-    --color-qa-subtle:       rgba(167, 139, 250, 0.10);
-    --color-qa-border:       rgba(167, 139, 250, 0.25);
-
-    /* Shadows — deeper for dark surfaces */
-    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.24);
-    --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.28);
-    --shadow:    0 4px 16px rgba(0, 0, 0, 0.32);
-    --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.40);
-    --shadow-xl: 0 24px 60px rgba(0, 0, 0, 0.50);
-    --shadow-glow: 0 4px 12px rgba(37, 155, 110, 0.20);
-  }
-}
+/* Dark mode disabled — landing always uses light theme.
+   To re-enable, wrap the block below in @media (prefers-color-scheme: dark) { … }
+*/

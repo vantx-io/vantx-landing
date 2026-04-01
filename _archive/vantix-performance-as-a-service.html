@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vantix — Performance as a Service</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;color:#1B2A4A;line-height:1.7;background:#fff}
+.container{max-width:800px;margin:0 auto;padding:0 24px}
+.wide{max-width:1100px;margin:0 auto;padding:0 24px}
+
+/* Hero */
+.hero{background:#1B2A4A;color:#fff;padding:80px 0 60px}
+.hero .tag{display:inline-block;background:rgba(46,117,182,.15);border:1px solid rgba(46,117,182,.3);border-radius:100px;padding:6px 16px;font-size:12px;color:#6BA3D6;margin-bottom:20px;font-weight:500;letter-spacing:.5px}
+.hero h1{font-size:44px;font-weight:700;line-height:1.15;margin-bottom:16px}
+.hero h1 span{color:#2E75B6}
+.hero .sub{font-size:18px;color:#8A9BC0;max-width:650px;margin-bottom:32px;line-height:1.7}
+
+/* Problem */
+.problem{padding:60px 0;border-bottom:1px solid #E8ECF2}
+.problem p{font-size:17px;color:#444;line-height:1.8;margin-bottom:16px}
+.problem .pain{color:#C0392B;font-weight:600}
+
+/* Deliverables */
+.deliverables{padding:60px 0}
+.deliverables h2{font-size:32px;font-weight:700;margin-bottom:8px}
+.deliverables .intro{font-size:16px;color:#5A6B8A;margin-bottom:40px;max-width:650px}
+.deliverable{margin-bottom:48px;display:grid;grid-template-columns:56px 1fr;gap:20px;align-items:start}
+.deliverable .num{width:48px;height:48px;border-radius:12px;background:#E8F0FE;color:#2E75B6;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.deliverable h3{font-size:22px;font-weight:700;color:#1B2A4A;margin-bottom:6px}
+.deliverable .what{font-size:15px;color:#444;line-height:1.8;margin-bottom:12px}
+.deliverable .how{display:flex;gap:12px;flex-wrap:wrap}
+.deliverable .how span{display:inline-block;padding:4px 12px;border-radius:6px;font-size:12px;font-weight:500;background:#F5F5F5;color:#5A6B8A}
+.deliverable .how span.freq{background:#E8F0FE;color:#2E75B6}
+.deliverable .how span.tool{background:#E8F5E9;color:#27AE60}
+
+/* Outcome */
+.outcome{padding:60px 0;background:#FAFBFD}
+.outcome h2{font-size:28px;font-weight:700;margin-bottom:24px}
+.outcomes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.outcome-card{padding:24px;border-radius:12px;border:1px solid #E8ECF2;background:#fff}
+.outcome-card h4{font-size:15px;font-weight:700;margin-bottom:6px}
+.outcome-card p{font-size:13px;color:#5A6B8A;line-height:1.6}
+
+/* How we work */
+.how-work{padding:60px 0;border-top:1px solid #E8ECF2}
+.how-work h2{font-size:28px;font-weight:700;margin-bottom:32px}
+.timeline{position:relative;padding-left:32px}
+.timeline::before{content:'';position:absolute;left:11px;top:4px;bottom:4px;width:2px;background:#E8ECF2}
+.tl-item{position:relative;margin-bottom:32px}
+.tl-item::before{content:'';position:absolute;left:-32px;top:4px;width:24px;height:24px;border-radius:50%;background:#2E75B6;border:3px solid #fff;box-shadow:0 0 0 2px #E8ECF2}
+.tl-item h4{font-size:16px;font-weight:700;color:#1B2A4A;margin-bottom:4px}
+.tl-item p{font-size:14px;color:#5A6B8A;line-height:1.6}
+.tl-item .badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;background:#E8F0FE;color:#2E75B6;margin-left:8px}
+
+/* Pricing */
+.pricing{padding:60px 0;background:#1B2A4A;color:#fff}
+.pricing h2{font-size:28px;font-weight:700;margin-bottom:32px}
+.price-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:32px}
+.price-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:32px}
+.price-card h3{font-size:18px;font-weight:700;margin-bottom:4px}
+.price-card .desc{font-size:13px;color:#8A9BC0;margin-bottom:20px}
+.price-card .amount{font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:700;color:#2E75B6;margin-bottom:4px}
+.price-card .per{font-size:14px;color:#556B8E}
+.price-card .pilot{display:inline-block;margin-top:12px;padding:4px 12px;border-radius:100px;font-size:12px;font-weight:600;background:rgba(230,126,34,.15);color:#E67E22}
+.price-card ul{list-style:none;margin-top:16px}
+.price-card li{font-size:13px;color:#8A9BC0;padding:4px 0;padding-left:20px;position:relative}
+.price-card li::before{content:'✓';position:absolute;left:0;color:#27AE60;font-weight:700}
+
+/* CTA */
+.cta{padding:60px 0;text-align:center;border-top:1px solid rgba(255,255,255,.1)}
+.cta h2{font-size:28px;font-weight:700;margin-bottom:12px}
+.cta p{font-size:15px;color:#8A9BC0;margin-bottom:24px;max-width:500px;margin-left:auto;margin-right:auto}
+.btn{display:inline-block;padding:14px 28px;border-radius:10px;font-size:15px;font-weight:600;text-decoration:none;transition:all .2s;border:none;cursor:pointer}
+.btn-primary{background:#2E75B6;color:#fff}.btn-primary:hover{background:#1B5A94}
+.btn-ghost{background:transparent;color:#8A9BC0;border:1px solid rgba(255,255,255,.15);margin-left:8px}
+.btn-ghost:hover{background:rgba(255,255,255,.05)}
+
+footer{padding:24px 0;text-align:center;font-size:12px;color:#556B8E;background:#1B2A4A}
+
+@media(max-width:768px){
+  .hero h1{font-size:28px}
+  .outcomes-grid,.price-grid{grid-template-columns:1fr}
+  .deliverable{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+<div class="container">
+  <div class="tag">PERFORMANCE AS A SERVICE</div>
+  <h1>Tu Black Friday ya no es una apuesta.<br><span>Es un dato.</span></h1>
+  <p class="sub">Sabemos exactamente cuánto tráfico aguanta tu sistema. Cuál es tu punto de quiebre. Cómo se comporta bajo carga real. Y te avisamos si algo cambia — antes de que lo note un usuario.</p>
+</div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem">
+<div class="container">
+  <p>Tu "99.9% uptime" es una estimación. No lo has medido. <span class="pain">No sabes cuánto tráfico aguanta tu sistema</span> antes de degradar. <span class="pain">No sabes si el último deploy empeoró tu performance.</span> Y cuando llega Black Friday o una campaña de marketing, cruzas los dedos.</p>
+  <p>El problema no es que tu equipo no sepa hacer load testing. Es que <span class="pain">nadie tiene tiempo de hacerlo de forma continua</span> — y un test aislado antes del release no cuenta. Un susto en producción tampoco debería ser la forma de descubrirlo.</p>
+  <p>Eso es exactamente lo que resolvemos. No con un proyecto one-off. Con una <strong>capacidad gestionada que te da datos reales cada semana — y mejora cada mes</strong>.</p>
+</div>
+</section>
+
+<!-- DELIVERABLES — Fort Digital structure -->
+<section class="deliverables">
+<div class="container">
+  <h2>Qué reciben nuestros clientes</h2>
+  <p class="intro">Siete deliverables concretos. Un resultado: sabes exactamente cómo está tu sistema — y qué hacer con eso.</p>
+
+  <!-- 1 -->
+  <div class="deliverable">
+    <div class="num">1</div>
+    <div>
+      <h3>Sabes exactamente cuánto aguanta tu sistema — medido, no estimado</h3>
+      <p class="what">Establecemos una línea base medida de tu sistema: capacidad real (Max TPS), punto de quiebre (breakpoint), latencia de referencia (p50/p95/p99), error rate de referencia, y uptime real medido cada minuto. Este baseline es tu punto de partida. Todo lo que hagamos después se mide contra él.</p>
+      <div class="how">
+        <span class="tool">k6 load test (baseline + stress + spike)</span>
+        <span class="tool">k6 synthetic monitoring</span>
+        <span class="tool">Uptime checks cada 1 min</span>
+        <span class="freq">Semana 1 — y después cada mes</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="deliverable">
+    <div class="num">2</div>
+    <div>
+      <h3>Tu equipo se entera antes que tus usuarios — 24/7, cada minuto</h3>
+      <p class="what">Desde el día 1, tu sistema está siendo monitoreado cada minuto. Health checks comprueban que está vivo. Cada 5 minutos, un test sintético ejecuta tu flujo crítico (ej: login → buscar → pagar) y mide la latencia real y los errores. Si algo se degrada, lo sabemos antes que tus usuarios — y te avisamos por Slack.</p>
+      <div class="how">
+        <span class="tool">k6 uptime check</span>
+        <span class="freq">Cada 1 minuto</span>
+        <span class="tool">k6 synthetic flow</span>
+        <span class="freq">Cada 5 minutos</span>
+        <span class="tool">Alertas → Slack</span>
+        <span class="freq">Real-time</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="deliverable">
+    <div class="num">3</div>
+    <div>
+      <h3>Si un deploy empeoró tu performance, lo sabemos esa semana — no 3 meses después</h3>
+      <p class="what">Cada semana corremos Lighthouse contra las páginas críticas de tu aplicación. Trackeamos LCP, FID, CLS, TTI, bundle size, y Lighthouse score. Si un deploy empeoró tu web performance, lo detectamos al siguiente scan — no 3 meses después cuando SEO se queja.</p>
+      <div class="how">
+        <span class="tool">Lighthouse CI headless</span>
+        <span class="freq">Semanal (domingos)</span>
+        <span class="tool">Core Web Vitals trending</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="deliverable">
+    <div class="num">4</div>
+    <div>
+      <h3>Cada mes sabes si soportas 2x, 5x, 10x tu tráfico — con números, no estimaciones</h3>
+      <p class="what">Cada mes ejecutamos una evaluación completa: prueba de carga (baseline + stress + spike), actualizamos el breakpoint, comparamos contra el mes anterior, y evaluamos si tu sistema soporta el crecimiento proyectado (2x, 5x, 10x). Si implementaste los fixes que recomendamos, medimos el impacto real con números.</p>
+      <div class="how">
+        <span class="tool">k6 full load test</span>
+        <span class="freq">Mensual (día 5-10)</span>
+        <span class="tool">Capacity planning extrapolation</span>
+        <span class="tool">Before/after delta analysis</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="deliverable">
+    <div class="num">5</div>
+    <div>
+      <h3>Hallazgos priorizados con acciones específicas — no listas genéricas</h3>
+      <p class="what">Cada hallazgo viene con severidad (P0–P3), componente afectado, evidencia con datos, impacto cuantificado, y una acción concreta de remediación — incluyendo el SQL, la config, o el cambio exacto. No decimos "considere optimizar la base de datos". Decimos "CREATE INDEX idx_x ON settlements(merchant_id, status, created_at DESC)" — con la estimación de mejora esperada.</p>
+      <div class="how">
+        <span class="tool">FANG-grade analysis methodology</span>
+        <span class="tool">USE / RED / Four Golden Signals</span>
+        <span class="tool">Roadmap priorizado por ROI</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="deliverable">
+    <div class="num">6</div>
+    <div>
+      <h3>Dashboards en tiempo real + reportes que no tienes que pedir</h3>
+      <p class="what">Tu equipo tiene acceso a dashboards Grafana embebidos en el portal de cliente — métricas de uptime, latencia, error rate, y web performance actualizadas en tiempo real. Cada lunes recibes un reporte semanal por Slack. Cada mes recibes un informe completo (PDF + XLSX) con trending, hallazgos, y recomendaciones. Todo async — llega sin que tengas que pedirlo.</p>
+      <div class="how">
+        <span class="tool">Grafana dashboards (6 panels)</span>
+        <span class="tool">Portal de cliente web</span>
+        <span class="freq">Reporte semanal → Slack cada lunes</span>
+        <span class="freq">Informe mensual → PDF día 5</span>
+        <span class="tool">Video Loom mensual</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 — NEW: Calls -->
+  <div class="deliverable">
+    <div class="num">7</div>
+    <div>
+      <h3>Comunicación async-first — con calls opcionales cuando importa</h3>
+      <p class="what">Operamos 100% async por defecto: Slack para preguntas, Loom para explicaciones, PDF para reportes formales. Pero entendemos que a veces necesitas hablar con alguien. Por eso incluimos una <strong>call de kick-off de 15 minutos</strong> para alinear prioridades al inicio del servicio, y <strong>calls opcionales de 15 min</strong> cuando hay un incidente, un hallazgo complejo, o necesitas discutir el roadmap. Si al final del mes quieres un <strong>video walkthrough del informe mensual</strong>, lo agendamos.</p>
+      <div class="how">
+        <span class="freq">Kick-off: 15 min video call</span>
+        <span class="freq">Incidentes/hallazgos: call opcional 15 min</span>
+        <span class="freq">Informe mensual: video meet opcional</span>
+        <span class="tool">Slack async siempre disponible</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- OUTCOME -->
+<section class="outcome">
+<div class="wide">
+  <h2>El resultado</h2>
+  <div class="outcomes-grid">
+    <div class="outcome-card">
+      <h4>Menos sorpresas</h4>
+      <p>Sabes tu capacidad real, tu uptime medido, y tus bottlenecks antes de que sean incidentes. Black Friday ya no es una apuesta.</p>
+    </div>
+    <div class="outcome-card">
+      <h4>Diagnóstico más rápido</h4>
+      <p>Cuando algo se degrada, tienes dashboards con datos reales, trending histórico, y un equipo que ya conoce tu sistema.</p>
+    </div>
+    <div class="outcome-card">
+      <h4>Un sistema que mejora cada mes</h4>
+      <p>No es un reporte que se archiva. Es un ciclo: medir → encontrar → priorizar → implementar → validar. Cada mes el baseline sube.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- HOW WE WORK -->
+<section class="how-work">
+<div class="container">
+  <h2>Cómo funciona</h2>
+  <div class="timeline">
+    <div class="tl-item">
+      <h4>Kick-off <span class="badge">15 min video call</span></h4>
+      <p>Alineamos prioridades, entendemos tu stack, definimos endpoints y flujos críticos a monitorear. Si prefieres hacerlo por Slack, también funciona.</p>
+    </div>
+    <div class="tl-item">
+      <h4>Semana 1: Baseline + activación de monitoreo</h4>
+      <p>Corremos el primer load test completo y activamos uptime + synthetic monitoring 24/7. Desde este punto, tienes datos reales cada minuto.</p>
+    </div>
+    <div class="tl-item">
+      <h4>Cada lunes: Reporte semanal → Slack</h4>
+      <p>Uptime, latencia, errores, anomalías de la semana, optimizaciones realizadas. Formato corto, actionable.</p>
+    </div>
+    <div class="tl-item">
+      <h4>Cada mes: Evaluación completa + informe</h4>
+      <p>Load test mensual + Lighthouse + capacity planning. Informe PDF detallado con trending, hallazgos, y roadmap. Video Loom con walkthrough.</p>
+    </div>
+    <div class="tl-item">
+      <h4>Opcional: Video meet del informe mensual <span class="badge">15-30 min</span></h4>
+      <p>Si quieres discutir los hallazgos del mes, el roadmap, o presentar los resultados a tu equipo/management, agendamos una call. No es obligatorio — el Loom cubre lo mismo.</p>
+    </div>
+    <div class="tl-item">
+      <h4>Ante incidentes: alerta + call si necesitas <span class="badge">respuesta mismo día</span></h4>
+      <p>Si el monitoreo detecta una degradación, te avisamos por Slack con los datos. Si necesitas hablar, agendamos un call de 15 min para discutir acción.</p>
+    </div>
+    <div class="tl-item">
+      <h4>Continuo: tu sistema mejora cada mes</h4>
+      <p>El baseline sube. Los hallazgos se resuelven. Las alertas se afinan. Los dashboards se ajustan. Es una capacidad gestionada, no un proyecto.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing">
+<div class="wide">
+  <h2>Dos formas de empezar</h2>
+  <div class="price-grid">
+    <div class="price-card">
+      <h3>Performance Checkup</h3>
+      <p class="desc">Saber exactamente dónde estás antes de comprometerte a nada.</p>
+      <div class="amount">$3,500</div>
+      <div class="per">pago único · entrega en 2 semanas</div>
+      <ul>
+        <li>Capacidad real medida (Max TPS, breakpoint, p95)</li>
+        <li>Core Web Vitals + Lighthouse de tus páginas críticas</li>
+        <li>Mapa de bottlenecks con evidencia</li>
+        <li>Roadmap priorizado (P0–P3) con fixes específicos</li>
+        <li>Informe PDF + video Loom de walkthrough</li>
+        <li>1 re-test post-fix incluido</li>
+      </ul>
+      <span class="pilot">Primer cliente: $2,625</span>
+    </div>
+    <div class="price-card">
+      <h3>Retainer Performance</h3>
+      <p class="desc">Monitoreo continuo + evaluación mensual. Sabes cómo está tu sistema siempre.</p>
+      <div class="amount">$2,800<span style="font-size:16px;color:#556B8E">/mes</span></div>
+      <div class="per">compromiso mínimo 3 meses</div>
+      <ul>
+        <li>Todo lo del Checkup, recurrente cada mes</li>
+        <li>Uptime check cada 1 minuto — 24/7</li>
+        <li>Synthetic flow de tu flujo crítico cada 5 minutos</li>
+        <li>Alertas en tiempo real → Slack</li>
+        <li>Lighthouse CI semanal automático</li>
+        <li>Evaluación de carga mensual completa</li>
+        <li>Capacity planning (2x, 5x, 10x tráfico actual)</li>
+        <li>Reporte semanal → Slack cada lunes</li>
+        <li>Informe mensual PDF + video Loom</li>
+        <li>Soporte incidentes: mismo día hábil</li>
+      </ul>
+      <span class="pilot">Primer cliente: $2,100/mes</span>
+    </div>
+  </div>
+  <p style="font-size:13px;color:#556B8E;text-align:center">Infraestructura incluida. Stack open-source (k6 + Grafana + Prometheus) — sin lock-in. Todo tuyo si terminas el servicio.</p>
+</div>
+
+<!-- CTA -->
+<div class="cta">
+  <h2>¿Cuánto tráfico aguanta tu sistema hoy?</h2>
+  <p>Si no tienes un número, tenemos una conversación que vale la pena tener.</p>
+  <a href="/cdn-cgi/l/email-protection#4c2f2322382d2f380c3a2d22382534622f20" class="btn btn-primary">Hablemos → <span class="__cf_email__" data-cfemail="066569687267657246706768726f7e28656a">[email&#160;protected]</span></a>
+  <a href="https://calendly.com/vantix/15min" class="btn btn-ghost">Agenda

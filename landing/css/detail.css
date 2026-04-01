@@ -278,6 +278,48 @@
   margin-bottom: var(--space-6);
 }
 
+/* --------------------------------------------------------------------------
+   Deliverables grid layout (D-14) — break text walls into scannable grid
+   -------------------------------------------------------------------------- */
+
+.deliverables__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+}
+
+@media (min-width: 768px) {
+  .deliverables__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* When in grid mode, deliverables become cards */
+.deliverables__grid .deliverable {
+  margin-bottom: 0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+  /* Switch from side-by-side number+content to stacked layout inside cards */
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+}
+
+.deliverables__grid .deliverable__num-wrap {
+  display: none; /* Numbers are less useful in a grid layout — the card itself is the visual unit */
+}
+
+.deliverables__grid .deliverable__title {
+  font-size: var(--text-base);
+  font-weight: var(--font-bold);
+}
+
+.deliverables__grid .deliverable__body {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
 .deliverable > div {
   min-width: 0; /* allow text to wrap inside grid cell */
   max-width: 640px; /* ~70 chars at 16px — readable line length */

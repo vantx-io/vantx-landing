@@ -11,8 +11,7 @@
   <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="../img/apple-touch-icon.png">
-  <meta name="theme-color" content="#F8F7F4" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#1A1917" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#F8F7F4">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Observability as a Service — Vantx">
   <meta property="og:description" content="Managed observability: instrumentation, dashboards, SLOs, and alert tuning as a continuously improving capability. From chaotic to reliable.">
@@ -146,6 +145,8 @@
           Five concrete deliverables that transform your monitoring from 'implemented but chaotic' to 'reliable and useful'.
         </p>
 
+        <div class="deliverables__grid">
+
         <!-- Deliverable 1 -->
         <div class="deliverable">
           <div class="deliverable__num deliverable__num--green">1</div>
@@ -179,8 +180,6 @@
             </div>
           </div>
         </div>
-
-        <hr class="deliverable-break">
 
         <!-- Deliverable 3 -->
         <div class="deliverable">
@@ -230,6 +229,8 @@
             </div>
           </div>
         </div>
+
+        </div><!-- /.deliverables__grid -->
 
       </div><!-- /.container -->
     </section>
@@ -301,6 +302,35 @@
         </div><!-- /.timeline -->
 
       </div><!-- /.container -->
+    </section>
+
+    <!-- ================================================================
+         FAQ — service-specific
+         ================================================================ -->
+    <section class="faq section" id="faq" aria-labelledby="faq-heading">
+      <div class="container">
+        <div class="section-header">
+          <h2 id="faq-heading" class="section-title" data-i18n="faq.heading">FAQs</h2>
+        </div>
+        <div class="faq__list">
+          <details class="faq__item">
+            <summary class="faq__question" data-i18n="obs_page.faq.items.0.question">What monitoring tools do you integrate with?</summary>
+            <p class="faq__answer" data-i18n="obs_page.faq.items.0.answer">We work with the tools you already have — Datadog, Grafana, Prometheus, New Relic, CloudWatch, and others. We configure and extend your existing stack, not replace it.</p>
+          </details>
+          <details class="faq__item">
+            <summary class="faq__question" data-i18n="obs_page.faq.items.1.question">How do you reduce our telemetry bill?</summary>
+            <p class="faq__answer" data-i18n="obs_page.faq.items.1.answer">By auditing your metric cardinality and retention policies. Most teams are storing high-resolution data they never query. We identify and prune it — typically 30–50% cost reduction in the first month.</p>
+          </details>
+          <details class="faq__item">
+            <summary class="faq__question" data-i18n="obs_page.faq.items.2.question">Do you replace our current monitoring setup?</summary>
+            <p class="faq__answer" data-i18n="obs_page.faq.items.2.answer">No. We build on what you have, fix what's broken, and add what's missing. Our goal is a system your team owns and understands — not a dependency on us.</p>
+          </details>
+          <details class="faq__item">
+            <summary class="faq__question" data-i18n="obs_page.faq.items.3.question">How fast can we see results?</summary>
+            <p class="faq__answer" data-i18n="obs_page.faq.items.3.answer">Dashboard and alert fixes are visible in the first week. A full observability baseline — coverage across services, SLOs defined, noise reduced — is typically in place by end of month one.</p>
+          </details>
+        </div>
+      </div>
     </section>
 
     <!-- ================================================================

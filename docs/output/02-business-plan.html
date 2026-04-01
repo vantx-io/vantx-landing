@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Business Plan — Vantx</title>
+    <style>
+    /* ═══════════════════════════════════════════════════
+       Vantx Docs — PDF Style (weasyprint)
+       Matches brand style guide: DM Sans, forest green,
+       parchment tones, warm grays
+       ═══════════════════════════════════════════════════ */
+
+    /* Fonts — use the self-hosted woff2 from the landing dir */
+    @font-face {
+      font-family: 'DM Sans';
+      src: url('../landing/fonts/dm-sans-latin.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'DM Sans';
+      src: url('../landing/fonts/dm-sans-latin.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'JetBrains Mono';
+      src: url('../landing/fonts/jb-mono-latin.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'JetBrains Mono';
+      src: url('../landing/fonts/jb-mono-latin.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    /* ── Page setup ── */
+    @page {
+      size: letter;
+      margin: 2.2cm 2.5cm 2.5cm 2.5cm;
+
+      @bottom-center {
+        content: counter(page);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9px;
+        color: #6B6B64;
+      }
+      @top-right {
+        content: "VANTX";
+        font-family: 'DM Sans', sans-serif;
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        color: #B0AFA8;
+      }
+    }
+
+    @page :first {
+      @bottom-center { content: none; }
+      @top-right { content: none; }
+    }
+
+    /* ── Base ── */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.6;
+      color: #1A1A17;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Cover page (YAML metadata handled by pandoc template) ── */
+
+    /* ── Headings ── */
+    h1 {
+      font-size: 22pt;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: #1B6B4A;
+      margin-top: 1.8em;
+      margin-bottom: 0.6em;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #1B6B4A;
+      page-break-after: avoid;
+    }
+
+    h2 {
+      font-size: 16pt;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      color: #1A1A17;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 12pt;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #1A1A17;
+      margin-top: 1.2em;
+      margin-bottom: 0.4em;
+      page-break-after: avoid;
+    }
+
+    h4, h5, h6 {
+      font-size: 10.5pt;
+      font-weight: 700;
+      color: #1A1A17;
+      margin-top: 1em;
+      margin-bottom: 0.3em;
+    }
+
+    /* ── Paragraphs ── */
+    p {
+      margin-top: 0;
+      margin-bottom: 0.6em;
+      color: #3A3A35;
+    }
+
+    /* ── Lists ── */
+    ul, ol {
+      margin-top: 0.3em;
+      margin-bottom: 0.8em;
+      padding-left: 1.5em;
+    }
+
+    li {
+      margin-bottom: 0.25em;
+      color: #3A3A35;
+    }
+
+    li::marker {
+      color: #1B6B4A;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.6em;
+      margin-bottom: 1em;
+      font-size: 9.5pt;
+      line-height: 1.45;
+      page-break-inside: auto;
+    }
+
+    thead {
+      background: #1B6B4A;
+    }
+
+    thead th {
+      color: #FFFFFF;
+      font-weight: 600;
+      font-size: 8.5pt;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      text-align: left;
+      padding: 7px 10px;
+      border: 1px solid #15593D;
+    }
+
+    tbody td {
+      padding: 6px 10px;
+      border: 1px solid #E2E1DC;
+      vertical-align: top;
+      color: #3A3A35;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #F8F7F4;
+    }
+
+    tbody tr:nth-child(odd) {
+      background: #FFFFFF;
+    }
+
+    /* Bold first column for definition-style tables */
+    tbody td:first-child {
+      font-weight: 600;
+      color: #1A1A17;
+    }
+
+    /* ── Blockquotes (callout boxes) ── */
+    blockquote {
+      margin: 1em 0;
+      padding: 12px 16px;
+      border-left: 3px solid #1B6B4A;
+      background: #F8F7F4;
+      border-radius: 0 6px 6px 0;
+      font-size: 10pt;
+      color: #3A3A35;
+    }
+
+    blockquote p {
+      margin: 0;
+    }
+
+    blockquote p + p {
+      margin-top: 0.4em;
+    }
+
+    /* ── Code ── */
+    code {
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 8.5pt;
+      background: #F0EFEB;
+      padding: 1px 5px;
+      border-radius: 3px;
+      color: #1A1A17;
+    }
+
+    pre {
+      margin: 0.8em 0;
+      padding: 14px 16px;
+      background: #1A1917;
+      border-radius: 8px;
+      overflow: hidden;
+      page-break-inside: avoid;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      color: #EDECE7;
+      font-size: 8pt;
+      line-height: 1.5;
+    }
+
+    /* ── Horizontal rules / page breaks ── */
+    hr {
+      border: none;
+      border-top: 1px solid #E2E1DC;
+      margin: 1.5em 0;
+    }
+
+    /* ── Strong / Bold ── */
+    strong {
+      font-weight: 700;
+      color: #1A1A17;
+    }
+
+    /* ── Links ── */
+    a {
+      color: #1B6B4A;
+      text-decoration: none;
+    }
+
+    /* ── Images (logo) ── */
+    img {
+      max-width: 30%;
+      height: auto;
+    }
+
+    /* ── Monospace data styling ── */
+    .price, .metric {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+    }
+
+    /* ── Emoji status indicators ── */
+    /* These render natively in weasyprint */
+
+    /* ── Page break utility ── */
+    .newpage {
+      page-break-before: always;
+    }
+
+    /* Cover page */
+    .cover {
+      page-break-after: always;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 700px;
+    }
+    .cover__logo { width: 140px; margin-bottom: 48px; }
+    .cover__bar { width: 60px; height: 3px; background: #1B6B4A; margin-bottom: 32px; }
+    .cover__title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 32pt; font-weight: 700;
+      letter-spacing: -0.03em; line-height: 1.1;
+      color: #1A1A17; margin: 0 0 12px 0;
+      border: none; padding: 0;
+    }
+    .cover__subtitle {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14pt; font-weight: 400;
+      color: #5C5C56; margin: 0 0 40px 0;
+    }
+    .cover__meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9pt; color: #6B6B64; line-height: 1.8;
+    }
+    .cover__meta span { display: block; }
+    .cover__footer {
+      margin-top: auto; padding-top: 32px;
+      border-top: 1px solid #E2E1DC;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8pt; color: #B0AFA8;
+    }
+    </style>
+  </head>
+<body>
+
+<div class="cover">
+  <img class="cover__logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAABbCAMAAABqOSM9AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAMAUExURRtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrSowIbgAAAAD/dFJOUwAQTa6Aka9OEQUsdMPyi57zwXIqBBpcquiKAealUhUNQZDV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" alt="Vantx">
+  <div class="cover__bar"></div>
+  <h1 class="cover__title">Business Plan</h1>
+    <p class="cover__subtitle">Productized Engineering Services</p>
+    <div class="cover__meta">
+    <span>Version 4.0</span>
+    <span>March 2026</span>
+    <span>vantx.io &middot; hello@vantx.io</span>
+  </div>
+  <div class="cover__footer">
+    Confidential &mdash; Vantx
+  </div>
+</div>
+
+<h1 id="business-plan">BUSINESS PLAN</h1>
+<p><strong>Productized Engineering Services</strong></p>
+<p>Version 4.0 — March 2026 · Confidential</p>
+<ul>
+<li><strong>Model:</strong> Productized services — subscribe, request,
+receive. Pause or cancel anytime.</li>
+<li><strong>Products:</strong> Performance · Observability · Fractional
+SRE · Fractional QA Tech Lead</li>
+<li><strong>Website:</strong> vantx.io</li>
+<li><strong>Target:</strong> $600K year 1 · $1.8M year 2 · $3.5M year
+3</li>
+<li><strong>Team:</strong> 10 people: founder + 3 engineers + 3 sellers
+(commission) + PM (equity) + marketing (equity) + external services</li>
+<li><strong>Infra per client:</strong> Dedicated Grafana Cloud stack
+(Prometheus + Loki + Tempo + Faro + IRM)</li>
+</ul>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="the-productized-model">1. The Productized Model</h1>
+<p>Inspired by DesignJoy ($5,995/mo, 1 designer, $1.5M+/yr revenue) and
+the “Productize” framework by Eisha Armstrong. We convert consulting
+services into products with fixed pricing, standardized delivery, and
+monthly subscriptions.</p>
+<h3 id="the-4-products">The 4 products</h3>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>Product</th>
+<th>Type</th>
+<th>US Price</th>
+<th>LATAM (-40%)</th>
+<th>AI Startup (-25%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Performance</td>
+<td>Managed 24/7 + board</td>
+<td>$5,995/mo</td>
+<td>$3,595/mo</td>
+<td>$4,495/mo</td>
+</tr>
+<tr>
+<td>Observability</td>
+<td>Managed + board</td>
+<td>$6,995/mo</td>
+<td>$4,195/mo</td>
+<td>$5,245/mo</td>
+</tr>
+<tr>
+<td>Fractional SRE</td>
+<td>Expert subscription</td>
+<td>$7,995/mo</td>
+<td>$4,795/mo</td>
+<td>$5,995/mo</td>
+</tr>
+<tr>
+<td>Fractional QA TL</td>
+<td>Expert subscription</td>
+<td>From $6,995/mo</td>
+<td>$4,195/mo</td>
+<td>$5,245/mo</td>
+</tr>
+<tr>
+<td>Checkup (entry)</td>
+<td>One-shot</td>
+<td>$2,995</td>
+<td>$1,795</td>
+<td>$2,245</td>
+</tr>
+</tbody>
+</table>
+<h3 id="why-it-works">Why it works</h3>
+<ul>
+<li>Eliminates sales friction: pricing on website, subscribe via Stripe,
+no proposals</li>
+<li>Reduces CAC: no 4-8 week sales cycle. Subscribe → onboarding in 1
+hour</li>
+<li>Increases LTV: pause/cancel is less scary than “breaking a
+contract”</li>
+<li>Scalable: k6 framework + automated Grafana Cloud allows more clients
+per engineer</li>
+<li>Predictable: fixed monthly revenue per client, low fixed costs</li>
+</ul>
+<h3 id="discount-programs">Discount programs</h3>
+<ul>
+<li><strong>LATAM &amp; Spain:</strong> 40% off all plans for companies
+in Latin America and Spain</li>
+<li><strong>AI Startups:</strong> 25% off for early-stage teams building
+with AI</li>
+</ul>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="team">2. Team</h1>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Role</th>
+<th>Compensation</th>
+<th>Type</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>José Castillo — CEO / Lead</td>
+<td>$0 → $8K year 2</td>
+<td>Founder equity</td>
+<td>Day 1</td>
+</tr>
+<tr>
+<td>Seller LATAM</td>
+<td>100% commission</td>
+<td>Contractor</td>
+<td>Month 1</td>
+</tr>
+<tr>
+<td>Seller US #1</td>
+<td>100% commission</td>
+<td>Contractor</td>
+<td>Month 1</td>
+</tr>
+<tr>
+<td>Seller US #2</td>
+<td>100% commission</td>
+<td>Contractor</td>
+<td>Month 6</td>
+</tr>
+<tr>
+<td>Sr Perf Engineer</td>
+<td>$3,500/mo</td>
+<td>Full-time LATAM</td>
+<td>Month 3</td>
+</tr>
+<tr>
+<td>Mid Perf Engineer</td>
+<td>$2,500/mo</td>
+<td>Full-time LATAM</td>
+<td>Month 4</td>
+</tr>
+<tr>
+<td>QA Automation Eng</td>
+<td>$2,000/mo</td>
+<td>Full-time LATAM</td>
+<td>Month 5</td>
+</tr>
+<tr>
+<td>PM / Client Success</td>
+<td>2-3% equity + $500 bonus</td>
+<td>Partner</td>
+<td>Month 3</td>
+</tr>
+<tr>
+<td>Marketing &amp; Content</td>
+<td>1-2% equity + $500 bonus</td>
+<td>Partner</td>
+<td>Month 2</td>
+</tr>
+<tr>
+<td>Accounting CL</td>
+<td>$400/mo</td>
+<td>External</td>
+<td>Day 1</td>
+</tr>
+<tr>
+<td>Legal CL</td>
+<td>$300/mo</td>
+<td>External</td>
+<td>Day 1</td>
+</tr>
+<tr>
+<td>Accounting + Legal US</td>
+<td>$600/mo</td>
+<td>External</td>
+<td>Month 4</td>
+</tr>
+</tbody>
+</table>
+<h3 id="equity-table">Equity table</h3>
+<table>
+<thead>
+<tr>
+<th>Person</th>
+<th>Equity</th>
+<th>Vesting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>José Castillo</td>
+<td>85-90%</td>
+<td>Founder</td>
+</tr>
+<tr>
+<td>PM / Client Success</td>
+<td>2-3%</td>
+<td>4 years, 1 year cliff</td>
+</tr>
+<tr>
+<td>Marketing</td>
+<td>1-2%</td>
+<td>4 years, 1 year cliff</td>
+</tr>
+<tr>
+<td>Future pool</td>
+<td>5-8%</td>
+<td>Reserved</td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="financial-projections">3. Financial Projections</h1>
+<h3 id="year-1-month-by-month">Year 1 — Month by month</h3>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr>
+<th>Month</th>
+<th>Subs</th>
+<th>MRR</th>
+<th>One-shots</th>
+<th>Revenue</th>
+<th>Fixed costs</th>
+<th>Commissions</th>
+<th>Net profit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Month 1</td>
+<td>0</td>
+<td>$0</td>
+<td>$2,995</td>
+<td>$2,995</td>
+<td>$900</td>
+<td>$449</td>
+<td>$1,646</td>
+</tr>
+<tr>
+<td>Month 2</td>
+<td>1</td>
+<td>$5,995</td>
+<td>$2,995</td>
+<td>$8,990</td>
+<td>$900</td>
+<td>$1,349</td>
+<td>$6,741</td>
+</tr>
+<tr>
+<td>Month 3</td>
+<td>2</td>
+<td>$12,990</td>
+<td>$2,995</td>
+<td>$15,985</td>
+<td>$5,600</td>
+<td>$2,398</td>
+<td>$7,987</td>
+</tr>
+<tr>
+<td>Month 4</td>
+<td>4</td>
+<td>$24,980</td>
+<td>$6,995</td>
+<td>$31,975</td>
+<td>$5,600</td>
+<td>$4,796</td>
+<td>$21,579</td>
+</tr>
+<tr>
+<td>Month 5</td>
+<td>6</td>
+<td>$37,970</td>
+<td>$2,995</td>
+<td>$40,965</td>
+<td>$10,900</td>
+<td>$6,145</td>
+<td>$23,920</td>
+</tr>
+<tr>
+<td>Month 6</td>
+<td>8</td>
+<td>$49,960</td>
+<td>$7,995</td>
+<td>$57,955</td>
+<td>$10,900</td>
+<td>$8,693</td>
+<td>$38,362</td>
+</tr>
+<tr>
+<td>Month 7</td>
+<td>9</td>
+<td>$56,955</td>
+<td>$2,995</td>
+<td>$59,950</td>
+<td>$11,300</td>
+<td>$8,993</td>
+<td>$39,658</td>
+</tr>
+<tr>
+<td>Month 8</td>
+<td>11</td>
+<td>$68,945</td>
+<td>$2,995</td>
+<td>$71,940</td>
+<td>$11,300</td>
+<td>$10,791</td>
+<td>$49,849</td>
+</tr>
+<tr>
+<td>Month 9</td>
+<td>12</td>
+<td>$75,940</td>
+<td>$6,995</td>
+<td>$82,935</td>
+<td>$11,300</td>
+<td>$12,440</td>
+<td>$59,195</td>
+</tr>
+<tr>
+<td>Month 10</td>
+<td>13</td>
+<td>$82,935</td>
+<td>$2,995</td>
+<td>$85,930</td>
+<td>$11,300</td>
+<td>$12,890</td>
+<td>$61,741</td>
+</tr>
+<tr>
+<td>Month 11</td>
+<td>14</td>
+<td>$89,930</td>
+<td>$2,995</td>
+<td>$92,925</td>
+<td>$11,300</td>
+<td>$13,939</td>
+<td>$67,687</td>
+</tr>
+<tr>
+<td>Month 12</td>
+<td>15</td>
+<td>$96,925</td>
+<td>$7,995</td>
+<td>$104,920</td>
+<td>$11,300</td>
+<td>$15,738</td>
+<td>$77,882</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>$656,465</strong></td>
+<td><strong>$102,600</strong></td>
+<td><strong>$98,620</strong></td>
+<td><strong>$455,245</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="assumptions">Assumptions</h3>
+<ul>
+<li>José does delivery solo months 1-2. From month 3, engineers take
+over.</li>
+<li>Sellers close 1-2 subs/month each. Conservative.</li>
+<li>Mix: 35% US full price, 45% LATAM (-40%), 20% AI startups
+(-25%)</li>
+<li>Avg MRR per sub: ~$5,500 (blended across markets and products)</li>
+<li>Churn: 10% annual (lower than contract model because pause reduces
+churn)</li>
+<li>Grafana Cloud: $0 for 90% of clients (free tier)</li>
+</ul>
+<h3 id="year-projection">3-year projection</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Year 1</th>
+<th>Year 2</th>
+<th>Year 3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Active subscriptions</td>
+<td>15</td>
+<td>32</td>
+<td>55</td>
+</tr>
+<tr>
+<td>MRR end of year</td>
+<td>$96,925</td>
+<td>$195,000</td>
+<td>$340,000</td>
+</tr>
+<tr>
+<td>Annual revenue</td>
+<td>$656,465</td>
+<td>$1,800,000</td>
+<td>$3,500,000</td>
+</tr>
+<tr>
+<td>Fixed costs</td>
+<td>$102,600</td>
+<td>$280,000</td>
+<td>$480,000</td>
+</tr>
+<tr>
+<td>Commissions</td>
+<td>$98,620</td>
+<td>$270,000</td>
+<td>$525,000</td>
+</tr>
+<tr>
+<td>EBITDA</td>
+<td>$455,245</td>
+<td>$1,250,000</td>
+<td>$2,495,000</td>
+</tr>
+<tr>
+<td>EBITDA margin</td>
+<td>69%</td>
+<td>69%</td>
+<td>71%</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Year 1: $455K net profit (69% margin). Break-even: month 1.
+Self-funded.</p>
+</blockquote>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="fixed-costs-detail">4. Fixed Costs Detail</h1>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Month 1-2</th>
+<th>Month 3-4</th>
+<th>Month 5-6</th>
+<th>Month 7-12</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>José (equity)</td>
+<td>$0</td>
+<td>$0</td>
+<td>$0</td>
+<td>$0</td>
+</tr>
+<tr>
+<td>Sellers (3) — commission only</td>
+<td>$0</td>
+<td>$0</td>
+<td>$0</td>
+<td>$0</td>
+</tr>
+<tr>
+<td>Sr Perf Engineer</td>
+<td>$0</td>
+<td>$3,500</td>
+<td>$3,500</td>
+<td>$3,500</td>
+</tr>
+<tr>
+<td>Mid Perf Engineer</td>
+<td>$0</td>
+<td>$0</td>
+<td>$2,500</td>
+<td>$2,500</td>
+</tr>
+<tr>
+<td>QA Automation</td>
+<td>$0</td>
+<td>$0</td>
+<td>$2,000</td>
+<td>$2,000</td>
+</tr>
+<tr>
+<td>PM (equity + bonus)</td>
+<td>$0</td>
+<td>$500</td>
+<td>$500</td>
+<td>$500</td>
+</tr>
+<tr>
+<td>Marketing (equity + bonus)</td>
+<td>$0</td>
+<td>$500</td>
+<td>$500</td>
+<td>$500</td>
+</tr>
+<tr>
+<td>External services</td>
+<td>$700</td>
+<td>$700</td>
+<td>$1,300</td>
+<td>$1,300</td>
+</tr>
+<tr>
+<td>Infra + tools + Grafana Cloud</td>
+<td>$200</td>
+<td>$400</td>
+<td>$600</td>
+<td>$1,000</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td><strong>$900</strong></td>
+<td><strong>$5,600</strong></td>
+<td><strong>$10,900</strong></td>
+<td><strong>$11,300</strong></td>
+</tr>
+</tbody>
+</table>
+<h1 id="unit-economics">5. Unit Economics</h1>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Performance</th>
+<th>Observability</th>
+<th>Frac SRE</th>
+<th>Frac QA TL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Revenue/mo (US)</td>
+<td>$5,995</td>
+<td>$6,995</td>
+<td>$7,995</td>
+<td>$6,995</td>
+</tr>
+<tr>
+<td>COGS/mo</td>
+<td>$400</td>
+<td>$550</td>
+<td>$1,600</td>
+<td>$1,400</td>
+</tr>
+<tr>
+<td>Gross margin</td>
+<td>93%</td>
+<td>92%</td>
+<td>80%</td>
+<td>80%</td>
+</tr>
+<tr>
+<td>Avg lifetime</td>
+<td>24 months</td>
+<td>24 months</td>
+<td>12 months</td>
+<td>10 months</td>
+</tr>
+<tr>
+<td>LTV (US)</td>
+<td>$143,880</td>
+<td>$167,880</td>
+<td>$95,940</td>
+<td>$69,950</td>
+</tr>
+<tr>
+<td>CAC estimated</td>
+<td>$2,000</td>
+<td>$2,500</td>
+<td>$3,000</td>
+<td>$2,500</td>
+</tr>
+<tr>
+<td>LTV:CAC</td>
+<td>72:1</td>
+<td>67:1</td>
+<td>32:1</td>
+<td>28:1</td>
+</tr>
+</tbody>
+</table>
+<h1 id="go-to-market">6. Go-to-Market</h1>
+<h3 id="website-live-at-vantx.io">Website (live at vantx.io)</h3>
+<p>The website is live and fully operational:</p>
+<ul>
+<li>Landing page with hero, pain points, services, comparison table,
+FAQ, and CTA</li>
+<li>4 dedicated service detail pages (Performance, Observability,
+Fractional SRE, QA Tech Lead)</li>
+<li>Mission &amp; Values page (<code>/about/mission.html</code>)</li>
+<li>Welcome page (post-purchase onboarding)</li>
+<li>Privacy Policy + Terms of Service</li>
+<li>Brand Style Guide at <code>/brand/style-guide.html</code></li>
+<li><code>llms.txt</code> for AI-readable company info</li>
+</ul>
+<p><strong>Tech stack:</strong> Self-hosted fonts (DM Sans + JetBrains
+Mono), custom CSS design system with dark mode, i18n (EN/ES), entrance
+animations, Cloudflare hosting.</p>
+<p><strong>Integrations:</strong></p>
+<ul>
+<li>Google Analytics 4 (G-VMTZXQG4HX) with custom event tracking</li>
+<li>Stripe payment links (Performance subscription + Checkup
+one-time)</li>
+<li>Calendly popup (15-min call booking)</li>
+<li>Cloudflare geo-detection for LATAM/Spain discount banner</li>
+<li>SEO structured data (Organization + Services + FAQ rich
+results)</li>
+<li>Sitemap + robots.txt</li>
+</ul>
+<h3 id="launch-channels">Launch channels</h3>
+<ul>
+<li><strong>ProductHunt:</strong> Launch Checkup with 30% off PH
+exclusive. Target: Top 5. (See <code>04-producthunt-plan.md</code>)</li>
+<li><strong>LinkedIn:</strong> 3 posts/week (José + Marketing). Outreach
+by sellers.</li>
+<li><strong>HackerNews, Dev.to, Indie Hackers:</strong> Technical
+articles, revenue transparency.</li>
+<li><strong>Referrals:</strong> 5% of first payment to referrer.</li>
+<li><strong>Partnerships:</strong> Dev agencies, cloud consultants,
+accelerators.</li>
+</ul>
+<h1 id="investment">7. Investment</h1>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Amount</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Working capital (3 months × $900)</td>
+<td>$2,700</td>
+</tr>
+<tr>
+<td>US LLC (Wyoming/Stripe Atlas)</td>
+<td>$1,000</td>
+</tr>
+<tr>
+<td>E&amp;O Insurance</td>
+<td>$2,000</td>
+</tr>
+<tr>
+<td>Tools (Stripe, Trello, Calendly)</td>
+<td>$500</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td><strong>$6,200</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>$6,200 total. Break-even month 1. Cash-flow positive from day 1. 100%
+bootstrappable.</p>
+</blockquote>
+<h3 id="year-1-milestones">Year 1 Milestones</h3>
+<ul>
+<li>Month 1: First paying client (checkup or subscription)</li>
+<li>Month 3: 3 active subs, first engineer hired</li>
+<li>Month 6: 8 subs, $57K monthly revenue</li>
+<li>Month 9: 12 subs, $82K revenue, US entity operational</li>
+<li>Month 12: 15 subs, $104K revenue, $77K net profit monthly</li>
+</ul>
+
+</body>
+</html>

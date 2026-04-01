@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 320" font-family="'DM Sans', sans-serif">
+  <!-- Background -->
+  <rect width="560" height="320" fill="#FFFFFF" rx="8"/>
+
+  <!-- Title -->
+  <text x="40" y="28" font-size="12" font-weight="700" fill="#1A1A17">Breakpoint Analysis</text>
+  <text x="40" y="44" font-size="9" fill="#6B6B64">TPS and p95 latency at each load stage</text>
+
+  <!-- Grid -->
+  <line x1="70" y1="60" x2="70" y2="260" stroke="#E2E1DC" stroke-width="1"/>
+  <line x1="70" y1="260" x2="500" y2="260" stroke="#E2E1DC" stroke-width="1"/>
+  <line x1="70" y1="220" x2="500" y2="220" stroke="#F0EFEB" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="70" y1="180" x2="500" y2="180" stroke="#F0EFEB" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="70" y1="140" x2="500" y2="140" stroke="#F0EFEB" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="70" y1="100" x2="500" y2="100" stroke="#F0EFEB" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="70" y1="60" x2="500" y2="60" stroke="#F0EFEB" stroke-width="1" stroke-dasharray="4"/>
+
+  <!-- Y-axis left (TPS) -->
+  <text x="60" y="264" font-size="8" fill="#1B6B4A" text-anchor="end">0</text>
+  <text x="60" y="224" font-size="8" fill="#1B6B4A" text-anchor="end">150</text>
+  <text x="60" y="184" font-size="8" fill="#1B6B4A" text-anchor="end">300</text>
+  <text x="60" y="144" font-size="8" fill="#1B6B4A" text-anchor="end">450</text>
+  <text x="60" y="104" font-size="8" fill="#1B6B4A" text-anchor="end">600</text>
+  <text x="24" y="160" font-size="8" fill="#1B6B4A" text-anchor="middle" transform="rotate(-90 24 160)">TPS</text>
+
+  <!-- Y-axis right (Latency ms) -->
+  <line x1="500" y1="60" x2="500" y2="260" stroke="#E2E1DC" stroke-width="1"/>
+  <text x="510" y="264" font-size="8" fill="#C0392B">0</text>
+  <text x="510" y="224" font-size="8" fill="#C0392B">1000</text>
+  <text x="510" y="184" font-size="8" fill="#C0392B">2000</text>
+  <text x="510" y="144" font-size="8" fill="#C0392B">3000</text>
+  <text x="510" y="104" font-size="8" fill="#C0392B">4000</text>
+  <text x="546" y="160" font-size="8" fill="#C0392B" text-anchor="middle" transform="rotate(90 546 160)">p95 ms</text>
+
+  <!-- X-axis labels -->
+  <text x="156" y="278" font-size="8" fill="#6B6B64" text-anchor="middle">50 VU</text>
+  <text x="242" y="278" font-size="8" fill="#6B6B64" text-anchor="middle">100 VU</text>
+  <text x="328" y="278" font-size="8" fill="#6B6B64" text-anchor="middle">150 VU</text>
+  <text x="414" y="278" font-size="8" fill="#6B6B64" text-anchor="middle">200 VU</text>
+  <text x="485" y="278" font-size="8" fill="#C0392B" font-weight="700" text-anchor="middle">250 VU</text>
+
+  <!-- TPS area fill -->
+  <polygon points="156,227.3 242,130.1 328,121.3 414,116 485,112.7 485,260 156,260" fill="#1B6B4A" opacity="0.1"/>
+
+  <!-- TPS line (green) — 245, 488, 520, 540, 560→drop -->
+  <polyline points="156,227.3 242,130.1 328,121.3 414,116 485,112.7" fill="none" stroke="#1B6B4A" stroke-width="2.5"/>
+  <circle cx="156" cy="227.3" r="4" fill="#1B6B4A"/>
+  <circle cx="242" cy="130.1" r="4" fill="#1B6B4A"/>
+  <circle cx="328" cy="121.3" r="4" fill="#1B6B4A"/>
+  <circle cx="414" cy="116" r="4" fill="#1B6B4A"/>
+  <circle cx="485" cy="112.7" r="4" fill="#1B6B4A" stroke="#C0392B" stroke-width="2"/>
+
+  <!-- TPS annotations -->
+  <text x="156" y="222" font-size="7" fill="#1B6B4A" text-anchor="middle">245</text>
+  <text x="242" y="125" font-size="7" fill="#1B6B4A" text-anchor="middle">488</text>
+  <text x="328" y="116" font-size="7" fill="#1B6B4A" text-anchor="middle">520</text>
+  <text x="414" y="111" font-size="7" fill="#1B6B4A" text-anchor="middle">540</text>
+  <text x="485" y="107" font-size="7" fill="#C0392B" font-weight="700" text-anchor="middle">560</text>
+
+  <!-- Latency line (red) — 180, 420, 890, 1800, 4200 -->
+  <polyline points="156,252.8 242,243.2 328,224.4 414,188 485,92" fill="none" stroke="#C0392B" stroke-width="2.5"/>
+  <circle cx="156" cy="252.8" r="4" fill="#C0392B"/>
+  <circle cx="242" cy="243.2" r="4" fill="#C0392B"/>
+  <circle cx="328" cy="224.4" r="4" fill="#C0392B"/>
+  <circle cx="414" cy="188" r="4" fill="#C0392B"/>
+  <circle cx="485" cy="92" r="4" fill="#C0392B"/>
+
+  <!-- Latency annotations -->
+  <text x="156" y="250" font-size="7" fill="#C0392B" text-anchor="end">180ms</text>
+  <text x="242" y="255" font-size="7" fill="#C0392B" text-anchor="middle">420ms</text>
+  <text x="328" y="237" font-size="7" fill="#C0392B" text-anchor="middle">890ms</text>
+  <text x="414" y="201" font-size="7" fill="#C0392B" text-anchor="middle">1800ms</text>
+  <text x="485" y="85" font-size="7" fill="#C0392B" font-weight="700" text-anchor="middle">4200ms</text>
+
+  <!-- Breakpoint annotation -->
+  <line x1="485" y1="60" x2="485" y2="260" stroke="#C0392B" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.5"/>
+  <rect x="440" y="65" width="90" height="20" fill="#C0392B" rx="3" opacity="0.9"/>
+  <text x="485" y="79" font-size="8" font-weight="700" fill="#FFFFFF" text-anchor="middle">BREAKPOINT</text>
+
+  <!-- Legend -->
+  <line x1="100" y1="300" x2="120" y2="300" stroke="#1B6B4A" stroke-width="2.5"/>
+  <text x="124" y="304" font-size="8" fill="#1B6B4A">TPS (throughput)</text>
+  <line x1="230" y1="300" x2="250" y2="300" stroke="#C0392B" stroke-width="2.5"/>
+  <text x="254" y="304" font-size="8" fill="#C0392B">p95 Latency (ms)</text>
+</svg>

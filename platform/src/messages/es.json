@@ -1,0 +1,385 @@
+{
+  "metadata": {
+    "title": "Vantx Portal",
+    "description": "Portal de Performance Engineering & SRE"
+  },
+  "common": {
+    "pilot": "PILOTO",
+    "logout": "Cerrar sesión",
+    "vs_previous": "vs anterior",
+    "loom": "Loom",
+    "loading": "Cargando...",
+    "error_section": "Algo salió mal en esta sección",
+    "error_section_body": "Esta sección no pudo cargar. El resto de la página sigue disponible.",
+    "error_retry": "Intentar de nuevo"
+  },
+  "portal": {
+    "onboarding_heading": "¡Bienvenido a Vantx!",
+    "onboarding_body": "Aquí hay algunas cosas para comenzar.",
+    "onboarding_tasks": "Ver tus tareas",
+    "onboarding_tests": "Ver resultados de pruebas",
+    "onboarding_billing": "Explorar facturación",
+    "onboarding_settings": "Actualizar preferencias de notificación",
+    "onboarding_dismiss": "Entendido"
+  },
+  "login": {
+    "title": "Portal de cliente",
+    "subtitle": "Performance Engineering & SRE",
+    "email": "Email",
+    "password": "Password",
+    "email_placeholder": "tu@empresa.com",
+    "password_placeholder": "********",
+    "submit": "Ingresar",
+    "submitting": "Ingresando...",
+    "demo": "Demo: juan@novapay.com / demo2026",
+    "forgot_password": "Olvidaste tu password?",
+    "forgot_prompt": "Ingresa tu email para recibir un enlace de recuperacion",
+    "forgot_email_sent": "Si existe una cuenta con ese email, recibiras un enlace de recuperacion.",
+    "forgot_send": "Enviar enlace",
+    "forgot_back": "Volver a iniciar sesion",
+    "forgot_sending": "Enviando...",
+    "reset_success": "Password actualizado. Inicia sesion con tu nuevo password."
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "tests": "Evaluaciones",
+    "reports": "Reportes",
+    "tasks": "Tareas",
+    "grafana": "Grafana",
+    "billing": "Pagos",
+    "services": "Servicios",
+    "tutorials": "Tutoriales",
+    "settings": "Configuraci\u00f3n"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "summary": "Resumen de performance — {clientName}",
+    "charts": {
+      "peak_tps": "Peak TPS por semana",
+      "latency_p95": "Latencia p95 (ms)"
+    },
+    "recent_reports": "Reportes Recientes",
+    "active_tasks": "Tareas Activas"
+  },
+  "tests": {
+    "title": "Evaluaciones de Performance",
+    "subtitle": "Historial de pruebas de carga, web performance, y checkups",
+    "results_by_scenario": "Resultados por Escenario",
+    "table": {
+      "scenario": "Escenario",
+      "vus": "VUs",
+      "tps": "TPS",
+      "p50": "p50",
+      "p95": "p95",
+      "p99": "p99",
+      "errors": "Errors"
+    },
+    "findings": "Hallazgos",
+    "action": "Acción"
+  },
+  "reports": {
+    "title": "Reportes",
+    "filters": {
+      "all": "Todos",
+      "monthly": "Mensuales",
+      "weekly": "Semanales",
+      "checkup": "Checkup",
+      "evaluation": "Evaluación"
+    },
+    "type_labels": {
+      "checkup": "Checkup",
+      "monthly": "Mensual",
+      "weekly": "Semanal",
+      "evaluation": "Evaluación",
+      "incident_rca": "RCA",
+      "capacity_plan": "Capacity"
+    },
+    "watch_video": "Ver Video",
+    "empty": "No hay reportes para este filtro."
+  },
+  "tasks": {
+    "title": "Tareas y Solicitudes",
+    "new_request": "+ Nueva Solicitud",
+    "new_request_title": "Nueva Solicitud",
+    "form": {
+      "title_placeholder": "Título",
+      "description_placeholder": "Descripción (opcional)",
+      "priority": {
+        "low": "Baja",
+        "medium": "Media",
+        "high": "Alta",
+        "critical": "Crítica"
+      },
+      "type": {
+        "request": "Solicitud",
+        "incident": "Incidente",
+        "optimization": "Optimización",
+        "investigation": "Investigación"
+      },
+      "create": "Crear",
+      "cancel": "Cancelar"
+    },
+    "filters": {
+      "all": "Todas",
+      "open": "Abiertas",
+      "in_progress": "En Progreso",
+      "completed": "Completadas"
+    },
+    "due": "Vence",
+    "view_comments": "Ver comentarios",
+    "no_comments": "Sin comentarios aún.",
+    "comment_placeholder": "Escribe un comentario...",
+    "send": "Enviar",
+    "attach_file": "Adjuntar archivo",
+    "drop_files_here": "Soltar archivos aqui",
+    "error_executable": "{filename} — ejecutables no permitidos",
+    "error_size": "{filename} — excede el limite de 50 MB",
+    "uploading": "Subiendo...",
+    "download_file": "Descargar {filename}",
+    "close_preview": "Cerrar vista previa",
+    "attachment_alt": "Adjunto: {filename}",
+    "error_comment_submit": "Error al publicar comentario. Intenta de nuevo.",
+    "error_upload_failed": "Error al subir — intenta de nuevo",
+    "edit_title": "Editar titulo",
+    "save_title": "Guardar",
+    "change_status": "Cambiar estado",
+    "error_update_failed": "Error al actualizar tarea. Intenta de nuevo."
+  },
+  "billing": {
+    "title": "Pagos y Suscripción",
+    "current_plan": "PLAN ACTUAL",
+    "actions": "ACCIONES",
+    "pay_stripe": "Pagar con Stripe",
+    "processing": "Procesando...",
+    "download_invoice": "Descargar Factura",
+    "change_plan": "Cambiar Plan",
+    "next_charge": "Próximo cobro",
+    "per_month": "/mes",
+    "no_subscription": "Sin suscripción activa",
+    "no_invoices": "No hay facturas disponibles",
+    "payment_history": "Historial de Pagos",
+    "pending": "Pendiente",
+    "plan_labels": {
+      "retainer": "Retainer Performance Mensual",
+      "retainer_perf": "Retainer Performance Mensual",
+      "checkup": "Performance Checkup",
+      "oaas_baseline": "Observability Baseline",
+      "oaas_gestion": "Observability Gestión Continua",
+      "fractional_2d": "Fractional SRE (2 días/sem)",
+      "fractional_4d": "Fractional SRE (4 días/sem)",
+      "custom": "Plan Custom"
+    }
+  },
+  "services": {
+    "title": "Servicios Disponibles",
+    "subtitle": "Todos los servicios que ofrecemos. Precios en {market}.",
+    "categories": {
+      "core": "Servicios Core",
+      "addon": "Add-ons",
+      "training": "Training"
+    },
+    "coming_soon": "PRÓXIMAMENTE",
+    "request": "Solicitar",
+    "coming_soon_btn": "Próximamente",
+    "delivery_days": "{days} días hábiles",
+    "more_features": "+{count} más"
+  },
+  "grafana": {
+    "title": "Dashboards Grafana",
+    "subtitle": "Métricas en tiempo real de tu infraestructura.",
+    "time_ranges": {
+      "1h": "Última hora",
+      "6h": "6 horas",
+      "24h": "24 horas",
+      "7d": "7 días",
+      "30d": "30 días",
+      "custom": "Custom"
+    },
+    "date_separator": "a",
+    "test_id": "Test ID",
+    "open_in_grafana": "Abrir en Grafana",
+    "dashboards": {
+      "red": { "name": "RED Metrics", "desc": "Rate, Errors, Duration por servicio" },
+      "use": { "name": "Infrastructure USE", "desc": "CPU, Memory, Network, Disk" },
+      "pg": { "name": "PostgreSQL", "desc": "Connections, cache hit, slow queries" },
+      "k6": { "name": "k6 Load Test", "desc": "VUs, TPS, latencia, errors" },
+      "cwv": { "name": "Web Vitals", "desc": "LCP, INP, CLS, Lighthouse trending" },
+      "slo": { "name": "SLO Compliance", "desc": "Error budget, burn rate" },
+      "faro": { "name": "Frontend RUM", "desc": "CWV real por página/device/país" },
+      "incidents": { "name": "Incidents", "desc": "MTTR, on-call, timeline" }
+    }
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "markAllRead": "Marcar todo como leido",
+    "empty": "Sin notificaciones",
+    "justNow": "Ahora mismo"
+  },
+  "settings": {
+    "title": "Configuraci\u00f3n",
+    "profile_heading": "Perfil",
+    "name_label": "Nombre",
+    "email_readonly_label": "Email",
+    "save": "Guardar",
+    "saving": "Guardando...",
+    "saved": "Guardado",
+    "notifications_heading": "Notificaciones",
+    "email_label": "Notificaciones por email",
+    "email_description": "Recibe actualizaciones de tareas y pagos por email",
+    "in_app_label": "Notificaciones en la app",
+    "in_app_description": "Recibe notificaciones en el portal",
+    "digest_label": "Resumen semanal por email",
+    "digest_description": "Recibe un resumen los lunes de la actividad",
+    "security_heading": "Seguridad",
+    "new_password": "Nuevo password",
+    "confirm_password": "Confirmar password",
+    "new_password_placeholder": "Min. 8 caracteres",
+    "confirm_placeholder": "Repetir password",
+    "pw_submit": "Cambiar password",
+    "pw_submitting": "Cambiando...",
+    "pw_success": "Password actualizado",
+    "error_pw_min": "El password debe tener al menos 8 caracteres",
+    "error_pw_mismatch": "Los passwords no coinciden",
+    "error_load": "No se pudieron cargar las preferencias. Intenta recargar la p\u00e1gina.",
+    "error_save": "No se pudo guardar el cambio. Intenta de nuevo."
+  },
+  "tutorials": {
+    "title": "Tutoriales",
+    "subtitle": "Aprende a interpretar tus resultados y sacar el máximo provecho.",
+    "back": "← Volver a tutoriales",
+    "reading_time": "{min} min lectura",
+    "reading_time_short": "{min} min",
+    "watch_video": "Ver Video Explicativo",
+    "difficulty": {
+      "beginner": "Principiante",
+      "intermediate": "Intermedio",
+      "advanced": "Avanzado"
+    },
+    "categories": {
+      "interpretar_resultados": "Interpretar Resultados",
+      "load_testing": "Load Testing",
+      "web_performance": "Web Performance",
+      "observability": "Observabilidad",
+      "capacity_planning": "Capacity Planning",
+      "getting_started": "Primeros Pasos"
+    }
+  },
+  "reset_password": {
+    "title": "Establecer nuevo password",
+    "new_password": "Nuevo password",
+    "confirm_password": "Confirmar password",
+    "new_password_placeholder": "Min. 8 caracteres",
+    "confirm_placeholder": "Repetir password",
+    "submit": "Actualizar password",
+    "submitting": "Actualizando...",
+    "success": "Password actualizado! Redirigiendo al login...",
+    "loading": "Verificando enlace de recuperacion...",
+    "error_min_length": "El password debe tener al menos 8 caracteres",
+    "error_mismatch": "Los passwords no coinciden",
+    "error_expired": "Este enlace es invalido o ha expirado. Solicita uno nuevo."
+  },
+  "admin": {
+    "title": "Admin",
+    "nav": {
+      "overview": "Overview",
+      "clients": "Clients",
+      "tasks": "Tasks",
+      "billing": "Billing",
+      "users": "Usuarios"
+    },
+    "sidebar": {
+      "admin_badge": "ADMIN",
+      "back_to_portal": "Back to Portal"
+    },
+    "overview": {
+      "title": "Admin Overview",
+      "active_clients": "Active Clients",
+      "current_mrr": "Current MRR",
+      "open_tasks": "Open Tasks",
+      "pending_payments": "Pending Payments",
+      "recent_activity": "Recent Activity",
+      "event_new_client": "New client: {name}",
+      "event_payment": "Payment {status}: ${amount} from {client}",
+      "event_task": "Task \"{title}\" — {status}"
+    },
+    "audit_log": {
+      "title": "Registro de Auditoría",
+      "empty": "Aún no hay acciones de administrador registradas.",
+      "action_invite": "{actor} invitó a {target} como {role}",
+      "action_role_change": "{actor} cambió el rol de {target} a {role}",
+      "action_deactivate": "{actor} desactivó a {target}",
+      "action_reactivate": "{actor} reactivó a {target}"
+    },
+    "clients": {
+      "title": "All Clients",
+      "search_placeholder": "Search by name...",
+      "col_name": "Name",
+      "col_status": "Status",
+      "col_plan": "Plan",
+      "col_monthly": "Monthly",
+      "col_tasks": "Active Tasks",
+      "no_results": "No clients found"
+    },
+    "tasks": {
+      "title": "All Tasks",
+      "filter_client": "All Clients",
+      "filter_priority": "All Priorities",
+      "filter_status": "All Statuses",
+      "col_title": "Title",
+      "col_client": "Client",
+      "col_priority": "Priority",
+      "col_status": "Status",
+      "col_assigned": "Assigned To",
+      "col_created": "Created",
+      "no_results": "No tasks found"
+    },
+    "billing": {
+      "title": "Billing Overview",
+      "total_mrr": "Total MRR",
+      "active_subscriptions": "Active Subscriptions",
+      "pending_payments": "Pending Payments",
+      "failed_payments": "Failed Payments",
+      "recent_payments": "Recent Payments",
+      "active_subs_table": "Active Subscriptions",
+      "col_client": "Client",
+      "col_amount": "Amount",
+      "col_currency": "Currency",
+      "col_status": "Status",
+      "col_date": "Date",
+      "col_plan": "Plan",
+      "col_monthly": "Monthly",
+      "col_period_end": "Period End",
+      "no_payments": "No payments found",
+      "no_subscriptions": "No active subscriptions",
+      "mrr_trend_title": "Tendencia MRR (ultimos 12 meses)",
+      "mrr_no_data": "Sin datos de pago para el periodo seleccionado"
+    },
+    "users": {
+      "title": "Gestion de Usuarios",
+      "invite_button": "Invitar Usuario",
+      "search_placeholder": "Buscar por nombre o email...",
+      "col_name": "Nombre",
+      "col_email": "Email",
+      "col_role": "Rol",
+      "col_client": "Cliente",
+      "col_status": "Estado",
+      "col_created": "Creado",
+      "col_actions": "Acciones",
+      "action_change_role": "Cambiar Rol",
+      "action_deactivate": "Desactivar",
+      "action_reactivate": "Reactivar",
+      "no_results": "No se encontraron usuarios",
+      "invite_form_email": "Email",
+      "invite_form_role": "Rol",
+      "invite_form_client": "Cliente",
+      "invite_form_submit": "Enviar Invitacion",
+      "invite_form_cancel": "Cancelar",
+      "invite_success": "Invitacion enviada a {email}",
+      "invite_error_duplicate": "Ya existe un usuario con este email",
+      "invite_error_failed": "Error al enviar invitacion. Intenta de nuevo.",
+      "role_change_success": "Rol actualizado",
+      "deactivate_success": "Usuario desactivado",
+      "reactivate_success": "Usuario reactivado"
+    }
+  }
+}

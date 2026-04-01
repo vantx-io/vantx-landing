@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 240" font-family="'DM Sans', sans-serif">
+  <!-- Background -->
+  <rect width="560" height="240" fill="#FFFFFF" rx="8"/>
+
+  <!-- Title -->
+  <text x="40" y="28" font-size="12" font-weight="700" fill="#1A1A17">Production Bugs — Monthly Trend</text>
+  <text x="40" y="44" font-size="9" fill="#6B6B64">Bugs by severity reaching production</text>
+
+  <!-- Grid -->
+  <line x1="90" y1="60" x2="90" y2="190" stroke="#E2E1DC" stroke-width="1"/>
+  <line x1="90" y1="190" x2="460" y2="190" stroke="#E2E1DC" stroke-width="1"/>
+  <line x1="90" y1="164" x2="460" y2="164" stroke="#F0EFEB" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="90" y1="138" x2="460" y2="138" stroke="#F0EFEB" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="90" y1="112" x2="460" y2="112" stroke="#F0EFEB" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="90" y1="86" x2="460" y2="86" stroke="#F0EFEB" stroke-width="1" stroke-dasharray="4"/>
+
+  <!-- Y-axis -->
+  <text x="80" y="194" font-size="8" fill="#6B6B64" text-anchor="end">0</text>
+  <text x="80" y="168" font-size="8" fill="#6B6B64" text-anchor="end">2</text>
+  <text x="80" y="142" font-size="8" fill="#6B6B64" text-anchor="end">4</text>
+  <text x="80" y="116" font-size="8" fill="#6B6B64" text-anchor="end">6</text>
+  <text x="80" y="90" font-size="8" fill="#6B6B64" text-anchor="end">8</text>
+
+  <!-- Target line -->
+  <line x1="90" y1="164" x2="460" y2="164" stroke="#1B6B4A" stroke-width="1" stroke-dasharray="6 3" opacity="0.5"/>
+  <text x="464" y="162" font-size="7" fill="#1B6B4A">Target: ≤2</text>
+
+  <!-- December: 8 total (stacked: 1 P0 + 2 P1 + 3 P2 + 2 P3) -->
+  <text x="155" y="208" font-size="9" fill="#3A3A35" text-anchor="middle">Dec</text>
+  <!-- P3: 2 → 26px from bottom -->
+  <rect x="130" y="164" width="50" height="26" fill="#B0AFA8" rx="3"/>
+  <!-- P2: 3 → 39px -->
+  <rect x="130" y="125" width="50" height="39" fill="#D4A017" rx="3"/>
+  <!-- P1: 2 → 26px -->
+  <rect x="130" y="99" width="50" height="26" fill="#C0392B" rx="3"/>
+  <!-- P0: 1 → 13px -->
+  <rect x="130" y="86" width="50" height="13" fill="#8B0000" rx="3"/>
+  <text x="155" y="82" font-size="9" font-weight="700" fill="#C0392B" text-anchor="middle">8</text>
+
+  <!-- January: 7 (1 P0 + 1 P1 + 3 P2 + 2 P3) -->
+  <text x="245" y="208" font-size="9" fill="#3A3A35" text-anchor="middle">Jan</text>
+  <rect x="220" y="164" width="50" height="26" fill="#B0AFA8" rx="3"/>
+  <rect x="220" y="125" width="50" height="39" fill="#D4A017" rx="3"/>
+  <rect x="220" y="112" width="50" height="13" fill="#C0392B" rx="3"/>
+  <rect x="220" y="99" width="50" height="13" fill="#8B0000" rx="3"/>
+  <text x="245" y="95" font-size="9" font-weight="700" fill="#C0392B" text-anchor="middle">7</text>
+
+  <!-- February: 6 (1 P0 + 1 P1 + 2 P2 + 2 P3) -->
+  <text x="335" y="208" font-size="9" fill="#3A3A35" text-anchor="middle">Feb</text>
+  <rect x="310" y="164" width="50" height="26" fill="#B0AFA8" rx="3"/>
+  <rect x="310" y="138" width="50" height="26" fill="#D4A017" rx="3"/>
+  <rect x="310" y="125" width="50" height="13" fill="#C0392B" rx="3"/>
+  <rect x="310" y="112" width="50" height="13" fill="#8B0000" rx="3"/>
+  <text x="335" y="108" font-size="9" font-weight="700" fill="#D4A017" text-anchor="middle">6</text>
+
+  <!-- March: 2 (0 P0 + 0 P1 + 0 P2 + 2 P3) -->
+  <text x="425" y="208" font-size="9" fill="#3A3A35" font-weight="700" text-anchor="middle">Mar</text>
+  <rect x="400" y="164" width="50" height="26" fill="#B0AFA8" rx="3"/>
+  <text x="425" y="160" font-size="9" font-weight="700" fill="#1B6B4A" text-anchor="middle">2</text>
+
+  <!-- Improvement annotation -->
+  <text x="490" y="100" font-size="14" font-weight="700" fill="#1B6B4A">-67%</text>
+  <text x="490" y="116" font-size="8" fill="#6B6B64">reduction</text>
+  <text x="490" y="130" font-size="7" fill="#6B6B64">0 critical bugs</text>
+  <text x="490" y="142" font-size="7" fill="#6B6B64">in March</text>
+
+  <!-- Legend -->
+  <rect x="120" y="224" width="8" height="8" fill="#8B0000" rx="1"/>
+  <text x="132" y="232" font-size="7" fill="#6B6B64">P0 Critical</text>
+  <rect x="200" y="224" width="8" height="8" fill="#C0392B" rx="1"/>
+  <text x="212" y="232" font-size="7" fill="#6B6B64">P1 High</text>
+  <rect x="265" y="224" width="8" height="8" fill="#D4A017" rx="1"/>
+  <text x="277" y="232" font-size="7" fill="#6B6B64">P2 Medium</text>
+  <rect x="340" y="224" width="8" height="8" fill="#B0AFA8" rx="1"/>
+  <text x="352" y="232" font-size="7" fill="#6B6B64">P3 Low</text>
+</svg>

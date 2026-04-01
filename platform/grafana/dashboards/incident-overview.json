@@ -1,0 +1,113 @@
+{
+  "title": "Incident Overview — Vantix",
+  "uid": "vantix-incidents",
+  "tags": ["vantix", "incidents", "irm", "oncall"],
+  "editable": true,
+  "schemaVersion": 39,
+  "time": { "from": "now-30d", "to": "now" },
+  "templating": {
+    "list": [
+      {
+        "name": "severity", "type": "custom", "label": "Severity",
+        "query": "P1,P2,P3",
+        "includeAll": true, "multi": true,
+        "current": { "text": "All", "value": "$__all" }
+      }
+    ]
+  },
+  "panels": [
+    {
+      "title": "Active Incidents", "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 0 },
+      "targets": [{ "expr": "sum(irm_incidents_active{severity=~\"$severity\"})", "legendFormat": "" }],
+      "fieldConfig": { "defaults": { "thresholds": { "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 1 }, { "color": "red", "value": 3 }] } } }
+    },
+    {
+      "title": "MTTR (Mean Time to Resolve)", "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 0 },
+      "targets": [{ "expr": "avg(irm_incident_resolution_time_minutes{severity=~\"$severity\"})", "legendFormat": "" }],
+      "fieldConfig": { "defaults": { "unit": "m", "thresholds": { "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 30 }, { "color": "red", "value": 120 }] } } }
+    },
+    {
+      "title": "MTTA (Mean Time to Acknowledge)", "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 0 },
+      "targets": [{ "expr": "avg(irm_incident_ack_time_minutes{severity=~\"$severity\"})", "legendFormat": "" }],
+      "fieldConfig": { "defaults": { "unit": "m", "thresholds": { "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 5 }, { "color": "red", "value": 15 }] } } }
+    },
+    {
+      "title": "Incidents (30d)", "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 0 },
+      "targets": [{ "expr": "sum(increase(irm_incidents_total{severity=~\"$severity\"}[30d]))", "legendFormat": "" }],
+      "fieldConfig": { "defaults": { "thresholds": { "steps": [{ "color": "blue", "value": null }] } } }
+    },
+    {
+      "title": "On-Call Now", "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 0 },
+      "targets": [{ "expr": "irm_oncall_current_responder", "legendFormat": "{{responder}}" }],
+      "fieldConfig": { "defaults": { "thresholds": { "steps": [{ "color": "purple", "value": null }] } } }
+    },
+    {
+      "title": "Alert Firing", "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 0 },
+      "targets": [{ "expr": "sum(ALERTS{alertstate=\"firing\"})", "legendFormat": "" }],
+      "fieldConfig": { "defaults": { "thresholds": { "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 1 }] } } }
+    },
+    {
+      "title": "Incidents Over Time", "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
+      "targets": [
+        { "expr": "sum by (severity) (increase(irm_incidents_total[1d]))", "legendFormat": "{{severity}}" }
+      ],
+      "fieldConfig": { "defaults": { "custom": { "fillOpacity": 30, "stacking": { "mode": "normal" }, "lineWidth": 2 } }, "overrides": [
+        { "matcher": { "id": "byName", "options": "P1" }, "properties": [{ "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }] },
+        { "matcher": { "id": "byName", "options": "P2" }, "properties": [{ "id": "color", "value": { "fixedColor": "orange", "mode": "fixed" } }] },
+        { "matcher": { "id": "byName", "options": "P3" }, "properties": [{ "id": "color", "value": { "fixedColor": "yellow", "mode": "fixed" } }] }
+      ] }
+    },
+    {
+      "title": "MTTR Trend", "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
+      "targets": [
+        { "expr": "avg by (severity) (irm_incident_resolution_time_minutes{severity=~\"$severity\"})", "legendFormat": "{{severity}} MTTR" }
+      ],
+      "fieldConfig": { "defaults": { "unit": "m", "custom": { "fillOpacity": 10 }, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 30 }, { "color": "red", "value": 120 }] } } }
+    },
+    {
+      "title": "Incident Timeline (Recent)", "type": "table",
+      "gridPos": { "h": 8, "w": 16, "x": 0, "y": 12 },
+      "targets": [{ "expr": "irm_incident_info{severity=~\"$severity\"}", "legendFormat": "", "format": "table" }],
+      "fieldConfig": { "defaults": {} },
+      "options": { "sortBy": [{ "displayName": "Time", "desc": true }] }
+    },
+    {
+      "title": "On-Call Schedule", "type": "table",
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 12 },
+      "targets": [{ "expr": "irm_oncall_schedule_info", "legendFormat": "", "format": "table" }],
+      "fieldConfig": { "defaults": {} }
+    },
+    {
+      "title": "Alerts by Source", "type": "piechart",
+      "gridPos": { "h": 6, "w": 8, "x": 0, "y": 20 },
+      "targets": [{ "expr": "sum by (alertname) (ALERTS{alertstate=\"firing\"})", "legendFormat": "{{alertname}}" }],
+      "fieldConfig": { "defaults": {} }
+    },
+    {
+      "title": "Escalations (30d)", "type": "stat",
+      "gridPos": { "h": 6, "w": 4, "x": 8, "y": 20 },
+      "targets": [{ "expr": "sum(increase(irm_escalations_total[30d]))", "legendFormat": "" }],
+      "fieldConfig": { "defaults": { "thresholds": { "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 5 }, { "color": "red", "value": 15 }] } } }
+    },
+    {
+      "title": "P1 Availability Impact (30d)", "type": "gauge",
+      "gridPos": { "h": 6, "w": 6, "x": 12, "y": 20 },
+      "targets": [{ "expr": "1 - (sum(irm_incident_duration_minutes{severity=\"P1\"}) / (30 * 24 * 60))", "legendFormat": "" }],
+      "fieldConfig": { "defaults": { "unit": "percentunit", "min": 0.99, "max": 1, "thresholds": { "steps": [{ "color": "red", "value": null }, { "color": "orange", "value": 0.999 }, { "color": "green", "value": 0.9999 }] } } }
+    },
+    {
+      "title": "Postmortem Completion", "type": "gauge",
+      "gridPos": { "h": 6, "w": 6, "x": 18, "y": 20 },
+      "targets": [{ "expr": "sum(irm_postmortems_completed) / sum(irm_incidents_total{severity=~\"P1|P2\"})", "legendFormat": "" }],
+      "fieldConfig": { "defaults": { "unit": "percentunit", "min": 0, "max": 1, "thresholds": { "steps": [{ "color": "red", "value": null }, { "color": "orange", "value": 0.8 }, { "color": "green", "value": 1 }] } } }
+    }
+  ]
+}

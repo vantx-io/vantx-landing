@@ -1,53 +1,107 @@
 # Stack Research
 
-**Domain:** Static B2B landing page — bilingual EN/ES, Calendly embed, dark techy design
-**Researched:** 2026-03-20
-**Confidence:** HIGH (all core decisions verifiable from existing codebase + official Calendly docs + browser standards)
+**Domain:** SaaS platform — Security & Polish milestone (v1.2)
+**Researched:** 2026-03-25
+**Confidence:** HIGH (Supabase MFA, Vercel Cron, Playwright built-in visual regression) / MEDIUM (Upstash free-tier specifics, NTARH Next.js 15 exact compatibility)
 
 ---
 
-## Recommended Stack
+## Context: What Already Exists
 
-### Core Technologies
+These are installed and working in `platform/package.json`. Do NOT re-add or research them for v1.2.
+
+| Already Installed | Notes |
+|-------------------|-------|
+| `@supabase/supabase-js ^2.47.0` | MFA API (`auth.mfa.*`) lives on this client |
+| `@supabase/ssr ^0.9.0` | Server client for Route Handlers and middleware |
+| `recharts ^2.13.3` | Already present — use for MRR chart as-is |
+| `@playwright/test ^1.58.2` | Visual regression built in via `toHaveScreenshot()` |
+| `vitest ^4.1.1` | Integration test runner |
+| `resend ^6.9.4` | Email delivery for weekly digest |
+| `@react-email/components ^1.0.10` | Email templates for digest |
+| `@react-email/render ^2.0.4` | Renders React Email to HTML string |
+| `date-fns ^4.1.0` | Date formatting for digest content |
+| `next 14.2.18` | App Router — NTARH v4 requires next >= 14.0.4, satisfied |
+
+---
+
+## New Dependencies Required
+
+### Core Additions
 
 | Technology | Version | Purpose | Why Recommended |
 |------------|---------|---------|-----------------|
-| HTML5 | — (no version to pin) | Document structure + i18n markup via `data-i18n` attributes | Project constraint and right call: no build step, no framework overhead, zero runtime cost, directly consistent with the 4 existing pages in `06-landing-pages/` |
-| CSS3 with Custom Properties | — | Styling, dark theme, design tokens, responsive layout | CSS variables (`--color-bg`, `--color-accent`, etc.) are the standard 2025 approach for theming. Lets you define the dark palette once and swap it without JS. No preprocessor needed for a single landing page. |
-| Vanilla JavaScript (ES2022+) | — | i18n logic, language detection, Calendly init | The i18n requirement is ~50 lines of code with `navigator.languages`, `data-i18n` attributes, and JSON translation files. No library justifies its weight for this scope. ES2022 module syntax (`import`) works in all modern browsers natively. |
-| DM Sans + JetBrains Mono | — | Typography | Already in use across all existing pages AND the platform (`07-plataforma/`). Brand consistency is a stronger reason than any aesthetic argument. Load via Google Fonts CDN during development; evaluate self-hosting before production for Core Web Vitals. |
+| `@upstash/ratelimit` | `^2.0.8` | Sliding-window / fixed-window rate limits on API routes | Only connectionless (HTTP-based) rate limiter designed for Vercel serverless. State lives in external Redis — survives cold starts and is shared across all function instances. `lru-cache` resets per-instance and is not shared, making it trivially bypassable under concurrent load. |
+| `@upstash/redis` | `^1.34.x` (latest) | HTTP Redis client — required peer dep for `@upstash/ratelimit` | HTTP-based, no persistent TCP connection. Works identically in Edge runtime and Node.js serverless. Cannot substitute `ioredis` (different interface). |
+| `next-test-api-route-handler` | `^4.x` (latest) | Integration-test App Router route handlers in isolation with Vitest | Purpose-built for Next.js App Router. Runs actual route handler code in a Next.js-like environment without a full dev server. Supports App Router since v4 (requires next >= 14.0.4 — satisfied). Pairs with existing Vitest. |
+| `msw` | `^2.x` (latest) | Mock external HTTP calls during integration tests | Intercepts `fetch` at the network boundary in Node.js via `setupServer` from `msw/node`. Allows stubbing Supabase REST, Stripe, Resend without changing production code. Pairs with `next-test-api-route-handler`. |
 
-### Supporting Libraries
+### No Additional Install Required
+
+| Feature | Why No New Package Needed |
+|---------|--------------------------|
+| **TOTP / 2FA enrollment** | `supabase.auth.mfa.enroll()` returns a QR code as an SVG string directly. Render as `<img src={\`data:image/svg+xml;utf8,${encodeURIComponent(qr)}\`}>`. No qrcode library needed. |
+| **TOTP challenge + verify** | `supabase.auth.mfa.challenge()` + `supabase.auth.mfa.verify()` — all on existing `@supabase/supabase-js`. |
+| **AAL2 enforcement in middleware** | `supabase.auth.mfa.getAuthenticatorAssuranceLevel()` in `middleware.ts`. Redirect to `/mfa-verify` if `nextLevel === 'aal2'` and current is `aal1`. |
+| **Weekly email digest** | Vercel Cron (`vercel.json`) issues a GET to `/api/cron/digest`. Route handler uses existing Resend + React Email. No worker process or job queue. |
+| **Notification preferences** | Supabase Postgres column (JSONB or per-type boolean columns) on `users` or separate `notification_preferences` table. Read/write via existing Supabase service client. |
+| **Admin user management** | `supabase.auth.admin.inviteUserByEmail()`, `supabase.auth.admin.updateUserById()`, `supabase.auth.admin.deleteUser()` — all on `createServiceClient()` which already uses the service role key. |
+| **MRR trend chart** | `recharts ^2.13.3` already installed. Use `<AreaChart>` or `<LineChart>` with `"use client"` directive. Query Stripe `subscriptions` or existing `subscriptions` table. |
+| **Playwright visual regression** | `toHaveScreenshot()` is built into `@playwright/test` since v1.26. No snapshot plugin needed. Baselines stored in `__snapshots__` beside test files. |
+
+---
+
+## Supporting Libraries
 
 | Library | Version | Purpose | When to Use |
 |---------|---------|---------|-------------|
-| Calendly Embed Widget | n/a (CDN script) | Inline and popup scheduling embeds | Always — it is the primary conversion mechanism. Load `https://assets.calendly.com/assets/external/widget.js` once in the page. Use `Calendly.initPopupWidget()` on CTA buttons; use `Calendly.initInlineWidget()` for the dedicated booking section. Pass `?background_color=0f1523&text_color=e2e8f0&primary_color=2E75B6` URL params for dark theme alignment. |
-| None (i18n is vanilla) | — | Bilingual EN/ES toggle | A custom ~50-line i18n module covers the full requirement: load `en.json` / `es.json`, walk `[data-i18n]` elements, detect via `navigator.languages[0]`, persist to `localStorage`. i18next is an option if the copy grows to 200+ strings or needs pluralization, but that threshold is not reached for a 5-page marketing site. |
+| `@upstash/ratelimit` | `^2.0.8` | API rate limiting | Wrap any route handler accepting unauthenticated or auth-sensitive input: login, invite, password reset, checkout. Skip on webhook routes (Stripe/Supabase verify signatures). |
+| `@upstash/redis` | `^1.34.x` | HTTP Redis client | Peer dep for `@upstash/ratelimit`. Provision one free-tier Upstash database (10k req/day, 256 MB). |
+| `next-test-api-route-handler` | `^4.x` | Integration test route handlers | Target: `/api/checkout`, `/api/billing-portal`, `/api/tasks`, `/api/cron/digest`. |
+| `msw` | `^2.x` | Mock HTTP in tests | Stub Supabase REST, Stripe API, Resend in integration tests. Use `http` namespace (v2 breaking change from v1's `rest`). |
 
-### Development Tools
+---
+
+## Development Tools
 
 | Tool | Purpose | Notes |
 |------|---------|-------|
-| Live Server (VS Code) / `npx serve` | Local dev server with hot reload | No build tooling needed. `npx serve 06-landing-pages` works out of the box. |
-| impeccable.style `/audit` | Design quality audit before ship | Explicitly called out in PROJECT.md. Run on each page before considering it done. |
-| Google Fonts Helper (`gwfh.mranftl.com`) | Self-host font files for production | Download woff2 subsets of DM Sans + JetBrains Mono to eliminate the 2-server round-trip. Matters for Core Web Vitals LCP given the page is a performance consultancy's own site. |
-| Prettier | HTML/CSS/JS formatting | Optional but consistent formatting is cheap insurance when files are shared. No config needed — defaults work. |
+| `vercel.json` (project config) | Declare cron schedule for weekly digest | `"crons": [{"path": "/api/cron/digest", "schedule": "0 9 * * 1"}]` — Mondays 9am UTC. Hobby plan: once/day max. Pro plan: any frequency. |
+| Upstash Console (upstash.com) | Provision serverless Redis | Free tier: 10k req/day, 256 MB. Sufficient for rate limiting a small-scale SaaS. No credit card required. |
 
 ---
 
 ## Installation
 
-No package manager needed for the landing pages themselves. All dependencies are CDN or vanilla.
+```bash
+# Rate limiting (2 packages — always install together)
+npm install @upstash/ratelimit @upstash/redis
+
+# Integration test tooling (dev only)
+npm install -D next-test-api-route-handler msw
+```
+
+Environment variables to add to `.env.local` and Vercel dashboard:
 
 ```bash
-# Serve locally (one-liner, no install)
-npx serve /path/to/06-landing-pages
+# Upstash Redis — get from console.upstash.com after creating a database
+UPSTASH_REDIS_REST_URL=https://xxx.upstash.io
+UPSTASH_REDIS_REST_TOKEN=xxxx
 
-# If self-hosting fonts (recommended for production):
-# Download from https://gwfh.mranftl.com/fonts/dm-sans and https://gwfh.mranftl.com/fonts/jetbrains-mono
-# Place woff2 files in 06-landing-pages/fonts/
-# Add @font-face declarations to the shared CSS, remove Google Fonts <link>
+# Vercel Cron auth — generate with: openssl rand -base64 32
+CRON_SECRET=your-random-secret-here
 ```
+
+The weekly digest route handler must check:
+
+```typescript
+const authHeader = request.headers.get('authorization');
+if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  return new Response('Unauthorized', { status: 401 });
+}
+```
+
+Vercel automatically sends this header when invoking cron jobs.
 
 ---
 
@@ -55,12 +109,13 @@ npx serve /path/to/06-landing-pages
 
 | Recommended | Alternative | When to Use Alternative |
 |-------------|-------------|-------------------------|
-| Vanilla JS i18n module | i18next (via CDN) | If copy grows beyond ~200 strings, needs ICU plurals, or a non-technical editor needs a WYSIWYG translation workflow |
-| Vanilla JS i18n module | Separate HTML files per locale (`/en/`, `/es/`) | If SSR/SEO for locale URLs becomes a hard requirement in v2 — not needed now |
-| CSS Custom Properties for dark theme | Tailwind CSS dark mode | Tailwind is already used in `07-plataforma/` but dragging it into a no-build static file adds a build step that contradicts the constraint. CSS variables achieve the same result with zero tooling. |
-| CSS Custom Properties for dark theme | Sass/SCSS | Sass adds a compile step. For a single dark-only landing page with one color palette, CSS variables are strictly simpler and browser-native. |
-| Google Fonts CDN (dev) → self-hosted (prod) | Fontsource npm package | Fontsource is cleaner in a Node project but adds a build step. For raw HTML files, copying woff2s and writing `@font-face` is faster. |
-| Calendly Embed Widget (CDN) | Cal.com (open source) | If Vantix ever migrates off Calendly. Not relevant for v1. |
+| `@upstash/ratelimit` + Upstash Redis | `lru-cache` in-process rate limiter | Only viable if self-hosting with a persistent Node.js process. On Vercel, multiple serverless instances run simultaneously with isolated memory — `lru-cache` limits are not globally enforced. Abuse bypasses limits by hitting different cold instances. |
+| `@upstash/ratelimit` + Upstash Redis | `ioredis` + Vercel KV | Vercel KV is backed by Upstash under the hood. Using `@upstash/ratelimit` directly gives a purpose-built API (`ratelimit.limit(identifier)`) vs. writing raw Redis commands. Choose Vercel KV only if the team prefers managing keys via the Vercel dashboard. |
+| `next-test-api-route-handler` | Supertest + custom HTTP server | NTARH is purpose-built for Next.js App Router route handlers. Supertest requires spinning up a real HTTP server and doesn't understand route handler conventions, dynamic segments, or middleware. More setup, less accurate to production. |
+| `msw` v2 | `vi.mock()` module mocking | Module mocking couples test assertions to implementation details (which internal function was called). MSW mocks at the network boundary — production code runs unchanged. Correct choice for integration tests. `vi.mock()` remains correct for unit tests of individual functions. |
+| Vercel Cron (`vercel.json`) | `node-cron`, `agenda`, `bull` | External job queues add infrastructure (Redis worker process, queue UI) incompatible with Vercel's stateless serverless model. Vercel Cron is zero-infrastructure — a GET request to an existing route handler. Sufficient for a weekly digest. |
+| Supabase built-in MFA API | `speakeasy` + `otplib` + `qrcode` | Supabase handles TOTP secret generation, QR code SVG, challenge/verify lifecycle, and AAL session upgrade entirely. Rolling your own means duplicating what Supabase already provides — and diverging from its session model introduces security risk. |
+| Playwright `toHaveScreenshot()` | `pixelmatch` + custom diffing | `toHaveScreenshot()` is fully integrated: generates baseline on first run, diffs on subsequent runs, produces expected/actual/diff images in `test-results/` on failure. No configuration needed. A standalone `pixelmatch` setup requires custom tooling around the same capability. |
 
 ---
 
@@ -68,71 +123,71 @@ npx serve /path/to/06-landing-pages
 
 | Avoid | Why | Use Instead |
 |-------|-----|-------------|
-| React / Next.js | Framework overhead is unjustified for 4–5 static marketing pages. Next.js is already in `07-plataforma/` — keeping the landing pages separate preserves the clean boundary between marketing site and platform. Adding a build pipeline violates the explicit PROJECT.md constraint. | Vanilla HTML/CSS/JS |
-| Astro / Hugo / Eleventy | SSGs are excellent for multi-page sites with shared templates, but introduce a build step and mental model switch for a project whose existing pages are plain HTML. The content reuse problem is solved by shared CSS + JS modules, not a generator. Re-evaluate for v2 if page count exceeds 10. | Vanilla HTML with shared `<link>` and `<script>` references |
-| Separate HTML files per language (`index-en.html`, `index-es.html`) | Duplicates markup, doubles maintenance surface area, creates link rot risk. The JS-toggle approach (single file, `data-i18n` attributes, JSON translation files) is the correct pattern for a 2-language site at this scale. | Single HTML file + `translations/en.json` + `translations/es.json` |
-| Inline `<style>` blocks per page (current pattern) | The existing pages each have large inline `<style>` blocks. This should be consolidated into a shared `styles.css` during the rebuild so the dark palette and design tokens are defined once. | Shared external `styles.css` with CSS custom properties at `:root` |
-| Calendly `<iframe>` src embed (bare iframe) | The widget.js approach gives programmatic control (init on button click, pass prefill data, listen to `calendly.event_scheduled` events). A raw `<iframe>` is less controllable and harder to style. | `Calendly.initPopupWidget()` / `Calendly.initInlineWidget()` |
-| Google Fonts CDN in production | Adds two cross-origin connections, delays LCP, sends referrer to Google. Especially ironic for a performance consultancy. | Self-hosted woff2 files + `@font-face` in shared CSS |
+| `speakeasy` or `otplib` for TOTP | Supabase Auth manages the full MFA lifecycle. Adding a separate TOTP library creates duplication and risks diverging from Supabase's session/AAL model — a security vulnerability surface. | `supabase.auth.mfa.*` APIs on existing client |
+| `qrcode` or `qrcode.react` | Supabase `mfa.enroll()` returns an SVG QR code string. No generation library needed. | Render `totp.qr_code` as `<img src={\`data:image/svg+xml;utf8,${encodeURIComponent(qr)}\`}>` |
+| `lru-cache` for API rate limiting | State is per-process instance. On Vercel serverless, multiple function instances run simultaneously with isolated memory. Limits are not globally enforced — abuse bypasses them by hitting different instances. | `@upstash/ratelimit` + Upstash Redis |
+| `node-cron` / `agenda` / `bull` | Require persistent worker processes incompatible with Vercel's stateless serverless model. | Vercel Cron (`vercel.json`) calling existing route handlers |
+| `playwright-visual-regression` (any 3rd-party) | Redundant — `@playwright/test` has `toHaveScreenshot()` built in since v1.26. The platform is on v1.58.2. | `expect(page).toHaveScreenshot()` — no install needed |
+| Upgrading `recharts` to v3 mid-milestone | If recharts v3 exists it would be a major version with breaking API changes. The platform has v2.13.3 locked and working. | Use existing `recharts ^2.13.3` for MRR chart |
+| `msw` v1 | MSW v1 uses the `rest` import namespace. MSW v2 (current) uses `http`. If you pin v1 and the team adds v2 tooling later, there's a namespace conflict. Install v2 from the start. | `msw ^2.x` |
 
 ---
 
 ## Stack Patterns by Variant
 
-**For the main page (`index.html`) — conversion-focused:**
-- Use `Calendly.initPopupWidget()` on all CTA buttons so the user never leaves the page
-- Dark hero section uses CSS custom properties already defined at `:root`
-- Language toggle in the navbar calls the i18n module and stores choice to `localStorage`
+**If on Vercel Hobby plan:**
+- Cron jobs limited to once per day maximum
+- Weekly digest: `"schedule": "0 9 * * 1"` (Monday 9am UTC) — once/day and within limit
+- Daily digest frequency requires Pro plan upgrade
 
-**For service detail pages (`perf.html`, `obs.html`, `sre.html`) — education-focused:**
-- Use `Calendly.initInlineWidget()` in a dedicated section near the bottom of each page (full booking experience visible without a click)
-- Same shared CSS and i18n module via `<link>` and `<script src>` — no duplication
+**If on Vercel Pro plan:**
+- Any cron frequency supported (down to per-minute)
+- Consider separate schedules: weekly summary digest + daily activity digest
 
-**If self-hosting fonts before production:**
-- Preload woff2 files in `<head>` with `<link rel="preload" as="font" crossorigin>` — this recovers ~300–500ms on first load
+**Rate limiting — choose algorithm by route type:**
+- Login / invite / password reset: `slidingWindow(5, '15 m')` per IP — prevents credential stuffing
+- General authenticated API routes: `fixedWindow(60, '1 m')` per user ID — prevents runaway automation
+- Webhook routes (`/api/webhooks/stripe`): skip rate limiting — Stripe signature verification is the auth mechanism
 
-**If Calendly dark theme CSS bleeds through:**
-- Known limitation: Calendly's iframe honors `background_color` / `text_color` / `primary_color` URL params but some internal elements (expandable detail rows) may override them
-- Mitigation: wrap the inline widget in a `<div>` with a matching dark background so visual bleed is hidden by the surrounding context
+**2FA AAL2 enforcement — scope by route sensitivity:**
+- Admin routes (user management, role changes, billing actions): enforce AAL2
+- Client portal routes (view tasks, reports, tutorials): AAL1 (email/password) is sufficient
+- Pattern: in `middleware.ts`, check `getAuthenticatorAssuranceLevel()`, redirect to `/mfa-verify` if `nextLevel === 'aal2'` and current is `aal1`
+
+**MSW setup pattern for integration tests (Node.js):**
+- Import `setupServer` from `msw/node` (not `msw/browser`)
+- Call `server.listen()` in `beforeAll`, `server.resetHandlers()` in `afterEach`, `server.close()` in `afterAll`
+- Register as `setupFiles` in `vitest.config.ts`
 
 ---
 
 ## Version Compatibility
 
-| Package | Compatible With | Notes |
-|---------|-----------------|-------|
-| Calendly widget.js (CDN, always latest) | Any modern browser | No versioning — Calendly controls the script. Consequence: behavior can change without notice. Test after any major Calendly product update. |
-| CSS Custom Properties | Chrome 49+, Firefox 31+, Safari 9.1+ (HIGH coverage 2025) | Universal. No fallback needed. |
-| `navigator.languages` | Chrome 32+, Firefox 32+, Safari 10.1+ | Universal for 2025 target audience. Fall back to `navigator.language` for older Safari. |
-| ES2022 modules (`type="module"`) | Chrome 61+, Firefox 60+, Safari 10.1+ | Universal for 2025. Enables clean module separation for i18n code without a bundler. |
-| Google Fonts (DM Sans, JetBrains Mono) | All browsers | Already confirmed working in all 4 existing pages. |
-
----
-
-## Existing Codebase Context
-
-The 4 pages in `06-landing-pages/` already establish:
-- Color palette: `#1B2A4A` (bg-dark), `#0F1B33` (bg-darker), `#2E75B6` (brand-blue), `#8A9BC0` (muted-text)
-- Typography: DM Sans (body) + JetBrains Mono (prices, numbers, code-style callouts)
-- Responsive breakpoint: `768px`
-- CSS-only structure: no existing build tooling to preserve or break
-
-The new system should extract the common palette and typography into CSS custom properties in a shared `styles.css`, then reference them across all pages. This is the primary architectural improvement over the existing files.
+| Package A | Compatible With | Notes |
+|-----------|-----------------|-------|
+| `@upstash/ratelimit ^2.0.8` | `@upstash/redis ^1.x` | v2 ratelimit requires `@upstash/redis` v1 client — not `ioredis`. |
+| `next-test-api-route-handler ^4.x` | `next ^14.0.4+`, `vitest ^4.x` | NTARH v4 supports App Router. In Next.js 15, route handler `params` is a Promise — use `await params` inside tests. |
+| `msw ^2.x` | `vitest ^4.x` | MSW v2 uses `http` import (not `rest`). Use `setupServer` from `msw/node` for Vitest Node.js environment. Incompatible with `bun test` — use `npm test`. |
+| `recharts ^2.13.3` | `react ^18.3.1` | Already installed. No upgrade needed for MRR chart. Requires `"use client"` directive on any component using Recharts primitives. |
+| `@playwright/test ^1.58.2` | `toHaveScreenshot()` | Built-in since v1.26. Baselines stored in `__snapshots__/` beside test files. First run generates baseline; subsequent runs diff. |
+| `@supabase/supabase-js ^2.47.0` | MFA API (`auth.mfa.*`) | Free and enabled by default on all Supabase projects. Must be enabled in Supabase Dashboard > Authentication > MFA before enrollment API calls work. |
 
 ---
 
 ## Sources
 
-- Existing codebase: `06-landing-pages/vantix-landing-v3.html` — palette, typography, structure confirmed
-- `.planning/PROJECT.md` — explicit constraint: vanilla HTML/CSS/JS, no frameworks
-- `.planning/codebase/STACK.md` — confirmed DM Sans + JetBrains Mono already in brand system
-- [Calendly Embed options overview](https://help.calendly.com/hc/en-us/articles/223147027-Embed-options-overview) — MEDIUM confidence (403 on direct doc fetch, but CDN URL and API confirmed via community + martech sources)
-- [Calendly developer embed docs](https://developer.calendly.com/how-to-display-the-scheduling-page-for-users-of-your-app) — `initInlineWidget` / `initPopupWidget` API confirmed
-- [navigator.language detection guide](https://lingo.dev/en/javascript-i18n/detect-user-preferred-language) — MEDIUM confidence (WebSearch verified)
-- [CSS Custom Properties for theming (2025)](https://www.frontendtools.tech/blog/css-variables-guide-design-tokens-theming-2025) — MEDIUM confidence
-- [Self-hosting Google Fonts for Core Web Vitals](https://www.corewebvitals.io/pagespeed/self-host-google-fonts) — MEDIUM confidence
-- [impeccable.style cheatsheet](https://impeccable.style/cheatsheet) — confirmed active tool for design audit
+- [Supabase TOTP MFA Docs](https://supabase.com/docs/guides/auth/auth-mfa/totp) — enrollment flow, QR SVG return value, AAL levels confirmed. No extra npm package needed. HIGH confidence.
+- [Supabase MFA API Reference](https://supabase.com/docs/reference/javascript/auth-mfa-api) — enroll/challenge/verify/getAuthenticatorAssuranceLevel method signatures. HIGH confidence.
+- [@upstash/ratelimit npm](https://www.npmjs.com/package/@upstash/ratelimit) — v2.0.8, published ~2 months ago, actively maintained. HIGH confidence.
+- [upstash/ratelimit-js GitHub](https://github.com/upstash/ratelimit-js) — Next.js middleware example confirmed, sliding window algorithm. HIGH confidence.
+- [Vercel Cron Jobs Docs](https://vercel.com/docs/cron-jobs) — `vercel.json` format, CRON_SECRET pattern, `vercel-cron/1.0` user agent. HIGH confidence.
+- [Vercel Cron Usage & Pricing](https://vercel.com/docs/cron-jobs/usage-and-pricing) — Hobby: once/day max; Pro: per-minute; max 100 cron jobs/project. HIGH confidence.
+- [Playwright Visual Comparisons Docs](https://playwright.dev/docs/test-snapshots) — `toHaveScreenshot()` built-in, no external library. HIGH confidence.
+- [next-test-api-route-handler GitHub](https://github.com/Xunnamius/next-test-api-route-handler) — v4 App Router support confirmed for next >= 14.0.4; Next.js 15 params-as-Promise caveat noted. MEDIUM confidence (no explicit v4 + Next.js 15 confirmation found).
+- [MSW Quick Start](https://mswjs.io/docs/quick-start/) — v2 Node.js integration, `setupServer` from `msw/node`. HIGH confidence.
+- [Upstash Ratelimit + Next.js 2026](https://noqta.tn/en/tutorials/upstash-redis-nextjs-rate-limiting-caching-2026) — Community tutorial confirming current patterns. MEDIUM confidence.
 
 ---
-*Stack research for: Vantix static B2B landing page (bilingual EN/ES)*
-*Researched: 2026-03-20*
+
+*Stack research for: Vantix Platform v1.2 — Security & Polish (2FA, Rate Limiting, Cron Digest, Admin Mgmt, MRR Chart, Integration + Visual Regression Tests)*
+*Researched: 2026-03-25*

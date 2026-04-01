@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 280" font-family="'DM Sans', sans-serif">
+  <!-- Background -->
+  <rect width="560" height="280" fill="#FFFFFF" rx="8"/>
+
+  <!-- Title -->
+  <text x="40" y="28" font-size="12" font-weight="700" fill="#1A1A17">Lighthouse Scores by Page</text>
+  <text x="40" y="44" font-size="9" fill="#6B6B64">Performance · Accessibility · Best Practices · SEO</text>
+
+  <!-- Grid -->
+  <line x1="110" y1="60" x2="110" y2="230" stroke="#E2E1DC" stroke-width="1"/>
+  <line x1="110" y1="230" x2="530" y2="230" stroke="#E2E1DC" stroke-width="1"/>
+  <line x1="110" y1="196" x2="530" y2="196" stroke="#F0EFEB" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="110" y1="162" x2="530" y2="162" stroke="#F0EFEB" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="110" y1="128" x2="530" y2="128" stroke="#F0EFEB" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="110" y1="94" x2="530" y2="94" stroke="#F0EFEB" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="110" y1="60" x2="530" y2="60" stroke="#F0EFEB" stroke-width="1" stroke-dasharray="4"/>
+
+  <!-- Y-axis labels -->
+  <text x="100" y="234" font-size="8" fill="#6B6B64" text-anchor="end">0</text>
+  <text x="100" y="200" font-size="8" fill="#6B6B64" text-anchor="end">20</text>
+  <text x="100" y="166" font-size="8" fill="#6B6B64" text-anchor="end">40</text>
+  <text x="100" y="132" font-size="8" fill="#6B6B64" text-anchor="end">60</text>
+  <text x="100" y="98" font-size="8" fill="#6B6B64" text-anchor="end">80</text>
+  <text x="100" y="64" font-size="8" fill="#6B6B64" text-anchor="end">100</text>
+
+  <!-- Good threshold -->
+  <line x1="110" y1="77" x2="530" y2="77" stroke="#1B6B4A" stroke-width="1" stroke-dasharray="6 3" opacity="0.4"/>
+  <text x="534" y="75" font-size="7" fill="#1B6B4A">Good (90+)</text>
+
+  <!-- Homepage bars (x center: 180) -->
+  <text x="180" y="248" font-size="8" fill="#3A3A35" text-anchor="middle">Homepage</text>
+  <!-- Perf 68 → h=115.6 -->
+  <rect x="145" y="114.4" width="14" height="115.6" fill="#D4A017" rx="2"/>
+  <text x="152" y="111" font-size="6" fill="#D4A017" text-anchor="middle">68</text>
+  <!-- A11y 82 → h=139.4 -->
+  <rect x="161" y="90.6" width="14" height="139.4" fill="#3B82B5" rx="2"/>
+  <!-- BP 85 → h=144.5 -->
+  <rect x="177" y="85.5" width="14" height="144.5" fill="#6B6B64" rx="2"/>
+  <!-- SEO 90 → h=153 -->
+  <rect x="193" y="77" width="14" height="153" fill="#1B6B4A" rx="2"/>
+
+  <!-- Checkout bars (x center: 290) -->
+  <text x="290" y="248" font-size="8" fill="#3A3A35" text-anchor="middle">Checkout</text>
+  <!-- Perf 42 → h=71.4 -->
+  <rect x="255" y="158.6" width="14" height="71.4" fill="#C0392B" rx="2"/>
+  <text x="262" y="155" font-size="6" fill="#C0392B" text-anchor="middle">42</text>
+  <!-- A11y 75 → h=127.5 -->
+  <rect x="271" y="102.5" width="14" height="127.5" fill="#3B82B5" rx="2"/>
+  <!-- BP 80 → h=136 -->
+  <rect x="287" y="94" width="14" height="136" fill="#6B6B64" rx="2"/>
+  <!-- SEO 78 → h=132.6 -->
+  <rect x="303" y="97.4" width="14" height="132.6" fill="#1B6B4A" rx="2"/>
+
+  <!-- Dashboard bars (x center: 400) -->
+  <text x="400" y="248" font-size="8" fill="#3A3A35" text-anchor="middle">Dashboard</text>
+  <!-- Perf 55 → h=93.5 -->
+  <rect x="365" y="136.5" width="14" height="93.5" fill="#D4A017" rx="2"/>
+  <text x="372" y="133" font-size="6" fill="#D4A017" text-anchor="middle">55</text>
+  <!-- A11y 78 → h=132.6 -->
+  <rect x="381" y="97.4" width="14" height="132.6" fill="#3B82B5" rx="2"/>
+  <!-- BP 85 → h=144.5 -->
+  <rect x="397" y="85.5" width="14" height="144.5" fill="#6B6B64" rx="2"/>
+  <!-- SEO N/A -->
+
+  <!-- API Docs bars (x center: 495) -->
+  <text x="495" y="248" font-size="8" fill="#3A3A35" text-anchor="middle">API Docs</text>
+  <!-- Perf 89 → h=151.3 -->
+  <rect x="460" y="78.7" width="14" height="151.3" fill="#1B6B4A" rx="2"/>
+  <text x="467" y="75" font-size="6" fill="#1B6B4A" text-anchor="middle">89</text>
+  <!-- A11y 92 → h=156.4 -->
+  <rect x="476" y="73.6" width="14" height="156.4" fill="#3B82B5" rx="2"/>
+  <!-- BP 95 → h=161.5 -->
+  <rect x="492" y="68.5" width="14" height="161.5" fill="#6B6B64" rx="2"/>
+  <!-- SEO 95 -->
+  <rect x="508" y="68.5" width="14" height="161.5" fill="#1B6B4A" rx="2"/>
+
+  <!-- Legend -->
+  <rect x="160" y="264" width="8" height="8" fill="#C0392B" rx="1"/>
+  <text x="172" y="272" font-size="7" fill="#6B6B64">Performance</text>
+  <rect x="230" y="264" width="8" height="8" fill="#3B82B5" rx="1"/>
+  <text x="242" y="272" font-size="7" fill="#6B6B64">Accessibility</text>
+  <rect x="310" y="264" width="8" height="8" fill="#6B6B64" rx="1"/>
+  <text x="322" y="272" font-size="7" fill="#6B6B64">Best Practices</text>
+  <rect x="400" y="264" width="8" height="8" fill="#1B6B4A" rx="1"/>
+  <text x="412" y="272" font-size="7" fill="#6B6B64">SEO</text>
+</svg>

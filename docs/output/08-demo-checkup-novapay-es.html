@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reporte de Performance Checkup — Vantx</title>
+    <style>
+    /* ═══════════════════════════════════════════════════
+       Vantx Docs — PDF Style (weasyprint)
+       Matches brand style guide: DM Sans, forest green,
+       parchment tones, warm grays
+       ═══════════════════════════════════════════════════ */
+
+    /* Fonts — use the self-hosted woff2 from the landing dir */
+    @font-face {
+      font-family: 'DM Sans';
+      src: url('../landing/fonts/dm-sans-latin.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'DM Sans';
+      src: url('../landing/fonts/dm-sans-latin.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'JetBrains Mono';
+      src: url('../landing/fonts/jb-mono-latin.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'JetBrains Mono';
+      src: url('../landing/fonts/jb-mono-latin.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    /* ── Page setup ── */
+    @page {
+      size: letter;
+      margin: 2.2cm 2.5cm 2.5cm 2.5cm;
+
+      @bottom-center {
+        content: counter(page);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9px;
+        color: #6B6B64;
+      }
+      @top-right {
+        content: "VANTX";
+        font-family: 'DM Sans', sans-serif;
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        color: #B0AFA8;
+      }
+    }
+
+    @page :first {
+      @bottom-center { content: none; }
+      @top-right { content: none; }
+    }
+
+    /* ── Base ── */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.6;
+      color: #1A1A17;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Cover page (YAML metadata handled by pandoc template) ── */
+
+    /* ── Headings ── */
+    h1 {
+      font-size: 22pt;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: #1B6B4A;
+      margin-top: 1.8em;
+      margin-bottom: 0.6em;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #1B6B4A;
+      page-break-after: avoid;
+    }
+
+    h2 {
+      font-size: 16pt;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      color: #1A1A17;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 12pt;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #1A1A17;
+      margin-top: 1.2em;
+      margin-bottom: 0.4em;
+      page-break-after: avoid;
+    }
+
+    h4, h5, h6 {
+      font-size: 10.5pt;
+      font-weight: 700;
+      color: #1A1A17;
+      margin-top: 1em;
+      margin-bottom: 0.3em;
+    }
+
+    /* ── Paragraphs ── */
+    p {
+      margin-top: 0;
+      margin-bottom: 0.6em;
+      color: #3A3A35;
+    }
+
+    /* ── Lists ── */
+    ul, ol {
+      margin-top: 0.3em;
+      margin-bottom: 0.8em;
+      padding-left: 1.5em;
+    }
+
+    li {
+      margin-bottom: 0.25em;
+      color: #3A3A35;
+    }
+
+    li::marker {
+      color: #1B6B4A;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.6em;
+      margin-bottom: 1em;
+      font-size: 9.5pt;
+      line-height: 1.45;
+      page-break-inside: auto;
+    }
+
+    thead {
+      background: #1B6B4A;
+    }
+
+    thead th {
+      color: #FFFFFF;
+      font-weight: 600;
+      font-size: 8.5pt;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      text-align: left;
+      padding: 7px 10px;
+      border: 1px solid #15593D;
+    }
+
+    tbody td {
+      padding: 6px 10px;
+      border: 1px solid #E2E1DC;
+      vertical-align: top;
+      color: #3A3A35;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #F8F7F4;
+    }
+
+    tbody tr:nth-child(odd) {
+      background: #FFFFFF;
+    }
+
+    /* Bold first column for definition-style tables */
+    tbody td:first-child {
+      font-weight: 600;
+      color: #1A1A17;
+    }
+
+    /* ── Blockquotes (callout boxes) ── */
+    blockquote {
+      margin: 1em 0;
+      padding: 12px 16px;
+      border-left: 3px solid #1B6B4A;
+      background: #F8F7F4;
+      border-radius: 0 6px 6px 0;
+      font-size: 10pt;
+      color: #3A3A35;
+    }
+
+    blockquote p {
+      margin: 0;
+    }
+
+    blockquote p + p {
+      margin-top: 0.4em;
+    }
+
+    /* ── Code ── */
+    code {
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 8.5pt;
+      background: #F0EFEB;
+      padding: 1px 5px;
+      border-radius: 3px;
+      color: #1A1A17;
+    }
+
+    pre {
+      margin: 0.8em 0;
+      padding: 14px 16px;
+      background: #1A1917;
+      border-radius: 8px;
+      overflow: hidden;
+      page-break-inside: avoid;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      color: #EDECE7;
+      font-size: 8pt;
+      line-height: 1.5;
+    }
+
+    /* ── Horizontal rules / page breaks ── */
+    hr {
+      border: none;
+      border-top: 1px solid #E2E1DC;
+      margin: 1.5em 0;
+    }
+
+    /* ── Strong / Bold ── */
+    strong {
+      font-weight: 700;
+      color: #1A1A17;
+    }
+
+    /* ── Links ── */
+    a {
+      color: #1B6B4A;
+      text-decoration: none;
+    }
+
+    /* ── Images (logo) ── */
+    img {
+      max-width: 30%;
+      height: auto;
+    }
+
+    /* ── Monospace data styling ── */
+    .price, .metric {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+    }
+
+    /* ── Emoji status indicators ── */
+    /* These render natively in weasyprint */
+
+    /* ── Page break utility ── */
+    .newpage {
+      page-break-before: always;
+    }
+
+    /* Cover page */
+    .cover {
+      page-break-after: always;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 700px;
+    }
+    .cover__logo { width: 140px; margin-bottom: 48px; }
+    .cover__bar { width: 60px; height: 3px; background: #1B6B4A; margin-bottom: 32px; }
+    .cover__title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 32pt; font-weight: 700;
+      letter-spacing: -0.03em; line-height: 1.1;
+      color: #1A1A17; margin: 0 0 12px 0;
+      border: none; padding: 0;
+    }
+    .cover__subtitle {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14pt; font-weight: 400;
+      color: #5C5C56; margin: 0 0 40px 0;
+    }
+    .cover__meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9pt; color: #6B6B64; line-height: 1.8;
+    }
+    .cover__meta span { display: block; }
+    .cover__footer {
+      margin-top: auto; padding-top: 32px;
+      border-top: 1px solid #E2E1DC;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8pt; color: #B0AFA8;
+    }
+    </style>
+  </head>
+<body>
+
+<div class="cover">
+  <img class="cover__logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAABbCAMAAABqOSM9AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAMAUExURRtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrSowIbgAAAAD/dFJOUwAQTa6Aka9OEQUsdMPyi57zwXIqBBpcquiKAealUhUNQZDV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" alt="Vantx">
+  <div class="cover__bar"></div>
+  <h1 class="cover__title">Reporte de Performance Checkup</h1>
+    <p class="cover__subtitle">NovaPay SpA — Demo</p>
+    <div class="cover__meta">
+    <span>Version 1.0</span>
+    <span>Marzo 2026</span>
+    <span>vantx.io &middot; hello@vantx.io</span>
+  </div>
+  <div class="cover__footer">
+    Confidential &mdash; Vantx
+  </div>
+</div>
+
+<h1 id="performance-checkup">PERFORMANCE CHECKUP</h1>
+<p><strong>NovaPay SpA — Plataforma de Procesamiento de
+Pagos</strong></p>
+<p>Marzo 2026 · VANTX · hello@vantx.io</p>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="resumen-ejecutivo">Resumen Ejecutivo</h1>
+<p>La plataforma de procesamiento de pagos de NovaPay fue evaluada
+durante 5 días hábiles. La evaluación incluyó revisión de arquitectura,
+prueba de carga (baseline + stress + spike), auditoría de web
+performance (Core Web Vitals + Lighthouse), y evaluación de
+monitoreo.</p>
+<p><strong>Capacidad actual:</strong> 320 TPS (transacciones por
+segundo) antes de degradación. <strong>Punto de quiebre:</strong> 380
+TPS — latencia excede 2 segundos, tasa de error &gt;5%.
+<strong>Capacidad objetivo:</strong> 500+ TPS para soportar el
+crecimiento proyectado de Q3.</p>
+<h3 id="hallazgos-principales">Hallazgos Principales</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>ID</th>
+<th>Severidad</th>
+<th>Hallazgo</th>
+<th>Impacto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F-01</td>
+<td>P0 Crítico</td>
+<td>Pool de conexiones HikariCP en default (10). Cuello de botella bajo
+carga.</td>
+<td>Limita TPS a 320. Fix: subir a 30 → estimado +40-60% TPS.</td>
+</tr>
+<tr>
+<td>F-02</td>
+<td>P0 Crítico</td>
+<td>Índice faltante en
+<code>settlements(merchant_id, status, created_at)</code></td>
+<td>Full table scan en consultas de liquidación. Fix:
+<code>CREATE INDEX</code> → ~200ms → ~15ms.</td>
+</tr>
+<tr>
+<td>F-03</td>
+<td>P1 Alto</td>
+<td>Sin caché en lookups de config de merchant (~200 calls/sec
+idénticos)</td>
+<td>15% de carga de BD es lecturas redundantes. Fix: Redis cache con TTL
+60s.</td>
+</tr>
+<tr>
+<td>F-04</td>
+<td>P1 Alto</td>
+<td>LCP 4.2s en página de checkout (objetivo: &lt;2.5s)</td>
+<td>Score Lighthouse pobre (42/100). Fix: diferir JS no crítico,
+optimizar imagen hero.</td>
+</tr>
+<tr>
+<td>F-05</td>
+<td>P2 Medio</td>
+<td>Sin connection pooling para Redis</td>
+<td>Nueva conexión TCP por request. Fix: usar pool de ioredis.</td>
+</tr>
+<tr>
+<td>F-06</td>
+<td>P2 Medio</td>
+<td>Endpoint de health consulta BD (no es un health check real)</td>
+<td>Monitoreo de uptime no confiable. Fix: retornar 200 estático.</td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="resultados-de-prueba-de-carga">Resultados de Prueba de
+Carga</h1>
+<h3 id="escenario-baseline-tráfico-normal">Escenario Baseline (tráfico
+normal)</h3>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Valor</th>
+<th>Umbral</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Usuarios virtuales</td>
+<td>50</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>TPS promedio</td>
+<td>180</td>
+<td>≥150</td>
+<td>✅ Pasa</td>
+</tr>
+<tr>
+<td>Latencia p50</td>
+<td>95ms</td>
+<td>&lt;200ms</td>
+<td>✅ Pasa</td>
+</tr>
+<tr>
+<td>Latencia p95</td>
+<td>245ms</td>
+<td>&lt;500ms</td>
+<td>✅ Pasa</td>
+</tr>
+<tr>
+<td>Latencia p99</td>
+<td>520ms</td>
+<td>&lt;1000ms</td>
+<td>✅ Pasa</td>
+</tr>
+<tr>
+<td>Tasa de error</td>
+<td>0.02%</td>
+<td>&lt;1%</td>
+<td>✅ Pasa</td>
+</tr>
+</tbody>
+</table>
+<h3 id="escenario-stress-2x-tráfico">Escenario Stress (2x tráfico)</h3>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Valor</th>
+<th>Umbral</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Usuarios virtuales</td>
+<td>100</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>TPS máximo</td>
+<td>320</td>
+<td>≥300</td>
+<td>✅ Pasa</td>
+</tr>
+<tr>
+<td>Latencia p50</td>
+<td>180ms</td>
+<td>&lt;300ms</td>
+<td>✅ Pasa</td>
+</tr>
+<tr>
+<td>Latencia p95</td>
+<td>890ms</td>
+<td>&lt;1000ms</td>
+<td>✅ Pasa</td>
+</tr>
+<tr>
+<td>Latencia p99</td>
+<td>2,100ms</td>
+<td>&lt;2000ms</td>
+<td>❌ Falla</td>
+</tr>
+<tr>
+<td>Tasa de error</td>
+<td>0.8%</td>
+<td>&lt;2%</td>
+<td>✅ Pasa</td>
+</tr>
+</tbody>
+</table>
+<h3 id="escenario-spike-ráfaga-5x-tráfico">Escenario Spike (ráfaga 5x
+tráfico)</h3>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Valor</th>
+<th>Umbral</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Usuarios virtuales</td>
+<td>250 (ramp 30s)</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>TPS máximo</td>
+<td>380 (luego degradación)</td>
+<td>≥400</td>
+<td>❌ Falla</td>
+</tr>
+<tr>
+<td>Latencia p95</td>
+<td>3,200ms</td>
+<td>&lt;2000ms</td>
+<td>❌ Falla</td>
+</tr>
+<tr>
+<td>Tasa de error</td>
+<td>5.2%</td>
+<td>&lt;5%</td>
+<td>❌ Falla</td>
+</tr>
+<tr>
+<td>Tiempo de recuperación</td>
+<td>45 segundos</td>
+<td>&lt;30s</td>
+<td>❌ Falla</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Punto de quiebre identificado en 380 TPS.</strong> Más allá
+de este punto, el agotamiento del pool HikariCP causa latencia en
+cascada. El sistema no degrada gradualmente — colapsa abruptamente.</p>
+</blockquote>
+<h1 id="web-performance">Web Performance</h1>
+<table>
+<thead>
+<tr>
+<th>Página</th>
+<th>LCP</th>
+<th>FID</th>
+<th>CLS</th>
+<th>Lighthouse</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Homepage</td>
+<td>2.1s</td>
+<td>85ms</td>
+<td>0.05</td>
+<td>68/100</td>
+<td>⚠️ Mejorable</td>
+</tr>
+<tr>
+<td>Checkout</td>
+<td>4.2s</td>
+<td>120ms</td>
+<td>0.12</td>
+<td>42/100</td>
+<td>❌ Pobre</td>
+</tr>
+<tr>
+<td>Dashboard</td>
+<td>3.1s</td>
+<td>95ms</td>
+<td>0.08</td>
+<td>55/100</td>
+<td>⚠️ Mejorable</td>
+</tr>
+<tr>
+<td>API Docs</td>
+<td>1.4s</td>
+<td>45ms</td>
+<td>0.02</td>
+<td>89/100</td>
+<td>✅ Bien</td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="roadmap-de-remediación">Roadmap de Remediación</h1>
+<h3 id="p0-arreglar-esta-semana-impacto-estimado-60-tps">P0 — Arreglar
+esta semana (impacto estimado: +60% TPS)</h3>
+<p><strong>F-01: Aumentar pool size de HikariCP</strong></p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spring.datasource.hikari.maximum-pool-size</span><span class="kw">:</span><span class="at"> </span><span class="dv">30</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spring.datasource.hikari.minimum-idle</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">spring.datasource.hikari.connection-timeout</span><span class="kw">:</span><span class="at"> </span><span class="dv">5000</span></span></code></pre></div>
+<p>Mejora estimada: 320 → 480+ TPS. 30 minutos de implementación.</p>
+<p><strong>F-02: Agregar índice faltante</strong></p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> CONCURRENTLY idx_settlements_merchant_status_date</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> settlements(merchant_id, status, created_at <span class="kw">DESC</span>);</span></code></pre></div>
+<p>Mejora estimada: consultas de liquidación de ~200ms a ~15ms. 5
+minutos.</p>
+<h3 id="p1-arreglar-este-sprint">P1 — Arreglar este sprint</h3>
+<p><strong>F-03:</strong> Implementar Redis cache para config de
+merchant. TTL 60s. Esperado: -15% carga de BD.</p>
+<p><strong>F-04:</strong> Optimización de LCP en checkout. Diferir JS no
+crítico, lazy-load de imágenes bajo el fold, preconnect al CDN de pagos.
+Objetivo: LCP &lt;2.5s.</p>
+<h3 id="p2-arreglar-este-trimestre">P2 — Arreglar este trimestre</h3>
+<p><strong>F-05:</strong> Connection pooling de Redis con ioredis.
+<strong>F-06:</strong> Arreglar endpoint de health.</p>
+<blockquote>
+<p><strong>Próximos pasos:</strong> Implementar fixes P0 → VANTX
+re-testea gratis (incluido) → Validar mejora con datos. Resultado
+estimado: 320 → 510+ TPS.</p>
+<p>¿Interesado en monitoreo continuo? Nuestra suscripción Performance
+($5,995/mes, descuento LATAM disponible) incluye monitoreo sintético
+24/7, load tests mensuales, y reportes semanales — para que detectes el
+próximo bottleneck antes que tus usuarios.</p>
+<p>hello@vantx.io · vantx.io</p>
+</blockquote>
+
+</body>
+</html>

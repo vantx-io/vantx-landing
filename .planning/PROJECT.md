@@ -1,8 +1,8 @@
-# Vantix Landing Page System
+# Vantix Platform
 
 ## What This Is
 
-Sistema de landing pages híbrido para Vantix — una firma de SRE fraccional que ofrece Performance as a Service, Observability as a Service y Fractional Perf & SRE. El sitio convierte visitantes (CTOs, engineering managers de SaaS mid-size) en demos agendadas via Calendly. Bilingüe inglés/español con auto-detect de idioma. Diseño dark & techy, consistente con el posicionamiento técnico de la marca.
+Plataforma SaaS bilingüe (EN/ES) para Vantix — firma de SRE fraccional que ofrece Performance as a Service, Observability as a Service y Fractional Perf & SRE. Dos módulos: (1) sitio de marketing estático que convierte visitantes en demos via Calendly, y (2) plataforma Next.js con portal de cliente, dashboard admin interno, notificaciones in-app + email, y gestión de tareas con file uploads.
 
 ## Core Value
 
@@ -12,49 +12,117 @@ Convertir visitantes en demos agendadas — si alguien llega al sitio y no hay f
 
 ### Validated
 
-(None yet — ship to validate)
+- ✓ Landing page principal con hero, servicios, pricing teaser y CTA Calendly — v1.0
+- ✓ Páginas de detalle: Observability, Fractional SRE, Misión/Visión — v1.0
+- ✓ Sistema bilingüe (EN/ES) con auto-detect + toggle — v1.0
+- ✓ Calendly embed como mecanismo de contacto/demos — v1.0
+- ✓ Diseño dark & techy auditado con impeccable.style — v1.0
+- ✓ GA4 tracking + Calendly booking event listener — v1.0
+- ✓ WCAG 2.1 AA contrast compliance — v1.0
+- ✓ Test infrastructure (Vitest + Playwright + CI + i18n parity) — v1.1
+- ✓ Notification system (email via Resend, Slack, in-app Realtime bell) — v1.1
+- ✓ Admin dashboard (overview, clients, tasks, billing + role-gated middleware) — v1.1
+- ✓ File uploads (drag-and-drop, image thumbnails + lightbox, signed URL downloads) — v1.1
+- ✓ E2E tests (login, task CRUD, admin redirect, cross-tenant isolation) — v1.1
 
 ### Active
 
-- [ ] Landing page principal (/) con hero, servicios, cómo funciona, pricing teaser y CTA Calendly
-- [ ] Páginas de detalle de servicio: Performance as a Service, Observability as a Service, Fractional Perf & SRE
-- [ ] Sistema de idioma bilingüe (EN/ES) con auto-detect del browser + toggle en navbar
-- [ ] Embed de Calendly como mecanismo principal de contacto/agendado de demos
-- [ ] Diseño dark & techy (estética tipo Vercel/Linear) auditado con impeccable.style
-- [ ] Combinar el mejor contenido de las 4 páginas HTML existentes en `06-landing-pages/`
+- ✓ Rate limiting on API routes (SEC-04, SEC-05) — Validated in Phase 10: Rate Limiting
+- ✓ Weekly email digest to clients (NOTIF-10) — Validated in Phase 11: Notification Polish
+- ✓ User notification preferences (NOTIF-11, NOTIF-12) — Validated in Phase 11: Notification Polish
+- ✓ Admin user management — invite, role change, deactivate (ADMIN-07..10) — Validated in Phase 12: Admin Capabilities
+- ✓ Admin MRR trend chart (ADMIN-11) — Validated in Phase 12: Admin Capabilities
+- ✓ Forgot password + password change + user profile (AUTH-01..03) — Validated in Phase 13: Auth UX
+- ✓ Loading skeletons, onboarding guide, error boundaries (UX-01..03) — Validated in Phase 14: Polish UX
+- ✓ CSP headers + audit logging (SECURE-01..02) — Validated in Phase 15: Security Hardening
+- [ ] Integration tests for API routes (TEST-10)
+- [ ] Playwright visual regression tests (TEST-11)
+- [ ] Production deploy — Cloudflare, Vercel, Supabase, Stripe, Calendly, GA4 (LAUNCH-01..06)
 
 ### Out of Scope
 
-- Backend / CMS — sitio estático, sin servidor
-- Blog — diferir a v2
-- Autenticación / área privada — vive en la plataforma separada (`07-plataforma/`)
-- SEO server-side rendering — HTML estático es suficiente para v1
+- Blog — defer to v2
+- SEO con URLs `/es/` separadas — tradeoff aceptado en v1 (single-URL toggle)
+- Real-time chat — Slack covers async communication
+- Mobile app — responsive web sufficient at current scale
+- ~~Admin user management UI — promoted to v1.2 (ADMIN-07)~~ → Delivered in Phase 12
+- ~~Notification preferences UI — promoted to v1.2 (NOTIF-11)~~ → Delivered in Phase 11
+- Two-factor authentication (TOTP) — deferred to v1.3 (SEC-01, SEC-02, SEC-03)
 
 ## Context
 
-- **Existente:** 4 páginas HTML estáticas en `06-landing-pages/`: `vantix-landing-v3.html`, `vantix-performance-as-a-service.html`, `vantix-observability-as-a-service.html`, `vantix-mision-vision-valores.html`
-- **Contenido a aprovechar:** Headlines, copy de servicios y estructura narrativa ya validada en las páginas existentes
-- **Posicionamiento:** Alternativa al SRE full-time ($150K+/yr) — experiencia enterprise, precio startup. No competimos con Datadog/Grafana, los complementamos.
-- **ICP:** CTOs / Engineering Managers de SaaS mid-size que ya tienen herramientas de monitoreo pero nadie para interpretarlas y actuar
-- **Plataforma destino:** Los clientes que agendan demo eventualmente acceden a `07-plataforma/vantix-platform/` — el portal de cliente
-- **Auditoría de diseño:** Usar impeccable.style/cheatsheet para validar calidad visual antes de ship
+**Shipped v1.0 MVP** on 2026-03-24. Static marketing site in `landing/`.
+Tech: HTML + CSS Custom Properties + vanilla JS. ~8,779 LOC.
+
+**Shipped v1.1 Platform Hardening & Admin** on 2026-03-25. Full-stack platform in `platform/`.
+Tech: Next.js 14.2, Supabase (Postgres + Auth + Storage + Realtime), Stripe, Resend, Slack.
+~6,143 LOC TypeScript + 380 LOC E2E tests. 5 DB migrations. 13 plans across 5 phases.
+
+**Pre-launch blockers (manual):**
+- Replace Calendly URL placeholder with real link
+- Replace GA4 Measurement ID placeholder with real ID
+- Social proof section has placeholder content
 
 ## Constraints
 
-- **Tech stack:** HTML estático + CSS + JavaScript vanilla — sin frameworks, consistente con páginas existentes
-- **Hosting:** Archivos estáticos en `06-landing-pages/` — no requiere servidor
-- **Calendly:** Requiere cuenta activa de Calendly con link de agendado
-- **Idiomas:** Inglés como default, español como alternativa; auto-detect vía `navigator.language`
+- **Landing:** HTML estático + CSS + vanilla JS — no frameworks, no build step
+- **Platform:** Next.js 14.2 + Supabase + Stripe + Resend + Slack
+- **Hosting:** Static files on Cloudflare Pages (landing), Vercel (platform)
+- **Idiomas:** English default, Spanish alternative; next-intl for platform, auto-detect for landing
+- **Auth:** Supabase Auth with email/password, role-based (admin/engineer/seller/client)
 
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Hybrid structure (main + detail pages) | Main page convierte, detail pages educan — flujo natural | — Pending |
-| Auto-detect + toggle de idioma | Maximiza UX para ambos mercados sin URLs separadas | — Pending |
-| Calendly embed (no formulario propio) | Elimina fricción — reserva directa sin intermediarios | — Pending |
-| Dark & techy visual | Comunica credibilidad técnica, diferencia de consultoras genéricas | — Pending |
-| Combinar contenido existente | El copy ya está validado; no reinventar, refinar | — Pending |
+| Hybrid landing (main + detail pages) | Main page converts, detail pages educate | ✓ Good |
+| Calendly embed (no custom form) | Direct booking, zero friction | ✓ Good |
+| Dark & techy visual identity | Technical credibility, differentiation | ✓ Good |
+| Single-URL bilingual toggle (no `/es/`) | Simplicity over SEO in v1 | ⚠️ Revisit in v2 |
+| Google Fonts CDN | v1 simplicity; self-host for perf later | ⚠️ Revisit |
+| Supabase manual mocks for Vitest | No live DB dependency in CI | ✓ Good |
+| Resend + React Email for transactional email | Simple API, bilingual templates | ✓ Good |
+| Supabase Realtime for notifications | Native Postgres integration, row-level security | ✓ Good |
+| Signed URLs for file downloads (1hr expiry) | No permanent public URLs, security by default | ✓ Good |
+| react-dropzone for file uploads | Small bundle, composable, well-maintained | ✓ Good |
+| Storage RLS scoped by client_id path | Cross-tenant isolation at infrastructure level | ✓ Good |
+| CSP via next.config.js headers() (not middleware) | Static policy, middleware already complex (auth+i18n) | ✓ Good |
+| Audit log with silent failure semantics | Admin actions never blocked by logging failures | ✓ Good |
+| Opt-out notification model (no row = all ON) | Zero-config onboarding, progressive preference setting | ✓ Good |
+| Vercel Cron for weekly digest (Mon 9am UTC) | Free tier covers schedule, no external scheduler needed | ✓ Good |
+| DB trigger for user profile creation on invite | Auto-creates users row on auth.users INSERT, no app code needed | ✓ Good |
+| Supabase Auth ban for deactivation (876000h) | Immediate login prevention without session invalidation | ✓ Good |
+
+## Current Milestone: v1.2 Security & Polish
+
+**Goal:** Harden the platform with rate limiting, notification preferences, admin user management, MRR chart, and comprehensive test coverage (integration + visual regression). 2FA deferred to v1.3.
+
+**Target features:**
+- Rate limiting on API routes (Upstash Redis)
+- Weekly email digest + notification preferences
+- Admin user management (invite, role change, deactivate)
+- Admin MRR trend chart (Recharts)
+- Auth UX (forgot password, password change, user profile)
+- Polish UX (loading skeletons, onboarding, error boundaries)
+- Security hardening (CSP headers, audit logging)
+- Integration tests + visual regression tests
+- Production deploy (Cloudflare, Vercel, Supabase, Stripe live)
+
+## Evolution
+
+This document evolves at phase transitions and milestone boundaries.
+
+**After each phase transition:**
+1. Requirements invalidated? → Move to Out of Scope with reason
+2. Requirements validated? → Move to Validated with phase reference
+3. New requirements emerged? → Add to Active
+4. Decisions to log? → Add to Key Decisions
+
+**After each milestone:**
+1. Full review of all sections
+2. Core Value check — still the right priority?
+3. Audit Out of Scope — reasons still valid?
+4. Update Context with current state
 
 ---
-*Last updated: 2026-03-20 after initialization*
+*Last updated: 2026-03-27 after Phase 15 (security-hardening) completed*

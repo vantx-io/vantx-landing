@@ -1,0 +1,113 @@
+{
+  "title": "Frontend Observability (Faro) — Vantix",
+  "uid": "vantix-faro",
+  "tags": ["vantix", "faro", "rum", "frontend"],
+  "editable": true,
+  "schemaVersion": 39,
+  "time": { "from": "now-24h", "to": "now" },
+  "templating": {
+    "list": [
+      {
+        "name": "page", "type": "query", "label": "Page",
+        "query": "label_values(faro_web_vitals_lcp, page_url)",
+        "includeAll": true, "multi": true,
+        "current": { "text": "All", "value": "$__all" }
+      },
+      {
+        "name": "device", "type": "query", "label": "Device",
+        "query": "label_values(faro_web_vitals_lcp, device_type)",
+        "includeAll": true, "multi": true,
+        "current": { "text": "All", "value": "$__all" }
+      },
+      {
+        "name": "country", "type": "query", "label": "Country",
+        "query": "label_values(faro_web_vitals_lcp, country)",
+        "includeAll": true, "multi": true,
+        "current": { "text": "All", "value": "$__all" }
+      }
+    ]
+  },
+  "panels": [
+    {
+      "title": "Active Sessions", "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 0 },
+      "targets": [{ "expr": "sum(faro_active_sessions{page_url=~\"$page\", device_type=~\"$device\", country=~\"$country\"})", "legendFormat": "" }],
+      "fieldConfig": { "defaults": { "thresholds": { "steps": [{ "color": "blue", "value": null }] } } }
+    },
+    {
+      "title": "JS Error Rate", "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 0 },
+      "targets": [{ "expr": "sum(rate(faro_js_errors_total{page_url=~\"$page\"}[5m]))", "legendFormat": "" }],
+      "fieldConfig": { "defaults": { "unit": "errors/s", "thresholds": { "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 0.1 }, { "color": "red", "value": 1 }] } } }
+    },
+    {
+      "title": "Avg LCP (Real Users)", "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 0 },
+      "targets": [{ "expr": "avg(faro_web_vitals_lcp{page_url=~\"$page\", device_type=~\"$device\", country=~\"$country\"})", "legendFormat": "" }],
+      "fieldConfig": { "defaults": { "unit": "ms", "thresholds": { "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 2500 }, { "color": "red", "value": 4000 }] } } }
+    },
+    {
+      "title": "Avg INP (Real Users)", "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 0 },
+      "targets": [{ "expr": "avg(faro_web_vitals_inp{page_url=~\"$page\", device_type=~\"$device\", country=~\"$country\"})", "legendFormat": "" }],
+      "fieldConfig": { "defaults": { "unit": "ms", "thresholds": { "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 200 }, { "color": "red", "value": 500 }] } } }
+    },
+    {
+      "title": "Avg CLS (Real Users)", "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 0 },
+      "targets": [{ "expr": "avg(faro_web_vitals_cls{page_url=~\"$page\", device_type=~\"$device\", country=~\"$country\"})", "legendFormat": "" }],
+      "fieldConfig": { "defaults": { "decimals": 3, "thresholds": { "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 0.1 }, { "color": "red", "value": 0.25 }] } } }
+    },
+    {
+      "title": "Sessions (30d)", "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 0 },
+      "targets": [{ "expr": "sum(increase(faro_sessions_total[30d]))", "legendFormat": "" }],
+      "fieldConfig": { "defaults": { "thresholds": { "steps": [{ "color": "purple", "value": null }] } } }
+    },
+    {
+      "title": "Core Web Vitals — LCP by Page", "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
+      "targets": [{ "expr": "avg by (page_url) (faro_web_vitals_lcp{page_url=~\"$page\", device_type=~\"$device\", country=~\"$country\"})", "legendFormat": "{{page_url}}" }],
+      "fieldConfig": { "defaults": { "unit": "ms", "custom": { "fillOpacity": 10, "thresholdsStyle": { "mode": "line" } }, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 2500 }, { "color": "red", "value": 4000 }] } } }
+    },
+    {
+      "title": "Core Web Vitals — INP by Page", "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
+      "targets": [{ "expr": "avg by (page_url) (faro_web_vitals_inp{page_url=~\"$page\", device_type=~\"$device\", country=~\"$country\"})", "legendFormat": "{{page_url}}" }],
+      "fieldConfig": { "defaults": { "unit": "ms", "custom": { "fillOpacity": 10, "thresholdsStyle": { "mode": "line" } }, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 200 }, { "color": "red", "value": 500 }] } } }
+    },
+    {
+      "title": "JS Errors Over Time", "type": "timeseries",
+      "gridPos": { "h": 7, "w": 12, "x": 0, "y": 12 },
+      "targets": [
+        { "expr": "sum(rate(faro_js_errors_total{page_url=~\"$page\"}[5m]))", "legendFormat": "Total Errors" },
+        { "expr": "sum by (error_message) (topk(5, rate(faro_js_errors_total{page_url=~\"$page\"}[5m])))", "legendFormat": "{{error_message}}" }
+      ],
+      "fieldConfig": { "defaults": { "unit": "errors/s", "custom": { "fillOpacity": 15, "lineWidth": 2 } } }
+    },
+    {
+      "title": "Sessions by Device Type", "type": "piechart",
+      "gridPos": { "h": 7, "w": 6, "x": 12, "y": 12 },
+      "targets": [{ "expr": "sum by (device_type) (faro_active_sessions)", "legendFormat": "{{device_type}}" }],
+      "fieldConfig": { "defaults": {} }
+    },
+    {
+      "title": "Sessions by Country (Top 10)", "type": "piechart",
+      "gridPos": { "h": 7, "w": 6, "x": 18, "y": 12 },
+      "targets": [{ "expr": "topk(10, sum by (country) (faro_active_sessions))", "legendFormat": "{{country}}" }],
+      "fieldConfig": { "defaults": {} }
+    },
+    {
+      "title": "Resource Timing — Slowest Resources", "type": "table",
+      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 19 },
+      "targets": [{ "expr": "topk(10, avg by (resource_url) (faro_resource_duration_ms{page_url=~\"$page\"}))", "legendFormat": "{{resource_url}}", "format": "table" }],
+      "fieldConfig": { "defaults": { "unit": "ms" } }
+    },
+    {
+      "title": "Long Tasks (>50ms)", "type": "timeseries",
+      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 19 },
+      "targets": [{ "expr": "sum(rate(faro_long_tasks_total{page_url=~\"$page\"}[5m]))", "legendFormat": "Long Tasks/s" }],
+      "fieldConfig": { "defaults": { "unit": "tasks/s", "custom": { "fillOpacity": 20 } } }
+    }
+  ]
+}

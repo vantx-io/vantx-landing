@@ -64,6 +64,7 @@
   "services": {
     "heading": "Qué entregamos",
     "waitlist_prefix": "También disponible:",
+    "see_all": "Ver todos los servicios \u2192",
     "onetime_or": "O empieza con",
     "perf_checkup": {
       "name": "Performance Checkup",
@@ -298,6 +299,14 @@
           "body": "Training para tu equipo sobre cómo usar los dashboards, interpretar SLOs, y diagnosticar incidentes."
         }
       ]
+    },
+    "faq": {
+      "items": {
+        "0": { "question": "\u00bfCon qu\u00e9 herramientas de monitoreo se integran?", "answer": "Trabajamos con las herramientas que ya tienes \u2014 Datadog, Grafana, Prometheus, New Relic, CloudWatch y otras. Configuramos y extendemos tu stack actual, no lo reemplazamos." },
+        "1": { "question": "\u00bfC\u00f3mo reducen nuestra factura de telemetr\u00eda?", "answer": "Auditando la cardinalidad de m\u00e9tricas y pol\u00edticas de retenci\u00f3n. La mayor\u00eda de los equipos almacenan datos de alta resoluci\u00f3n que nunca consultan. Los identificamos y depuramos \u2014 t\u00edpicamente 30\u201350% de reducci\u00f3n en el primer mes." },
+        "2": { "question": "\u00bfReemplazan nuestro monitoreo actual?", "answer": "No. Construimos sobre lo que tienes, arreglamos lo que est\u00e1 roto y agregamos lo que falta. Nuestro objetivo es un sistema que tu equipo entienda y controle \u2014 no una dependencia de nosotros." },
+        "3": { "question": "\u00bfQu\u00e9 tan r\u00e1pido vemos resultados?", "answer": "Correcciones en dashboards y alertas son visibles en la primera semana. Una l\u00ednea base completa de observabilidad \u2014 cobertura de servicios, SLOs definidos, ruido reducido \u2014 t\u00edpicamente est\u00e1 lista al final del primer mes." }
+      }
     }
   },
   "sre_page": {
@@ -392,6 +401,14 @@
           "body": "Una review estructurada del progreso en confiabilidad: tendencias de SLOs, frecuencia de incidentes, consumo de error budget, y roadmap para el próximo trimestre."
         }
       ]
+    },
+    "faq": {
+      "items": {
+        "0": { "question": "\u00bfQu\u00e9 tan embebido est\u00e1 el SRE en nuestro equipo?", "answer": "Tan embebido como necesites. Nos unimos a tu Slack, asistimos a los standups y estamos disponibles durante tu horario laboral. Somos un miembro funcional del equipo \u2014 no una cola de tickets." },
+        "1": { "question": "\u00bfQu\u00e9 pasa durante un incidente activo?", "answer": "Nos unimos al bridge del incidente, ayudamos a coordinar la respuesta y nos aseguramos de que las personas correctas est\u00e9n en el lugar correcto. Despu\u00e9s del incidente, escribimos el postmortem y hacemos seguimiento de los action items." },
+        "2": { "question": "\u00bfBrindan cobertura de on-call?", "answer": "La cobertura de rotaci\u00f3n on-call est\u00e1 disponible como add-on. La suscripci\u00f3n base cubre disponibilidad en horario laboral y coaching de respuesta a incidentes. Cons\u00faltanos sobre cobertura extendida durante el onboarding." },
+        "3": { "question": "\u00bfQu\u00e9 entregan en los primeros 30 d\u00edas?", "answer": "Una l\u00ednea base de confiabilidad: runbooks documentados para tus 5 principales modos de falla, objetivos de SLO para tus servicios cr\u00edticos, y un backlog priorizado de trabajo de confiabilidad. La mayor\u00eda de los equipos dicen que la segunda semana ya se siente diferente." }
+      }
     }
   },
   "mission_page": {
@@ -556,6 +573,14 @@
           "body": "Una review estructurada de cobertura de tests, ratio de tests flaky, tiempo de ejecución, y roadmap de mejora para el próximo trimestre."
         }
       ]
+    },
+    "faq": {
+      "items": {
+        "0": { "question": "\u00bfCon qu\u00e9 frameworks de testing trabajan?", "answer": "Somos agnósticos al framework: Jest, Vitest, Playwright, Cypress, Pytest, RSpec. Usamos lo que mejor se adapte a tu stack. Si no tienes nada, recomendamos según tu lenguaje y tama\u00f1o de equipo." },
+        "1": { "question": "\u00bfEscriben los tests o ense\u00f1an a nuestro equipo?", "answer": "Ambas cosas, por fases. Escribimos la primera capa de cobertura para establecer patrones y velocidad \u2014 luego ense\u00f1amos a tus ingenieros el mismo enfoque para que puedan mantenerlo de forma independiente." },
+        "2": { "question": "\u00bfCu\u00e1nto tarda nuestro equipo en ser aut\u00f3nomo?", "answer": "T\u00edpicamente 60\u201390 d\u00edas para una independencia significativa. No optimizamos para la dependencia \u2014 un equipo que no nos necesita despu\u00e9s de 90 d\u00edas es un caso de \u00e9xito que queremos contar." },
+        "3": { "question": "\u00bfCu\u00e1l es su objetivo de cobertura?", "answer": "No perseguimos un porcentaje de cobertura \u2014 perseguimos cobertura significativa de los caminos cr\u00edticos. Un 40% de cobertura que cubra tu flujo de checkout vale m\u00e1s que un 90% de cobertura de funciones utilitarias." }
+      }
     }
   },
   "perf_page": {
@@ -660,6 +685,20 @@
           "body": "Si el monitoreo detecta una degradación, te avisamos por Slack con los datos. Si necesitas hablar, agendamos un call de 15 min."
         }
       ]
+    },
+    "faq": {
+      "items": {
+        "0": { "question": "\u00bfQu\u00e9 herramientas de performance usan?", "answer": "Usamos herramientas de profiling nativas de tu stack \u2014 flame graphs, APM traces, browser DevTools, load testing con k6 o Gatling. Optimizamos con tu toolchain existente, sin agregar nuevos vendors." },
+        "1": { "question": "\u00bfC\u00f3mo miden el impacto?", "answer": "Benchmarks antes y despu\u00e9s en las m\u00e9tricas que importan: latencia p50/p95/p99, throughput, error rates, Core Web Vitals. Cada optimizaci\u00f3n se entrega con evidencia medida." },
+        "2": { "question": "\u00bfLas optimizaciones romper\u00e1n funcionalidad existente?", "answer": "No hacemos cambios sin validaci\u00f3n. Cada optimizaci\u00f3n pasa por tu pipeline de CI existente y se prueba bajo carga realista antes de producci\u00f3n. Cero sorpresas." },
+        "3": { "question": "\u00bfQu\u00e9 resultados son realistas en el primer mes?", "answer": "Una l\u00ednea base completa de performance, tus 3 principales cuellos de botella identificados y corregidos, y un roadmap para los pr\u00f3ximos 90 d\u00edas. La mayor\u00eda de los equipos ven una mejora del 30\u201360% en sus endpoints m\u00e1s lentos en la segunda semana." }
+      }
     }
+  },
+  "social_proof": {
+    "label": "Resultados",
+    "heading": "Lo que dicen los clientes",
+    "placeholder_quote": "Testimonio de cliente próximamente. Contáctanos para conocer la experiencia de nuestros primeros clientes.",
+    "placeholder_logo": "Logos de clientes próximamente."
   }
 }

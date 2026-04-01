@@ -1,0 +1,43 @@
+{
+  "title": "SLO Compliance — Vantix",
+  "uid": "vantix-slo",
+  "tags": ["vantix", "slo", "error-budget"],
+  "editable": true, "schemaVersion": 39,
+  "time": { "from": "now-30d", "to": "now" },
+  "templating": {
+    "list": [
+      { "name": "service", "type": "query", "query": "label_values(http_requests_total, service)", "current": { "text": "All", "value": "$__all" }, "includeAll": true, "multi": true },
+      { "name": "slo_target", "type": "custom", "query": "99.9,99.5,99.0", "current": { "text": "99.9", "value": "99.9" } }
+    ]
+  },
+  "panels": [
+    { "title": "Availability (30d rolling)", "type": "gauge", "gridPos": { "h": 6, "w": 6, "x": 0, "y": 0 },
+      "targets": [{ "expr": "avg_over_time(up{service=~\"$service\"}[30d]) * 100" }],
+      "fieldConfig": { "defaults": { "min": 99, "max": 100, "unit": "percent", "decimals": 3, "thresholds": { "steps": [{ "color": "red", "value": null }, { "color": "orange", "value": 99.5 }, { "color": "green", "value": 99.9 }] } } } },
+    { "title": "Error Budget Remaining", "type": "gauge", "gridPos": { "h": 6, "w": 6, "x": 6, "y": 0 },
+      "targets": [{ "expr": "(1 - (1 - avg_over_time(up{service=~\"$service\"}[30d])) / (1 - $slo_target/100)) * 100" }],
+      "fieldConfig": { "defaults": { "min": 0, "max": 100, "unit": "percent", "thresholds": { "steps": [{ "color": "red", "value": null }, { "color": "orange", "value": 25 }, { "color": "green", "value": 50 }] } } } },
+    { "title": "Latency SLO (p95 < 300ms)", "type": "gauge", "gridPos": { "h": 6, "w": 6, "x": 12, "y": 0 },
+      "targets": [{ "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{service=~\"$service\"}[30d])) by (le)) * 1000" }],
+      "fieldConfig": { "defaults": { "unit": "ms", "thresholds": { "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 200 }, { "color": "red", "value": 300 }] } } } },
+    { "title": "Error Rate SLO (< 0.1%)", "type": "gauge", "gridPos": { "h": 6, "w": 6, "x": 18, "y": 0 },
+      "targets": [{ "expr": "sum(rate(http_requests_total{service=~\"$service\",status=~\"5..\"}[30d])) / sum(rate(http_requests_total{service=~\"$service\"}[30d])) * 100" }],
+      "fieldConfig": { "defaults": { "unit": "percent", "decimals": 3, "thresholds": { "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 0.05 }, { "color": "red", "value": 0.1 }] } } } },
+    { "title": "Error Budget Burn Rate", "type": "timeseries", "gridPos": { "h": 7, "w": 12, "x": 0, "y": 6 },
+      "targets": [
+        { "expr": "sum(rate(http_requests_total{service=~\"$service\",status=~\"5..\"}[1h])) / sum(rate(http_requests_total{service=~\"$service\"}[1h])) / (1 - $slo_target/100)", "legendFormat": "1h burn rate" },
+        { "expr": "sum(rate(http_requests_total{service=~\"$service\",status=~\"5..\"}[6h])) / sum(rate(http_requests_total{service=~\"$service\"}[6h])) / (1 - $slo_target/100)", "legendFormat": "6h burn rate" }
+      ],
+      "fieldConfig": { "defaults": { "custom": { "fillOpacity": 10 }, "thresholds": { "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 1 }, { "color": "red", "value": 10 }] } } } },
+    { "title": "Availability Over Time (daily)", "type": "timeseries", "gridPos": { "h": 7, "w": 12, "x": 12, "y": 6 },
+      "targets": [{ "expr": "avg_over_time(up{service=~\"$service\"}[1d]) * 100", "legendFormat": "{{service}}" }],
+      "fieldConfig": { "defaults": { "unit": "percent", "min": 99, "max": 100, "custom": { "fillOpacity": 10 }, "thresholds": { "steps": [{ "color": "red", "value": null }, { "color": "orange", "value": 99.5 }, { "color": "green", "value": 99.9 }] } } } },
+    { "title": "SLO Summary by Service", "type": "table", "gridPos": { "h": 6, "w": 24, "x": 0, "y": 13 },
+      "targets": [
+        { "expr": "avg_over_time(up{service=~\"$service\"}[30d]) * 100", "legendFormat": "{{service}}", "format": "table" }
+      ] },
+    { "title": "Incidents / Alerts Timeline", "type": "timeseries", "gridPos": { "h": 5, "w": 24, "x": 0, "y": 19 },
+      "targets": [{ "expr": "ALERTS{alertstate=\"firing\",service=~\"$service\"}", "legendFormat": "{{alertname}}" }],
+      "fieldConfig": { "defaults": { "custom": { "drawStyle": "points", "pointSize": 8 } } } }
+  ]
+}

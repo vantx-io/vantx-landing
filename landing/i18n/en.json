@@ -64,6 +64,7 @@
   "services": {
     "heading": "What we deliver",
     "waitlist_prefix": "Also available:",
+    "see_all": "See all services \u2192",
     "onetime_or": "Or start with",
     "perf_checkup": {
       "name": "Performance Checkup",
@@ -298,6 +299,14 @@
           "body": "Training for your team on using dashboards, interpreting SLOs, and diagnosing incidents."
         }
       ]
+    },
+    "faq": {
+      "items": {
+        "0": { "question": "What monitoring tools do you integrate with?", "answer": "We work with the tools you already have \u2014 Datadog, Grafana, Prometheus, New Relic, CloudWatch, and others. We configure and extend your existing stack, not replace it." },
+        "1": { "question": "How do you reduce our telemetry bill?", "answer": "By auditing your metric cardinality and retention policies. Most teams are storing high-resolution data they never query. We identify and prune it \u2014 typically 30\u201350% cost reduction in the first month." },
+        "2": { "question": "Do you replace our current monitoring setup?", "answer": "No. We build on what you have, fix what\u2019s broken, and add what\u2019s missing. Our goal is a system your team owns and understands \u2014 not a dependency on us." },
+        "3": { "question": "How fast can we see results?", "answer": "Dashboard and alert fixes are visible in the first week. A full observability baseline \u2014 coverage across services, SLOs defined, noise reduced \u2014 is typically in place by end of month one." }
+      }
     }
   },
   "sre_page": {
@@ -392,6 +401,14 @@
           "body": "A structured review of reliability progress: SLO trends, incident frequency, error budget consumption, and roadmap for the next quarter."
         }
       ]
+    },
+    "faq": {
+      "items": {
+        "0": { "question": "How embedded is the SRE in our team?", "answer": "As embedded as you need. We join your Slack, attend standups, and are reachable during your business hours. We\u2019re a functional team member \u2014 not a ticketing queue." },
+        "1": { "question": "What happens during a live incident?", "answer": "We join the incident bridge, help coordinate the response, and make sure the right people are in the room. Post-incident, we write the postmortem and track the follow-up items." },
+        "2": { "question": "Do you provide on-call coverage?", "answer": "On-call rotation coverage is available as an add-on. The base subscription covers business-hours availability and incident response coaching. Ask us about extended coverage during onboarding." },
+        "3": { "question": "What do you deliver in the first 30 days?", "answer": "A reliability baseline: documented runbooks for your top 5 failure modes, SLO targets for your critical services, and a prioritized backlog of reliability work. Most teams say week two already feels different." }
+      }
     }
   },
   "mission_page": {
@@ -556,6 +573,14 @@
           "body": "A structured review of test coverage, flaky test ratio, test execution time, and improvement roadmap for the next quarter."
         }
       ]
+    },
+    "faq": {
+      "items": {
+        "0": { "question": "What test frameworks do you work with?", "answer": "We\u2019re framework-agnostic: Jest, Vitest, Playwright, Cypress, Pytest, RSpec. We use whatever fits your stack. If you have nothing, we\u2019ll recommend based on your language and team size." },
+        "1": { "question": "Do you write tests or teach our team?", "answer": "Both, in phases. We write the first layer of coverage to establish patterns and velocity \u2014 then teach your engineers the same approach so they can maintain it independently." },
+        "2": { "question": "How long until our team is autonomous?", "answer": "Typically 60\u201390 days to meaningful independence. We don\u2019t optimize for dependency \u2014 a team that doesn\u2019t need us after 90 days is a success story we want to tell." },
+        "3": { "question": "What\u2019s your coverage target?", "answer": "We don\u2019t chase a coverage percentage \u2014 we chase meaningful coverage of critical paths. A 40% coverage number that covers your checkout flow is more valuable than 90% coverage of utility functions." }
+      }
     }
   },
   "perf_page": {
@@ -660,6 +685,20 @@
           "body": "If monitoring detects degradation, we alert you via Slack with the data. If you need to talk, we schedule a 15-min call."
         }
       ]
+    },
+    "faq": {
+      "items": {
+        "0": { "question": "What performance tools do you use?", "answer": "We use profiling tools native to your stack \u2014 flame graphs, APM traces, browser DevTools, load testing with k6 or Gatling. We optimize with your existing toolchain, not by adding new vendors." },
+        "1": { "question": "How do you measure impact?", "answer": "Before-and-after benchmarks on the metrics that matter: p50/p95/p99 latency, throughput, error rates, Core Web Vitals. Every optimization ships with measured proof." },
+        "2": { "question": "Will optimizations break existing functionality?", "answer": "We don\u2019t ship changes without validation. Every optimization goes through your existing CI pipeline and is tested under realistic load before production. Zero surprises." },
+        "3": { "question": "What results are realistic in the first month?", "answer": "A full performance baseline, your top 3 bottlenecks identified and fixed, and a roadmap for the next 90 days. Most teams see 30\u201360% improvement on their worst endpoints in week two." }
+      }
     }
+  },
+  "social_proof": {
+    "label": "Results",
+    "heading": "What clients say",
+    "placeholder_quote": "Client testimonial coming soon. Reach out to learn what early clients are experiencing.",
+    "placeholder_logo": "Client logos added as engagements close."
   }
 }

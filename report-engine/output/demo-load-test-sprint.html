@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Load Testing Sprint Report — Vantx</title>
+    <style>
+    /* ═══════════════════════════════════════════════════
+       Vantx Docs — PDF Style (weasyprint)
+       Matches brand style guide: DM Sans, forest green,
+       parchment tones, warm grays
+       ═══════════════════════════════════════════════════ */
+
+    /* Fonts — use the self-hosted woff2 from the landing dir */
+    @font-face {
+      font-family: 'DM Sans';
+      src: url('../landing/fonts/dm-sans-latin.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'DM Sans';
+      src: url('../landing/fonts/dm-sans-latin.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'JetBrains Mono';
+      src: url('../landing/fonts/jb-mono-latin.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'JetBrains Mono';
+      src: url('../landing/fonts/jb-mono-latin.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    /* ── Page setup ── */
+    @page {
+      size: letter;
+      margin: 2.2cm 2.5cm 2.5cm 2.5cm;
+
+      @bottom-center {
+        content: counter(page);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9px;
+        color: #6B6B64;
+      }
+      @top-right {
+        content: "VANTX";
+        font-family: 'DM Sans', sans-serif;
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        color: #B0AFA8;
+      }
+    }
+
+    @page :first {
+      @bottom-center { content: none; }
+      @top-right { content: none; }
+    }
+
+    /* ── Base ── */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.6;
+      color: #1A1A17;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Cover page (YAML metadata handled by pandoc template) ── */
+
+    /* ── Headings ── */
+    h1 {
+      font-size: 22pt;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: #1B6B4A;
+      margin-top: 1.8em;
+      margin-bottom: 0.6em;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #1B6B4A;
+      page-break-after: avoid;
+    }
+
+    h2 {
+      font-size: 16pt;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      color: #1A1A17;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 12pt;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #1A1A17;
+      margin-top: 1.2em;
+      margin-bottom: 0.4em;
+      page-break-after: avoid;
+    }
+
+    h4, h5, h6 {
+      font-size: 10.5pt;
+      font-weight: 700;
+      color: #1A1A17;
+      margin-top: 1em;
+      margin-bottom: 0.3em;
+    }
+
+    /* ── Paragraphs ── */
+    p {
+      margin-top: 0;
+      margin-bottom: 0.6em;
+      color: #3A3A35;
+    }
+
+    /* ── Lists ── */
+    ul, ol {
+      margin-top: 0.3em;
+      margin-bottom: 0.8em;
+      padding-left: 1.5em;
+    }
+
+    li {
+      margin-bottom: 0.25em;
+      color: #3A3A35;
+    }
+
+    li::marker {
+      color: #1B6B4A;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.6em;
+      margin-bottom: 1em;
+      font-size: 9.5pt;
+      line-height: 1.45;
+      page-break-inside: auto;
+    }
+
+    thead {
+      background: #1B6B4A;
+    }
+
+    thead th {
+      color: #FFFFFF;
+      font-weight: 600;
+      font-size: 8.5pt;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      text-align: left;
+      padding: 7px 10px;
+      border: 1px solid #15593D;
+    }
+
+    tbody td {
+      padding: 6px 10px;
+      border: 1px solid #E2E1DC;
+      vertical-align: top;
+      color: #3A3A35;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #F8F7F4;
+    }
+
+    tbody tr:nth-child(odd) {
+      background: #FFFFFF;
+    }
+
+    /* Bold first column for definition-style tables */
+    tbody td:first-child {
+      font-weight: 600;
+      color: #1A1A17;
+    }
+
+    /* ── Blockquotes (callout boxes) ── */
+    blockquote {
+      margin: 1em 0;
+      padding: 12px 16px;
+      border-left: 3px solid #1B6B4A;
+      background: #F8F7F4;
+      border-radius: 0 6px 6px 0;
+      font-size: 10pt;
+      color: #3A3A35;
+    }
+
+    blockquote p {
+      margin: 0;
+    }
+
+    blockquote p + p {
+      margin-top: 0.4em;
+    }
+
+    /* ── Code ── */
+    code {
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 8.5pt;
+      background: #F0EFEB;
+      padding: 1px 5px;
+      border-radius: 3px;
+      color: #1A1A17;
+    }
+
+    pre {
+      margin: 0.8em 0;
+      padding: 14px 16px;
+      background: #1A1917;
+      border-radius: 8px;
+      overflow: hidden;
+      page-break-inside: avoid;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      color: #EDECE7;
+      font-size: 8pt;
+      line-height: 1.5;
+    }
+
+    /* ── Horizontal rules / page breaks ── */
+    hr {
+      border: none;
+      border-top: 1px solid #E2E1DC;
+      margin: 1.5em 0;
+    }
+
+    /* ── Strong / Bold ── */
+    strong {
+      font-weight: 700;
+      color: #1A1A17;
+    }
+
+    /* ── Links ── */
+    a {
+      color: #1B6B4A;
+      text-decoration: none;
+    }
+
+    /* ── Images (logo) ── */
+    img {
+      max-width: 30%;
+      height: auto;
+    }
+
+    /* ── Monospace data styling ── */
+    .price, .metric {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+    }
+
+    /* ── Emoji status indicators ── */
+    /* These render natively in weasyprint */
+
+    /* ── Page break utility ── */
+    .newpage {
+      page-break-before: always;
+    }
+
+    /* Cover page */
+    .cover {
+      page-break-after: always;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 700px;
+    }
+    .cover__logo { width: 140px; margin-bottom: 48px; }
+    .cover__bar { width: 60px; height: 3px; background: #1B6B4A; margin-bottom: 32px; }
+    .cover__title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 32pt; font-weight: 700;
+      letter-spacing: -0.03em; line-height: 1.1;
+      color: #1A1A17; margin: 0 0 12px 0;
+      border: none; padding: 0;
+    }
+    .cover__subtitle {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14pt; font-weight: 400;
+      color: #5C5C56; margin: 0 0 40px 0;
+    }
+    .cover__meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9pt; color: #6B6B64; line-height: 1.8;
+    }
+    .cover__meta span { display: block; }
+    .cover__footer {
+      margin-top: auto; padding-top: 32px;
+      border-top: 1px solid #E2E1DC;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8pt; color: #B0AFA8;
+    }
+
+    /* Report-specific: status badges */
+    .status-pass { color: #1B6B4A; font-weight: 700; }
+    .status-fail { color: #C0392B; font-weight: 700; }
+    .status-warn { color: #D4A017; font-weight: 700; }
+
+    /* Report-specific: metric highlight */
+    .metric-hero {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 24pt; font-weight: 700;
+      color: #1B6B4A; display: block;
+      margin: 8px 0;
+    }
+    </style>
+  </head>
+<body>
+
+<div class="cover">
+  <img class="cover__logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAABbCAMAAABqOSM9AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAMAUExURRtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrShtrSowIbgAAAAD/dFJOUwAQTa6Aka9OEQUsdMPyi57zwXIqBBpcquiKAealUhUNQZDV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" alt="Vantx">
+  <div class="cover__bar"></div>
+  <h1 class="cover__title">Load Testing Sprint Report</h1>
+    <p class="cover__subtitle">NovaPay SpA — Sprint Results</p>
+    <div class="cover__meta">
+    <span>Version 1.0</span>
+    <span>March 2026</span>
+    <span>vantx.io &middot; hello@vantx.io</span>
+  </div>
+  <div class="cover__footer">
+    Confidential &mdash; Vantx
+  </div>
+</div>
+
+<h1 id="load-testing-sprint">LOAD TESTING SPRINT</h1>
+<p><strong>NovaPay SpA — Payment Processing Platform</strong></p>
+<p>March 2026 · VANTX · hello@vantx.io</p>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="executive-summary">Executive Summary</h1>
+<p>A 3-week load testing sprint was conducted for NovaPay’s payment
+processing platform. The engagement covered 5 critical flows, 4 scenario
+types, and 23 test runs across staging and pre-production environments.
+Maximum throughput achieved: 520 TPS. Breakpoint identified at 560 TPS
+(PostgreSQL connection exhaustion). 4 critical findings identified with
+specific remediation steps. All k6 scripts and Grafana dashboards
+delivered as reusable assets.</p>
+<h3 id="key-results">Key Results</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Duration</td>
+<td>3 weeks (15 business days)</td>
+</tr>
+<tr>
+<td>Scenarios designed</td>
+<td>5 flows x 4 types = 20 scenarios</td>
+</tr>
+<tr>
+<td>Test runs executed</td>
+<td>23</td>
+</tr>
+<tr>
+<td>Max TPS achieved</td>
+<td>520</td>
+</tr>
+<tr>
+<td>Breakpoint identified</td>
+<td>560 TPS</td>
+</tr>
+<tr>
+<td>Critical findings</td>
+<td>4</td>
+</tr>
+<tr>
+<td>k6 scripts delivered</td>
+<td>5 (one per flow) + 1 combined</td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="scope-objectives">1. Scope &amp; Objectives</h1>
+<h3 id="objectives">Objectives</h3>
+<ol type="1">
+<li>Establish performance baseline for all critical payment flows</li>
+<li>Identify system breakpoint and capacity limits</li>
+<li>Validate system behavior under spike conditions (Black Friday
+simulation)</li>
+<li>Deliver reusable k6 framework for ongoing CI/CD integration</li>
+</ol>
+<h3 id="flows-under-test">Flows Under Test</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Flow</th>
+<th>Description</th>
+<th>Priority</th>
+<th>SLA</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Create Payment</td>
+<td>POST /api/payments → process → confirm</td>
+<td>P0</td>
+<td>p95 &lt; 500ms</td>
+</tr>
+<tr>
+<td>Checkout (guest)</td>
+<td>Full checkout flow: cart → payment → confirmation</td>
+<td>P0</td>
+<td>p95 &lt; 2s</td>
+</tr>
+<tr>
+<td>Settlement Export</td>
+<td>GET /api/settlements?merchant_id=X (paginated)</td>
+<td>P1</td>
+<td>p95 &lt; 3s</td>
+</tr>
+<tr>
+<td>Merchant Dashboard</td>
+<td>Login → dashboard → analytics load</td>
+<td>P1</td>
+<td>p95 &lt; 1.5s</td>
+</tr>
+<tr>
+<td>Webhook Delivery</td>
+<td>Payment confirmed → webhook sent to merchant</td>
+<td>P1</td>
+<td>p95 &lt; 1s</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test-environment">Test Environment</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Component</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Environment</td>
+<td>Pre-production (identical to prod: ECS Fargate, RDS,
+ElastiCache)</td>
+</tr>
+<tr>
+<td>Infrastructure</td>
+<td>AWS us-east-1, same instance sizes as production</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>PostgreSQL 15 (RDS db.r6g.xlarge) — restored from prod snapshot
+(anonymized)</td>
+</tr>
+<tr>
+<td>Load generators</td>
+<td>k6 Cloud (us-east-1), 3 load zones</td>
+</tr>
+<tr>
+<td>Monitoring</td>
+<td>Grafana Cloud (Prometheus + Loki + Tempo)</td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="scenario-design">2. Scenario Design</h1>
+<h3 id="scenario-matrix">Scenario Matrix</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Type</th>
+<th>VUs</th>
+<th>Duration</th>
+<th>Ramp</th>
+<th>Target TPS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Baseline</td>
+<td>Baseline</td>
+<td>50</td>
+<td>10 min</td>
+<td>2 min</td>
+<td>180</td>
+</tr>
+<tr>
+<td>Stress</td>
+<td>Stress</td>
+<td>100</td>
+<td>15 min</td>
+<td>3 min</td>
+<td>360</td>
+</tr>
+<tr>
+<td>Spike</td>
+<td>Spike</td>
+<td>250</td>
+<td>5 min</td>
+<td>30s</td>
+<td>500+</td>
+</tr>
+<tr>
+<td>Soak</td>
+<td>Soak</td>
+<td>50</td>
+<td>2 hours</td>
+<td>5 min</td>
+<td>180</td>
+</tr>
+<tr>
+<td>Breakpoint</td>
+<td>Breakpoint</td>
+<td>10→500</td>
+<td>30 min</td>
+<td>Stepped +10/min</td>
+<td>Max</td>
+</tr>
+</tbody>
+</table>
+<h3 id="thresholds">Thresholds</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Threshold</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>p95 response time</td>
+<td>&lt;500ms (API), &lt;2s (checkout)</td>
+<td>NovaPay SLA commitments</td>
+</tr>
+<tr>
+<td>p99 response time</td>
+<td>&lt;1000ms (API), &lt;3s (checkout)</td>
+<td>Worst-case user experience</td>
+</tr>
+<tr>
+<td>Error rate</td>
+<td>&lt;1% (baseline), &lt;5% (stress)</td>
+<td>Payment reliability requirement</td>
+</tr>
+<tr>
+<td>TPS</td>
+<td>≥400 sustained</td>
+<td>Target for Q3 growth projection</td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="results">3. Results</h1>
+<h3 id="baseline">Baseline</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+<th>Threshold</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Virtual Users</td>
+<td>50</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Avg TPS</td>
+<td>245</td>
+<td>≥150</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>p50</td>
+<td>68ms</td>
+<td>&lt;200ms</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>p95</td>
+<td>180ms</td>
+<td>&lt;500ms</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>p99</td>
+<td>380ms</td>
+<td>&lt;1000ms</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>Error rate</td>
+<td>0.01%</td>
+<td>&lt;1%</td>
+<td>✅ Pass</td>
+</tr>
+</tbody>
+</table>
+<h3 id="stress">Stress</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+<th>Threshold</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Virtual Users</td>
+<td>100</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Max TPS</td>
+<td>488</td>
+<td>≥300</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>p50</td>
+<td>125ms</td>
+<td>&lt;300ms</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>p95</td>
+<td>420ms</td>
+<td>&lt;500ms</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>p99</td>
+<td>780ms</td>
+<td>&lt;1000ms</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>Error rate</td>
+<td>0.3%</td>
+<td>&lt;2%</td>
+<td>✅ Pass</td>
+</tr>
+</tbody>
+</table>
+<h3 id="spike">Spike</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+<th>Threshold</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Virtual Users</td>
+<td>250 (ramp 30s)</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Max TPS</td>
+<td>520</td>
+<td>≥400</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>p95</td>
+<td>1,800ms</td>
+<td>&lt;2000ms</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>Error rate</td>
+<td>1.2%</td>
+<td>&lt;5%</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>Recovery</td>
+<td>18s</td>
+<td>&lt;30s</td>
+<td>✅ Pass</td>
+</tr>
+</tbody>
+</table>
+<h3 id="soak-2-hours">Soak (2 hours)</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+<th>Threshold</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Avg TPS</td>
+<td>242</td>
+<td>≥150</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>p95</td>
+<td>195ms</td>
+<td>&lt;500ms</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>Memory growth</td>
+<td>+45 MB (Java heap)</td>
+<td>&lt;200 MB</td>
+<td>✅ Pass</td>
+</tr>
+<tr>
+<td>Error rate</td>
+<td>0.02%</td>
+<td>&lt;1%</td>
+<td>✅ Pass</td>
+</tr>
+</tbody>
+</table>
+<figure>
+<img src="assets/charts/breakpoint-chart.svg"
+alt="Breakpoint Analysis" />
+<figcaption aria-hidden="true">Breakpoint Analysis</figcaption>
+</figure>
+<h3 id="breakpoint">Breakpoint</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr>
+<th>Stage</th>
+<th>VUs</th>
+<th>TPS</th>
+<th>p95</th>
+<th>Error Rate</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stage 1</td>
+<td>50</td>
+<td>245</td>
+<td>180ms</td>
+<td>0.01%</td>
+<td>✅ Normal</td>
+</tr>
+<tr>
+<td>Stage 2</td>
+<td>100</td>
+<td>488</td>
+<td>420ms</td>
+<td>0.3%</td>
+<td>✅ Normal</td>
+</tr>
+<tr>
+<td>Stage 3</td>
+<td>150</td>
+<td>520</td>
+<td>890ms</td>
+<td>0.8%</td>
+<td>⚠️ Degrading</td>
+</tr>
+<tr>
+<td>Stage 4</td>
+<td>200</td>
+<td>540</td>
+<td>1,800ms</td>
+<td>2.1%</td>
+<td>⚠️ Stressed</td>
+</tr>
+<tr>
+<td><strong>Stage 5</strong></td>
+<td><strong>250</strong></td>
+<td><strong>560 → drop</strong></td>
+<td><strong>4,200ms</strong></td>
+<td><strong>8.5%</strong></td>
+<td><strong>❌ Breakpoint</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Breakpoint at 560 TPS (250 VUs).</strong> PostgreSQL
+connection pool exhausted at this point. ECS auto-scaled to 12 tasks but
+all tasks competed for the same 30 HikariCP connections. Latency cliff:
+p95 jumped from 1.8s to 4.2s in 30 seconds.</p>
+</blockquote>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="findings">4. Findings</h1>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr>
+<th>ID</th>
+<th>Severity</th>
+<th>Finding</th>
+<th>Evidence</th>
+<th>Recommended Fix</th>
+<th>Estimated Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LT-01</td>
+<td>P0</td>
+<td>PostgreSQL connection pool is the primary bottleneck at &gt;500
+TPS</td>
+<td>Breakpoint trace shows connection wait time &gt;3s at 560 TPS</td>
+<td>Deploy PgBouncer as external connection pooler</td>
+<td>+40-60% TPS headroom</td>
+</tr>
+<tr>
+<td>LT-02</td>
+<td>P1</td>
+<td>Webhook delivery adds 80ms latency to payment flow (synchronous
+call)</td>
+<td>Trace flamegraph shows webhook dispatch in the hot path</td>
+<td>Make webhook delivery async via SQS</td>
+<td>-80ms on payment p50</td>
+</tr>
+<tr>
+<td>LT-03</td>
+<td>P1</td>
+<td>Settlement export without merchant index still hits cold path at
+scale</td>
+<td>Slow query log shows 2s queries for merchants with &gt;50K
+settlements</td>
+<td>Add composite index + explain plan review</td>
+<td>Settlement p95 from 1.8s to ~200ms</td>
+</tr>
+<tr>
+<td>LT-04</td>
+<td>P2</td>
+<td>Java heap grows 45MB over 2h soak — possible slow leak in session
+cache</td>
+<td>Heap dump shows accumulating <code>MerchantConfigCache</code>
+entries</td>
+<td>Add TTL eviction to in-memory cache</td>
+<td>Prevents OOM in long-running tasks</td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="deliverables">5. Deliverables</h1>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Deliverable</th>
+<th>Description</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>k6 scripts</td>
+<td>5 flow scripts + 1 combined scenario + shared utilities</td>
+<td><code>tests/k6/</code> in NovaPay repo</td>
+</tr>
+<tr>
+<td>Grafana dashboard</td>
+<td>k6 results dashboard with custom panels per flow</td>
+<td>https://novapay.grafana.net/d/k6-sprint</td>
+</tr>
+<tr>
+<td>CI/CD integration</td>
+<td>GitHub Actions workflow: baseline on every PR, full suite
+weekly</td>
+<td><code>.github/workflows/load-test.yml</code></td>
+</tr>
+<tr>
+<td>Raw results</td>
+<td>All 23 test run results with Grafana snapshots</td>
+<td>Shared Google Drive folder</td>
+</tr>
+</tbody>
+</table>
+<h3 id="k6-script-inventory">k6 Script Inventory</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Script</th>
+<th>Flow</th>
+<th>Scenarios</th>
+<th>Lines</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>payment-flow.js</code></td>
+<td>Create Payment</td>
+<td>baseline, stress, spike</td>
+<td>142</td>
+</tr>
+<tr>
+<td><code>checkout-flow.js</code></td>
+<td>Guest Checkout</td>
+<td>baseline, stress, spike</td>
+<td>198</td>
+</tr>
+<tr>
+<td><code>settlement-export.js</code></td>
+<td>Settlement Export</td>
+<td>baseline, stress</td>
+<td>95</td>
+</tr>
+<tr>
+<td><code>merchant-dashboard.js</code></td>
+<td>Merchant Dashboard</td>
+<td>baseline, stress</td>
+<td>118</td>
+</tr>
+<tr>
+<td><code>webhook-delivery.js</code></td>
+<td>Webhook Delivery</td>
+<td>baseline, stress</td>
+<td>87</td>
+</tr>
+<tr>
+<td><code>combined-scenario.js</code></td>
+<td>All flows (weighted)</td>
+<td>all types</td>
+<td>245</td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-before:always">
+
+</div>
+<h1 id="capacity-planning">6. Capacity Planning</h1>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Required TPS</th>
+<th>Current Max</th>
+<th>Gap</th>
+<th>Action Needed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Current traffic (180 avg)</td>
+<td>180</td>
+<td>520</td>
+<td>+189% headroom</td>
+<td>None</td>
+</tr>
+<tr>
+<td>2x growth (Q3)</td>
+<td>360</td>
+<td>520</td>
+<td>+44%</td>
+<td>None</td>
+</tr>
+<tr>
+<td>3x growth (Q4 with partnerships)</td>
+<td>540</td>
+<td>520</td>
+<td>-4%</td>
+<td>Deploy PgBouncer (LT-01)</td>
+</tr>
+<tr>
+<td>5x growth (Black Friday)</td>
+<td>900</td>
+<td>520</td>
+<td>-42%</td>
+<td>PgBouncer + read replicas + async webhooks</td>
+</tr>
+<tr>
+<td>10x growth (next year)</td>
+<td>1,800</td>
+<td>520</td>
+<td>-71%</td>
+<td>Full architecture review — consider sharding</td>
+</tr>
+</tbody>
+</table>
+<h1 id="recommendations">7. Recommendations</h1>
+<ol type="1">
+<li><p><strong>Immediate (LT-01):</strong> Deploy PgBouncer in
+transaction mode between ECS tasks and RDS. This is the single
+highest-impact change — estimated to push breakpoint from 560 to 800+
+TPS without any application changes.</p></li>
+<li><p><strong>This sprint (LT-02):</strong> Make webhook delivery
+asynchronous. Currently adds 80ms to every payment. SQS + a small
+consumer service. Payment p50 would drop from 68ms to ~45ms.</p></li>
+<li><p><strong>This quarter (LT-03, LT-04):</strong> Index optimization
+for settlement queries. Cache TTL fix to prevent heap growth. Both are
+straightforward.</p></li>
+<li><p><strong>Ongoing:</strong> Run baseline load test on every PR
+(already configured in CI). Run full suite (stress + spike) weekly via
+scheduled workflow. Run breakpoint test monthly to track capacity
+trend.</p></li>
+</ol>
+<blockquote>
+<p><strong>Next steps:</strong> Implement LT-01 (PgBouncer) → VANTX
+re-tests (included) → Validate improvement. Consider Performance
+subscription ($5,995/mo) for continuous monthly testing.</p>
+<p>hello@vantx.io · vantx.io</p>
+</blockquote>
+
+</body>
+</html>

@@ -340,12 +340,7 @@ ul, ol {
   filter: brightness(0);
 }
 
-/* Dark mode: show the white logo naturally */
-@media (prefers-color-scheme: dark) {
-  .nav__logo-img {
-    filter: none;
-  }
-}
+/* Dark mode logo override disabled — light theme only */
 
 /* Desktop links */
 .nav__links {

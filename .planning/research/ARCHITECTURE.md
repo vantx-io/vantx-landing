@@ -1,319 +1,799 @@
 # Architecture Research
 
-**Domain:** Hybrid static landing page system — multi-page B2B SaaS marketing site
-**Researched:** 2026-03-20
-**Confidence:** HIGH
-
-## Standard Architecture
-
-### System Overview
-
-```
-┌──────────────────────────────────────────────────────────────────┐
-│                        BROWSER RUNTIME                           │
-├──────────────────────────────────────────────────────────────────┤
-│  ┌──────────────┐  ┌─────────────────────────────────────────┐   │
-│  │  index.html  │  │  services/perf.html  obs.html  sre.html │   │
-│  │  (main page) │  │  (service detail pages)                 │   │
-│  └──────┬───────┘  └──────────────────┬──────────────────────┘   │
-│         │                             │                          │
-│         └──────────────┬──────────────┘                          │
-│                        ↓                                         │
-│  ┌─────────────────────────────────────────────────────────────┐ │
-│  │                    partials/nav.html                        │ │
-│  │                    partials/footer.html                     │ │
-│  │   (fetched via JS on DOMContentLoaded, injected innerHTML)  │ │
-│  └─────────────────────────────────────────────────────────────┘ │
-│                        ↓                                         │
-│  ┌─────────────────────────────────────────────────────────────┐ │
-│  │                    js/i18n.js                               │ │
-│  │   1. Detects locale via navigator.languages / localStorage  │ │
-│  │   2. Fetches translations/en.json or translations/es.json   │ │
-│  │   3. Walks DOM: [data-i18n] → sets textContent              │ │
-│  │   4. Stores choice in localStorage on toggle               │ │
-│  └─────────────────────────────────────────────────────────────┘ │
-│                        ↓                                         │
-│  ┌─────────────────────────────────────────────────────────────┐ │
-│  │                    css/tokens.css  (imported first)         │ │
-│  │                    css/base.css                             │ │
-│  │                    css/layout.css                           │ │
-│  │                    css/components.css                       │ │
-│  └─────────────────────────────────────────────────────────────┘ │
-│                        ↓                                         │
-│  ┌─────────────────────────────────────────────────────────────┐ │
-│  │                    Calendly embed (popup text / inline)     │ │
-│  │                    (loaded via their CDN script tag)        │ │
-│  └─────────────────────────────────────────────────────────────┘ │
-└──────────────────────────────────────────────────────────────────┘
-```
-
-### Component Responsibilities
-
-| Component | Responsibility | Typical Implementation |
-|-----------|----------------|------------------------|
-| `index.html` | Primary conversion page: hero, services overview, how-it-works, pricing teaser, Calendly CTA | Plain HTML, uses `data-i18n` attributes throughout |
-| `services/perf.html` | Depth page for Performance as a Service — full deliverables, proof points, dedicated Calendly | Plain HTML, same shell structure as index |
-| `services/obs.html` | Depth page for Observability as a Service | Same as above |
-| `services/sre.html` | Depth page for Fractional Perf & SRE | Same as above |
-| `partials/nav.html` | Shared navigation: logo, service links, language toggle button | Fragment HTML; no `<html>`/`<head>`; fetched and injected |
-| `partials/footer.html` | Shared footer: links, legal, language toggle fallback | Fragment HTML; fetched and injected |
-| `css/tokens.css` | CSS custom properties for entire color/spacing/type system | `:root` vars; dark theme overrides via `[data-theme="dark"]` |
-| `css/base.css` | Reset, body, typography defaults | Scoped to tokens |
-| `css/layout.css` | Container, grid, section spacing utilities | Utility classes only |
-| `css/components.css` | Cards, buttons, nav, footer, Calendly container | Component-scoped selectors |
-| `js/i18n.js` | Language detection, translation loading, DOM patching, toggle handler | Vanilla JS module; localStorage for persistence |
-| `js/main.js` | Partial loading (nav/footer), scroll behavior, minor interactions | Runs on DOMContentLoaded |
-| `translations/en.json` | All English strings keyed by `data-i18n` key | Flat or shallow-nested JSON |
-| `translations/es.json` | All Spanish strings keyed by same keys | Mirrors en.json structure |
+**Domain:** Next.js 15 App Router + Supabase platform — v1.2 Security & Polish feature integration
+**Researched:** 2026-03-25
+**Confidence:** HIGH (Supabase MFA, Vercel Cron, and Playwright docs verified against official sources; in-memory rate limiter pattern and Recharts integration confirmed against codebase)
 
 ---
 
-## Recommended Project Structure
+## Context: What Already Exists
+
+This document is integration-focused. The v1.1 platform is fully running. The eight new features (2FA, rate limiting, weekly digest, notification prefs, admin user management, MRR chart, integration tests, visual regression) must slot into the existing architecture without introducing new layers or rewrites.
+
+**Existing architecture constraints that drive integration decisions:**
+
+- Three Supabase clients: `createClient()` (browser), `createServerSupabase()` (server/cookie-based), `createServiceClient()` (API routes, bypasses RLS)
+- Middleware handles: locale detection, session auth check, role guard for `/admin`, redirect to login
+- Notification pipeline: `notifyTaskEvent()` in `lib/notifications.ts` orchestrates email (Resend), in-app row insert, and Slack; called fire-and-forget from API routes
+- Auth: Supabase email/password with roles `admin | engineer | seller | client` stored in `users.role`
+- Test infra: Vitest (jsdom) + Playwright (chromium with auth state); both already configured
+- Recharts already installed (`"recharts": "^2.13.3"` in package.json)
+- `subscriptions.price_monthly` already exists — MRR data is already in the DB
+
+---
+
+## System Overview
 
 ```
-06-landing-pages/
-├── index.html                    # Main conversion page (/)
-├── services/
-│   ├── performance.html          # Performance as a Service detail
-│   ├── observability.html        # Observability as a Service detail
-│   └── fractional-sre.html       # Fractional Perf & SRE detail
-├── partials/
-│   ├── nav.html                  # Shared nav fragment
-│   └── footer.html               # Shared footer fragment
-├── css/
-│   ├── tokens.css                # Design tokens (custom properties) — loaded first
-│   ├── base.css                  # Reset, body, typography
-│   ├── layout.css                # Container, grid, section utilities
-│   └── components.css            # All reusable UI components
-├── js/
-│   ├── main.js                   # Partial injection + scroll behavior
-│   └── i18n.js                   # Language detection, translation, toggle
-├── translations/
-│   ├── en.json                   # English strings
-│   └── es.json                   # Spanish strings
-└── assets/
-    ├── fonts/                    # Local font files (if self-hosting)
-    ├── icons/                    # SVG icons
-    └── logo.svg                  # Vantix logo
+┌─────────────────────────────────────────────────────────────────────┐
+│  Next.js 15 App Router (Vercel)                                     │
+│                                                                     │
+│  ┌──────────────┐  ┌───────────────┐  ┌────────────┐  ┌──────────┐ │
+│  │  Middleware  │  │  Admin Pages  │  │  Portal    │  │ Cron API │ │
+│  │  (existing)  │  │  (+ users pg) │  │  Pages     │  │ /digest  │ │
+│  │  + AAL2 gate │  │  (+ MRR chart)│  │  (+ notif  │  │          │ │
+│  │  + rate gate │  │               │  │   prefs)   │  │          │ │
+│  └──────┬───────┘  └──────┬────────┘  └─────┬──────┘  └────┬─────┘ │
+│         │                 │                  │              │       │
+│  ┌──────┴─────────────────┴──────────────────┴──────────────┴─────┐ │
+│  │                    API Routes Layer                             │ │
+│  │  /api/checkout  /api/billing-portal  /api/tasks/*              │ │
+│  │  /api/webhooks/stripe                                          │ │
+│  │  /api/admin/users  /api/admin/users/[id]  (NEW)                │ │
+│  │  /api/cron/digest  (NEW)                                       │ │
+│  │                                                                │ │
+│  │  Rate Limiter: lib/rate-limit.ts (in-memory Map, per-route)   │ │
+│  └────────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────┘
+           │                           │                │
+           ▼                           ▼                ▼
+┌──────────────────┐   ┌───────────────────────────┐  ┌──────────┐
+│ Supabase Auth    │   │ Supabase Postgres          │  │  Resend  │
+│ (existing)       │   │ (existing 13 tables)       │  │ (existing│
+│ + TOTP MFA       │   │ + user_notification_prefs  │  │  + weekly│
+│   enroll/verify  │   │ + user_invitations         │  │  digest) │
+│ + AAL2 sessions  │   │                            │  └──────────┘
+└──────────────────┘   └───────────────────────────┘
 ```
 
-### Structure Rationale
+---
 
-- **`services/` subdirectory:** Groups detail pages under a clean URL path (`/services/performance.html`). Keeps `index.html` isolated as the primary entry point.
-- **`partials/`:** Fragment files (no `<html>` shell) fetched once per page load and injected into a `<div id="nav-placeholder">`. Avoids duplicating nav markup across 4 HTML files.
-- **`css/` split into 4 files:** `tokens.css` first ensures custom properties are always available; components never hard-code color or spacing values. This is the minimum viable CSS architecture that prevents the "spaghetti" problem of the existing pages (all CSS inline in `<style>` blocks).
-- **`translations/` as JSON files:** JSON is the universal choice — loaded with `fetch()`, parsed with `JSON.parse()`, no extra dependencies. Flat key structure (`"hero.title"`) is readable and tooling-friendly.
-- **`js/` split into `main.js` and `i18n.js`:** Single responsibility per file. `i18n.js` can be tested in isolation; `main.js` handles all other page interactions.
+## Component Inventory: New vs Modified
+
+| Component | Status | Location | Notes |
+|-----------|--------|----------|-------|
+| `src/middleware.ts` | **MODIFIED** | Existing | Add AAL2 MFA check after existing role guard |
+| `src/lib/rate-limit.ts` | **NEW** | `src/lib/` | In-memory sliding window rate limiter |
+| `src/lib/mfa.ts` | **NEW** | `src/lib/` | TOTP enroll / verify / unenroll wrappers |
+| `src/lib/digest.ts` | **NEW** | `src/lib/` | Weekly digest query + send logic |
+| `src/lib/emails/WeeklyDigestEmail.tsx` | **NEW** | `src/lib/emails/` | React Email digest template |
+| `src/lib/notifications.ts` | **MODIFIED** | Existing | Add preference filter before each channel send |
+| `src/app/api/admin/users/route.ts` | **NEW** | `src/app/api/admin/users/` | GET list users, POST invite |
+| `src/app/api/admin/users/[id]/route.ts` | **NEW** | `src/app/api/admin/users/[id]/` | PATCH role/deactivate |
+| `src/app/api/cron/digest/route.ts` | **NEW** | `src/app/api/cron/digest/` | Secured by CRON_SECRET |
+| `src/app/api/checkout/route.ts` | **MODIFIED** | Existing | Add rate limiter check at top |
+| `src/app/api/billing-portal/route.ts` | **MODIFIED** | Existing | Add rate limiter check at top |
+| `src/app/api/tasks/route.ts` | **MODIFIED** | Existing | Add rate limiter check at top |
+| `src/app/[locale]/admin/users/page.tsx` | **NEW** | Admin pages | User list + invite form + role/deactivate |
+| `src/app/[locale]/admin/billing/page.tsx` | **MODIFIED** | Existing | Add MRR chart section |
+| `src/app/[locale]/portal/security/page.tsx` | **NEW** | Portal pages | 2FA enrollment UI |
+| `src/app/[locale]/portal/notifications/page.tsx` | **NEW** | Portal pages | Notification preference toggles |
+| `src/app/[locale]/mfa-verify/page.tsx` | **NEW** | Outside /portal | MFA challenge screen (shown post-login) |
+| `supabase/migrations/005_notification_prefs.sql` | **NEW** | Migrations | `user_notification_prefs` table + RLS |
+| `supabase/migrations/006_user_invitations.sql` | **NEW** | Migrations | `user_invitations` tracking table + RLS |
+| `vercel.json` | **NEW** | `platform/` root | Cron schedule definition |
+| `src/__tests__/api/*.test.ts` | **NEW** | `src/__tests__/api/` | Integration tests for API routes |
+| `e2e/visual/*.spec.ts` | **NEW** | `e2e/visual/` | Visual regression tests |
+| `playwright.config.ts` | **MODIFIED** | Existing | Add `visual` project |
+
+---
+
+## Feature Integration Details
+
+### Feature 1: Two-Factor Authentication (TOTP) — SEC-01
+
+**Integration point:** Supabase Auth TOTP MFA is enabled by default on all Supabase projects and free on all plans. No new infrastructure needed. The existing `@supabase/ssr` client already has the MFA API available.
+
+**Authentication Assurance Levels:**
+- `aal1` = password only (current state for all users)
+- `aal2` = password + TOTP verified (after enrollment and challenge)
+
+**New files:**
+
+```
+src/app/[locale]/portal/security/page.tsx   ← Enrollment UI: QR code + verify + manage
+src/app/[locale]/mfa-verify/page.tsx        ← Challenge screen post-login
+src/lib/mfa.ts                              ← enroll(), verify(), unenroll() SDK wrappers
+```
+
+**Middleware change (additive — append after existing role check):**
+
+```typescript
+// src/middleware.ts — after existing admin role check, before final return:
+const { data: aalData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+if (
+  aalData?.nextLevel === 'aal2' &&
+  aalData?.currentLevel !== 'aal2' &&
+  pathWithoutLocale !== '/mfa-verify'
+) {
+  return NextResponse.redirect(new URL(`/${locale}/mfa-verify`, request.url))
+}
+```
+
+**`getAuthenticatorAssuranceLevel()` is a local computation** — it inspects the JWT claims in the existing session cookie without a network round-trip to Supabase. Latency impact on middleware is negligible.
+
+**Enrollment data flow:**
+
+```
+User visits /portal/security
+  → client: supabase.auth.mfa.enroll({ factorType: 'totp' })
+    returns: { id: factorId, totp: { qr_code, secret } }
+  → Display QR code SVG as <img src="data:..."> + plain-text secret fallback
+  → User scans with authenticator app, enters 6-digit code
+  → client: supabase.auth.mfa.challenge({ factorId })
+    returns: { id: challengeId }
+  → client: supabase.auth.mfa.verify({ factorId, challengeId, code })
+  → on success: session upgraded to aal2; show confirmation
+```
+
+**Login challenge data flow:**
+
+```
+User submits password → aal1 session established
+  → middleware: getAuthenticatorAssuranceLevel()
+      nextLevel === 'aal2' && currentLevel !== 'aal2'?
+        YES → redirect /mfa-verify
+  → /mfa-verify: user enters TOTP code
+      → challenge() + verify() → aal2 session established
+      → redirect to /portal (or stored return URL)
+```
+
+**No DB migration needed.** Supabase stores factor data in `auth.mfa_factors` (internal, managed).
+
+---
+
+### Feature 2: Rate Limiting on API Routes — SEC-02
+
+**Integration point:** The three existing API routes (`/api/checkout`, `/api/billing-portal`, `/api/tasks`) have zero rate limiting. New routes (`/api/admin/*`, `/api/cron/digest`) also need protection.
+
+**Approach: per-route in-memory Map with sliding window.** No Redis or external dependency needed at current scale (Vantix has < 20 concurrent users). Vercel serverless is ephemeral — the Map resets on cold starts, which is acceptable (attackers see the limit reset too, and a cold-start attack is self-throttling).
+
+**New file: `src/lib/rate-limit.ts`**
+
+```typescript
+const store = new Map<string, { count: number; resetAt: number }>()
+
+export function rateLimit(
+  ip: string,
+  limit: number = 20,
+  windowMs: number = 60_000,
+): { allowed: boolean; remaining: number } {
+  const now = Date.now()
+  const entry = store.get(ip)
+
+  if (!entry || now > entry.resetAt) {
+    store.set(ip, { count: 1, resetAt: now + windowMs })
+    return { allowed: true, remaining: limit - 1 }
+  }
+
+  if (entry.count >= limit) {
+    return { allowed: false, remaining: 0 }
+  }
+
+  entry.count++
+  return { allowed: true, remaining: limit - entry.count }
+}
+```
+
+**Usage pattern (added to top of each protected route):**
+
+```typescript
+const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? '127.0.0.1'
+const { allowed } = rateLimit(ip, 20, 60_000)
+if (!allowed) {
+  return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+}
+```
+
+**Limits per route:**
+
+| Route | Limit | Window | Rationale |
+|-------|-------|--------|-----------|
+| `/api/checkout` | 5/min | 60s | Stripe session creation is expensive |
+| `/api/billing-portal` | 10/min | 60s | Portal redirect |
+| `/api/tasks` POST | 20/min | 60s | Normal admin usage |
+| `/api/admin/users` POST | 10/min | 60s | Invite operations |
+| `/api/cron/digest` | CRON_SECRET only | — | Secret validates the caller; no IP rate limit |
+
+---
+
+### Feature 3: Weekly Email Digest — NOTIF-10
+
+**Integration point:** Vercel Cron Jobs trigger an HTTP GET to a new API route at `0 9 * * 1` (Monday 09:00 UTC). The route uses the existing `sendEmail()` helper and reads from existing Supabase tables.
+
+**New files:**
+
+```
+src/app/api/cron/digest/route.ts      ← GET handler, CRON_SECRET gate
+src/lib/digest.ts                     ← query logic + looping send
+src/lib/emails/WeeklyDigestEmail.tsx  ← React Email template (bilingual)
+platform/vercel.json                  ← Cron schedule config (new file)
+```
+
+**`vercel.json`:**
+
+```json
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/cron/digest",
+      "schedule": "0 9 * * 1"
+    }
+  ]
+}
+```
+
+**Security — CRON_SECRET pattern (verified Vercel docs):**
+
+```typescript
+// src/app/api/cron/digest/route.ts
+export async function GET(request: NextRequest) {
+  const authHeader = request.headers.get('authorization')
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return new Response('Unauthorized', { status: 401 })
+  }
+  const result = await sendWeeklyDigest()
+  return Response.json(result)
+}
+```
+
+Vercel automatically injects `Authorization: Bearer $CRON_SECRET` when triggering the cron. Local testing: call `GET /api/cron/digest` with the header manually.
+
+**Digest data flow:**
+
+```
+Vercel Cron (Monday 09:00 UTC)
+  → GET /api/cron/digest (Authorization: Bearer $CRON_SECRET)
+  → digest.ts: SELECT clients WHERE status = 'active'
+  → for each client:
+      SELECT users WHERE client_id = client.id
+      SELECT weekly_metrics WHERE client_id = ? ORDER BY week_start DESC LIMIT 1
+      SELECT tasks WHERE client_id = ? AND updated_at > (now - 7 days)
+      for each user:
+        SELECT user_notification_prefs WHERE user_id = user.id
+        if email_digest_weekly = true (or row is null → default true):
+          sendEmail(WeeklyDigestEmail, { locale, client, metrics, tasks })
+  → return { sent: N, skipped: M }
+```
+
+**Dependency on NOTIF-11:** The `email_digest_weekly` preference check requires the `user_notification_prefs` table. Build NOTIF-11 (migration + table) before NOTIF-10. In the interim, default to send-all (treat missing pref row as `true`).
+
+**Cron plan note:** Vercel Hobby plan allows once-per-day minimum. Weekly (`0 9 * * 1`) is once per week — allowed on all plans. Pro plan gets per-minute precision; Hobby gets ±1 hour accuracy on daily crons (weekly is coarser and within spec).
+
+---
+
+### Feature 4: Notification Preferences — NOTIF-11
+
+**Integration point:** New DB table. The existing `notifyTaskEvent` orchestrator gains a preference lookup before each channel send. Preferences default to `true` (opt-out model) to preserve current behavior for users who have not set preferences.
+
+**New migration: `005_notification_prefs.sql`**
+
+```sql
+CREATE TABLE user_notification_prefs (
+  user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  email_task_created BOOLEAN DEFAULT true,
+  email_task_updated BOOLEAN DEFAULT true,
+  email_digest_weekly BOOLEAN DEFAULT true,
+  inapp_task_created BOOLEAN DEFAULT true,
+  inapp_task_updated BOOLEAN DEFAULT true,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE user_notification_prefs ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users manage own prefs" ON user_notification_prefs
+  FOR ALL USING (user_id = auth.uid());
+
+CREATE POLICY "Admins read all prefs" ON user_notification_prefs
+  FOR SELECT USING (
+    (SELECT role FROM users WHERE id = auth.uid()) IN ('admin', 'engineer')
+  );
+```
+
+**New portal page:**
+
+```
+src/app/[locale]/portal/notifications/page.tsx   ← Toggle switches, one per channel
+```
+
+**Modified `lib/notifications.ts`** — add preference filter inside the per-user loop:
+
+```typescript
+// Before sending to each user, look up their prefs:
+const { data: prefs } = await supabase
+  .from('user_notification_prefs')
+  .select('email_task_created, email_task_updated, inapp_task_created, inapp_task_updated')
+  .eq('user_id', user.id)
+  .single()
+
+// null prefs row = user hasn't set preferences = all channels enabled (default)
+const emailEnabled = eventType === 'task_created'
+  ? (prefs?.email_task_created ?? true)
+  : (prefs?.email_task_updated ?? true)
+
+const inappEnabled = eventType === 'task_created'
+  ? (prefs?.inapp_task_created ?? true)
+  : (prefs?.inapp_task_updated ?? true)
+
+if (emailEnabled) { await sendEmail(...) }
+if (inappEnabled) { await createNotification(...) }
+```
+
+**Preference row creation strategy:** Use `INSERT INTO user_notification_prefs (user_id) VALUES (?) ON CONFLICT DO NOTHING` when a user first visits the notifications page. Avoids a separate onboarding step.
+
+---
+
+### Feature 5: Admin User Management — ADMIN-07
+
+**Integration point:** Uses Supabase Admin API (`supabase.auth.admin.inviteUserByEmail`) from server-side API routes using the existing `createServiceClient()` (service role key). No new auth infrastructure needed.
+
+**New migration: `006_user_invitations.sql`**
+
+```sql
+CREATE TABLE user_invitations (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  email TEXT NOT NULL,
+  role TEXT NOT NULL CHECK (role IN ('admin', 'engineer', 'seller', 'client')),
+  client_id UUID REFERENCES clients(id),
+  invited_by UUID REFERENCES users(id),
+  accepted_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE user_invitations ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Admins manage invitations" ON user_invitations
+  FOR ALL USING (
+    (SELECT role FROM users WHERE id = auth.uid()) IN ('admin', 'engineer')
+  );
+```
+
+**New API routes:**
+
+```
+src/app/api/admin/users/route.ts       ← GET list, POST invite
+src/app/api/admin/users/[id]/route.ts  ← PATCH (role/deactivate)
+```
+
+**Security pattern for all `/api/admin/*` routes** — verify caller before using service client:
+
+```typescript
+// Every admin API route must do this:
+const userClient = createServerSupabase()        // cookie-based, respects RLS
+const { data: { user } } = await userClient.auth.getUser()
+if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+const { data: profile } = await userClient
+  .from('users').select('role').eq('id', user.id).single()
+if (!['admin', 'engineer'].includes(profile?.role ?? '')) {
+  return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+}
+
+// Now safe to use service client for privileged operation:
+const admin = createServiceClient()
+```
+
+**Invite flow:**
+
+```
+Admin submits form: { email, role, client_id? }
+  → POST /api/admin/users
+  → verify caller is admin
+  → serviceClient.auth.admin.inviteUserByEmail(email, {
+      data: { role, client_id }  // stored in user metadata
+    })
+  → Supabase sends magic-link invite email to user
+  → INSERT user_invitations { email, role, client_id, invited_by }
+  → return 201
+
+User receives email, clicks link
+  → Supabase handles accept flow (sets password)
+  → Trigger or post-signup hook creates users row with role from metadata
+  → UPDATE user_invitations SET accepted_at = NOW() WHERE email = ?
+```
+
+**Known limitation:** `inviteUserByEmail` does not support PKCE (documented by Supabase — the browser sending the invite differs from the one accepting it). This is expected behavior and does not affect security for this use case.
+
+**Role change flow:**
+
+```
+Admin changes role in dropdown
+  → PATCH /api/admin/users/[id] { action: 'role', role: 'engineer' }
+  → serviceClient.from('users').update({ role }).eq('id', userId)
+  → Middleware picks up new role on user's next request (session refresh)
+```
+
+**Deactivate flow:**
+
+```
+Admin clicks Deactivate
+  → PATCH /api/admin/users/[id] { action: 'deactivate' }
+  → serviceClient.auth.admin.updateUserById(userId, { ban_duration: '87600h' })
+    (ban for 10 years = effective permanent)
+  → OR: UPDATE users SET status = 'inactive' WHERE id = ? (soft delete, no auth ban)
+```
+
+**New admin page:**
+
+```
+src/app/[locale]/admin/users/page.tsx   ← Table: name, email, role, status + actions
+                                            Invite form: email + role + client select
+                                            Pending invitations list
+```
+
+---
+
+### Feature 6: Admin MRR Trend Chart — ADMIN-08
+
+**Integration point:** Recharts is already installed. MRR data already exists in `subscriptions.price_monthly` + `subscriptions.started_at` + `subscriptions.cancelled_at`. No new library, no new DB migration needed.
+
+**Data query approach** — aggregate from existing `subscriptions` table in the route or server component. At current scale (< 20 clients), simple in-process aggregation is sufficient:
+
+```typescript
+// Pseudo-logic for 12-month MRR series:
+const months = getLast12Months()  // array of { start: Date, end: Date, label: string }
+const { data: subs } = await supabase
+  .from('subscriptions')
+  .select('price_monthly, started_at, cancelled_at, status, currency')
+
+const mrrData = months.map(({ start, end, label }) => ({
+  month: label,
+  mrr: subs
+    .filter(s =>
+      s.price_monthly > 0 &&
+      new Date(s.started_at) <= end &&
+      (!s.cancelled_at || new Date(s.cancelled_at) >= start)
+    )
+    .reduce((sum, s) => sum + Number(s.price_monthly), 0)
+}))
+```
+
+**Integration into existing billing page:**
+
+```
+src/app/[locale]/admin/billing/page.tsx   ← Add MRR chart section above billing table
+```
+
+**Chart component (new Client Component):**
+
+```
+src/components/MRRChart.tsx   ← 'use client', wraps Recharts AreaChart
+```
+
+**Server/Client boundary:** The billing page (`page.tsx`) is a server component that fetches subscription data. It passes the aggregated `mrrData` array as props to `<MRRChart />` which is a `'use client'` component. Recharts uses browser APIs and cannot render in server context.
+
+---
+
+### Feature 7: Integration Tests for API Routes — TEST-10
+
+**Integration point:** Existing Vitest setup uses jsdom environment. API route integration tests need Node environment. Recommended library: `next-test-api-route-handler` — wraps actual route handlers in a simulated Next.js environment without running the server.
+
+**New dev dependency:**
+
+```bash
+npm install -D next-test-api-route-handler
+```
+
+**New test files:**
+
+```
+src/__tests__/api/
+  checkout.test.ts          ← Tests POST /api/checkout: rate limit, Stripe call, response
+  billing-portal.test.ts    ← Tests POST /api/billing-portal
+  tasks.test.ts             ← Tests POST /api/tasks: field validation, notify call
+  admin-users.test.ts       ← Tests POST /api/admin/users: auth check, invite call
+  cron-digest.test.ts       ← Tests GET /api/cron/digest: CRON_SECRET, send count
+```
+
+**Per-file environment override** (Node required for route handlers):
+
+```typescript
+// @vitest-environment node
+import { testApiHandler } from 'next-test-api-route-handler'
+import * as handler from '@/app/api/checkout/route'
+```
+
+**Extended Supabase mock** — new `src/lib/supabase/__mocks__/server.ts`:
+
+```typescript
+export const createServerSupabase = vi.fn(() => ({
+  auth: { getUser: vi.fn() },
+  from: vi.fn(() => ({ select: vi.fn(), insert: vi.fn(), update: vi.fn(), eq: vi.fn(), single: vi.fn() })),
+}))
+
+export const createServiceClient = vi.fn(() => ({
+  from: vi.fn(() => ({ select: vi.fn(), insert: vi.fn(), update: vi.fn(), eq: vi.fn(), single: vi.fn() })),
+  auth: {
+    admin: {
+      inviteUserByEmail: vi.fn(),
+      updateUserById: vi.fn(),
+    }
+  },
+}))
+```
+
+**Stripe mock** — `src/lib/__mocks__/stripe.ts`:
+
+```typescript
+export const getStripe = vi.fn(() => ({
+  customers: { create: vi.fn() },
+  checkout: { sessions: { create: vi.fn(() => ({ url: 'https://checkout.stripe.com/test' })) } },
+  billingPortal: { sessions: { create: vi.fn() } },
+}))
+```
+
+**Rate limiter mock** — `src/lib/__mocks__/rate-limit.ts`:
+
+```typescript
+export const rateLimit = vi.fn(() => ({ allowed: true, remaining: 19 }))
+```
+
+---
+
+### Feature 8: Visual Regression Tests — TEST-11
+
+**Integration point:** Playwright already configured with `chromium` project and `playwright/.auth/user.json` auth state. Visual regression uses `page.toHaveScreenshot()` — no new dependencies.
+
+**New Playwright project in `playwright.config.ts`:**
+
+```typescript
+{
+  name: 'visual',
+  testMatch: /visual\/.*\.spec\.ts/,
+  use: {
+    ...devices['Desktop Chrome'],
+    storageState: 'playwright/.auth/user.json',
+  },
+  dependencies: ['setup'],
+}
+```
+
+**New test files:**
+
+```
+e2e/visual/
+  admin-overview.spec.ts        ← Admin dashboard overview
+  admin-billing.spec.ts         ← MRR chart (mask chart values)
+  portal-dashboard.spec.ts      ← Client portal home
+  portal-notifications.spec.ts  ← Notification preferences toggles
+  portal-security.spec.ts       ← 2FA enrollment page
+  login.spec.ts                 ← Login page (no auth required)
+```
+
+**Standard visual test pattern:**
+
+```typescript
+test('admin overview matches snapshot', async ({ page }) => {
+  await page.goto('/en/admin')
+  await page.waitForLoadState('networkidle')
+  await expect(page).toHaveScreenshot('admin-overview.png', {
+    mask: [
+      page.locator('[data-testid="timestamp"]'),
+      page.locator('[data-testid="live-metric"]'),
+    ],
+    maxDiffPixels: 50,
+  })
+})
+```
+
+**Baseline update:**
+
+```bash
+# Generate initial baselines (run once):
+playwright test --project=visual --update-snapshots
+
+# Review diffs after UI changes:
+playwright show-report
+```
+
+**Critical: mask dynamic content.** Timestamps, MRR chart values, notification counts, and any data that changes between runs must be masked. Chart areas should be masked entirely for the MRR chart, or seed deterministic test data via `scripts/seed-demo.js` before visual runs.
+
+---
+
+## Data Flow Diagrams
+
+### 2FA Login Flow
+
+```
+User submits password
+  → aal1 session established
+  → middleware: getAuthenticatorAssuranceLevel()
+      nextLevel === 'aal2' && currentLevel !== 'aal2'?
+        YES → redirect /mfa-verify
+        NO  → allow to /portal
+  → /mfa-verify: user enters TOTP
+      → challenge({ factorId }) → verify({ factorId, challengeId, code })
+      → aal2 session established
+      → redirect /portal
+```
+
+### Weekly Digest Flow
+
+```
+Vercel Cron (Monday 09:00 UTC)
+  → GET /api/cron/digest
+  → validate CRON_SECRET
+  → digest.ts:
+      for each active client:
+        for each user:
+          check user_notification_prefs (email_digest_weekly)
+          if enabled:
+            query tasks + weekly_metrics for that client
+            sendEmail(WeeklyDigestEmail)
+  → return { sent: N, skipped: M }
+```
+
+### Admin Invite Flow
+
+```
+Admin: POST /api/admin/users { email, role, client_id }
+  → verify admin role (userClient)
+  → serviceClient.auth.admin.inviteUserByEmail(email, { data: { role, client_id } })
+  → INSERT user_invitations
+  → Supabase sends invite email
+
+User clicks link
+  → Supabase handles redirect + password set
+  → users row created (role from metadata)
+  → UPDATE user_invitations SET accepted_at = NOW()
+```
+
+### MRR Chart Data Flow
+
+```
+Admin visits /admin/billing
+  → Server component fetches subscriptions from Supabase
+  → Aggregates price_monthly per month (12-month window)
+  → Passes mrrData[] as props to <MRRChart /> (client component)
+  → Recharts renders AreaChart in browser
+```
+
+---
+
+## Recommended Project Structure (Delta — v1.2 additions only)
+
+```
+platform/
+├── vercel.json                          ← NEW — cron schedule config
+├── src/
+│   ├── app/
+│   │   ├── api/
+│   │   │   ├── admin/
+│   │   │   │   ├── users/
+│   │   │   │   │   ├── route.ts         ← NEW: GET list, POST invite
+│   │   │   │   │   └── [id]/
+│   │   │   │   │       └── route.ts     ← NEW: PATCH role/deactivate
+│   │   │   │   └── mrr/
+│   │   │   │       └── route.ts         ← OPTIONAL: if extracting MRR query to API
+│   │   │   └── cron/
+│   │   │       └── digest/
+│   │   │           └── route.ts         ← NEW: CRON_SECRET guarded GET
+│   │   └── [locale]/
+│   │       ├── admin/
+│   │       │   └── users/
+│   │       │       └── page.tsx         ← NEW: user management UI
+│   │       ├── portal/
+│   │       │   ├── security/
+│   │       │   │   └── page.tsx         ← NEW: 2FA enrollment
+│   │       │   └── notifications/
+│   │       │       └── page.tsx         ← NEW: notification preference toggles
+│   │       └── mfa-verify/
+│   │           └── page.tsx             ← NEW: TOTP challenge screen
+│   ├── components/
+│   │   └── MRRChart.tsx                 ← NEW: 'use client' Recharts wrapper
+│   ├── lib/
+│   │   ├── mfa.ts                       ← NEW: TOTP enroll/verify/unenroll
+│   │   ├── rate-limit.ts                ← NEW: in-memory sliding window
+│   │   ├── digest.ts                    ← NEW: weekly digest logic
+│   │   └── emails/
+│   │       └── WeeklyDigestEmail.tsx    ← NEW: React Email template
+│   └── __tests__/
+│       └── api/
+│           ├── checkout.test.ts         ← NEW
+│           ├── billing-portal.test.ts   ← NEW
+│           ├── tasks.test.ts            ← NEW
+│           ├── admin-users.test.ts      ← NEW
+│           └── cron-digest.test.ts      ← NEW
+├── supabase/
+│   └── migrations/
+│       ├── 005_notification_prefs.sql   ← NEW
+│       └── 006_user_invitations.sql     ← NEW
+└── e2e/
+    └── visual/
+        ├── admin-overview.spec.ts        ← NEW
+        ├── admin-billing.spec.ts         ← NEW
+        ├── portal-dashboard.spec.ts      ← NEW
+        ├── portal-notifications.spec.ts  ← NEW
+        └── portal-security.spec.ts       ← NEW
+```
 
 ---
 
 ## Architectural Patterns
 
-### Pattern 1: fetch-inject for Shared Partials
+### Pattern 1: Additive Middleware Guard
 
-**What:** Each HTML page declares empty placeholder elements. On `DOMContentLoaded`, `main.js` fetches the partial HTML file and injects it with `innerHTML`.
+**What:** Append a new auth check to existing middleware by appending logic after the existing checks. Each guard returns early if its condition does not apply; otherwise falls through.
 
-**When to use:** Any static multi-page site with 2+ pages sharing nav/footer, no build step available.
+**When to use:** Adding the MFA AAL2 check without restructuring the existing locale + session + role guards.
 
-**Trade-offs:** Nav/footer are not in the initial HTML (slight FOUC risk). Acceptable here because nav is not above-the-fold critical content. Mitigate with `visibility: hidden` on placeholder until injection completes.
+**Trade-offs:** `getAuthenticatorAssuranceLevel()` is a local JWT inspection (no network call) when the session is cached — documented as microsecond-fast. Safe to call on every protected request.
 
-**Example:**
-```html
-<!-- In every HTML page -->
-<div id="nav-placeholder"></div>
-```
+### Pattern 2: Service Client for Privileged Admin Operations
 
-```javascript
-// js/main.js
-async function loadPartials() {
-  const root = document.documentElement.dataset.root || '';
-  const nav = await fetch(`${root}/partials/nav.html`).then(r => r.text());
-  document.getElementById('nav-placeholder').innerHTML = nav;
-  // Fire i18n AFTER nav is injected so nav strings also get translated
-  window.i18n.applyTranslations();
-}
-document.addEventListener('DOMContentLoaded', loadPartials);
-```
+**What:** All `/api/admin/*` route handlers follow a two-client pattern: (1) use `createServerSupabase()` (cookie-based, respects RLS) to verify the caller's role, then (2) use `createServiceClient()` (service role, bypasses RLS) for the privileged operation.
 
-**Critical dependency:** i18n must run AFTER partial injection completes. This means `i18n.applyTranslations()` is called as a callback from `loadPartials()`, not independently on `DOMContentLoaded`.
+**When to use:** Any time an admin needs to write data on behalf of another user, or use Supabase Admin API methods. Never use service client for reads that should be scoped to the caller.
 
-### Pattern 2: data-i18n Attribute Translation
+**Trade-offs:** Service role bypasses all RLS. Every admin route must do its own explicit authorization check. Treat the service client as a loaded gun — verify intent before use.
 
-**What:** Every translatable string in HTML gets a `data-i18n` attribute with a dot-notation key. `i18n.js` walks the DOM, looks up each key in the active translation JSON, and sets `textContent` (or `placeholder` for inputs).
+### Pattern 3: CRON_SECRET Gate
 
-**When to use:** Any static site needing bilingual content without a framework.
+**What:** Vercel injects `Authorization: Bearer $CRON_SECRET` on cron-triggered requests. The handler validates this before executing.
 
-**Trade-offs:** Initial HTML render shows keys briefly if JS is slow (negligible in practice; translations are ~5-10KB JSON). Screen readers see final translated text. Attributes are grep-able — easy to audit coverage.
+**When to use:** All `/api/cron/*` routes. Also allows manual testing locally by providing the header.
 
-**Example:**
-```html
-<!-- HTML markup -->
-<h1 data-i18n="hero.title"></h1>
-<p data-i18n="hero.subtitle"></p>
-<a href="#" data-i18n="hero.cta_primary"></a>
-<input data-i18n-placeholder="contact.email_placeholder">
-```
+**Trade-offs:** The secret must be added to Vercel's environment variables. Rotate it if it leaks. Anyone with the secret can trigger the job, so treat it with the same care as a service account key.
 
-```json
-// translations/en.json
-{
-  "hero": {
-    "title": "Your team doesn't need more tools. It needs them to work.",
-    "subtitle": "Vantix is your external Performance & SRE team.",
-    "cta_primary": "Book a Checkup →"
-  },
-  "contact": {
-    "email_placeholder": "your@email.com"
-  }
-}
-```
+### Pattern 4: Preference-Aware Notification Filtering
 
-```javascript
-// js/i18n.js (core logic sketch)
-async function loadTranslations(lang) {
-  const res = await fetch(`/translations/${lang}.json`);
-  return res.json();
-}
+**What:** Before each channel send inside `notifyTaskEvent`, look up `user_notification_prefs` for the recipient. Treat a missing row as all-enabled (null-coalescing to `true`).
 
-function applyTranslations(strings) {
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.dataset.i18n;
-    const value = getNestedValue(strings, key);
-    if (value) el.textContent = value;
-  });
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-    const key = el.dataset.i18nPlaceholder;
-    const value = getNestedValue(strings, key);
-    if (value) el.placeholder = value;
-  });
-}
-```
+**When to use:** Every new notification channel should follow this same gate. The `user_notification_prefs` table is the single source of truth for per-user, per-channel opt-outs.
 
-### Pattern 3: CSS Custom Properties Dark Theme
+**Trade-offs:** One extra DB query per recipient per event. Acceptable at current scale. If the recipient list grows (fan-out to 50+ users), fetch all prefs in a single `IN` query before the loop.
 
-**What:** All color, spacing, and typography values defined as CSS custom properties in `:root`. Dark theme is the default (set directly on `:root`). No `prefers-color-scheme` toggle needed — the site is always dark as a brand choice.
+### Pattern 5: Server-Fetched, Client-Rendered Chart
 
-**When to use:** When dark is the fixed brand aesthetic, not a user-switchable preference.
+**What:** Server component fetches and aggregates raw subscription data, passes as serializable props to a `'use client'` chart component.
 
-**Trade-offs:** Simpler than a toggleable system. If a light mode is ever needed, it is trivially added with `[data-theme="light"]` overrides.
+**When to use:** Any visualization using Recharts, Chart.js, or other browser-API-dependent charting libraries inside a Next.js App Router page.
 
-**Example:**
-```css
-/* css/tokens.css */
-:root {
-  /* Brand colors */
-  --color-bg:          #0F1B33;
-  --color-bg-surface:  #1B2A4A;
-  --color-bg-elevated: #243356;
-  --color-accent:      #2E75B6;
-  --color-accent-muted:#6BA3D6;
-  --color-text:        #E8ECF2;
-  --color-text-muted:  #8A9BC0;
-  --color-text-faint:  #556B8E;
-  --color-border:      rgba(255,255,255,0.08);
-  --color-danger:      #C0392B;
-  --color-success:     #27AE60;
-  --color-warning:     #E67E22;
-
-  /* Typography */
-  --font-sans:  'DM Sans', sans-serif;
-  --font-mono:  'JetBrains Mono', monospace;
-  --text-xs:    12px;
-  --text-sm:    14px;
-  --text-base:  16px;
-  --text-lg:    18px;
-  --text-xl:    20px;
-  --text-2xl:   24px;
-  --text-3xl:   32px;
-  --text-4xl:   44px;
-  --text-5xl:   56px;
-
-  /* Spacing */
-  --space-section: 80px;
-  --space-card:    32px;
-
-  /* Radii */
-  --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-pill: 100px;
-}
-```
+**Trade-offs:** Separates data fetching (server) from rendering (client). Means the chart cannot update in real time without adding a client-side fetch or SWR hook, but for an admin billing chart that changes monthly, static render is sufficient.
 
 ---
 
-## Data Flow
-
-### i18n Data Flow (Page Load)
+## Build Order — Dependency Graph
 
 ```
-Browser loads index.html
-    ↓
-<script src="js/main.js"> runs on DOMContentLoaded
-    ↓
-main.js: fetch('/partials/nav.html') + fetch('/partials/footer.html')
-    ↓
-Inject nav/footer innerHTML into placeholders
-    ↓
-main.js calls: i18n.init()
-    ↓
-i18n.js: read localStorage('vantix_lang')
-    ↓ (if null)
-i18n.js: navigator.languages[0].startsWith('es') → set 'es', else 'en'
-    ↓
-i18n.js: fetch('/translations/{lang}.json')
-    ↓
-i18n.js: applyTranslations(strings) — walks ALL [data-i18n] in DOM
-    ↓
-document.documentElement.lang = lang  (updates <html lang="...">)
-    ↓
-Page renders with correct language
+[SEC-02] Rate Limiting        ← No deps. Touches only existing routes.
+     ↓ (parallel OK)
+[SEC-01] 2FA / TOTP           ← No deps. Middleware change is additive.
+     ↓
+[NOTIF-11] Notification Prefs ← Migration + UI. No deps.
+     ↓
+[NOTIF-10] Weekly Digest      ← Depends on NOTIF-11 (pref table for filter)
+     ↓ (parallel OK)
+[ADMIN-07] User Management    ← No deps. New routes + page.
+     ↓ (parallel OK)
+[ADMIN-08] MRR Chart          ← No deps. Data already in DB, Recharts already installed.
+     ↓
+[TEST-10] Integration Tests   ← Depends on all API routes being complete.
+     ↓
+[TEST-11] Visual Regression   ← Depends on all UI pages being complete.
 ```
 
-### Language Toggle Flow
+**Recommended phase grouping:**
 
-```
-User clicks lang toggle button (in nav)
-    ↓
-i18n.toggle() called
-    ↓
-Flip lang: 'en' ↔ 'es'
-    ↓
-localStorage.setItem('vantix_lang', newLang)
-    ↓
-fetch('/translations/{newLang}.json')
-    ↓
-applyTranslations(newStrings)
-    ↓
-Update toggle button label + document.documentElement.lang
-```
-
-### Key Dependency Rule
-
-The partial injection and i18n application must be sequential, not parallel. The `nav.html` partial contains `data-i18n` nodes (nav links, lang toggle label). If `applyTranslations()` runs before the nav is injected, those strings stay untranslated.
-
-**Correct order:**
-1. Fetch partials (parallel fetch for nav + footer is fine)
-2. Inject both partials into DOM
-3. Then call `i18n.init()`
-
-### Calendly Integration Flow
-
-```
-User clicks CTA button ("Book a Checkup")
-    ↓
-Calendly.initPopupWidget({ url: 'https://calendly.com/vantix/...' })
-    ↓
-Calendly iframe opens as overlay
-    ↓
-User completes booking (handled entirely by Calendly)
-    ↓
-Calendly fires event.data.event === 'calendly.event_scheduled'
-    ↓ (optional)
-window.postMessage listener → confirmation UI or analytics event
-```
-
-Calendly's `<script>` tag and CSS link are loaded once in the `<head>` of each HTML page. Use the **popup text** pattern for CTA buttons (not inline embed) — keeps the page layout clean and lets the Calendly overlay appear on demand.
+| Phase | Features | Rationale |
+|-------|----------|-----------|
+| 1 | SEC-02 rate limiting | Isolated change to existing routes, lowest risk |
+| 2 | SEC-01 2FA/TOTP | Middleware change; needs clean state from Phase 1 |
+| 3 | NOTIF-11 prefs + NOTIF-10 digest | Sequential: prefs migration before digest preference filter |
+| 4 | ADMIN-07 user mgmt + ADMIN-08 MRR chart | Independent of each other; can parallelize within phase |
+| 5 | TEST-10 integration tests + TEST-11 visual regression | Must come last; tests stable features |
 
 ---
 
@@ -321,50 +801,53 @@ Calendly's `<script>` tag and CSS link are loaded once in the `<head>` of each H
 
 | Scale | Architecture Adjustments |
 |-------|--------------------------|
-| 4 pages, 2 languages | Current plan — fetch-inject + JSON i18n is sufficient. No build step needed. |
-| 10+ pages | Translation key management becomes painful without a spreadsheet or tooling. Consider a thin build step (Eleventy or 11ty) that compiles partials at build time instead of runtime. |
-| SEO becomes critical | Client-side i18n means search engines see blank `data-i18n` attributes unless they execute JS. For v1 this is acceptable. For v2, pre-render both language versions as separate HTML files (`/en/`, `/es/`). |
-
-### Scaling Priorities
-
-1. **First limitation:** Translation file maintenance — as copy evolves, keeping `en.json` and `es.json` in sync is a manual discipline problem. Add a simple key-audit script in `js/` that logs missing/extra keys.
-2. **Second limitation:** Partial fetch latency — nav/footer are invisible until fetched. On slow connections this creates a layout shift. Mitigate with a skeleton or by inlining the nav on the main page (one exception to DRY is acceptable for the most-trafficked page).
+| Current (< 20 users, < 20 clients) | In-memory rate limiter is fine. Digest loops in-process. MRR aggregation in-process. |
+| 100 users / 100 clients | Replace Map-based rate limiter with `@upstash/ratelimit` + Vercel KV. Digest loop can still run in-process (< 100 emails in one cron invocation). |
+| 1,000+ users | Move digest to Trigger.dev or Inngest (background job with retries). Rate limiting at Edge middleware. MRR chart switches to a precomputed materialized view. |
 
 ---
 
 ## Anti-Patterns
 
-### Anti-Pattern 1: All CSS Inline in Each HTML File
+### Anti-Pattern 1: Calling Service Client from Middleware
 
-**What people do:** Copy-paste the `<style>` block from one HTML file to the next (as in the existing `06-landing-pages/` files).
+**What people do:** Use `createServiceClient()` in `middleware.ts` to bypass RLS for role checks.
 
-**Why it's wrong:** Any design change requires editing 4 files. Token inconsistencies accumulate. Dark theme rework becomes a search-and-replace problem across thousands of lines.
+**Why it's wrong:** Middleware runs on the Vercel Edge Runtime. The service role key must remain server-only. Embedding it in middleware exposes it to the edge context and can cause configuration errors. The existing middleware uses `createServerClient` with the anon key — this is correct.
 
-**Do this instead:** Extract all CSS into `css/tokens.css`, `css/base.css`, `css/components.css`. Each HTML file links those 3-4 stylesheets. One change in `tokens.css` propagates across all pages instantly.
+**Do this instead:** Keep service client usage inside `/api/*` route handlers only. The existing middleware role check (`supabase.from('users').select('role')` with the anon key) is sufficient because RLS allows authenticated users to read their own `users` row.
 
-### Anti-Pattern 2: Translating via Separate HTML Files per Language
+### Anti-Pattern 2: Calling Admin API from Client Components
 
-**What people do:** Create `index-en.html` and `index-es.html` and maintain both separately.
+**What people do:** Call `supabase.auth.admin.inviteUserByEmail` directly in a client component using `createClient()`.
 
-**Why it's wrong:** Copy changes must be made twice. Structure diverges over time. Navigation between pages must carry a language parameter through every link.
+**Why it's wrong:** Admin API methods require the service role key. The anon key returns 403. These methods must always go through an API route that uses `createServiceClient()`.
 
-**Do this instead:** Single HTML file per page with `data-i18n` attributes. Language stored in `localStorage`. One source of truth for structure; JSON files as the source of truth for copy.
+**Do this instead:** POST to `/api/admin/users` from the admin page's form submit handler. The route handler verifies the caller's role, then uses `createServiceClient()` for the invite operation.
 
-### Anti-Pattern 3: Loading Calendly on Every Page
+### Anti-Pattern 3: Skipping AAL Check on Protected Routes
 
-**What people do:** Put the Calendly `<script>` and `<link>` in the shared nav partial so it loads universally.
+**What people do:** Only check MFA enrollment at login time; skip `getAuthenticatorAssuranceLevel()` in middleware.
 
-**Why it's wrong:** Calendly scripts add ~150KB to every page, including service detail pages where it may not be the primary CTA.
+**Why it's wrong:** If a user's session is refreshed without completing the MFA challenge (e.g., via token refresh), they bypass 2FA on subsequent requests.
 
-**Do this instead:** Include the Calendly script only in pages that have a booking CTA. `index.html` and the service detail pages all have CTAs, so in practice it loads everywhere — but keep it explicit in each page's `<head>`, not in the shared partial.
+**Do this instead:** Call `getAuthenticatorAssuranceLevel()` in middleware on every request to `/portal` and `/admin`. It is a local JWT inspection — no latency cost.
 
-### Anti-Pattern 4: Running i18n Before Partials are Injected
+### Anti-Pattern 4: Recharts Directly in Server Components
 
-**What people do:** Call `i18n.init()` in a separate `DOMContentLoaded` listener that races with the partial-fetch listener.
+**What people do:** Import `{ AreaChart }` from `'recharts'` inside a `page.tsx` or `layout.tsx` without `'use client'`.
 
-**Why it's wrong:** The nav partial contains `data-i18n` nodes. If `applyTranslations()` runs first, those nodes don't exist yet and their translations are silently skipped. The language toggle renders in the wrong language.
+**Why it's wrong:** Recharts uses `window` and DOM APIs. Server-side rendering throws: `ReferenceError: window is not defined`.
 
-**Do this instead:** Call `i18n.init()` as a `.then()` callback after all partial injections are complete. One `DOMContentLoaded` listener in `main.js` orchestrates the full sequence.
+**Do this instead:** Isolate all Recharts imports in a dedicated `'use client'` component (`<MRRChart />`). The server component fetches data and passes it as props. The client component handles rendering.
+
+### Anti-Pattern 5: Visual Tests Against Live Data
+
+**What people do:** Take screenshots of pages showing live DB values (task counts, timestamps, MRR numbers) and compare against a baseline.
+
+**Why it's wrong:** Tests fail on every data change, even when the UI is correct. This makes visual tests noisy and teams start ignoring failures.
+
+**Do this instead:** Use `mask: [locator]` to hide dynamic regions, or seed deterministic fixture data before running visual tests.
 
 ---
 
@@ -372,48 +855,42 @@ Calendly's `<script>` tag and CSS link are loaded once in the `<head>` of each H
 
 ### External Services
 
-| Service | Integration Pattern | Notes |
-|---------|---------------------|-------|
-| Calendly | Popup widget via JS API (`Calendly.initPopupWidget`) | Load script in `<head>`; trigger on CTA button click. Use `hideEventTypeDetails: true` to avoid redundant info. Pass UTM params via `utm` object in init call. |
-| Google Fonts | CDN `<link>` in `<head>` | DM Sans + JetBrains Mono already used in existing pages. Consider self-hosting for performance/privacy if needed. |
-| impeccable.style | External audit tool — no integration | Used manually post-build to audit visual quality. Not embedded. |
+| Service | Existing Integration | v1.2 Change |
+|---------|---------------------|-------------|
+| Supabase Auth | `@supabase/ssr` session management | Add MFA API: `mfa.enroll`, `mfa.challenge`, `mfa.verify`, `mfa.getAuthenticatorAssuranceLevel` |
+| Supabase Admin API | `createServiceClient()` for RLS bypass | Add `auth.admin.inviteUserByEmail`, `auth.admin.updateUserById` |
+| Supabase Postgres | 13 existing tables + RLS | Add 2 tables: `user_notification_prefs`, `user_invitations` |
+| Resend | `sendEmail()` in `lib/email.ts` | Add `WeeklyDigestEmail` template; called from `digest.ts` |
+| Stripe | Checkout, billing portal, webhooks | No change — MRR reads from local `subscriptions` table |
+| Vercel Cron | Not present | Add `vercel.json` crons config; one job: Monday 09:00 UTC |
+| Recharts | Already installed in package.json | Add `<MRRChart />` client component using `AreaChart` |
 
 ### Internal Boundaries
 
 | Boundary | Communication | Notes |
 |----------|---------------|-------|
-| `main.js` → `i18n.js` | `window.i18n` global object exposed by `i18n.js`; called by `main.js` after partials load | `i18n.js` must be loaded before `main.js` in `<script>` order, or use ES modules |
-| Page HTML → partials | `fetch()` + `innerHTML` injection; one-way data flow | Partials are pure HTML fragments; they receive no data from the page |
-| Page HTML → translations | `data-i18n` attribute keys; `i18n.js` acts as the transformer | Keys must match exactly between HTML and JSON files |
-| `06-landing-pages/` → `07-plataforma/` | Outbound link only — CTA links point to platform URL | No shared code or assets between the two systems |
-
----
-
-## Suggested Build Order
-
-Based on dependencies between components:
-
-1. **Design tokens first** (`css/tokens.css`) — everything else depends on custom property names being defined before they are consumed.
-2. **Base CSS + layout** (`css/base.css`, `css/layout.css`) — establishes typographic baseline and container grid before any component is built.
-3. **Shared partials** (`partials/nav.html`, `partials/footer.html`) — structure is stable early; component CSS can be written targeting nav classes without building full pages.
-4. **i18n infrastructure** (`js/i18n.js`, `translations/en.json`, `translations/es.json`, `js/main.js`) — wire up the system with placeholder content before real copy is finalized. This surfaces missing keys early.
-5. **Main page** (`index.html`) — primary conversion page. Validate full stack (partials + i18n + Calendly + CSS) works end-to-end on this one page before building detail pages.
-6. **Component CSS for main page sections** (`css/components.css`) — hero, service cards, how-it-works, CTA sections. Written alongside `index.html`.
-7. **Service detail pages** (`services/performance.html`, `services/observability.html`, `services/fractional-sre.html`) — reuse all existing CSS; mostly additive HTML structure.
-8. **Content migration** — pull validated copy from existing `06-landing-pages/*.html` files. At this point the skeleton is built; adding real content is purely mechanical.
+| `middleware.ts` ↔ Supabase Auth | SDK `getAuthenticatorAssuranceLevel()` | Add after existing role check; local JWT inspection, no network |
+| `notifyTaskEvent` ↔ `user_notification_prefs` | Supabase query per recipient | Null pref row = all channels enabled; treat as opt-out model |
+| `/api/admin/*` ↔ Supabase Admin API | `createServiceClient()` | Must verify caller role first via `createServerSupabase()` |
+| `/api/cron/digest` ↔ `digest.ts` | Function call | Logic separated from handler for unit testability |
+| `<MRRChart />` ↔ server page | Props (serialized array) | Server fetches + aggregates; client renders — no client-side fetch needed |
+| Integration tests ↔ route handlers | `next-test-api-route-handler` | Tests use mocked `@/lib/supabase/server` and `@/lib/stripe` |
 
 ---
 
 ## Sources
 
-- [MDN: Navigator.language](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/language) — language detection
-- [Calendly: Embed options overview](https://help.calendly.com/hc/en-us/articles/223147027-Embed-options-overview) — embed patterns
-- [CSS-Tricks: The Simplest Ways to Handle HTML Includes](https://css-tricks.com/the-simplest-ways-to-handle-html-includes/) — partial injection patterns
-- [Building a Super Small i18n Script in JavaScript — Andreas Remdt](https://andreasremdt.com/blog/building-a-super-small-and-simple-i18n-script-in-javascript/) — data-i18n pattern
-- [A Practical Guide to CSS Custom Properties for Theming — Ronald Svilcins](https://ronaldsvilcins.com/2025/03/30/a-practical-guide-to-css-custom-properties-for-theming/) — token architecture
-- [Every way to detect a user's locale — DEV Community](https://dev.to/lingodotdev/every-way-to-detect-a-users-locale-from-best-to-worst-369i) — navigator.languages best practices
-- [Translations in plain JS — Medium](https://medium.com/@mihura.ian/translations-in-vanilla-javascript-c942c2095170) — vanilla i18n implementation
+- [Supabase TOTP MFA Documentation](https://supabase.com/docs/guides/auth/auth-mfa/totp) — HIGH confidence, official docs
+- [Supabase Auth MFA JavaScript API Reference](https://supabase.com/docs/reference/javascript/auth-mfa-api) — HIGH confidence, official docs
+- [Supabase Admin inviteUserByEmail](https://supabase.com/docs/reference/javascript/auth-admin-inviteuserbyemail) — HIGH confidence, official docs
+- [Vercel Cron Jobs](https://vercel.com/docs/cron-jobs) — HIGH confidence, official docs
+- [Vercel Managing Cron Jobs (CRON_SECRET)](https://vercel.com/docs/cron-jobs/manage-cron-jobs) — HIGH confidence, official docs; CRON_SECRET pattern confirmed with code example
+- [Playwright Visual Comparisons](https://playwright.dev/docs/test-snapshots) — HIGH confidence, official Playwright docs
+- [next-test-api-route-handler GitHub](https://github.com/Xunnamius/next-test-api-route-handler) — MEDIUM confidence; actively maintained, Next.js 15 App Router support confirmed in README
+- Recharts `package.json` — HIGH confidence; already installed at `^2.13.3`, verified in codebase
+- `subscriptions.price_monthly` + `started_at` + `cancelled_at` — HIGH confidence; confirmed in `001_schema.sql`
 
 ---
-*Architecture research for: Vantix hybrid static landing page system*
-*Researched: 2026-03-20*
+
+*Architecture research for: Vantix Platform v1.2 — 2FA, rate limiting, digest, notification prefs, admin user mgmt, MRR chart, integration tests, visual regression*
+*Researched: 2026-03-25*

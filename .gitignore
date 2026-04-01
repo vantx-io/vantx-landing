@@ -4,3 +4,23 @@
 !.dev.vars.example
 .env*
 !.env.example
+# OS
+.DS_Store
+
+# Claude Code local config
+.agent/
+.agents/
+.claude/
+
+# Supabase temp
+platform/supabase/.branches/
+platform/supabase/.temp/
+
+# Node
+node_modules/
+.next/
+
+# Environment
+.env
+.env.local
+.env.*.local

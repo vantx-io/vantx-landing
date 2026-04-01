@@ -1,0 +1,67 @@
+{
+  "title": "Web Performance — Core Web Vitals — Vantix",
+  "uid": "vantix-cwv",
+  "tags": ["vantix", "web-vitals", "lighthouse"],
+  "editable": true,
+  "schemaVersion": 39,
+  "time": { "from": "now-30d", "to": "now" },
+  "panels": [
+    {
+      "title": "Lighthouse Score", "type": "timeseries",
+      "gridPos": { "h": 7, "w": 8, "x": 0, "y": 0 },
+      "targets": [{ "expr": "lighthouse_performance_score", "legendFormat": "Score" }],
+      "fieldConfig": { "defaults": { "min": 0, "max": 100, "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "orange", "value": 50 }, { "color": "green", "value": 90 }] }, "custom": { "fillOpacity": 10 } } }
+    },
+    {
+      "title": "LCP (Largest Contentful Paint)", "type": "timeseries",
+      "gridPos": { "h": 7, "w": 8, "x": 8, "y": 0 },
+      "targets": [{ "expr": "web_vitals_lcp_ms", "legendFormat": "LCP" }],
+      "fieldConfig": { "defaults": { "unit": "ms", "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 2500 }, { "color": "red", "value": 4000 }] }, "custom": { "fillOpacity": 10, "thresholdsStyle": { "mode": "line" } } } }
+    },
+    {
+      "title": "FID (First Input Delay)", "type": "timeseries",
+      "gridPos": { "h": 7, "w": 8, "x": 16, "y": 0 },
+      "targets": [{ "expr": "web_vitals_fid_ms", "legendFormat": "FID" }],
+      "fieldConfig": { "defaults": { "unit": "ms", "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 100 }, { "color": "red", "value": 300 }] }, "custom": { "fillOpacity": 10, "thresholdsStyle": { "mode": "line" } } } }
+    },
+    {
+      "title": "CLS (Cumulative Layout Shift)", "type": "timeseries",
+      "gridPos": { "h": 7, "w": 8, "x": 0, "y": 7 },
+      "targets": [{ "expr": "web_vitals_cls", "legendFormat": "CLS" }],
+      "fieldConfig": { "defaults": { "decimals": 3, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 0.1 }, { "color": "red", "value": 0.25 }] }, "custom": { "fillOpacity": 10, "thresholdsStyle": { "mode": "line" } } } }
+    },
+    {
+      "title": "Time to Interactive (TTI)", "type": "timeseries",
+      "gridPos": { "h": 7, "w": 8, "x": 8, "y": 7 },
+      "targets": [{ "expr": "web_vitals_tti_ms", "legendFormat": "TTI" }],
+      "fieldConfig": { "defaults": { "unit": "ms", "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 3000 }, { "color": "red", "value": 5000 }] } } }
+    },
+    {
+      "title": "JS Bundle Size (KB)", "type": "stat",
+      "gridPos": { "h": 3, "w": 4, "x": 16, "y": 7 },
+      "targets": [{ "expr": "web_bundle_size_kb", "legendFormat": "" }],
+      "fieldConfig": { "defaults": { "unit": "deckbytes", "thresholds": { "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 500 }, { "color": "red", "value": 1000 }] } } }
+    },
+    {
+      "title": "Current LCP", "type": "stat",
+      "gridPos": { "h": 3, "w": 2, "x": 20, "y": 7 },
+      "targets": [{ "expr": "web_vitals_lcp_ms" }],
+      "fieldConfig": { "defaults": { "unit": "ms", "thresholds": { "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 2500 }, { "color": "red", "value": 4000 }] } } }
+    },
+    {
+      "title": "Current Lighthouse", "type": "stat",
+      "gridPos": { "h": 3, "w": 2, "x": 22, "y": 7 },
+      "targets": [{ "expr": "lighthouse_performance_score" }],
+      "fieldConfig": { "defaults": { "min": 0, "max": 100, "thresholds": { "steps": [{ "color": "red", "value": null }, { "color": "orange", "value": 50 }, { "color": "green", "value": 90 }] } } }
+    },
+    {
+      "title": "Web Vitals Summary", "type": "table",
+      "gridPos": { "h": 4, "w": 8, "x": 16, "y": 10 },
+      "targets": [
+        { "expr": "web_vitals_lcp_ms", "legendFormat": "LCP (ms)", "format": "table" },
+        { "expr": "web_vitals_fid_ms", "legendFormat": "FID (ms)", "format": "table" },
+        { "expr": "web_vitals_cls", "legendFormat": "CLS", "format": "table" }
+      ]
+    }
+  ]
+}
