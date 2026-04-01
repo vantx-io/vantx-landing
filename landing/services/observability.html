@@ -29,6 +29,7 @@
 
   <!-- Preload i18n JSON — starts download in parallel with CSS instead of waiting for JS execution -->
   <link rel="preload" href="../i18n/en.json" as="fetch" crossorigin>
+  <link rel="preload" href="../partials/footer.html" as="fetch" crossorigin>
 
   <!-- @font-face inlined (was fonts.css) — eliminates 1 render-blocking request -->
   <style>
@@ -40,10 +41,8 @@
     @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 700;font-display:swap;src:url(../fonts/jb-mono-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
   </style>
 
-  <!-- Design system — paths use ../ because this page is one level deep -->
-  <link rel="stylesheet" href="../css/tokens.css">
-  <link rel="stylesheet" href="../css/base.css">
-  <link rel="stylesheet" href="../css/detail.css">
+  <!-- Design system — single file eliminates 2 render-blocking requests -->
+  <link rel="stylesheet" href="../css/styles.css">
 
   <!-- App scripts — defer: download now, execute after DOM parse -->
   <script>window.VANTX_BASE = '..';</script>
@@ -87,7 +86,39 @@
   <a href="#main-content" class="skip-link" data-i18n="nav.skip_link">Skip to content</a>
 
   <!-- Nav partial injected here -->
-  <div data-partial="nav"></div>
+  <!-- Nav inlined for instant FCP — partials.js skips fetch when content exists -->
+  <div data-partial="nav">
+  <nav class="nav" aria-label="Main navigation">
+    <div class="container nav__inner">
+      <a href="/" class="nav__logo" data-i18n-aria="nav.logo_aria">
+        <picture>
+          <source srcset="../img/vantx-logo-horizontal-white.webp" type="image/webp">
+          <img src="../img/vantx-logo-horizontal-white-sm.png" alt="Vantx" class="nav__logo-img" width="140" height="32"
+               onerror="this.style.display='none';this.parentElement.insertAdjacentHTML('afterend','<span class=nav__logo-mark>Vantx</span>')">
+        </picture>
+      </a>
+      <ul class="nav__links" role="list">
+        <li><a href="/#services" class="nav__link" data-i18n="nav.services">Services</a></li>
+        <li><a href="/about/mission.html" class="nav__link" data-i18n="nav.about">About</a></li>
+      </ul>
+      <div class="nav__actions">
+        <button class="nav__lang" data-lang-toggle type="button" aria-label="Switch language">ES</button>
+        <button type="button" class="btn btn--primary btn--sm js-calendly-trigger" data-i18n="nav.cta">Book a Call</button>
+      </div>
+      <button class="nav__mobile-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer">
+        <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+      </button>
+    </div>
+    <div id="nav-drawer" class="nav__drawer" role="dialog" aria-label="Mobile navigation" aria-modal="true">
+      <a href="/#services" class="nav__link" data-i18n="nav.services">Services</a>
+      <a href="/about/mission.html" class="nav__link" data-i18n="nav.about">About</a>
+      <div class="nav__drawer-actions">
+        <button class="nav__lang" data-lang-toggle type="button" aria-label="Switch language">ES</button>
+        <button type="button" class="btn btn--primary btn--sm js-calendly-trigger" data-i18n="nav.cta">Book a Call</button>
+      </div>
+    </div>
+  </nav>
+  </div>
 
   <main id="main-content" tabindex="-1">
 

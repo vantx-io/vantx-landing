@@ -33,6 +33,9 @@
     const container = document.querySelector(selector);
     if (!container) return; // not every page uses every partial
 
+    // Skip fetch if content is already inlined in the HTML
+    if (container.children.length > 0) return;
+
     var cacheKey = CACHE_PREFIX + url.split("/").pop();
     var raw = null;
 
